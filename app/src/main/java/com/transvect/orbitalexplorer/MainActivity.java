@@ -1,6 +1,7 @@
 package com.transvect.orbitalexplorer;
 
 import android.app.Activity;
+import android.opengl.GLSurfaceView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
