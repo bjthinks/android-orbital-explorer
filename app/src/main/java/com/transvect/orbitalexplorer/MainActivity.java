@@ -17,11 +17,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Create a GLSurfaceView instance and set it
+        // Inflate a GLSurfaceView instance and set it
         // as the ContentView for this Activity.
         mGLSurfaceView = (MyGLSurfaceView) findViewById(R.id.section_label);
         setContentView(R.layout.activity_main);
-        //setContentView(mGLView);
     }
 
     @Override
