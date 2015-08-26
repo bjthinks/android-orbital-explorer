@@ -1,5 +1,8 @@
 package com.transvect.orbitalexplorer;
 
+import android.app.ActivityManager;
+import android.content.Context;
+import android.content.pm.ConfigurationInfo;
 import android.opengl.GLSurfaceView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -16,6 +19,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (!hasGLES20()) {
+            // TODO show a helpful message
+            System.exit(0);
+        }
 
         // Inflate a GLSurfaceView instance and set it
         // as the ContentView for this Activity.
@@ -43,5 +51,13 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private boolean hasGLES20() {
+        ActivityManager manager =
+                (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        ConfigurationInfo info = manager.getDeviceConfigurationInfo();
+        int majorVersion = info.reqGlEsVersion >> 16;
+        return majorVersion >= 2;
     }
 }
