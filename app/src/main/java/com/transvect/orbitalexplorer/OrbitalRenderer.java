@@ -1,6 +1,7 @@
 package com.transvect.orbitalexplorer;
 
 import android.opengl.GLES20;
+import android.opengl.Matrix;
 import android.util.Log;
 
 import java.nio.ByteBuffer;
@@ -18,12 +19,17 @@ public class OrbitalRenderer extends MyGLRenderer {
     private FloatBuffer vertexBuffer;
     private int mProgram;
 
+    private final float[] mMVPMatrix = new float[16];
+    private final float[] mProjectionMatrix = new float[16];
+    private final float[] mViewMatrix = new float[16];
+
     private final String vertexShaderSource
-            = "attribute vec2 inPosition;"
+            = "uniform mat4 uMVPMatrix;"
+            + "attribute vec2 inPosition;"
             + "varying vec4 position;"
             + "void main() {"
             + "  position = vec4(inPosition.xy, 0, 1);"
-            + "  gl_Position = position;"
+            + "  gl_Position = uMVPMatrix * position;"
             + "}";
     private final String fragmentShaderSource
             = "precision mediump float;"
@@ -69,11 +75,19 @@ public class OrbitalRenderer extends MyGLRenderer {
             GLES20.glLinkProgram(mProgram);
             getGLError();
         }
+        GLES20.glViewport(0, 0, width, height);
+        float ratio = (float) Math.sqrt((double)width / (double)height);
+        Matrix.frustumM(mProjectionMatrix, 0, -ratio, ratio, (float) (-1.0 / ratio), (float) (1.0 / ratio), 1, 10);
     }
 
     @Override
     public void onDrawFrame() {
+        GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
+        Matrix.setLookAtM(mViewMatrix, 0, 0, 0, -3, 0f, 0f, 0f, 0f, 1.0f, 0.0f);
+        Matrix.multiplyMM(mMVPMatrix, 0, mProjectionMatrix, 0, mViewMatrix, 0);
         GLES20.glUseProgram(mProgram);
+        int mvpMatrixHandle = GLES20.glGetUniformLocation(mProgram, "uMVPMatrix");
+        GLES20.glUniformMatrix4fv(mvpMatrixHandle, 1, false, mMVPMatrix, 0);
         int inPositionHandle = GLES20.glGetAttribLocation(mProgram, "inPosition");
         GLES20.glEnableVertexAttribArray(inPositionHandle);
         GLES20.glVertexAttribPointer(inPositionHandle, 2, GLES20.GL_FLOAT, false, 8, vertexBuffer);
