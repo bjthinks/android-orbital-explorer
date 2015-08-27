@@ -12,6 +12,7 @@ import android.view.MotionEvent;
 public class OrbitalView extends GLSurfaceView {
 
     OrbitalRenderer mRenderer;
+    static float angle = 0;
 
     public OrbitalView(Context context) {
         super(context);
@@ -32,6 +33,7 @@ public class OrbitalView extends GLSurfaceView {
 
         // Set the Renderer for drawing on the GLSurfaceView
         mRenderer = new OrbitalRenderer();
+        mRenderer.setAngle(angle);
         setRenderer(mRenderer);
 
         // Render the view only when there is a change in the drawing data
@@ -56,7 +58,8 @@ public class OrbitalView extends GLSurfaceView {
                     dx = -dx;
                 if (x < getWidth() / 2)
                     dy = -dy;
-                mRenderer.setAngle(mRenderer.getAngle() + ((dx + dy) * TOUCH_SCALE_FACTOR));
+                angle += (dx + dy) * TOUCH_SCALE_FACTOR;
+                mRenderer.setAngle(angle);
                 requestRender();
         }
         mPreviousX = x;

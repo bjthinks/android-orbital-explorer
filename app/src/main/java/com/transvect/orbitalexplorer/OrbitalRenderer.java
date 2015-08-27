@@ -26,9 +26,6 @@ public class OrbitalRenderer extends MyGLRenderer {
     private final float[] scratch = new float[16];
 
     public volatile float mAngle;
-    public float getAngle() {
-        return mAngle;
-    }
     public void setAngle(float angle) {
         mAngle = angle;
     }
