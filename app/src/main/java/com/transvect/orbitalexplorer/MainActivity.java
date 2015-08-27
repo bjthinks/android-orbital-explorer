@@ -11,10 +11,7 @@ import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity {
 
-    /**
-     * Add an OpenGL surface to the main activity
-     */
-    private GLSurfaceView mGLSurfaceView;
+    private MyGLSurfaceView mMyGLSurfaceView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Inflate a GLSurfaceView instance and set it
         // as the ContentView for this Activity.
-        mGLSurfaceView = (MyGLSurfaceView) findViewById(R.id.glsurfaceview);
+        mMyGLSurfaceView = (MyGLSurfaceView) findViewById(R.id.myglsurfaceview);
         setContentView(R.layout.activity_main);
     }
 
@@ -42,15 +39,15 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        if (mGLSurfaceView != null)
-            mGLSurfaceView.onPause();
+        if (mMyGLSurfaceView != null)
+            mMyGLSurfaceView.onPause();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if (mGLSurfaceView != null)
-            mGLSurfaceView.onResume();
+        if (mMyGLSurfaceView != null)
+            mMyGLSurfaceView.onResume();
     }
 
     @Override

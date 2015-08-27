@@ -5,11 +5,10 @@ import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
 
 /**
- * Created by bwj on 8/25/15.
+ * A wrapper around GLSurfaceView that ensures we do proper setup.
  */
-public class MyGLSurfaceView extends GLSurfaceView {
 
-    private MyGLRenderer mRenderer;
+public class MyGLSurfaceView extends GLSurfaceView {
 
     public MyGLSurfaceView(Context context) {
         super(context);
@@ -29,8 +28,7 @@ public class MyGLSurfaceView extends GLSurfaceView {
         setPreserveEGLContextOnPause(true);
 
         // Set the Renderer for drawing on the GLSurfaceView
-        mRenderer = new MyGLRenderer();
-        setRenderer(mRenderer);
+        setRenderer(new OrbitalRenderer());
 
         // Render the view only when there is a change in the drawing data
         setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
