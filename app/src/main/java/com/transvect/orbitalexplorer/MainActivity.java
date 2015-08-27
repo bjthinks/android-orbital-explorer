@@ -3,7 +3,6 @@ package com.transvect.orbitalexplorer;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.pm.ConfigurationInfo;
-import android.opengl.GLSurfaceView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -11,7 +10,7 @@ import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity {
 
-    private MyGLSurfaceView mMyGLSurfaceView;
+    private OrbitalView mOrbitalView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Inflate a GLSurfaceView instance and set it
         // as the ContentView for this Activity.
-        mMyGLSurfaceView = (MyGLSurfaceView) findViewById(R.id.myglsurfaceview);
+        mOrbitalView = (OrbitalView) findViewById(R.id.myglsurfaceview);
         setContentView(R.layout.activity_main);
     }
 
@@ -39,15 +38,15 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        if (mMyGLSurfaceView != null)
-            mMyGLSurfaceView.onPause();
+        if (mOrbitalView != null)
+            mOrbitalView.onPause();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if (mMyGLSurfaceView != null)
-            mMyGLSurfaceView.onResume();
+        if (mOrbitalView != null)
+            mOrbitalView.onResume();
     }
 
     @Override

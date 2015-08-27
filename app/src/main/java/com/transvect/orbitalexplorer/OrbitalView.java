@@ -8,14 +8,14 @@ import android.util.AttributeSet;
  * A wrapper around GLSurfaceView that ensures we do proper setup.
  */
 
-public class MyGLSurfaceView extends GLSurfaceView {
+public class OrbitalView extends GLSurfaceView {
 
-    public MyGLSurfaceView(Context context) {
+    public OrbitalView(Context context) {
         super(context);
         setup();
     }
 
-    public MyGLSurfaceView(Context context, AttributeSet attribs) {
+    public OrbitalView(Context context, AttributeSet attribs) {
         super(context, attribs);
         setup();
     }
