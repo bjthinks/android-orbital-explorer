@@ -27,8 +27,30 @@ public class MainActivity extends AppCompatActivity {
 
         // Inflate a GLSurfaceView instance and set it
         // as the ContentView for this Activity.
-        mGLSurfaceView = (MyGLSurfaceView) findViewById(R.id.section_label);
+        mGLSurfaceView = (MyGLSurfaceView) findViewById(R.id.glsurfaceview);
         setContentView(R.layout.activity_main);
+    }
+
+    private boolean hasGLES20() {
+        ActivityManager manager =
+                (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        ConfigurationInfo info = manager.getDeviceConfigurationInfo();
+        int majorVersion = info.reqGlEsVersion >> 16;
+        return majorVersion >= 2;
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (mGLSurfaceView != null)
+            mGLSurfaceView.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (mGLSurfaceView != null)
+            mGLSurfaceView.onResume();
     }
 
     @Override
@@ -51,13 +73,5 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    private boolean hasGLES20() {
-        ActivityManager manager =
-                (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-        ConfigurationInfo info = manager.getDeviceConfigurationInfo();
-        int majorVersion = info.reqGlEsVersion >> 16;
-        return majorVersion >= 2;
     }
 }

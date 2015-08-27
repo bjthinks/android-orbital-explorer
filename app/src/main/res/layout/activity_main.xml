@@ -7,7 +7,7 @@
     tools:context="com.transvect.orbitalexplorer.MainActivity">
 
     <com.transvect.orbitalexplorer.MyGLSurfaceView
-        android:id="@+id/section_label"
+        android:id="@+id/glsurfaceview"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

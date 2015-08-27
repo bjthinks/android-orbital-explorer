@@ -9,32 +9,27 @@ import android.util.AttributeSet;
  */
 public class MyGLSurfaceView extends GLSurfaceView {
 
-    private final MyGLRenderer mRenderer;
+    private MyGLRenderer mRenderer;
 
     public MyGLSurfaceView(Context context) {
         super(context);
-
-        // Create an OpenGL ES 2.0 context
-        setEGLContextClientVersion(2);
-
-        mRenderer = new MyGLRenderer();
-
-        // Set the Renderer for drawing on the GLSurfaceView
-        setRenderer(mRenderer);
-
-        // Render the view only when there is a change in the drawing data
-        setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
+        setup();
     }
 
     public MyGLSurfaceView(Context context, AttributeSet attribs) {
         super(context, attribs);
+        setup();
+    }
 
-        // Create an OpenGL ES 2.0 context
+    private void setup() {
+        // Specify OpenGL ES version 2.0
         setEGLContextClientVersion(2);
 
-        mRenderer = new MyGLRenderer();
+        // Try to preserve our context, if possible
+        setPreserveEGLContextOnPause(true);
 
         // Set the Renderer for drawing on the GLSurfaceView
+        mRenderer = new MyGLRenderer();
         setRenderer(mRenderer);
 
         // Render the view only when there is a change in the drawing data
