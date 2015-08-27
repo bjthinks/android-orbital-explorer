@@ -3,6 +3,7 @@ package com.transvect.orbitalexplorer;
 import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 
 /**
@@ -10,9 +11,10 @@ import android.view.MotionEvent;
  */
 
 public class OrbitalView extends GLSurfaceView {
+    private static final String TAG = "OrbitalView";
 
     OrbitalRenderer mRenderer;
-    static float angle = 0;
+    static Quaternion rotation = new Quaternion(1);
 
     public OrbitalView(Context context) {
         super(context);
@@ -33,14 +35,13 @@ public class OrbitalView extends GLSurfaceView {
 
         // Set the Renderer for drawing on the GLSurfaceView
         mRenderer = new OrbitalRenderer();
-        mRenderer.setAngle(angle);
+        mRenderer.setRotation(rotation.asFloatMatrix());
         setRenderer(mRenderer);
 
         // Render the view only when there is a change in the drawing data
         setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
     }
 
-    private final float TOUCH_SCALE_FACTOR = 180.0f / 320;
     private float mPreviousX;
     private float mPreviousY;
 
@@ -51,17 +52,19 @@ public class OrbitalView extends GLSurfaceView {
 
         switch (e.getAction()) {
             case MotionEvent.ACTION_MOVE:
-                float dx = x - mPreviousX;
-                float dy = y - mPreviousY;
-
-                if (y > getHeight() / 2)
-                    dx = -dx;
-                if (x < getWidth() / 2)
-                    dy = -dy;
-                angle += (dx + dy) * TOUCH_SCALE_FACTOR;
-                mRenderer.setAngle(angle);
+                double dx = x - mPreviousX;
+                double dy = y - mPreviousY;
+                double rotx = Math.PI * dx / getWidth();
+                double roty = Math.PI * dy / getHeight();
+                Quaternion xz_rotation = Quaternion.rotation(rotx, 0, 1, 0);
+                Quaternion yz_rotation = Quaternion.rotation(roty, -1, 0, 0);
+                rotation = xz_rotation.multiply(rotation);
+                rotation = yz_rotation.multiply(rotation);
+                rotation = rotation.multiply(1 / rotation.norm());
+                mRenderer.setRotation(rotation.asFloatMatrix());
                 requestRender();
         }
+
         mPreviousX = x;
         mPreviousY = y;
         return true;

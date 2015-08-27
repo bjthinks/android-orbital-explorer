@@ -22,12 +22,11 @@ public class OrbitalRenderer extends MyGLRenderer {
     private final float[] mMVPMatrix = new float[16];
     private final float[] mProjectionMatrix = new float[16];
     private final float[] mViewMatrix = new float[16];
-    private final float[] mRotationMatrix = new float[16];
+    private float[] mRotationMatrix = new float[16];
     private final float[] scratch = new float[16];
 
-    public volatile float mAngle;
-    public void setAngle(float angle) {
-        mAngle = angle;
+    public void setRotation(float[] r) {
+        mRotationMatrix = r;
     }
 
     private final String vertexShaderSource
@@ -92,7 +91,6 @@ public class OrbitalRenderer extends MyGLRenderer {
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
         Matrix.setLookAtM(mViewMatrix, 0, 0, 0, -3, 0f, 0f, 0f, 0f, 1.0f, 0.0f);
         Matrix.multiplyMM(mMVPMatrix, 0, mProjectionMatrix, 0, mViewMatrix, 0);
-        Matrix.setRotateM(mRotationMatrix, 0, mAngle, 0, 0, 1.0f);
         Matrix.multiplyMM(scratch, 0, mMVPMatrix, 0, mRotationMatrix, 0);
         GLES20.glUseProgram(mProgram);
         int mvpMatrixHandle = GLES20.glGetUniformLocation(mProgram, "uMVPMatrix");
