@@ -7,7 +7,8 @@ import android.util.Log;
 import android.view.MotionEvent;
 
 /**
- * A wrapper around GLSurfaceView that ensures we do proper setup.
+ * A wrapper around GLSurfaceView that ensures we do proper setup
+ * and handles input events.
  */
 
 public class OrbitalView extends GLSurfaceView {
