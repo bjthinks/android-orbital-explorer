@@ -2,6 +2,7 @@ package com.transvect.orbitalexplorer;
 
 import android.opengl.GLES20;
 import android.opengl.Matrix;
+import android.os.SystemClock;
 import android.util.Log;
 
 import java.nio.ByteBuffer;
@@ -22,6 +23,8 @@ public class OrbitalRenderer extends MyGLRenderer {
     private final float[] mMVPMatrix = new float[16];
     private final float[] mProjectionMatrix = new float[16];
     private final float[] mViewMatrix = new float[16];
+    private final float[] mRotationMatrix = new float[16];
+    private final float[] scratch = new float[16];
 
     private final String vertexShaderSource
             = "uniform mat4 uMVPMatrix;"
@@ -76,7 +79,7 @@ public class OrbitalRenderer extends MyGLRenderer {
             getGLError();
         }
         GLES20.glViewport(0, 0, width, height);
-        float ratio = (float) Math.sqrt((double)width / (double)height);
+        float ratio = (float) Math.sqrt((double) width / (double) height);
         Matrix.frustumM(mProjectionMatrix, 0, -ratio, ratio, (float) (-1.0 / ratio), (float) (1.0 / ratio), 1, 10);
     }
 
@@ -85,9 +88,13 @@ public class OrbitalRenderer extends MyGLRenderer {
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
         Matrix.setLookAtM(mViewMatrix, 0, 0, 0, -3, 0f, 0f, 0f, 0f, 1.0f, 0.0f);
         Matrix.multiplyMM(mMVPMatrix, 0, mProjectionMatrix, 0, mViewMatrix, 0);
+        long time = SystemClock.uptimeMillis() % 4000L;
+        float angle = 0.090f * ((int) time);
+        Matrix.setRotateM(mRotationMatrix, 0, angle, 0, 0, -1.0f);
+        Matrix.multiplyMM(scratch, 0, mMVPMatrix, 0, mRotationMatrix, 0);
         GLES20.glUseProgram(mProgram);
         int mvpMatrixHandle = GLES20.glGetUniformLocation(mProgram, "uMVPMatrix");
-        GLES20.glUniformMatrix4fv(mvpMatrixHandle, 1, false, mMVPMatrix, 0);
+        GLES20.glUniformMatrix4fv(mvpMatrixHandle, 1, false, scratch, 0);
         int inPositionHandle = GLES20.glGetAttribLocation(mProgram, "inPosition");
         GLES20.glEnableVertexAttribArray(inPositionHandle);
         GLES20.glVertexAttribPointer(inPositionHandle, 2, GLES20.GL_FLOAT, false, 8, vertexBuffer);
