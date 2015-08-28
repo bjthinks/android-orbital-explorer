@@ -19,15 +19,15 @@ public class OrbitalView extends GLSurfaceView {
 
     public OrbitalView(Context context) {
         super(context);
-        setup();
+        setup(context);
     }
 
     public OrbitalView(Context context, AttributeSet attribs) {
         super(context, attribs);
-        setup();
+        setup(context);
     }
 
-    private void setup() {
+    private void setup(Context context) {
         // Specify OpenGL ES version 2.0
         setEGLContextClientVersion(2);
 
@@ -35,7 +35,7 @@ public class OrbitalView extends GLSurfaceView {
         setPreserveEGLContextOnPause(true);
 
         // Set the Renderer for drawing on the GLSurfaceView
-        mRenderer = new OrbitalRenderer();
+        mRenderer = new OrbitalRenderer(context);
         mRenderer.setRotation(rotation.asFloatMatrix());
         setRenderer(mRenderer);
 

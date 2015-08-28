@@ -1,9 +1,14 @@
 package com.transvect.orbitalexplorer;
 
+import android.content.Context;
+import android.content.res.AssetManager;
 import android.opengl.GLES20;
 import android.opengl.Matrix;
 import android.util.Log;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
@@ -29,34 +34,9 @@ public class OrbitalRenderer extends MyGLRenderer {
         mRotationMatrix = r;
     }
 
-    private final String vertexShaderSource
-            = "uniform mat4 uMVPMatrix;"
-            + "attribute vec2 inPosition;"
-            + "varying vec4 position;"
-            + "void main() {"
-            + "  position = vec4(inPosition.xy, 0, 1);"
-            + "  gl_Position = uMVPMatrix * position;"
-            + "}";
-    private final String fragmentShaderSource
-            = "precision mediump float;"
-            + "varying vec4 position;"
-            + "void main() {"
-            + "  gl_FragColor = vec4((position.xy + 1.0) / 2.0, (2.0 - position.x - position.y) / 4.0, 1);"
-            + "}";
-
-    private int loadShader(int type, String shaderSource) {
-        int shader = GLES20.glCreateShader(type);
-        GLES20.glShaderSource(shader, shaderSource);
-        GLES20.glCompileShader(shader);
-        String result = GLES20.glGetShaderInfoLog(shader);
-        if (!result.equals("")) {
-            Log.e(TAG, "Shader failed to compile");
-            Log.e(TAG, result);
-        }
-        return shader;
-    }
-
-    OrbitalRenderer() {
+    private AssetManager assetManager;
+    OrbitalRenderer(Context context) {
+        assetManager = context.getAssets();
         float squareCoordinates[] = {
                 -1.0f, -1.0f,
                 -1.0f,  1.0f,
@@ -73,11 +53,11 @@ public class OrbitalRenderer extends MyGLRenderer {
     @Override
     public void onCreate(int width, int height, boolean contextIsNew) {
         if (contextIsNew) {
-            int vertexShader = loadShader(GLES20.GL_VERTEX_SHADER, vertexShaderSource);
-            int fragmentShader = loadShader(GLES20.GL_FRAGMENT_SHADER, fragmentShaderSource);
+            Shader vertexShader = new Shader(assetManager, "vertex.glsl", GLES20.GL_VERTEX_SHADER);
+            Shader fragmentShader = new Shader(assetManager, "fragment.glsl", GLES20.GL_FRAGMENT_SHADER);
             mProgram = GLES20.glCreateProgram();
-            GLES20.glAttachShader(mProgram, vertexShader);
-            GLES20.glAttachShader(mProgram, fragmentShader);
+            GLES20.glAttachShader(mProgram, vertexShader.getId());
+            GLES20.glAttachShader(mProgram, fragmentShader.getId());
             GLES20.glLinkProgram(mProgram);
             getGLError();
         }
