@@ -6,9 +6,6 @@ import android.opengl.GLES20;
 import android.opengl.Matrix;
 import android.util.Log;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
@@ -24,14 +21,11 @@ public class OrbitalRenderer extends MyGLRenderer {
     private FloatBuffer vertexBuffer;
     private int mProgram;
 
-    private final float[] mMVPMatrix = new float[16];
     private final float[] mProjectionMatrix = new float[16];
-    private final float[] mViewMatrix = new float[16];
-    private float[] mRotationMatrix = new float[16];
-    private final float[] scratch = new float[16];
+    private float[] mCameraRotation = new float[16];
 
     public void setRotation(float[] r) {
-        mRotationMatrix = r;
+        mCameraRotation = r;
     }
 
     private AssetManager assetManager;
@@ -64,18 +58,36 @@ public class OrbitalRenderer extends MyGLRenderer {
         }
         GLES20.glViewport(0, 0, width, height);
         float ratio = (float) Math.sqrt((double) width / (double) height);
-        Matrix.frustumM(mProjectionMatrix, 0, -ratio, ratio, (float) (-1.0 / ratio), (float) (1.0 / ratio), 1, 10);
+        float leftRight = ratio;
+        float bottomTop = 1.0f / ratio;
+        float near = 1.0f;
+        float far = 10.0f;
+        Matrix.frustumM(mProjectionMatrix, 0,
+                -leftRight, leftRight,
+                -bottomTop, bottomTop,
+                near, far);
+    }
+
+    private void setShaderTransform() {
+
+        float[] viewMatrix = new float[16];
+        Matrix.setLookAtM(viewMatrix, 0, 0, 0, -3, 0f, 0f, 0f, 0f, 1.0f, 0.0f);
+
+        float[] viewProjMatrix = new float[16];
+        Matrix.multiplyMM(viewProjMatrix, 0, mProjectionMatrix, 0, viewMatrix, 0);
+
+        float[] shaderTransform = new float[16];
+        Matrix.multiplyMM(shaderTransform, 0, viewProjMatrix, 0, mCameraRotation, 0);
+
+        int mvpMatrixHandle = GLES20.glGetUniformLocation(mProgram, "shaderTransform");
+        GLES20.glUniformMatrix4fv(mvpMatrixHandle, 1, false, shaderTransform, 0);
     }
 
     @Override
     public void onDrawFrame() {
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
-        Matrix.setLookAtM(mViewMatrix, 0, 0, 0, -3, 0f, 0f, 0f, 0f, 1.0f, 0.0f);
-        Matrix.multiplyMM(mMVPMatrix, 0, mProjectionMatrix, 0, mViewMatrix, 0);
-        Matrix.multiplyMM(scratch, 0, mMVPMatrix, 0, mRotationMatrix, 0);
         GLES20.glUseProgram(mProgram);
-        int mvpMatrixHandle = GLES20.glGetUniformLocation(mProgram, "uMVPMatrix");
-        GLES20.glUniformMatrix4fv(mvpMatrixHandle, 1, false, scratch, 0);
+        setShaderTransform();
         int inPositionHandle = GLES20.glGetAttribLocation(mProgram, "inPosition");
         GLES20.glEnableVertexAttribArray(inPositionHandle);
         GLES20.glVertexAttribPointer(inPositionHandle, 2, GLES20.GL_FLOAT, false, 8, vertexBuffer);

@@ -7,15 +7,22 @@ package com.transvect.orbitalexplorer;
 public class Quaternion {
     private final double r, i, j, k;
 
-    public Quaternion(double re, double im, double jm, double km) {
-        r = re;
-        i = im;
-        j = jm;
-        k = km;
+    public Quaternion(double real, double imaginary, double jmaginary, double kmaginary) {
+        r = real;
+        i = imaginary;
+        j = jmaginary;
+        k = kmaginary;
     }
 
-    public Quaternion(double re) {
-        r = re;
+    public Quaternion(double real, Vector3 unreal) {
+        r = real;
+        i = unreal.getX();
+        j = unreal.getY();
+        k = unreal.getZ();
+    }
+
+    public Quaternion(double real) {
+        r = real;
         i = 0;
         j = 0;
         k = 0;
@@ -37,17 +44,14 @@ public class Quaternion {
         return Math.sqrt(r*r + i*i + j*j + k*k);
     }
 
-    static Quaternion rotation(double angle, double x, double y, double z) {
-        double n = Math.sqrt(x*x + y*y + z*z);
-        x /= n;
-        y /= n;
-        z /= n;
+    static Quaternion rotation(double angle, Vector3 x) {
+        x = x.normalize();
         double s = Math.sin(angle / 2);
         double c = Math.cos(angle / 2);
-        return new Quaternion(c, s * x, s * y, s * z);
+        return new Quaternion(c, x.multiply(s));
     }
 
-    float[] asFloatMatrix() {
+    float[] asRotationMatrix() {
         float[] result = new float[16];
         result[0] = (float) (r*r + i*i - j*j - k*k);
         result[1] = (float) (2*r*k + 2*i*j);
