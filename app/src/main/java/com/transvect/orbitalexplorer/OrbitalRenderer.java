@@ -35,6 +35,7 @@ public class OrbitalRenderer extends MyGLRenderer {
     }
 
     private AssetManager assetManager;
+
     OrbitalRenderer(Context context) {
         assetManager = context.getAssets();
         float squareCoordinates[] = {
