@@ -25,11 +25,7 @@ public class RenderStage {
                 1.0f,  1.0f,
                 1.0f, -1.0f,
         };
-        ByteBuffer bb = ByteBuffer.allocateDirect(squareCoordinates.length * 4);
-        bb.order(ByteOrder.nativeOrder());
-        mVertexBuffer = bb.asFloatBuffer();
-        mVertexBuffer.put(squareCoordinates);
-        mVertexBuffer.position(0);
+        mVertexBuffer = floatArrayToBuffer(squareCoordinates);
     }
 
     public void newContext(AssetManager assetManager) {
@@ -53,6 +49,15 @@ public class RenderStage {
         GLES20.glDrawArrays(GLES20.GL_TRIANGLE_FAN, 0, 4);
         GLES20.glDisableVertexAttribArray(inPositionHandle);
         getGLError();
+    }
+
+    private FloatBuffer floatArrayToBuffer(float[] array) {
+        ByteBuffer bb = ByteBuffer.allocateDirect(array.length * 4);
+        bb.order(ByteOrder.nativeOrder());
+        FloatBuffer fb = bb.asFloatBuffer();
+        fb.put(array);
+        fb.position(0);
+        return fb;
     }
 
     private void getGLError() {
