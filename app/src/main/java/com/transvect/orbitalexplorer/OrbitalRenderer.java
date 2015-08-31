@@ -97,6 +97,7 @@ public class OrbitalRenderer extends MyGLRenderer {
 
     @Override
     public void onDrawFrame() {
+        // TODO this should take into account the # of milliseconds between calls
         if (mThisFrameRotation != null) {
             mRotationalMomentum = mThisFrameRotation;
             mThisFrameRotation = null;
