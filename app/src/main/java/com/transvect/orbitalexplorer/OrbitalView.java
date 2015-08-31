@@ -3,6 +3,7 @@ package com.transvect.orbitalexplorer;
 import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 
 /**
@@ -17,15 +18,15 @@ public class OrbitalView extends GLSurfaceView {
 
     public OrbitalView(Context context) {
         super(context);
-        setup(context);
+        constructorSetup(context);
     }
 
     public OrbitalView(Context context, AttributeSet attribs) {
         super(context, attribs);
-        setup(context);
+        constructorSetup(context);
     }
 
-    private void setup(Context context) {
+    private void constructorSetup(Context context) {
         // Specify OpenGL ES version 2.0
         setEGLContextClientVersion(2);
 

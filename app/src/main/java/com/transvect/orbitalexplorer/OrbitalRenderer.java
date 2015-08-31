@@ -22,9 +22,10 @@ public class OrbitalRenderer extends MyGLRenderer {
     private int mProgram;
 
     private final float[] mProjectionMatrix = new float[16];
-    private Quaternion mThisFrameRotation = new Quaternion(1);
-    private Quaternion mRotationalMomentum = new Quaternion(1);
-    private Quaternion mTotalRotation = new Quaternion(1);
+
+    private static Quaternion mThisFrameRotation = new Quaternion(1);
+    private static Quaternion mRotationalMomentum = new Quaternion(1);
+    private static Quaternion mTotalRotation = new Quaternion(1);
 
     public void rotateBy(Quaternion r)
     {

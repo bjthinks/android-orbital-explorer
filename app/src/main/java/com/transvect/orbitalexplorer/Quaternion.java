@@ -64,18 +64,21 @@ public class Quaternion {
 
     Quaternion pow(double alpha) {
         Quaternion normalized = normalize();
-        double c = normalized.real();
+        double normalizedRealPart = normalized.real();
+        Vector3 normalizedUnrealPart = normalized.unreal();
+        double c = normalizedRealPart;
+        double s = normalizedUnrealPart.norm();
         double theta = Math.acos(c);
-        double s = Math.sin(theta);
+        double alphaTheta = alpha * theta;
+        double ac = Math.cos(alphaTheta);
         Quaternion normalizedExponential;
         if (s > 0.001) {
-            Vector3 nHat = normalized.unreal().divide(s);
-            normalizedExponential = new Quaternion(Math.cos(alpha * theta), nHat.multiply(Math.sin(alpha * theta)));
+            double as = Math.sin(alphaTheta);
+            normalizedExponential = new Quaternion(ac, normalizedUnrealPart.multiply(as / s));
         } else {
-            normalizedExponential = new Quaternion(Math.cos(alpha * theta), normalized.unreal().multiply(alpha));
+            normalizedExponential = new Quaternion(ac, normalizedUnrealPart.multiply(alpha));
         }
-        normalizedExponential = normalizedExponential.normalize();
-        return normalizedExponential.multiply(Math.pow(norm(), alpha));
+        return normalizedExponential.normalize().multiply(Math.pow(norm(), alpha));
     }
 
     static Quaternion rotation(double angle, Vector3 x) {
