@@ -18,6 +18,8 @@ public class OrbitalRenderer extends MyGLRenderer {
 
     private static final String TAG = "OrbitalRenderer";
 
+    private RenderStage mRenderStage;
+
     private FloatBuffer vertexBuffer;
     private int mProgram;
 
@@ -39,6 +41,7 @@ public class OrbitalRenderer extends MyGLRenderer {
 
     OrbitalRenderer(Context context) {
         assetManager = context.getAssets();
+        mRenderStage = new RenderStage();
         float squareCoordinates[] = {
                 -1.0f, -1.0f,
                 -1.0f,  1.0f,
