@@ -5,7 +5,17 @@ package com.transvect.orbitalexplorer;
  */
 
 public class Quaternion {
+
     private final double r, i, j, k;
+
+    public double real() { return r; }
+    public double imag() { return i; }
+    public double jmag() { return j; }
+    public double kmag() { return k; }
+
+    public Vector3 unreal() {
+        return new Vector3(i, j, k);
+    }
 
     public Quaternion(double real, double imaginary, double jmaginary, double kmaginary) {
         r = real;
@@ -36,12 +46,36 @@ public class Quaternion {
                 r * y.k + i * y.j - j * y.i + k * y.r);
     }
 
-    Quaternion multiply(double y) {
-        return new Quaternion(y * r, y * i, y * j, y * k);
+    Quaternion multiply(double c) {
+        return new Quaternion(r * c, i * c, j * c, k * c);
+    }
+
+    Quaternion divide(double c) {
+        return new Quaternion(r / c, i / c, j / c, k / c);
     }
 
     double norm() {
-        return Math.sqrt(r*r + i*i + j*j + k*k);
+        return Math.sqrt(r * r + i * i + j * j + k * k);
+    }
+
+    Quaternion normalize() {
+        return divide(norm());
+    }
+
+    Quaternion pow(double alpha) {
+        Quaternion normalized = normalize();
+        double c = normalized.real();
+        double theta = Math.acos(c);
+        double s = Math.sin(theta);
+        Quaternion normalizedExponential;
+        if (s > 0.001) {
+            Vector3 nHat = normalized.unreal().divide(s);
+            normalizedExponential = new Quaternion(Math.cos(alpha * theta), nHat.multiply(Math.sin(alpha * theta)));
+        } else {
+            normalizedExponential = new Quaternion(Math.cos(alpha * theta), normalized.unreal().multiply(alpha));
+        }
+        normalizedExponential = normalizedExponential.normalize();
+        return normalizedExponential.multiply(Math.pow(norm(), alpha));
     }
 
     static Quaternion rotation(double angle, Vector3 x) {

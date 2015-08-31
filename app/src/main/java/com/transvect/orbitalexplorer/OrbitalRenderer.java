@@ -22,10 +22,16 @@ public class OrbitalRenderer extends MyGLRenderer {
     private int mProgram;
 
     private final float[] mProjectionMatrix = new float[16];
-    private float[] mCameraRotation = new float[16];
+    private Quaternion mThisFrameRotation = new Quaternion(1);
+    private Quaternion mRotationalMomentum = new Quaternion(1);
+    private Quaternion mTotalRotation = new Quaternion(1);
 
-    public void setRotation(float[] r) {
-        mCameraRotation = r;
+    public void rotateBy(Quaternion r)
+    {
+        if (mThisFrameRotation != null)
+            mThisFrameRotation = r.multiply(mThisFrameRotation);
+        else
+            mThisFrameRotation = r;
     }
 
     private AssetManager assetManager;
@@ -76,8 +82,10 @@ public class OrbitalRenderer extends MyGLRenderer {
         float[] viewProjMatrix = new float[16];
         Matrix.multiplyMM(viewProjMatrix, 0, mProjectionMatrix, 0, viewMatrix, 0);
 
+        float[] cameraRotation = mTotalRotation.asRotationMatrix();
+
         float[] shaderTransform = new float[16];
-        Matrix.multiplyMM(shaderTransform, 0, viewProjMatrix, 0, mCameraRotation, 0);
+        Matrix.multiplyMM(shaderTransform, 0, viewProjMatrix, 0, cameraRotation, 0);
 
         int mvpMatrixHandle = GLES20.glGetUniformLocation(mProgram, "shaderTransform");
         GLES20.glUniformMatrix4fv(mvpMatrixHandle, 1, false, shaderTransform, 0);
@@ -85,6 +93,14 @@ public class OrbitalRenderer extends MyGLRenderer {
 
     @Override
     public void onDrawFrame() {
+        if (mThisFrameRotation != null) {
+            mRotationalMomentum = mThisFrameRotation;
+            mThisFrameRotation = null;
+        } else {
+            mRotationalMomentum = mRotationalMomentum.pow(0.99);
+        }
+        mTotalRotation = mRotationalMomentum.multiply(mTotalRotation);
+
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
         GLES20.glUseProgram(mProgram);
         setShaderTransform();
