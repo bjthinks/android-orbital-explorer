@@ -11,12 +11,12 @@ import java.nio.FloatBuffer;
 /**
  * Created by bwj on 8/31/15.
  */
-public class MyRenderStage extends RenderStage {
+public class DemoRenderStage extends RenderStage {
 
     private int mProgram;
     private FloatBuffer mVertexBuffer;
 
-    MyRenderStage() {
+    DemoRenderStage() {
         float squareCoordinates[] = {
                 -1.0f, -1.0f,
                 -1.0f,  1.0f,

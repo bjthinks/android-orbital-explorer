@@ -11,7 +11,7 @@ import java.nio.FloatBuffer;
  * Created by bwj on 8/31/15.
  */
 public class RenderStage {
-    private static final String TAG = "MyRenderStage";
+    private static final String TAG = "DemoRenderStage";
 
     protected FloatBuffer floatArrayToBuffer(float[] array) {
         ByteBuffer bb = ByteBuffer.allocateDirect(array.length * 4);
