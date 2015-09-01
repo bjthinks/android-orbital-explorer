@@ -14,6 +14,7 @@ public class OrbitalRenderer extends MyGLRenderer {
     private static final String TAG = "OrbitalRenderer";
 
     private DemoRenderStage mDemoRenderStage;
+    private FinalRenderStage mFinalRenderStage;
 
     private final float[] mProjectionMatrix = new float[16];
 
@@ -34,12 +35,15 @@ public class OrbitalRenderer extends MyGLRenderer {
     OrbitalRenderer(Context context) {
         assetManager = context.getAssets();
         mDemoRenderStage = new DemoRenderStage();
+        mFinalRenderStage = new FinalRenderStage();
     }
 
     @Override
     public void onCreate(int width, int height, boolean contextIsNew) {
-        if (contextIsNew)
+        if (contextIsNew) {
             mDemoRenderStage.newContext(assetManager);
+            mFinalRenderStage.newContext(assetManager);
+        }
         GLES20.glViewport(0, 0, width, height);
         float ratio = (float) Math.sqrt((double) width / (double) height);
         float leftRight = ratio;
@@ -79,6 +83,8 @@ public class OrbitalRenderer extends MyGLRenderer {
         }
         mTotalRotation = mRotationalMomentum.multiply(mTotalRotation);
 
-        mDemoRenderStage.render(computeShaderTransform());
+        float[] shaderTransform = computeShaderTransform();
+        mDemoRenderStage.render(shaderTransform);
+        mFinalRenderStage.render(shaderTransform);
     }
 }
