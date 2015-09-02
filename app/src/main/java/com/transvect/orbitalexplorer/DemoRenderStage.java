@@ -12,6 +12,7 @@ import java.nio.FloatBuffer;
  * Created by bwj on 8/31/15.
  */
 public class DemoRenderStage extends RenderStage {
+    private static final String TAG = "DemoRenderStage";
 
     private int mProgram;
     private FloatBuffer mVertexBuffer;
@@ -27,6 +28,40 @@ public class DemoRenderStage extends RenderStage {
     }
 
     public void newContext(AssetManager assetManager) {
+
+        int temp[] = new int[1];
+
+        // Generate output texture
+        GLES20.glGenTextures(1, temp, 0);
+        int textureId = temp[0];
+        Log.d(TAG, "Texture id = " + textureId);
+
+        // Bind it to the TEXTURE_2D attachment point
+        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureId);
+
+        final int textureWidth = 64;
+        final int textureHeight = 64;
+        GLES20.glTexImage2D(GLES20.GL_TEXTURE_2D, 0, GLES20.GL_RGB, textureWidth, textureHeight, 0, GLES20.GL_RGB, GLES20.GL_UNSIGNED_BYTE, null);
+
+        // Generate framebuffer
+        GLES20.glGenFramebuffers(1, temp, 0);
+        int framebufferId = temp[0];
+        Log.d(TAG, "Framebuffer id = " + framebufferId);
+
+        // Bind framebuffer
+        GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, framebufferId);
+
+        // Check if framebuffer is complete
+        int status = GLES20.glCheckFramebufferStatus(GLES20.GL_FRAMEBUFFER);
+        if (status != 0)
+            Log.e(TAG, "Framebuffer not complete, code = " + status);
+
+        // Un-bind framebuffer -- this returns drawing to the default framebuffer
+        GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, 0);
+
+        getGLError();
+
+        // Compile & link GLSL program
         Shader vertexShader = new Shader(assetManager, "vertex.glsl", GLES20.GL_VERTEX_SHADER);
         Shader fragmentShader = new Shader(assetManager, "fragment.glsl", GLES20.GL_FRAGMENT_SHADER);
         mProgram = GLES20.glCreateProgram();
