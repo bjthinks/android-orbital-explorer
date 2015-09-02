@@ -39,9 +39,24 @@ public class DemoRenderStage extends RenderStage {
         // Bind it to the TEXTURE_2D attachment point
         GLES30.glBindTexture(GLES30.GL_TEXTURE_2D, textureId);
 
+        // Set the bound texture's size and format.
         final int textureWidth = 64;
         final int textureHeight = 64;
-        GLES30.glTexImage2D(GLES30.GL_TEXTURE_2D, 0, GLES30.GL_RGB, textureWidth, textureHeight, 0, GLES30.GL_RGB, GLES30.GL_UNSIGNED_BYTE, null);
+        // The following three parameters have to match a row of Table 3.2 in the
+        // OpenGL ES 3.0 specification, or we will get an OpenGL error.
+        // For the expensive 32-bit floating point textures that this app requires,
+        // the relevant rows of Table 3.2 are:
+        // format  type   sized internalformat
+        // RED     FLOAT  R32F
+        // RG      FLOAT  RG32F
+        // RGB     FLOAT  RGB32F
+        // RGBA    FLOAT  RGBA32F
+        // TODO: try RGB16F, R11F_G11F_B11F, & RGB9_E5 and see if they give good results.
+        final int textureFormat = GLES30.GL_RGB;
+        final int textureType = GLES30.GL_FLOAT;
+        final int textureInternalFormat = GLES30.GL_RGB32F;
+        GLES30.glTexImage2D(GLES30.GL_TEXTURE_2D, 0, textureInternalFormat,
+                textureWidth, textureHeight, 0, textureFormat, textureType, null);
 
         // Generate framebuffer
         GLES30.glGenFramebuffers(1, temp, 0);
