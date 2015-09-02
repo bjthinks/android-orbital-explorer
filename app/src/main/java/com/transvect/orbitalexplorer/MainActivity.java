@@ -16,9 +16,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (!hasGLES20()) {
+        if (!hasGLES30()) {
             // TODO show a helpful message
-            System.exit(0);
+            throw new UnsupportedOperationException();
         }
 
         // Inflate a GLSurfaceView instance and set it
@@ -27,12 +27,12 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
     }
 
-    private boolean hasGLES20() {
+    private boolean hasGLES30() {
         ActivityManager manager =
                 (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
         ConfigurationInfo info = manager.getDeviceConfigurationInfo();
         int majorVersion = info.reqGlEsVersion >> 16;
-        return majorVersion >= 2;
+        return majorVersion >= 3;
     }
 
     @Override
