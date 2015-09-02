@@ -34,7 +34,6 @@ public class DemoRenderStage extends RenderStage {
         // Generate output texture
         GLES30.glGenTextures(1, temp, 0);
         int textureId = temp[0];
-        Log.d(TAG, "Texture id = " + textureId);
 
         // Bind it to the TEXTURE_2D attachment point
         GLES30.glBindTexture(GLES30.GL_TEXTURE_2D, textureId);
@@ -43,33 +42,36 @@ public class DemoRenderStage extends RenderStage {
         final int textureWidth = 64;
         final int textureHeight = 64;
         // The following three parameters have to match a row of Table 3.2 in the
-        // OpenGL ES 3.0 specification, or we will get an OpenGL error.
-        // For the expensive 32-bit floating point textures that this app requires,
-        // the relevant rows of Table 3.2 are:
-        // format  type   sized internalformat
-        // RED     FLOAT  R32F
-        // RG      FLOAT  RG32F
-        // RGB     FLOAT  RGB32F
-        // RGBA    FLOAT  RGBA32F
-        // TODO: try RGB16F, R11F_G11F_B11F, & RGB9_E5 and see if they give good results.
-        final int textureFormat = GLES30.GL_RGB;
+        // OpenGL ES 3.0 specification, or we will get an OpenGL error. We also
+        // need to choose a sized internal format which is color-renderable
+        // according to Table 3.13 (supposedly).
+        // TODO check for EXT_color_buffer_float and fall back to internal format RGBA32I
+        // if not supported (in which case format = RGBA_INTEGER and type = INT)
+        final int textureFormat = GLES30.GL_RGBA;
         final int textureType = GLES30.GL_FLOAT;
-        final int textureInternalFormat = GLES30.GL_RGB32F;
+        final int textureInternalFormat = GLES30.GL_RGBA32F;
         GLES30.glTexImage2D(GLES30.GL_TEXTURE_2D, 0, textureInternalFormat,
                 textureWidth, textureHeight, 0, textureFormat, textureType, null);
+
+        // Set the filters for sampling the bound texture, when sampling at
+        // a different resolution than native.
+        GLES30.glTexParameteri(GLES30.GL_TEXTURE_2D, GLES30.GL_TEXTURE_MIN_FILTER, GLES30.GL_NEAREST);
+        GLES30.glTexParameteri(GLES30.GL_TEXTURE_2D, GLES30.GL_TEXTURE_MAG_FILTER, GLES30.GL_NEAREST);
 
         // Generate framebuffer
         GLES30.glGenFramebuffers(1, temp, 0);
         int framebufferId = temp[0];
-        Log.d(TAG, "Framebuffer id = " + framebufferId);
 
         // Bind framebuffer
         GLES30.glBindFramebuffer(GLES30.GL_FRAMEBUFFER, framebufferId);
 
+        // Attach the texture to the bound framebuffer
+        GLES30.glFramebufferTexture2D(GLES30.GL_FRAMEBUFFER, GLES30.GL_COLOR_ATTACHMENT0, GLES30.GL_TEXTURE_2D, textureId, 0);
+
         // Check if framebuffer is complete
         int status = GLES30.glCheckFramebufferStatus(GLES30.GL_FRAMEBUFFER);
-        if (status != 0)
-            Log.e(TAG, "Framebuffer not complete, code = " + status);
+        if (status != GLES30.GL_FRAMEBUFFER_COMPLETE)
+            Log.e(TAG, "Framebuffer not complete");
 
         // Un-bind framebuffer -- this returns drawing to the default framebuffer
         GLES30.glBindFramebuffer(GLES30.GL_FRAMEBUFFER, 0);
