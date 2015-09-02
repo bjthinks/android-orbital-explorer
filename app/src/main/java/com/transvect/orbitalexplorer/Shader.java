@@ -1,7 +1,7 @@
 package com.transvect.orbitalexplorer;
 
 import android.content.res.AssetManager;
-import android.opengl.GLES20;
+import android.opengl.GLES30;
 import android.util.Log;
 
 import java.io.BufferedReader;
@@ -42,10 +42,10 @@ public class Shader {
                 }
             }
         }
-        id = GLES20.glCreateShader(shaderType);
-        GLES20.glShaderSource(id, shaderSource);
-        GLES20.glCompileShader(id);
-        String result = GLES20.glGetShaderInfoLog(id);
+        id = GLES30.glCreateShader(shaderType);
+        GLES30.glShaderSource(id, shaderSource);
+        GLES30.glCompileShader(id);
+        String result = GLES30.glGetShaderInfoLog(id);
         if (!result.equals(""))
             Log.e(TAG, result);
     }

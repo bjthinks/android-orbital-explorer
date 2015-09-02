@@ -1,6 +1,6 @@
 package com.transvect.orbitalexplorer;
 
-import android.opengl.GLES20;
+import android.opengl.GLES30;
 import android.util.Log;
 
 import java.nio.ByteBuffer;
@@ -24,7 +24,7 @@ public class RenderStage {
 
     protected void getGLError() {
         int error;
-        while ((error = GLES20.glGetError()) != 0)
+        while ((error = GLES30.glGetError()) != 0)
             Log.e(TAG, "OpenGL error code " + error);
     }
 }

@@ -2,7 +2,7 @@ package com.transvect.orbitalexplorer;
 
 import android.content.Context;
 import android.content.res.AssetManager;
-import android.opengl.GLES20;
+import android.opengl.GLES30;
 import android.opengl.Matrix;
 
 /**
@@ -44,7 +44,7 @@ public class OrbitalRenderer extends MyGLRenderer {
             mDemoRenderStage.newContext(assetManager);
             mFinalRenderStage.newContext(assetManager);
         }
-        GLES20.glViewport(0, 0, width, height);
+        GLES30.glViewport(0, 0, width, height);
         float ratio = (float) Math.sqrt((double) width / (double) height);
         float leftRight = ratio;
         float bottomTop = 1.0f / ratio;
