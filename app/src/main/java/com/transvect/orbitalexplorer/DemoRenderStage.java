@@ -18,6 +18,7 @@ public class DemoRenderStage extends RenderStage {
     private FloatBuffer mVertexBuffer;
     private int mTextureId;
     private int mFramebufferId;
+    private int mWidth, mHeight;
 
     public int getTextureId() {
         return mTextureId;
@@ -45,8 +46,8 @@ public class DemoRenderStage extends RenderStage {
         GLES30.glBindTexture(GLES30.GL_TEXTURE_2D, mTextureId);
 
         // Set the bound texture's size and format.
-        final int textureWidth = 64;
-        final int textureHeight = 64;
+        final int textureWidth = 1;
+        final int textureHeight = 1;
         // The following three parameters have to match a row of Table 3.2 in the
         // OpenGL ES 3.0 specification, or we will get an OpenGL error. We also
         // need to choose a sized internal format which is color-renderable
@@ -94,8 +95,26 @@ public class DemoRenderStage extends RenderStage {
         getGLError();
     }
 
-    public void render(int width, int height, float[] shaderTransform) {
-        GLES30.glViewport(0, 0, 64, 64); // width, height);
+    public void resize(int width, int height) {
+        mWidth = width / 8;
+        mHeight = height / 8;
+
+        // Set the bound texture's size and format.
+        // The following three parameters have to match a row of Table 3.2 in the
+        // OpenGL ES 3.0 specification, or we will get an OpenGL error. We also
+        // need to choose a sized internal format which is color-renderable
+        // according to Table 3.13 (supposedly).
+        // TODO check for EXT_color_buffer_float and fall back to internal format RGBA32I
+        // if not supported (in which case format = RGBA_INTEGER and type = INT)
+        final int textureFormat = GLES30.GL_RGBA;
+        final int textureType = GLES30.GL_FLOAT;
+        final int textureInternalFormat = GLES30.GL_RGBA32F;
+        GLES30.glTexImage2D(GLES30.GL_TEXTURE_2D, 0, textureInternalFormat,
+                mWidth, mHeight, 0, textureFormat, textureType, null);
+    }
+
+    public void render(float[] shaderTransform) {
+        GLES30.glViewport(0, 0, mWidth, mHeight);
         GLES30.glBindFramebuffer(GLES30.GL_FRAMEBUFFER, mFramebufferId);
         GLES30.glClear(GLES30.GL_COLOR_BUFFER_BIT);
         GLES30.glUseProgram(mProgram);

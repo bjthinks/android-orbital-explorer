@@ -46,8 +46,8 @@ public class OrbitalRenderer extends MyGLRenderer {
             mDemoRenderStage.newContext(assetManager);
             mFinalRenderStage.newContext(assetManager);
         }
-        mWidth = width;
-        mHeight = height;
+        mDemoRenderStage.resize(width, height);
+        mFinalRenderStage.resize(width, height);
         float ratio = (float) Math.sqrt((double) width / (double) height);
         float leftRight = ratio;
         float bottomTop = 1.0f / ratio;
@@ -87,7 +87,7 @@ public class OrbitalRenderer extends MyGLRenderer {
         mTotalRotation = mRotationalMomentum.multiply(mTotalRotation);
 
         float[] shaderTransform = computeShaderTransform();
-        mDemoRenderStage.render(mWidth, mHeight, shaderTransform);
-        mFinalRenderStage.render(mWidth, mHeight, mDemoRenderStage.getTextureId());
+        mDemoRenderStage.render(shaderTransform);
+        mFinalRenderStage.render(mDemoRenderStage.getTextureId());
     }
 }

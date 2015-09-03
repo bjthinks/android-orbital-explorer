@@ -13,6 +13,7 @@ public class FinalRenderStage extends RenderStage {
 
     private FloatBuffer mVertexBuffer;
     private int mProgram;
+    private int mWidth, mHeight;
 
     FinalRenderStage() {
         float squareCoordinates[] = {
@@ -34,8 +35,13 @@ public class FinalRenderStage extends RenderStage {
         getGLError();
     }
 
-    public void render(int width, int height, int textureId) {
-        GLES30.glViewport(0, 0, width, height);
+    public void resize(int width, int height) {
+        mWidth = width;
+        mHeight = height;
+    }
+
+    public void render(int textureId) {
+        GLES30.glViewport(0, 0, mWidth, mHeight);
         GLES30.glUseProgram(mProgram);
         GLES30.glActiveTexture(GLES30.GL_TEXTURE0);
         GLES30.glBindTexture(GLES20.GL_TEXTURE_2D, textureId);
