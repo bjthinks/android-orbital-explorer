@@ -3,6 +3,13 @@ precision mediump float;
 uniform sampler2D data;
 in vec2 texCoord;
 out vec3 color;
+
+vec3 srgb_gamma(vec3 linear) {
+    return mix(linear * 12.92,
+               1.055 * pow(linear, vec3(1.0 / 2.4)) - vec3(0.055),
+               greaterThan(linear, vec3(0.0031308)));
+}
+
 void main() {
     vec4 blet = texture(data, texCoord);
 
@@ -30,5 +37,6 @@ void main() {
         linear_RGB.b < 0.0 || linear_RGB.b > 1.0)
         linear_RGB = vec3(0, 0, 0);
 
-    color = linear_RGB;
+    // TODO ask Chad about how to do this automatically
+    color = srgb_gamma(linear_RGB);
 }
