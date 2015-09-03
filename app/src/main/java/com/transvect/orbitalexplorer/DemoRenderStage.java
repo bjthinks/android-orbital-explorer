@@ -56,11 +56,8 @@ public class DemoRenderStage extends RenderStage {
         final int textureFormat = GLES30.GL_RGBA;
         final int textureType = GLES30.GL_FLOAT;
         final int textureInternalFormat = GLES30.GL_RGBA32F;
-        float[] blet = new float[64 * 64 * 4];
-        blet[0] = 1.0f;
-        blet[64*64*4-3] = 1.0f;
         GLES30.glTexImage2D(GLES30.GL_TEXTURE_2D, 0, textureInternalFormat,
-                textureWidth, textureHeight, 0, textureFormat, textureType, floatArrayToBuffer(blet));
+                textureWidth, textureHeight, 0, textureFormat, textureType, null);
 
         // Set the filters for sampling the bound texture, when sampling at
         // a different resolution than native.
