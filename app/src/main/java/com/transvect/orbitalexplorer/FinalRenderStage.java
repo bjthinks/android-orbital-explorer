@@ -1,7 +1,6 @@
 package com.transvect.orbitalexplorer;
 
 import android.content.res.AssetManager;
-import android.opengl.GLES20;
 import android.opengl.GLES30;
 
 import java.nio.FloatBuffer;
@@ -40,11 +39,11 @@ public class FinalRenderStage extends RenderStage {
         mHeight = height;
     }
 
-    public void render(int textureId) {
+    public void render(Texture texture) {
         GLES30.glViewport(0, 0, mWidth, mHeight);
         GLES30.glUseProgram(mProgram);
         GLES30.glActiveTexture(GLES30.GL_TEXTURE0);
-        GLES30.glBindTexture(GLES20.GL_TEXTURE_2D, textureId);
+        texture.bindToTexture2D();
         int dataHandle = GLES30.glGetUniformLocation(mProgram, "data");
         GLES30.glUniform1i(dataHandle, 0);
         int inPositionHandle = GLES30.glGetAttribLocation(mProgram, "inPosition");

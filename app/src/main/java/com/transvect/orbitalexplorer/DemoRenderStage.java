@@ -16,12 +16,12 @@ public class DemoRenderStage extends RenderStage {
 
     private int mProgram;
     private FloatBuffer mVertexBuffer;
-    private int mTextureId;
+    private Texture mTexture;
     private int mFramebufferId;
     private int mWidth, mHeight;
 
-    public int getTextureId() {
-        return mTextureId;
+    public Texture getTexture() {
+        return mTexture;
     }
 
     DemoRenderStage() {
@@ -36,29 +36,19 @@ public class DemoRenderStage extends RenderStage {
 
     public void newContext(AssetManager assetManager) {
 
-        int temp[] = new int[1];
-
-        // Generate output texture
-        GLES30.glGenTextures(1, temp, 0);
-        mTextureId = temp[0];
-
-        // Bind it to the TEXTURE_2D attachment point
-        GLES30.glBindTexture(GLES30.GL_TEXTURE_2D, mTextureId);
-
-        // Set the bound texture's size and format.
-        final int textureWidth = 1;
-        final int textureHeight = 1;
         // The following three parameters have to match a row of Table 3.2 in the
         // OpenGL ES 3.0 specification, or we will get an OpenGL error. We also
         // need to choose a sized internal format which is color-renderable
         // according to Table 3.13 (supposedly).
         // TODO check for EXT_color_buffer_float and fall back to internal format RGBA32I
         // if not supported (in which case format = RGBA_INTEGER and type = INT)
-        final int textureFormat = GLES30.GL_RGBA;
-        final int textureType = GLES30.GL_FLOAT;
-        final int textureInternalFormat = GLES30.GL_RGBA32F;
-        GLES30.glTexImage2D(GLES30.GL_TEXTURE_2D, 0, textureInternalFormat,
-                textureWidth, textureHeight, 0, textureFormat, textureType, null);
+        final int format = GLES30.GL_RGB;
+        final int type = GLES30.GL_UNSIGNED_BYTE;
+        final int internalFormat = GLES30.GL_RGB8;
+
+        // Create a texture to render to
+        mTexture = new Texture(format, type, internalFormat);
+        mTexture.bindToTexture2DAndResize(1, 1);
 
         // Set the filters for sampling the bound texture, when sampling at
         // a different resolution than native.
@@ -66,6 +56,7 @@ public class DemoRenderStage extends RenderStage {
         GLES30.glTexParameteri(GLES30.GL_TEXTURE_2D, GLES30.GL_TEXTURE_MAG_FILTER, GLES30.GL_NEAREST);
 
         // Generate framebuffer
+        int temp[] = new int[1];
         GLES30.glGenFramebuffers(1, temp, 0);
         mFramebufferId = temp[0];
 
@@ -73,7 +64,7 @@ public class DemoRenderStage extends RenderStage {
         GLES30.glBindFramebuffer(GLES30.GL_FRAMEBUFFER, mFramebufferId);
 
         // Attach the texture to the bound framebuffer
-        GLES30.glFramebufferTexture2D(GLES30.GL_FRAMEBUFFER, GLES30.GL_COLOR_ATTACHMENT0, GLES30.GL_TEXTURE_2D, mTextureId, 0);
+        GLES30.glFramebufferTexture2D(GLES30.GL_FRAMEBUFFER, GLES30.GL_COLOR_ATTACHMENT0, GLES30.GL_TEXTURE_2D, mTexture.getId(), 0);
 
         // Check if framebuffer is complete
         int status = GLES30.glCheckFramebufferStatus(GLES30.GL_FRAMEBUFFER);
@@ -96,21 +87,9 @@ public class DemoRenderStage extends RenderStage {
     }
 
     public void resize(int width, int height) {
-        mWidth = width / 8;
-        mHeight = height / 8;
-
-        // Set the bound texture's size and format.
-        // The following three parameters have to match a row of Table 3.2 in the
-        // OpenGL ES 3.0 specification, or we will get an OpenGL error. We also
-        // need to choose a sized internal format which is color-renderable
-        // according to Table 3.13 (supposedly).
-        // TODO check for EXT_color_buffer_float and fall back to internal format RGBA32I
-        // if not supported (in which case format = RGBA_INTEGER and type = INT)
-        final int textureFormat = GLES30.GL_RGBA;
-        final int textureType = GLES30.GL_FLOAT;
-        final int textureInternalFormat = GLES30.GL_RGBA32F;
-        GLES30.glTexImage2D(GLES30.GL_TEXTURE_2D, 0, textureInternalFormat,
-                mWidth, mHeight, 0, textureFormat, textureType, null);
+        mWidth = width;
+        mHeight = height;
+        mTexture.bindToTexture2DAndResize(mWidth, mHeight);
     }
 
     public void render(float[] shaderTransform) {

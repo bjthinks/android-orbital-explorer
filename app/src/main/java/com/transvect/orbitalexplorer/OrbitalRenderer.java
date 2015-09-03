@@ -43,6 +43,9 @@ public class OrbitalRenderer extends MyGLRenderer {
     @Override
     public void onCreate(int width, int height, boolean contextIsNew) {
         if (contextIsNew) {
+            // For pessimistic testing
+            // GLES30.glDisable(GLES30.GL_DITHER);
+
             mDemoRenderStage.newContext(assetManager);
             mFinalRenderStage.newContext(assetManager);
         }
@@ -88,6 +91,6 @@ public class OrbitalRenderer extends MyGLRenderer {
 
         float[] shaderTransform = computeShaderTransform();
         mDemoRenderStage.render(shaderTransform);
-        mFinalRenderStage.render(mDemoRenderStage.getTextureId());
+        mFinalRenderStage.render(mDemoRenderStage.getTexture());
     }
 }
