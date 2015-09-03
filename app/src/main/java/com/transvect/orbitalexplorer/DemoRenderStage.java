@@ -16,6 +16,12 @@ public class DemoRenderStage extends RenderStage {
 
     private int mProgram;
     private FloatBuffer mVertexBuffer;
+    private int mTextureId;
+    private int mFramebufferId;
+
+    public int getTextureId() {
+        return mTextureId;
+    }
 
     DemoRenderStage() {
         float squareCoordinates[] = {
@@ -33,10 +39,10 @@ public class DemoRenderStage extends RenderStage {
 
         // Generate output texture
         GLES30.glGenTextures(1, temp, 0);
-        int textureId = temp[0];
+        mTextureId = temp[0];
 
         // Bind it to the TEXTURE_2D attachment point
-        GLES30.glBindTexture(GLES30.GL_TEXTURE_2D, textureId);
+        GLES30.glBindTexture(GLES30.GL_TEXTURE_2D, mTextureId);
 
         // Set the bound texture's size and format.
         final int textureWidth = 64;
@@ -50,8 +56,11 @@ public class DemoRenderStage extends RenderStage {
         final int textureFormat = GLES30.GL_RGBA;
         final int textureType = GLES30.GL_FLOAT;
         final int textureInternalFormat = GLES30.GL_RGBA32F;
+        float[] blet = new float[64 * 64 * 4];
+        blet[0] = 1.0f;
+        blet[64*64*4-3] = 1.0f;
         GLES30.glTexImage2D(GLES30.GL_TEXTURE_2D, 0, textureInternalFormat,
-                textureWidth, textureHeight, 0, textureFormat, textureType, null);
+                textureWidth, textureHeight, 0, textureFormat, textureType, floatArrayToBuffer(blet));
 
         // Set the filters for sampling the bound texture, when sampling at
         // a different resolution than native.
@@ -60,13 +69,13 @@ public class DemoRenderStage extends RenderStage {
 
         // Generate framebuffer
         GLES30.glGenFramebuffers(1, temp, 0);
-        int framebufferId = temp[0];
+        mFramebufferId = temp[0];
 
         // Bind framebuffer
-        GLES30.glBindFramebuffer(GLES30.GL_FRAMEBUFFER, framebufferId);
+        GLES30.glBindFramebuffer(GLES30.GL_FRAMEBUFFER, mFramebufferId);
 
         // Attach the texture to the bound framebuffer
-        GLES30.glFramebufferTexture2D(GLES30.GL_FRAMEBUFFER, GLES30.GL_COLOR_ATTACHMENT0, GLES30.GL_TEXTURE_2D, textureId, 0);
+        GLES30.glFramebufferTexture2D(GLES30.GL_FRAMEBUFFER, GLES30.GL_COLOR_ATTACHMENT0, GLES30.GL_TEXTURE_2D, mTextureId, 0);
 
         // Check if framebuffer is complete
         int status = GLES30.glCheckFramebufferStatus(GLES30.GL_FRAMEBUFFER);
@@ -79,8 +88,8 @@ public class DemoRenderStage extends RenderStage {
         getGLError();
 
         // Compile & link GLSL program
-        Shader vertexShader = new Shader(assetManager, "vertex.glsl", GLES30.GL_VERTEX_SHADER);
-        Shader fragmentShader = new Shader(assetManager, "fragment.glsl", GLES30.GL_FRAGMENT_SHADER);
+        Shader vertexShader = new Shader(assetManager, "demo.vert", GLES30.GL_VERTEX_SHADER);
+        Shader fragmentShader = new Shader(assetManager, "demo.frag", GLES30.GL_FRAGMENT_SHADER);
         mProgram = GLES30.glCreateProgram();
         GLES30.glAttachShader(mProgram, vertexShader.getId());
         GLES30.glAttachShader(mProgram, fragmentShader.getId());
@@ -88,7 +97,9 @@ public class DemoRenderStage extends RenderStage {
         getGLError();
     }
 
-    public void render(float[] shaderTransform) {
+    public void render(int width, int height, float[] shaderTransform) {
+        GLES30.glViewport(0, 0, 64, 64); // width, height);
+        GLES30.glBindFramebuffer(GLES30.GL_FRAMEBUFFER, mFramebufferId);
         GLES30.glClear(GLES30.GL_COLOR_BUFFER_BIT);
         GLES30.glUseProgram(mProgram);
         int mvpMatrixHandle = GLES30.glGetUniformLocation(mProgram, "shaderTransform");
@@ -98,7 +109,7 @@ public class DemoRenderStage extends RenderStage {
         GLES30.glVertexAttribPointer(inPositionHandle, 2, GLES30.GL_FLOAT, false, 8, mVertexBuffer);
         GLES30.glDrawArrays(GLES30.GL_TRIANGLE_FAN, 0, 4);
         GLES30.glDisableVertexAttribArray(inPositionHandle);
+        GLES30.glBindFramebuffer(GLES30.GL_FRAMEBUFFER, 0);
         getGLError();
     }
-
 }

@@ -16,6 +16,8 @@ public class OrbitalRenderer extends MyGLRenderer {
     private DemoRenderStage mDemoRenderStage;
     private FinalRenderStage mFinalRenderStage;
 
+    private int mWidth, mHeight;
+
     private final float[] mProjectionMatrix = new float[16];
 
     private static Quaternion mThisFrameRotation = new Quaternion(1);
@@ -44,7 +46,8 @@ public class OrbitalRenderer extends MyGLRenderer {
             mDemoRenderStage.newContext(assetManager);
             mFinalRenderStage.newContext(assetManager);
         }
-        GLES30.glViewport(0, 0, width, height);
+        mWidth = width;
+        mHeight = height;
         float ratio = (float) Math.sqrt((double) width / (double) height);
         float leftRight = ratio;
         float bottomTop = 1.0f / ratio;
@@ -84,7 +87,7 @@ public class OrbitalRenderer extends MyGLRenderer {
         mTotalRotation = mRotationalMomentum.multiply(mTotalRotation);
 
         float[] shaderTransform = computeShaderTransform();
-        mDemoRenderStage.render(shaderTransform);
-        mFinalRenderStage.render(shaderTransform);
+        mDemoRenderStage.render(mWidth, mHeight, shaderTransform);
+        mFinalRenderStage.render(mWidth, mHeight, mDemoRenderStage.getTextureId());
     }
 }
