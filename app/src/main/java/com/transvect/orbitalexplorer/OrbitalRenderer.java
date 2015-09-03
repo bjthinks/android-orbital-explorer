@@ -18,8 +18,6 @@ public class OrbitalRenderer extends MyGLRenderer {
 
     private int mWidth, mHeight;
 
-    private final float[] mProjectionMatrix = new float[16];
-
     private static Quaternion mThisFrameRotation = new Quaternion(1);
     private static Quaternion mRotationalMomentum = new Quaternion(1);
     private static Quaternion mTotalRotation = new Quaternion(1);
@@ -49,26 +47,30 @@ public class OrbitalRenderer extends MyGLRenderer {
             mDemoRenderStage.newContext(assetManager);
             mFinalRenderStage.newContext(assetManager);
         }
-        mDemoRenderStage.resize(width, height);
-        mFinalRenderStage.resize(width, height);
-        float ratio = (float) Math.sqrt((double) width / (double) height);
+        mWidth = width;
+        mHeight = height;
+        mDemoRenderStage.resize(mWidth, mHeight);
+        mFinalRenderStage.resize(mWidth, mHeight);
+    }
+
+    private float[] computeShaderTransform() {
+
+        float ratio = (float) Math.sqrt((double) mWidth / (double) mHeight);
         float leftRight = ratio;
         float bottomTop = 1.0f / ratio;
         float near = 1.0f;
         float far = 10.0f;
-        Matrix.frustumM(mProjectionMatrix, 0,
+        float[] projectionMatrix = new float[16];
+        Matrix.frustumM(projectionMatrix, 0,
                 -leftRight, leftRight,
                 -bottomTop, bottomTop,
                 near, far);
-    }
-
-    private float[] computeShaderTransform() {
 
         float[] viewMatrix = new float[16];
         Matrix.setLookAtM(viewMatrix, 0, 0, 0, -3, 0f, 0f, 0f, 0f, 1.0f, 0.0f);
 
         float[] viewProjMatrix = new float[16];
-        Matrix.multiplyMM(viewProjMatrix, 0, mProjectionMatrix, 0, viewMatrix, 0);
+        Matrix.multiplyMM(viewProjMatrix, 0, projectionMatrix, 0, viewMatrix, 0);
 
         float[] cameraRotation = mTotalRotation.asRotationMatrix();
 
