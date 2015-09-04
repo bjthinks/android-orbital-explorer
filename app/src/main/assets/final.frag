@@ -13,12 +13,12 @@ vec3 srgb_gamma(vec3 linear) {
 void main() {
     vec4 blet = texture(data, texCoord);
 
-    vec2 uv = blet.xy;
+    vec2 uv_prime = blet.xy;
     float Y = blet.z;
 
-    // Convert CIE (u,v) color coordinates (as per CIELUV) to (x,y)
-    vec2 xy = vec2(9.0, 4.0) * uv;
-    xy /= dot(vec3(6.0, -16.0, 12.0), vec3(uv, 1.0));
+    // Convert CIE (u',v') color coordinates (as per CIELUV) to (x,y)
+    vec2 xy = vec2(9.0, 4.0) * uv_prime;
+    xy /= dot(vec3(6.0, -16.0, 12.0), vec3(uv_prime, 1.0));
 
     // Add z, defined as 1 - x - y
     vec3 xyz = vec3(xy, 1.0 - xy.x - xy.y);
