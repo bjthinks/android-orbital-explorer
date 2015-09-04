@@ -5,6 +5,7 @@ import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
+import android.view.ScaleGestureDetector;
 
 /**
  * A wrapper around GLSurfaceView that ensures we do proper setup
@@ -38,19 +39,29 @@ public class OrbitalView extends GLSurfaceView {
         setRenderer(mRenderer);
 
         // Render the view only when there is a change in the drawing data
-        // setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
+        setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
+
+        mScaleDetector = new ScaleGestureDetector(context, new ScaleListener());
     }
 
     private float mPreviousX;
     private float mPreviousY;
 
+    private ScaleGestureDetector mScaleDetector;
+    private float mScaleFactor = 1.0f;
+
     @Override
     public boolean onTouchEvent(MotionEvent e) {
+
+        mScaleDetector.onTouchEvent(e);
+        if (mScaleDetector.isInProgress())
+            return true;
 
         float x = e.getX();
         float y = e.getY();
 
-        switch (e.getAction()) {
+        switch (e.getActionMasked()) {
+
             case MotionEvent.ACTION_MOVE:
                 double dx = x - mPreviousX;
                 double dy = y - mPreviousY;
@@ -60,11 +71,43 @@ public class OrbitalView extends GLSurfaceView {
                 Quaternion yz_rotation = Quaternion.rotation(roty, new Vector3(-1, 0, 0));
                 Quaternion increment = yz_rotation.multiply(xz_rotation);
                 mRenderer.rotateBy(increment);
-                // requestRender();
+                requestRender();
+                break;
+
+            case MotionEvent.ACTION_DOWN:
+                Log.d(TAG, "Touch Event: Down");
+                break;
+
+            case MotionEvent.ACTION_UP:
+                Log.d(TAG, "Touch Event: Up");
+                break;
+
+            case MotionEvent.ACTION_POINTER_DOWN:
+                Log.d(TAG, "Touch Event: Pointer Down");
+                break;
+
+            case MotionEvent.ACTION_POINTER_UP:
+                Log.d(TAG, "Touch Event: Pointer Up");
+                break;
+
+            default:
+                Log.d(TAG, "Touch Event: Unknown");
+                break;
         }
 
         mPreviousX = x;
         mPreviousY = y;
         return true;
+    }
+
+    private class ScaleListener extends ScaleGestureDetector.SimpleOnScaleGestureListener {
+        @Override
+        public boolean onScale(ScaleGestureDetector detector) {
+            mScaleFactor *= detector.getScaleFactor();
+            mScaleFactor = Math.max(0.1f, Math.min(mScaleFactor, 5.0f));
+            Log.d(TAG, "Scale factor now = " + mScaleFactor);
+            invalidate();
+            return true;
+        }
     }
 }

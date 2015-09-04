@@ -18,9 +18,8 @@ public class OrbitalRenderer extends MyGLRenderer {
 
     private int mWidth, mHeight;
 
-    private static Quaternion mThisFrameRotation = new Quaternion(1);
-    private static Quaternion mRotationalMomentum = new Quaternion(1);
-    private static Quaternion mTotalRotation = new Quaternion(1);
+    private Quaternion mThisFrameRotation;
+    private static Quaternion mTotalRotation = new Quaternion(1.0);
 
     public void rotateBy(Quaternion r)
     {
@@ -36,6 +35,7 @@ public class OrbitalRenderer extends MyGLRenderer {
         assetManager = context.getAssets();
         mDemoRenderStage = new DemoRenderStage();
         mFinalRenderStage = new FinalRenderStage();
+        mThisFrameRotation = new Quaternion(1.0);
     }
 
     @Override
@@ -82,14 +82,8 @@ public class OrbitalRenderer extends MyGLRenderer {
 
     @Override
     public void onDrawFrame() {
-        // TODO this should take into account the # of milliseconds between calls
-        if (mThisFrameRotation != null) {
-            mRotationalMomentum = mThisFrameRotation;
-            mThisFrameRotation = null;
-        } else {
-            mRotationalMomentum = mRotationalMomentum.pow(0.99);
-        }
-        mTotalRotation = mRotationalMomentum.multiply(mTotalRotation);
+        mTotalRotation = mThisFrameRotation.multiply(mTotalRotation);
+        mThisFrameRotation = new Quaternion(1.0);
 
         float[] shaderTransform = computeShaderTransform();
         mDemoRenderStage.render(shaderTransform);
