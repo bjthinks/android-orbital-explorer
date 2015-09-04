@@ -27,8 +27,8 @@ public class OrbitalView extends GLSurfaceView {
     }
 
     private void constructorSetup(Context context) {
-        // Specify OpenGL ES version 2.0
-        setEGLContextClientVersion(2);
+        // Specify OpenGL ES version 3.0
+        setEGLContextClientVersion(3);
 
         // Try to preserve our context, if possible
         setPreserveEGLContextOnPause(true);
