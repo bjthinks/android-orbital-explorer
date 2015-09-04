@@ -42,9 +42,9 @@ public class DemoRenderStage extends RenderStage {
         // according to Table 3.13 (supposedly).
         // TODO check for EXT_color_buffer_float and fall back to internal format RGBA32I
         // if not supported (in which case format = RGBA_INTEGER and type = INT)
-        final int format = GLES30.GL_RGB;
-        final int type = GLES30.GL_UNSIGNED_BYTE;
-        final int internalFormat = GLES30.GL_RGB8;
+        final int format = GLES30.GL_RGBA;
+        final int type = GLES30.GL_FLOAT;
+        final int internalFormat = GLES30.GL_RGBA32F;
 
         // Create a texture to render to
         mTexture = new Texture(format, type, internalFormat);
@@ -95,6 +95,7 @@ public class DemoRenderStage extends RenderStage {
     public void render(float[] shaderTransform) {
         GLES30.glViewport(0, 0, mWidth, mHeight);
         GLES30.glBindFramebuffer(GLES30.GL_FRAMEBUFFER, mFramebufferId);
+        GLES30.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
         GLES30.glClear(GLES30.GL_COLOR_BUFFER_BIT);
         GLES30.glUseProgram(mProgram);
         int mvpMatrixHandle = GLES30.glGetUniformLocation(mProgram, "shaderTransform");

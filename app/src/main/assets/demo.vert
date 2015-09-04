@@ -6,9 +6,9 @@ uniform mat4 shaderTransform;
 in vec2 inPosition;
 
 // Output pre-transformed position
-out vec4 position;
+out vec2 position;
 
 void main() {
-    position = vec4(inPosition.xy, 0, 1);
-    gl_Position = shaderTransform * position;
+    position = inPosition * 0.06;
+    gl_Position = shaderTransform * vec4(inPosition, 0, 1);
 }
