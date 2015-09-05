@@ -2,8 +2,10 @@ package com.transvect.orbitalexplorer;
 
 import android.content.Context;
 import android.opengl.GLSurfaceView;
+import android.os.Bundle;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 
@@ -41,16 +43,20 @@ public class OrbitalView extends GLSurfaceView {
         // Render the view only when there is a change in the drawing data
         setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
 
+        mDetector = new GestureDetector(context, new MyGestureListener());
         mScaleDetector = new ScaleGestureDetector(context, new ScaleListener());
     }
 
     private float mPreviousX;
     private float mPreviousY;
 
+    private GestureDetector mDetector;
     private ScaleGestureDetector mScaleDetector;
 
     @Override
     public boolean onTouchEvent(MotionEvent e) {
+
+        mDetector.onTouchEvent(e);
 
         mScaleDetector.onTouchEvent(e);
         if (mScaleDetector.isInProgress()) {
@@ -64,6 +70,7 @@ public class OrbitalView extends GLSurfaceView {
         switch (e.getActionMasked()) {
 
             case MotionEvent.ACTION_MOVE:
+                Log.d(TAG, "Touch Event: Move");
                 double dx = x - mPreviousX;
                 double dy = y - mPreviousY;
                 double rotx = Math.PI * dx / getWidth();
@@ -99,6 +106,23 @@ public class OrbitalView extends GLSurfaceView {
         mPreviousX = x;
         mPreviousY = y;
         return true;
+    }
+
+    private class MyGestureListener extends GestureDetector.SimpleOnGestureListener {
+        private static final String TAG = "MyGestureListener";
+
+        @Override
+        public boolean onDown(MotionEvent event) {
+            return true;
+        }
+
+        @Override
+        public boolean onFling(MotionEvent event1, MotionEvent event2, float velocityX, float velocityY) {
+            // Log.d(TAG, "Fling: " + event1.toString());
+            // Log.d(TAG, "Fling: " + event2.toString());
+            Log.d(TAG, "Fling: velocity = ( " + velocityX + " , " + velocityY + " )");
+            return true;
+        }
     }
 
     private class ScaleListener extends ScaleGestureDetector.SimpleOnScaleGestureListener {
