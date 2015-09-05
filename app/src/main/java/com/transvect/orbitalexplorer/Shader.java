@@ -3,7 +3,6 @@ package com.transvect.orbitalexplorer;
 import android.content.res.AssetManager;
 import android.opengl.GLES30;
 import android.util.Log;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
