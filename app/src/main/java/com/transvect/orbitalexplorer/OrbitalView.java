@@ -2,7 +2,6 @@ package com.transvect.orbitalexplorer;
 
 import android.content.Context;
 import android.opengl.GLSurfaceView;
-import android.os.Bundle;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.GestureDetector;
@@ -43,7 +42,7 @@ public class OrbitalView extends GLSurfaceView {
         // Render the view only when there is a change in the drawing data
         setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
 
-        mDetector = new GestureDetector(context, new MyGestureListener());
+        mFlingDetector = new GestureDetector(context, new FlingListener());
         mScaleDetector = new ScaleGestureDetector(context, new ScaleListener());
     }
 
@@ -51,28 +50,21 @@ public class OrbitalView extends GLSurfaceView {
     private float mPreviousX;
     private float mPreviousY;
 
-    private GestureDetector mDetector;
+    private GestureDetector mFlingDetector;
     private ScaleGestureDetector mScaleDetector;
 
     @Override
     public boolean onTouchEvent(MotionEvent e) {
 
-        mDetector.onTouchEvent(e);
-
+        mFlingDetector.onTouchEvent(e);
         mScaleDetector.onTouchEvent(e);
-        if (mScaleDetector.isInProgress()) {
-            requestRender(); // TODO move this to the inner helper class
-            return true; // TODO try removing this return statement
-        }
 
-        final int action = e.getActionMasked();
-
-        switch (action) {
+        switch (e.getActionMasked()) {
 
             case MotionEvent.ACTION_DOWN: {
-                final int pointerIndex = e.getActionIndex();
-                final float x = e.getX(pointerIndex);
-                final float y = e.getY(pointerIndex);
+                int pointerIndex = e.getActionIndex();
+                float x = e.getX(pointerIndex);
+                float y = e.getY(pointerIndex);
                 mPreviousX = x;
                 mPreviousY = y;
                 mActivePointerId = e.getPointerId(0);
@@ -80,22 +72,24 @@ public class OrbitalView extends GLSurfaceView {
             }
 
             case MotionEvent.ACTION_MOVE: {
-                final int pointerIndex = e.findPointerIndex(mActivePointerId);
-                final float x = e.getX(pointerIndex);
-                final float y = e.getY(pointerIndex);
+                int pointerIndex = e.findPointerIndex(mActivePointerId);
+                float x = e.getX(pointerIndex);
+                float y = e.getY(pointerIndex);
                 double dx = x - mPreviousX;
                 double dy = y - mPreviousY;
                 mPreviousX = x;
                 mPreviousY = y;
                 invalidate(); // TODO learn about invalidate vs requestRender
 
-                double rotx = Math.PI * dx / getWidth(); // TODO replace with getMeanSize()
-                double roty = Math.PI * dy / getHeight();
-                Quaternion xz_rotation = Quaternion.rotation(rotx, new Vector3(0, 1, 0));
-                Quaternion yz_rotation = Quaternion.rotation(roty, new Vector3(-1, 0, 0));
-                Quaternion increment = yz_rotation.multiply(xz_rotation);
-                mRenderer.rotateBy(increment);
-                requestRender();
+                if (!mScaleDetector.isInProgress()) {
+                    double rotx = Math.PI * dx / getWidth(); // TODO replace with getMeanSize()
+                    double roty = Math.PI * dy / getHeight();
+                    Quaternion xz_rotation = Quaternion.rotation(rotx, new Vector3(0, 1, 0));
+                    Quaternion yz_rotation = Quaternion.rotation(roty, new Vector3(-1, 0, 0));
+                    Quaternion increment = yz_rotation.multiply(xz_rotation);
+                    mRenderer.rotateBy(increment);
+                    invalidate();
+                }
                 break;
             }
 
@@ -131,29 +125,17 @@ public class OrbitalView extends GLSurfaceView {
         return true;
     }
 
-    private class MyGestureListener extends GestureDetector.SimpleOnGestureListener {
-        private static final String TAG = "MyGestureListener";
+    private class FlingListener extends GestureDetector.SimpleOnGestureListener {
+        private static final String TAG = "FlingListener";
 
         @Override
         public boolean onDown(MotionEvent event) {
             return true;
         }
 
-        /*
-         * Testing shows that scroll gesture detection is not appropriate for
-         * this app, because touch-pause-move is categorized as some other event,
-         * which is therefore not a scroll gesture, even though we want it to be.
-         */
-        /* @Override
-        public boolean onScroll(MotionEvent event1, MotionEvent event2, float distanceX, float distanceY) {
-            Log.d(TAG, "Scroll: distance = ( " + distanceX + " , " + distanceY + " )");
-            return true;
-        } */
-
         @Override
         public boolean onFling(MotionEvent event1, MotionEvent event2, float velocityX, float velocityY) {
-            // Log.d(TAG, "Fling: " + event1.toString());
-            // Log.d(TAG, "Fling: " + event2.toString());
+            // TODO implement flinging
             Log.d(TAG, "Fling: velocity = ( " + velocityX + " , " + velocityY + " )");
             return true;
         }
