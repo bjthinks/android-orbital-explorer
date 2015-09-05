@@ -79,7 +79,6 @@ public class OrbitalView extends GLSurfaceView {
                 double dy = y - mPreviousY;
                 mPreviousX = x;
                 mPreviousY = y;
-                invalidate(); // TODO learn about invalidate vs requestRender
 
                 if (!mScaleDetector.isInProgress()) {
                     double rotx = Math.PI * dx / getWidth(); // TODO replace with getMeanSize()
@@ -88,7 +87,7 @@ public class OrbitalView extends GLSurfaceView {
                     Quaternion yz_rotation = Quaternion.rotation(roty, new Vector3(-1, 0, 0));
                     Quaternion increment = yz_rotation.multiply(xz_rotation);
                     mRenderer.rotateBy(increment);
-                    invalidate();
+                    requestRender();
                 }
                 break;
             }
@@ -145,7 +144,7 @@ public class OrbitalView extends GLSurfaceView {
         @Override
         public boolean onScale(ScaleGestureDetector detector) {
             mRenderer.scaleBy(detector.getScaleFactor());
-            invalidate();
+            requestRender();
             return true;
         }
     }
