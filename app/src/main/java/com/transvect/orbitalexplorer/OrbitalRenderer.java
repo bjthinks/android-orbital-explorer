@@ -18,15 +18,11 @@ public class OrbitalRenderer extends MyGLRenderer {
 
     private int mWidth, mHeight;
 
-    private Quaternion mThisFrameRotation;
     private static Quaternion mTotalRotation = new Quaternion(1.0);
     private static double mScaleFactor = 1.0;
 
     public void rotateBy(Quaternion r) {
-        if (mThisFrameRotation != null)
-            mThisFrameRotation = r.multiply(mThisFrameRotation);
-        else
-            mThisFrameRotation = r;
+        mTotalRotation = r.multiply(mTotalRotation);
     }
 
     public void scaleBy(double f) {
@@ -39,7 +35,6 @@ public class OrbitalRenderer extends MyGLRenderer {
         assetManager = context.getAssets();
         mDemoRenderStage = new DemoRenderStage();
         mFinalRenderStage = new FinalRenderStage();
-        mThisFrameRotation = new Quaternion(1.0);
     }
 
     @Override
@@ -86,9 +81,6 @@ public class OrbitalRenderer extends MyGLRenderer {
 
     @Override
     public void onDrawFrame() {
-        mTotalRotation = mThisFrameRotation.multiply(mTotalRotation);
-        mThisFrameRotation = new Quaternion(1.0);
-
         float[] shaderTransform = computeShaderTransform();
         mDemoRenderStage.render(shaderTransform);
         mFinalRenderStage.render(mDemoRenderStage.getTexture());

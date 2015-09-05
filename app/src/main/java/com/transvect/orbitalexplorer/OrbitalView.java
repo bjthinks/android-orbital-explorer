@@ -57,7 +57,7 @@ public class OrbitalView extends GLSurfaceView {
             requestRender();
             return true;
         }
-        
+
         float x = e.getX();
         float y = e.getY();
 
