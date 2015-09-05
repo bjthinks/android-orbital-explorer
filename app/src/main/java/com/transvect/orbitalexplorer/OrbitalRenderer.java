@@ -20,13 +20,17 @@ public class OrbitalRenderer extends MyGLRenderer {
 
     private Quaternion mThisFrameRotation;
     private static Quaternion mTotalRotation = new Quaternion(1.0);
+    private static double mScaleFactor = 1.0;
 
-    public void rotateBy(Quaternion r)
-    {
+    public void rotateBy(Quaternion r) {
         if (mThisFrameRotation != null)
             mThisFrameRotation = r.multiply(mThisFrameRotation);
         else
             mThisFrameRotation = r;
+    }
+
+    public void scaleBy(double f) {
+        mScaleFactor *= f;
     }
 
     private AssetManager assetManager;
@@ -67,7 +71,7 @@ public class OrbitalRenderer extends MyGLRenderer {
                 near, far);
 
         float[] viewMatrix = new float[16];
-        Matrix.setLookAtM(viewMatrix, 0, 0, 0, -2.5f, 0f, 0f, 0f, 0f, 1.0f, 0.0f);
+        Matrix.setLookAtM(viewMatrix, 0, 0, 0, (float) (-2.5 / mScaleFactor), 0f, 0f, 0f, 0f, 1.0f, 0.0f);
 
         float[] viewProjMatrix = new float[16];
         Matrix.multiplyMM(viewProjMatrix, 0, projectionMatrix, 0, viewMatrix, 0);

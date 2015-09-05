@@ -48,15 +48,16 @@ public class OrbitalView extends GLSurfaceView {
     private float mPreviousY;
 
     private ScaleGestureDetector mScaleDetector;
-    private float mScaleFactor = 1.0f;
 
     @Override
     public boolean onTouchEvent(MotionEvent e) {
 
         mScaleDetector.onTouchEvent(e);
-        if (mScaleDetector.isInProgress())
+        if (mScaleDetector.isInProgress()) {
+            requestRender();
             return true;
-
+        }
+        
         float x = e.getX();
         float y = e.getY();
 
@@ -103,9 +104,7 @@ public class OrbitalView extends GLSurfaceView {
     private class ScaleListener extends ScaleGestureDetector.SimpleOnScaleGestureListener {
         @Override
         public boolean onScale(ScaleGestureDetector detector) {
-            mScaleFactor *= detector.getScaleFactor();
-            mScaleFactor = Math.max(0.1f, Math.min(mScaleFactor, 5.0f));
-            Log.d(TAG, "Scale factor now = " + mScaleFactor);
+            mRenderer.scaleBy(detector.getScaleFactor());
             invalidate();
             return true;
         }
