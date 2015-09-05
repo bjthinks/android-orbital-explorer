@@ -2,7 +2,6 @@ package com.transvect.orbitalexplorer;
 
 import android.content.Context;
 import android.content.res.AssetManager;
-import android.opengl.GLES30;
 import android.opengl.Matrix;
 
 /**
@@ -19,14 +18,18 @@ public class OrbitalRenderer extends MyGLRenderer {
     private int mWidth, mHeight;
 
     private static Quaternion mTotalRotation = new Quaternion(1.0);
-    private static double mScaleFactor = 1.0;
+    private static double mCameraDistance = 3.0;
 
     public void rotateBy(Quaternion r) {
         mTotalRotation = r.multiply(mTotalRotation);
     }
 
     public void scaleBy(double f) {
-        mScaleFactor *= f;
+        mCameraDistance /= f;
+        if (mCameraDistance > 10.0)
+            mCameraDistance = 10.0;
+        if (mCameraDistance < 2.0)
+            mCameraDistance = 2.0;
     }
 
     private AssetManager assetManager;
@@ -58,7 +61,7 @@ public class OrbitalRenderer extends MyGLRenderer {
         float leftRight = ratio;
         float bottomTop = 1.0f / ratio;
         float near = 1.0f;
-        float far = 10.0f;
+        float far = (float) (mCameraDistance + 1.0);
         float[] projectionMatrix = new float[16];
         Matrix.frustumM(projectionMatrix, 0,
                 -leftRight, leftRight,
@@ -66,7 +69,7 @@ public class OrbitalRenderer extends MyGLRenderer {
                 near, far);
 
         float[] viewMatrix = new float[16];
-        Matrix.setLookAtM(viewMatrix, 0, 0, 0, (float) (-2.5 / mScaleFactor), 0f, 0f, 0f, 0f, 1.0f, 0.0f);
+        Matrix.setLookAtM(viewMatrix, 0, 0, 0, (float) (-mCameraDistance), 0f, 0f, 0f, 0f, 1.0f, 0.0f);
 
         float[] viewProjMatrix = new float[16];
         Matrix.multiplyMM(viewProjMatrix, 0, projectionMatrix, 0, viewMatrix, 0);
