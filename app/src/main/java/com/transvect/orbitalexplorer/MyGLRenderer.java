@@ -9,6 +9,7 @@ import javax.microedition.khronos.opengles.GL10;
  * actual OpenGL drawing, which occurs in a derived class.
  */
 
+// TODO marge this class with OrbitalRenderer and consult documentation
 public abstract class MyGLRenderer implements GLSurfaceView.Renderer {
 
     private boolean mSurfaceIsNew;

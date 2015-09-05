@@ -60,8 +60,8 @@ public class OrbitalView extends GLSurfaceView {
 
         mScaleDetector.onTouchEvent(e);
         if (mScaleDetector.isInProgress()) {
-            requestRender();
-            return true;
+            requestRender(); // TODO move this to the inner helper class
+            return true; // TODO try removing this return statement
         }
 
         float x = e.getX();
@@ -115,6 +115,17 @@ public class OrbitalView extends GLSurfaceView {
         public boolean onDown(MotionEvent event) {
             return true;
         }
+
+        /*
+         * Testing shows that scroll gesture detection is not appropriate for
+         * this app, because touch-pause-move is categorized as some other event,
+         * which is therefore not a scroll gesture, even though we want it to be.
+         */
+        /* @Override
+        public boolean onScroll(MotionEvent event1, MotionEvent event2, float distanceX, float distanceY) {
+            Log.d(TAG, "Scroll: distance = ( " + distanceX + " , " + distanceY + " )");
+            return true;
+        } */
 
         @Override
         public boolean onFling(MotionEvent event1, MotionEvent event2, float velocityX, float velocityY) {
