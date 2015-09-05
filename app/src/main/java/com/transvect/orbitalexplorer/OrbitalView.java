@@ -47,6 +47,7 @@ public class OrbitalView extends GLSurfaceView {
         mScaleDetector = new ScaleGestureDetector(context, new ScaleListener());
     }
 
+    private int mActivePointerId = MotionEvent.INVALID_POINTER_ID;
     private float mPreviousX;
     private float mPreviousY;
 
@@ -64,47 +65,69 @@ public class OrbitalView extends GLSurfaceView {
             return true; // TODO try removing this return statement
         }
 
-        float x = e.getX();
-        float y = e.getY();
+        final int action = e.getActionMasked();
 
-        switch (e.getActionMasked()) {
+        switch (action) {
 
-            case MotionEvent.ACTION_MOVE:
-                Log.d(TAG, "Touch Event: Move");
+            case MotionEvent.ACTION_DOWN: {
+                final int pointerIndex = e.getActionIndex();
+                final float x = e.getX(pointerIndex);
+                final float y = e.getY(pointerIndex);
+                mPreviousX = x;
+                mPreviousY = y;
+                mActivePointerId = e.getPointerId(0);
+                break;
+            }
+
+            case MotionEvent.ACTION_MOVE: {
+                final int pointerIndex = e.findPointerIndex(mActivePointerId);
+                final float x = e.getX(pointerIndex);
+                final float y = e.getY(pointerIndex);
                 double dx = x - mPreviousX;
                 double dy = y - mPreviousY;
-                double rotx = Math.PI * dx / getWidth();
+                mPreviousX = x;
+                mPreviousY = y;
+                invalidate(); // TODO learn about invalidate vs requestRender
+
+                double rotx = Math.PI * dx / getWidth(); // TODO replace with getMeanSize()
                 double roty = Math.PI * dy / getHeight();
-                Quaternion xz_rotation = Quaternion.rotation(rotx, new Vector3( 0, 1, 0));
+                Quaternion xz_rotation = Quaternion.rotation(rotx, new Vector3(0, 1, 0));
                 Quaternion yz_rotation = Quaternion.rotation(roty, new Vector3(-1, 0, 0));
                 Quaternion increment = yz_rotation.multiply(xz_rotation);
                 mRenderer.rotateBy(increment);
                 requestRender();
                 break;
-
-            case MotionEvent.ACTION_DOWN:
-                Log.d(TAG, "Touch Event: Down");
-                break;
+            }
 
             case MotionEvent.ACTION_UP:
-                Log.d(TAG, "Touch Event: Up");
+                mActivePointerId = MotionEvent.INVALID_POINTER_ID;
+                break;
+
+            case MotionEvent.ACTION_CANCEL:
+                mActivePointerId = MotionEvent.INVALID_POINTER_ID;
                 break;
 
             case MotionEvent.ACTION_POINTER_DOWN:
-                Log.d(TAG, "Touch Event: Pointer Down");
+                // A new pointer was added, but the good one is still there
                 break;
 
-            case MotionEvent.ACTION_POINTER_UP:
-                Log.d(TAG, "Touch Event: Pointer Up");
+            case MotionEvent.ACTION_POINTER_UP: {
+                // An old pointer went away, was it the good one?
+                final int pointerIndex = e.getActionIndex();
+                final int pointerId = e.getPointerId(pointerIndex);
+                if (pointerId == mActivePointerId) {
+                    final int newPointerIndex = (pointerIndex == 0 ? 1 : 0);
+                    mPreviousX = e.getX(newPointerIndex);
+                    mPreviousY = e.getY(newPointerIndex);
+                    mActivePointerId = e.getPointerId(newPointerIndex);
+                }
                 break;
+            }
 
             default:
-                Log.d(TAG, "Touch Event: Unknown");
                 break;
         }
 
-        mPreviousX = x;
-        mPreviousY = y;
         return true;
     }
 
