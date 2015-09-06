@@ -47,10 +47,6 @@ public class OrbitalView extends GLSurfaceView {
 
     private int mFirstPointerID = MotionEvent.INVALID_POINTER_ID;
     private int mSecondPointerID = MotionEvent.INVALID_POINTER_ID;
-    private double mPreviousX;
-    private double mPreviousY;
-    private double mPreviousDistance;
-    private double mPreviousAngle;
 
     private GestureDetector mFlingDetector;
 
@@ -88,8 +84,8 @@ public class OrbitalView extends GLSurfaceView {
                 break;
 
             case MotionEvent.ACTION_POINTER_UP: {
-                // One fell out but some remain
-                // Which bear fell out?
+                // One falling out but at least one will remain
+                // Which bear is falling out?
                 int goneIndex = e.getActionIndex();
 
                 if (e.getPointerCount() == 3) {
@@ -113,7 +109,9 @@ public class OrbitalView extends GLSurfaceView {
             }
 
             case MotionEvent.ACTION_CANCEL:
-                // They all fell out
+                // They all fell out, maybe because someone broke into the
+                // bears' house and frightened them. They're hiding under
+                // the bed and will come back out later when it's safe.
                 mFirstPointerID = MotionEvent.INVALID_POINTER_ID;
                 mSecondPointerID = MotionEvent.INVALID_POINTER_ID;
                 break;
@@ -124,6 +122,9 @@ public class OrbitalView extends GLSurfaceView {
 
         return true;
     }
+
+    private double mPreviousX;
+    private double mPreviousY;
 
     private void oneFingerEvent(MotionEvent e, boolean actionable) {
 
@@ -150,6 +151,9 @@ public class OrbitalView extends GLSurfaceView {
         mPreviousY = y;
     }
 
+    private double mPreviousDistance;
+    private double mPreviousAngle;
+
     private void twoFingerEvent(MotionEvent e, boolean actionable) {
 
         int firstPointerIndex  = e.findPointerIndex(mFirstPointerID);
@@ -160,11 +164,10 @@ public class OrbitalView extends GLSurfaceView {
         double x2 = e.getX(secondPointerIndex);
         double y2 = e.getY(secondPointerIndex);
 
-        double distance = Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
-        if (distance < 40.0)
-            distance = 40.0;
-
         double angle = Math.atan2(y2 - y1, x2 - x1);
+        double distance = Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
+        // Zero is highly unlikely, but don't take chances
+        if (distance < 1.0) distance = 1.0;
 
         if (actionable) {
 
