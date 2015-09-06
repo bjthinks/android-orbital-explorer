@@ -64,34 +64,15 @@ public class OrbitalView extends GLSurfaceView {
         switch (e.getActionMasked()) {
 
             case MotionEvent.ACTION_DOWN: {
-                Log.d(TAG, "Down");
-                int pointerIndex = e.getActionIndex();
-                double x = e.getX(pointerIndex);
-                double y = e.getY(pointerIndex);
-                mPreviousX = x;
-                mPreviousY = y;
                 mFirstPointerID = e.getPointerId(0);
+                oneFingerEvent(e, false);
                 break;
             }
 
             case MotionEvent.ACTION_MOVE: {
-                if (e.getPointerCount() == 1) {
-                    int pointerIndex = e.findPointerIndex(mFirstPointerID);
-                    double x = e.getX(pointerIndex);
-                    double y = e.getY(pointerIndex);
-                    double dx = x - mPreviousX;
-                    double dy = y - mPreviousY;
-                    mPreviousX = x;
-                    mPreviousY = y;
-
-                    double rotx = Math.PI * dx / getWidth(); // TODO replace with getMeanSize()
-                    double roty = Math.PI * dy / getHeight();
-                    Quaternion xz_rotation = Quaternion.rotation(rotx, new Vector3(0, 1, 0));
-                    Quaternion yz_rotation = Quaternion.rotation(roty, new Vector3(-1, 0, 0));
-                    Quaternion increment = yz_rotation.multiply(xz_rotation);
-                    mRenderer.rotateBy(increment);
-                    requestRender();
-                } else if (e.getPointerCount() == 2)
+                if (e.getPointerCount() == 1)
+                    oneFingerEvent(e, true);
+                else if (e.getPointerCount() == 2)
                     twoFingerEvent(e, true);
                 break;
             }
@@ -101,13 +82,10 @@ public class OrbitalView extends GLSurfaceView {
                 break;
 
             case MotionEvent.ACTION_CANCEL:
-                Log.d(TAG, "Cancel");
                 mFirstPointerID = MotionEvent.INVALID_POINTER_ID;
                 break;
 
             case MotionEvent.ACTION_POINTER_DOWN:
-                Log.d(TAG, "Pointer Down");
-                // A new pointer was added -- make it be second if we need one
                 if (e.getPointerCount() == 2) {
                     mSecondPointerID = e.getPointerId(e.getActionIndex());
                     twoFingerEvent(e, false);
@@ -115,19 +93,16 @@ public class OrbitalView extends GLSurfaceView {
                 break;
 
             case MotionEvent.ACTION_POINTER_UP: {
-                Log.d(TAG, "Pointer Up");
-                // An old pointer went away.
+                // Which old pointer went away?
                 int pointerIndex = e.getActionIndex();
                 int pointerId = e.getPointerId(pointerIndex);
+
                 // If it was the first one, make second be the new first. Swap them.
                 if (pointerId == mFirstPointerID) {
                     mFirstPointerID = mSecondPointerID;
                     mSecondPointerID = pointerId;
                 }
-                // Save the (possibly new) first pointer's position
-                int firstPointerIndex = e.findPointerIndex(mFirstPointerID);
-                mPreviousX = e.getX(firstPointerIndex);
-                mPreviousY = e.getY(firstPointerIndex);
+
                 // Now, did we get rid of the second pointer?
                 if (pointerId == mSecondPointerID) {
                     int newPointerIndex = 0;
@@ -140,6 +115,7 @@ public class OrbitalView extends GLSurfaceView {
                         twoFingerEvent(e, false);
                     } else {
                         mSecondPointerID = MotionEvent.INVALID_POINTER_ID;
+                        oneFingerEvent(e, false);
                     }
                 }
                 if (e.getPointerCount() > 2)
@@ -152,6 +128,30 @@ public class OrbitalView extends GLSurfaceView {
         }
 
         return true;
+    }
+
+    private void oneFingerEvent(MotionEvent e, boolean actionable) {
+
+        int pointerIndex = e.findPointerIndex(mFirstPointerID);
+
+        double x = e.getX(pointerIndex);
+        double y = e.getY(pointerIndex);
+
+        if (actionable) {
+            double dx = x - mPreviousX;
+            double dy = y - mPreviousY;
+            double rotx = Math.PI * dx / getWidth(); // TODO replace with getMeanSize()
+            double roty = Math.PI * dy / getHeight();
+            Quaternion xz_rotation = Quaternion.rotation(rotx, new Vector3(0, 1, 0));
+            Quaternion yz_rotation = Quaternion.rotation(roty, new Vector3(-1, 0, 0));
+            Quaternion composite = yz_rotation.multiply(xz_rotation);
+            mRenderer.rotateBy(composite);
+
+            requestRender();
+        }
+
+        mPreviousX = x;
+        mPreviousY = y;
     }
 
     private void twoFingerEvent(MotionEvent e, boolean actionable) {
