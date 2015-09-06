@@ -43,44 +43,47 @@ public class OrbitalView extends GLSurfaceView {
         setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
 
         mFlingDetector = new GestureDetector(context, new FlingListener());
-        mScaleDetector = new ScaleGestureDetector(context, new ScaleListener());
     }
 
-    private int mActivePointerId = MotionEvent.INVALID_POINTER_ID;
-    private float mPreviousX;
-    private float mPreviousY;
+    private int mFirstPointerID = MotionEvent.INVALID_POINTER_ID;
+    private int mSecondPointerID = MotionEvent.INVALID_POINTER_ID;
+    private double mPreviousX;
+    private double mPreviousY;
+    private double mPreviousDistance;
+    private double mPreviousAngle;
 
     private GestureDetector mFlingDetector;
-    private ScaleGestureDetector mScaleDetector;
 
     @Override
     public boolean onTouchEvent(MotionEvent e) {
 
         mFlingDetector.onTouchEvent(e);
-        mScaleDetector.onTouchEvent(e);
+
+        Log.d(TAG, "Pointer count = " + e.getPointerCount());
 
         switch (e.getActionMasked()) {
 
             case MotionEvent.ACTION_DOWN: {
+                Log.d(TAG, "Down");
                 int pointerIndex = e.getActionIndex();
-                float x = e.getX(pointerIndex);
-                float y = e.getY(pointerIndex);
+                double x = e.getX(pointerIndex);
+                double y = e.getY(pointerIndex);
                 mPreviousX = x;
                 mPreviousY = y;
-                mActivePointerId = e.getPointerId(0);
+                mFirstPointerID = e.getPointerId(0);
                 break;
             }
 
             case MotionEvent.ACTION_MOVE: {
-                int pointerIndex = e.findPointerIndex(mActivePointerId);
-                float x = e.getX(pointerIndex);
-                float y = e.getY(pointerIndex);
-                double dx = x - mPreviousX;
-                double dy = y - mPreviousY;
-                mPreviousX = x;
-                mPreviousY = y;
+                if (e.getPointerCount() == 1) {
+                    int pointerIndex = e.findPointerIndex(mFirstPointerID);
+                    double x = e.getX(pointerIndex);
+                    double y = e.getY(pointerIndex);
+                    double dx = x - mPreviousX;
+                    double dy = y - mPreviousY;
+                    mPreviousX = x;
+                    mPreviousY = y;
 
-                if (!mScaleDetector.isInProgress()) {
                     double rotx = Math.PI * dx / getWidth(); // TODO replace with getMeanSize()
                     double roty = Math.PI * dy / getHeight();
                     Quaternion xz_rotation = Quaternion.rotation(rotx, new Vector3(0, 1, 0));
@@ -88,32 +91,59 @@ public class OrbitalView extends GLSurfaceView {
                     Quaternion increment = yz_rotation.multiply(xz_rotation);
                     mRenderer.rotateBy(increment);
                     requestRender();
-                }
+                } else if (e.getPointerCount() == 2)
+                    twoFingerEvent(e, true);
                 break;
             }
 
             case MotionEvent.ACTION_UP:
-                mActivePointerId = MotionEvent.INVALID_POINTER_ID;
+                mFirstPointerID = MotionEvent.INVALID_POINTER_ID;
                 break;
 
             case MotionEvent.ACTION_CANCEL:
-                mActivePointerId = MotionEvent.INVALID_POINTER_ID;
+                Log.d(TAG, "Cancel");
+                mFirstPointerID = MotionEvent.INVALID_POINTER_ID;
                 break;
 
             case MotionEvent.ACTION_POINTER_DOWN:
-                // A new pointer was added, but the good one is still there
+                Log.d(TAG, "Pointer Down");
+                // A new pointer was added -- make it be second if we need one
+                if (e.getPointerCount() == 2) {
+                    mSecondPointerID = e.getPointerId(e.getActionIndex());
+                    twoFingerEvent(e, false);
+                }
                 break;
 
             case MotionEvent.ACTION_POINTER_UP: {
-                // An old pointer went away, was it the good one?
-                final int pointerIndex = e.getActionIndex();
-                final int pointerId = e.getPointerId(pointerIndex);
-                if (pointerId == mActivePointerId) {
-                    final int newPointerIndex = (pointerIndex == 0 ? 1 : 0);
-                    mPreviousX = e.getX(newPointerIndex);
-                    mPreviousY = e.getY(newPointerIndex);
-                    mActivePointerId = e.getPointerId(newPointerIndex);
+                Log.d(TAG, "Pointer Up");
+                // An old pointer went away.
+                int pointerIndex = e.getActionIndex();
+                int pointerId = e.getPointerId(pointerIndex);
+                // If it was the first one, make second be the new first. Swap them.
+                if (pointerId == mFirstPointerID) {
+                    mFirstPointerID = mSecondPointerID;
+                    mSecondPointerID = pointerId;
                 }
+                // Save the (possibly new) first pointer's position
+                int firstPointerIndex = e.findPointerIndex(mFirstPointerID);
+                mPreviousX = e.getX(firstPointerIndex);
+                mPreviousY = e.getY(firstPointerIndex);
+                // Now, did we get rid of the second pointer?
+                if (pointerId == mSecondPointerID) {
+                    int newPointerIndex = 0;
+                    while (newPointerIndex < e.getPointerCount()
+                            && (e.getPointerId(newPointerIndex) == mFirstPointerID
+                            || e.getPointerId(newPointerIndex) == mSecondPointerID))
+                        ++newPointerIndex;
+                    if (newPointerIndex < e.getPointerCount()) {
+                        mSecondPointerID = e.getPointerId(newPointerIndex);
+                        twoFingerEvent(e, false);
+                    } else {
+                        mSecondPointerID = MotionEvent.INVALID_POINTER_ID;
+                    }
+                }
+                if (e.getPointerCount() > 2)
+                    twoFingerEvent(e, false);
                 break;
             }
 
@@ -122,6 +152,38 @@ public class OrbitalView extends GLSurfaceView {
         }
 
         return true;
+    }
+
+    private void twoFingerEvent(MotionEvent e, boolean actionable) {
+
+        int firstPointerIndex  = e.findPointerIndex(mFirstPointerID);
+        int secondPointerIndex = e.findPointerIndex(mSecondPointerID);
+
+        double x1 = e.getX(firstPointerIndex);
+        double y1 = e.getY(firstPointerIndex);
+        double x2 = e.getX(secondPointerIndex);
+        double y2 = e.getY(secondPointerIndex);
+
+        double distance = Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
+        if (distance < 40.0)
+            distance = 40.0;
+
+        double angle = Math.atan2(y2 - y1, x2 - x1);
+
+        if (actionable) {
+
+            double angleDifference = angle - mPreviousAngle;
+            Quaternion xy_rotation = Quaternion.rotation(angleDifference, new Vector3(0, 0, 1));
+            mRenderer.rotateBy(xy_rotation);
+
+            double scaleFactor = distance / mPreviousDistance;
+            mRenderer.scaleBy(scaleFactor);
+
+            requestRender();
+        }
+
+        mPreviousAngle = angle;
+        mPreviousDistance = distance;
     }
 
     private class FlingListener extends GestureDetector.SimpleOnGestureListener {
@@ -136,15 +198,6 @@ public class OrbitalView extends GLSurfaceView {
         public boolean onFling(MotionEvent event1, MotionEvent event2, float velocityX, float velocityY) {
             // TODO implement flinging
             Log.d(TAG, "Fling: velocity = ( " + velocityX + " , " + velocityY + " )");
-            return true;
-        }
-    }
-
-    private class ScaleListener extends ScaleGestureDetector.SimpleOnScaleGestureListener {
-        @Override
-        public boolean onScale(ScaleGestureDetector detector) {
-            mRenderer.scaleBy(detector.getScaleFactor());
-            requestRender();
             return true;
         }
     }
