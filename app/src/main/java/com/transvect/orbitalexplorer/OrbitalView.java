@@ -59,69 +59,64 @@ public class OrbitalView extends GLSurfaceView {
 
         mFlingDetector.onTouchEvent(e);
 
-        Log.d(TAG, "Pointer count = " + e.getPointerCount());
-
         switch (e.getActionMasked()) {
 
-            case MotionEvent.ACTION_DOWN: {
+            case MotionEvent.ACTION_DOWN:
+                // One bear in the bed
                 mFirstPointerID = e.getPointerId(0);
                 oneFingerEvent(e, false);
                 break;
-            }
-
-            case MotionEvent.ACTION_MOVE: {
-                if (e.getPointerCount() == 1)
-                    oneFingerEvent(e, true);
-                else if (e.getPointerCount() == 2)
-                    twoFingerEvent(e, true);
-                break;
-            }
-
-            case MotionEvent.ACTION_UP:
-                mFirstPointerID = MotionEvent.INVALID_POINTER_ID;
-                break;
-
-            case MotionEvent.ACTION_CANCEL:
-                mFirstPointerID = MotionEvent.INVALID_POINTER_ID;
-                break;
 
             case MotionEvent.ACTION_POINTER_DOWN:
+                // Two or more bears in the bed
                 if (e.getPointerCount() == 2) {
                     mSecondPointerID = e.getPointerId(e.getActionIndex());
                     twoFingerEvent(e, false);
                 }
                 break;
 
+            case MotionEvent.ACTION_MOVE:
+                if (e.getPointerCount() == 1)
+                    oneFingerEvent(e, true);
+                else if (e.getPointerCount() == 2)
+                    twoFingerEvent(e, true);
+                break;
+
+            case MotionEvent.ACTION_UP:
+                // No bears in the bed
+                mFirstPointerID = MotionEvent.INVALID_POINTER_ID;
+                break;
+
             case MotionEvent.ACTION_POINTER_UP: {
-                // Which old pointer went away?
-                int pointerIndex = e.getActionIndex();
-                int pointerId = e.getPointerId(pointerIndex);
+                // One fell out but some remain
+                // Which bear fell out?
+                int goneIndex = e.getActionIndex();
 
-                // If it was the first one, make second be the new first. Swap them.
-                if (pointerId == mFirstPointerID) {
-                    mFirstPointerID = mSecondPointerID;
-                    mSecondPointerID = pointerId;
-                }
-
-                // Now, did we get rid of the second pointer?
-                if (pointerId == mSecondPointerID) {
-                    int newPointerIndex = 0;
-                    while (newPointerIndex < e.getPointerCount()
-                            && (e.getPointerId(newPointerIndex) == mFirstPointerID
-                            || e.getPointerId(newPointerIndex) == mSecondPointerID))
-                        ++newPointerIndex;
-                    if (newPointerIndex < e.getPointerCount()) {
-                        mSecondPointerID = e.getPointerId(newPointerIndex);
-                        twoFingerEvent(e, false);
-                    } else {
-                        mSecondPointerID = MotionEvent.INVALID_POINTER_ID;
-                        oneFingerEvent(e, false);
-                    }
-                }
-                if (e.getPointerCount() > 2)
+                if (e.getPointerCount() == 3) {
+                    // So they all rolled over and one fell out
+                    int remainingIndex = 0;
+                    if (remainingIndex == goneIndex) remainingIndex++;
+                    mFirstPointerID = e.getPointerId(remainingIndex++);
+                    if (remainingIndex == goneIndex) remainingIndex++;
+                    mSecondPointerID = e.getPointerId(remainingIndex);
                     twoFingerEvent(e, false);
+                } else if (e.getPointerCount() == 2) {
+                    // So they all rolled over and one fell out
+                    int remainingIndex = 0;
+                    if (remainingIndex == goneIndex) remainingIndex++;
+                    mFirstPointerID = e.getPointerId(remainingIndex);
+                    mSecondPointerID = MotionEvent.INVALID_POINTER_ID;
+                    oneFingerEvent(e, false);
+                }
+
                 break;
             }
+
+            case MotionEvent.ACTION_CANCEL:
+                // They all fell out
+                mFirstPointerID = MotionEvent.INVALID_POINTER_ID;
+                mSecondPointerID = MotionEvent.INVALID_POINTER_ID;
+                break;
 
             default:
                 break;
