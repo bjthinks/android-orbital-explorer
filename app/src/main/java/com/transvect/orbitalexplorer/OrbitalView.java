@@ -135,8 +135,9 @@ public class OrbitalView extends GLSurfaceView {
         if (actionable) {
             double dx = x - mPreviousX;
             double dy = y - mPreviousY;
-            double rotx = Math.PI * dx / getWidth(); // TODO replace with getMeanSize()
-            double roty = Math.PI * dy / getHeight();
+            double meanSize = Math.sqrt(getWidth() * getHeight());
+            double rotx = Math.PI * dx / meanSize;
+            double roty = Math.PI * dy / meanSize;
             Quaternion xz_rotation = Quaternion.rotation(rotx, new Vector3(0, 1, 0));
             Quaternion yz_rotation = Quaternion.rotation(roty, new Vector3(-1, 0, 0));
             Quaternion composite = yz_rotation.multiply(xz_rotation);
