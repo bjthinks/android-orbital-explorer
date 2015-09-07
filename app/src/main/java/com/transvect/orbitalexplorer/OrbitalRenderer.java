@@ -2,13 +2,17 @@ package com.transvect.orbitalexplorer;
 
 import android.content.Context;
 import android.content.res.AssetManager;
+import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
+
+import javax.microedition.khronos.egl.EGLConfig;
+import javax.microedition.khronos.opengles.GL10;
 
 /**
  * The OpenGL guts start here.
  */
 
-public class OrbitalRenderer extends MyGLRenderer {
+public class OrbitalRenderer implements GLSurfaceView.Renderer {
 
     private static final String TAG = "OrbitalRenderer";
 
@@ -35,12 +39,18 @@ public class OrbitalRenderer extends MyGLRenderer {
     private AssetManager assetManager;
 
     OrbitalRenderer(Context context) {
+        mSurfaceIsNew = true;
+        mWidth = -1;
+        mHeight = -1;
+        mLastTime = System.currentTimeMillis();
+        mFramesDrawnThisSecond = 0;
+        mFPS = 0;
+
         assetManager = context.getAssets();
         mDemoRenderStage = new DemoRenderStage();
         mFinalRenderStage = new FinalRenderStage();
     }
 
-    @Override
     public void onCreate(int width, int height, boolean contextIsNew) {
         if (contextIsNew) {
             // For pessimistic testing
@@ -82,7 +92,47 @@ public class OrbitalRenderer extends MyGLRenderer {
         return shaderTransform;
     }
 
+    private boolean mSurfaceIsNew;
+    private long mLastTime;
+    private int mFramesDrawnThisSecond;
+    private int mFPS;
+
     @Override
+    public void onDrawFrame(GL10 unused) {
+        onDrawFrame();
+
+        ++mFramesDrawnThisSecond;
+        long currentTime = System.currentTimeMillis();
+        if (currentTime - mLastTime >= 1000) {
+            mFPS = mFramesDrawnThisSecond;
+            mFramesDrawnThisSecond = 0;
+            mLastTime = currentTime;
+        }
+    }
+
+    public int getFPS() {
+        return mFPS;
+    }
+
+    @Override
+    public void onSurfaceCreated(GL10 unused, EGLConfig config) {
+        mSurfaceIsNew = true;
+        mWidth = -1;
+        mHeight = -1;
+    }
+
+    @Override
+    public void onSurfaceChanged(GL10 unused, int width, int height) {
+        if (!mSurfaceIsNew && width == mWidth && height == mHeight)
+            return;
+
+        mWidth = width;
+        mHeight = height;
+
+        onCreate(mWidth, mHeight, mSurfaceIsNew);
+        mSurfaceIsNew = false;
+    }
+
     public void onDrawFrame() {
         float[] shaderTransform = computeShaderTransform();
         mDemoRenderStage.render(shaderTransform);
