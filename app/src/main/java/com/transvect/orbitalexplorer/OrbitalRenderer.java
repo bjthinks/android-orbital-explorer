@@ -86,7 +86,9 @@ public class OrbitalRenderer implements GLSurfaceView.Renderer {
 
     @Override
     public void onDrawFrame(GL10 unused) {
-        onDrawFrame();
+        float[] shaderTransform = computeShaderTransform();
+        mDemoRenderStage.render(shaderTransform);
+        mFinalRenderStage.render(mDemoRenderStage.getTexture());
 
         ++mFramesDrawnThisSecond;
         long currentTime = System.currentTimeMillis();
@@ -128,11 +130,5 @@ public class OrbitalRenderer implements GLSurfaceView.Renderer {
         mFinalRenderStage.resize(mWidth, mHeight);
 
         mSurfaceIsNew = false;
-    }
-
-    public void onDrawFrame() {
-        float[] shaderTransform = computeShaderTransform();
-        mDemoRenderStage.render(shaderTransform);
-        mFinalRenderStage.render(mDemoRenderStage.getTexture());
     }
 }
