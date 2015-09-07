@@ -21,6 +21,7 @@ public class OrbitalRenderer implements GLSurfaceView.Renderer {
 
     private int mWidth, mHeight;
 
+    // TODO save these as preferences
     private static Quaternion mTotalRotation = new Quaternion(1.0);
     private static double mCameraDistance = 3.0;
 
