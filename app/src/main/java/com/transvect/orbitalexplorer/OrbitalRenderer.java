@@ -52,20 +52,6 @@ public class OrbitalRenderer implements GLSurfaceView.Renderer {
         mFinalRenderStage = new FinalRenderStage();
     }
 
-    public void onCreate(int width, int height, boolean contextIsNew) {
-        if (contextIsNew) {
-            // For pessimistic testing
-            // GLES30.glDisable(GLES30.GL_DITHER);
-
-            mDemoRenderStage.newContext(assetManager);
-            mFinalRenderStage.newContext(assetManager);
-        }
-        mWidth = width;
-        mHeight = height;
-        mDemoRenderStage.resize(mWidth, mHeight);
-        mFinalRenderStage.resize(mWidth, mHeight);
-    }
-
     private float[] computeShaderTransform() {
 
         float ratio = (float) Math.sqrt((double) mWidth / (double) mHeight);
@@ -130,7 +116,17 @@ public class OrbitalRenderer implements GLSurfaceView.Renderer {
         mWidth = width;
         mHeight = height;
 
-        onCreate(mWidth, mHeight, mSurfaceIsNew);
+        if (mSurfaceIsNew) {
+            // For pessimistic testing
+            // GLES30.glDisable(GLES30.GL_DITHER);
+
+            mDemoRenderStage.newContext(assetManager);
+            mFinalRenderStage.newContext(assetManager);
+        }
+
+        mDemoRenderStage.resize(mWidth, mHeight);
+        mFinalRenderStage.resize(mWidth, mHeight);
+
         mSurfaceIsNew = false;
     }
 
