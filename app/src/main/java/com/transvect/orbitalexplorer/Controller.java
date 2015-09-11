@@ -4,12 +4,12 @@ package com.transvect.orbitalexplorer;
  * Created by bwj on 9/11/15.
  */
 public class Controller {
-    public static Quaternion getTotalRotation() {
-        return mTotalRotation;
+    public void rotateBy(Quaternion r) {
+        mTotalRotation = r.multiply(mTotalRotation);
     }
 
-    public static void setTotalRotation(Quaternion mTotalRotation) {
-        Controller.mTotalRotation = mTotalRotation;
+    public Quaternion getTotalRotation() {
+        return mTotalRotation;
     }
 
     private static Quaternion mTotalRotation = new Quaternion(1.0);

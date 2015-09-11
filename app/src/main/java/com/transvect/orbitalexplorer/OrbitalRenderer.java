@@ -25,10 +25,6 @@ public class OrbitalRenderer implements GLSurfaceView.Renderer {
     // TODO save these as preferences
     private static double mCameraDistance = 3.0;
 
-    public void rotateBy(Quaternion r) {
-        mController.setTotalRotation(r.multiply(mController.getTotalRotation()));
-    }
-
     public void scaleBy(double f) {
         mCameraDistance /= f;
         if (mCameraDistance > 10.0)

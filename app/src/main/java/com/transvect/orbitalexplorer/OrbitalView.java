@@ -142,7 +142,7 @@ public class OrbitalView extends GLSurfaceView {
             Quaternion xz_rotation = Quaternion.rotation(rotx, new Vector3(0, 1, 0));
             Quaternion yz_rotation = Quaternion.rotation(roty, new Vector3(-1, 0, 0));
             Quaternion composite = yz_rotation.multiply(xz_rotation);
-            mRenderer.rotateBy(composite);
+            mController.rotateBy(composite);
 
             requestRender();
         }
@@ -173,7 +173,7 @@ public class OrbitalView extends GLSurfaceView {
 
             double angleDifference = angle - mPreviousAngle;
             Quaternion xy_rotation = Quaternion.rotation(angleDifference, new Vector3(0, 0, 1));
-            mRenderer.rotateBy(xy_rotation);
+            mController.rotateBy(xy_rotation);
 
             double scaleFactor = distance / mPreviousDistance;
             mRenderer.scaleBy(scaleFactor);
