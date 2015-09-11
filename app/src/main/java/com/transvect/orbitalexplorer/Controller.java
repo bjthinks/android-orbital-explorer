@@ -2,22 +2,11 @@ package com.transvect.orbitalexplorer;
 
 import android.opengl.Matrix;
 
-/**
- * Created by bwj on 9/11/15.
- */
 public class Controller {
 
     // TODO save these as preferences
-    private static double mCameraDistance = 3.0;
     private static Quaternion mTotalRotation = new Quaternion(1.0);
-
-    public synchronized void scaleBy(double f) {
-        mCameraDistance /= f;
-        if (mCameraDistance > 10.0)
-            mCameraDistance = 10.0;
-        if (mCameraDistance < 2.0)
-            mCameraDistance = 2.0;
-    }
+    private static double mCameraDistance = 3.0;
 
     public synchronized void drag(double x, double y) {
         Quaternion xz_rotation = Quaternion.rotation(Math.PI * x, new Vector3(0, 1, 0));
@@ -28,6 +17,14 @@ public class Controller {
     public synchronized void spin(double theta) {
         Quaternion xy_rotation = Quaternion.rotation(theta, new Vector3(0, 0, 1));
         mTotalRotation = xy_rotation.multiply(mTotalRotation);
+    }
+
+    public synchronized void zoom(double f) {
+        mCameraDistance /= f;
+        if (mCameraDistance > 10.0)
+            mCameraDistance = 10.0;
+        if (mCameraDistance < 2.0)
+            mCameraDistance = 2.0;
     }
 
     public synchronized float[] computeShaderTransform(float aspectRatio) {
@@ -54,6 +51,5 @@ public class Controller {
         Matrix.multiplyMM(shaderTransform, 0, viewProjMatrix, 0, cameraRotation, 0);
 
         return shaderTransform;
-
     }
 }

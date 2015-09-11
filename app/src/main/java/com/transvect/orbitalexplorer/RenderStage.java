@@ -6,9 +6,6 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
-/**
- * Created by bwj on 8/31/15.
- */
 public class RenderStage {
     private static final String TAG = "DemoRenderStage";
 

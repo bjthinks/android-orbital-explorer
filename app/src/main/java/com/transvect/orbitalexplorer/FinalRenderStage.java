@@ -4,9 +4,6 @@ import android.content.res.AssetManager;
 import android.opengl.GLES30;
 import java.nio.FloatBuffer;
 
-/**
- * Created by bwj on 9/1/15.
- */
 public class FinalRenderStage extends RenderStage {
 
     private FloatBuffer mVertexBuffer;

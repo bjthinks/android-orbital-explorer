@@ -1,9 +1,5 @@
 package com.transvect.orbitalexplorer;
 
-/**
- * Immutable quaternions
- */
-
 public class Quaternion {
 
     private final double r, i, j, k;

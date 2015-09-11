@@ -1,23 +1,16 @@
 package com.transvect.orbitalexplorer;
 
 import android.content.Context;
-import android.content.res.AssetManager;
 import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
-import android.view.ScaleGestureDetector;
-
-/**
- * A wrapper around GLSurfaceView that ensures we do proper setup
- * and handles input events.
- */
 
 public class OrbitalView extends GLSurfaceView {
     private static final String TAG = "OrbitalView";
 
-    private Controller mController;
+    private GestureDetector mFlingDetector;
 
     public OrbitalView(Context context) {
         super(context);
@@ -39,14 +32,14 @@ public class OrbitalView extends GLSurfaceView {
         mFlingDetector = new GestureDetector(context, new FlingListener());
     }
 
+    private Controller mController;
+
     public void setController(Controller controller) {
         mController = controller;
     }
 
     private int mFirstPointerID = MotionEvent.INVALID_POINTER_ID;
     private int mSecondPointerID = MotionEvent.INVALID_POINTER_ID;
-
-    private GestureDetector mFlingDetector;
 
     @Override
     public boolean onTouchEvent(MotionEvent e) {
@@ -168,8 +161,8 @@ public class OrbitalView extends GLSurfaceView {
             double angleDifference = angle - mPreviousAngle;
             mController.spin(angleDifference);
 
-            double scaleFactor = distance / mPreviousDistance;
-            mController.scaleBy(scaleFactor);
+            double zoomFactor = distance / mPreviousDistance;
+            mController.zoom(zoomFactor);
 
             requestRender();
         }

@@ -2,9 +2,6 @@ package com.transvect.orbitalexplorer;
 
 import android.opengl.GLES30;
 
-/**
- * Created by bwj on 9/3/15.
- */
 public class Texture {
 
     private final int mId;

@@ -7,10 +7,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-/**
- * Encapsulate an OpenGL vertex or fragment shader.
- */
-
 public class Shader {
     private static final String TAG = "Shader";
 

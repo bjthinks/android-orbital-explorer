@@ -1,8 +1,5 @@
 package com.transvect.orbitalexplorer;
 
-/**
- * Created by bwj on 8/30/15.
- */
 public class Vector3 {
 
     private final double x, y, z;
