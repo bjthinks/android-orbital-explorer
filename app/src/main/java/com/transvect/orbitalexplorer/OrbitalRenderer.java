@@ -23,11 +23,10 @@ public class OrbitalRenderer implements GLSurfaceView.Renderer {
     private int mWidth, mHeight;
 
     // TODO save these as preferences
-    private static Quaternion mTotalRotation = new Quaternion(1.0);
     private static double mCameraDistance = 3.0;
 
     public void rotateBy(Quaternion r) {
-        mTotalRotation = r.multiply(mTotalRotation);
+        mController.setTotalRotation(r.multiply(mController.getTotalRotation()));
     }
 
     public void scaleBy(double f) {
@@ -69,7 +68,7 @@ public class OrbitalRenderer implements GLSurfaceView.Renderer {
         float[] viewProjMatrix = new float[16];
         Matrix.multiplyMM(viewProjMatrix, 0, projectionMatrix, 0, viewMatrix, 0);
 
-        float[] cameraRotation = mTotalRotation.asRotationMatrix();
+        float[] cameraRotation = mController.getTotalRotation().asRotationMatrix();
 
         float[] shaderTransform = new float[16];
         Matrix.multiplyMM(shaderTransform, 0, viewProjMatrix, 0, cameraRotation, 0);
