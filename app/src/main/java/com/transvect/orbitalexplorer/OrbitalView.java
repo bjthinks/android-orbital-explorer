@@ -36,7 +36,7 @@ public class OrbitalView extends GLSurfaceView {
         setPreserveEGLContextOnPause(true);
 
         // Set the Renderer for drawing on the GLSurfaceView
-        mRenderer = new OrbitalRenderer(context);
+        mRenderer = new OrbitalRenderer(context.getAssets());
         setRenderer(mRenderer);
 
         // Render the view only when there is a change in the drawing data

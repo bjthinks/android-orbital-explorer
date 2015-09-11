@@ -39,11 +39,11 @@ public class OrbitalRenderer implements GLSurfaceView.Renderer {
 
     private AssetManager mAssetManager;
 
-    OrbitalRenderer(Context context) {
+    OrbitalRenderer(AssetManager assetManager) {
         mWidth = -1;
         mHeight = -1;
 
-        mAssetManager = context.getAssets();
+        mAssetManager = assetManager;
         mDemoRenderStage = new DemoRenderStage();
         mFinalRenderStage = new FinalRenderStage();
     }
