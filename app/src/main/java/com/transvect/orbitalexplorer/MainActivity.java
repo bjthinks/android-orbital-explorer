@@ -29,12 +29,12 @@ public class MainActivity extends Activity {
 
         // Encapsulate all communication with the render thread and all long-term state
         Controller controller = new Controller();
+        mOrbitalView.setController(controller);
 
         // Make an OrbitalRenderer. Needs assets for shader code.
         OrbitalRenderer renderer = new OrbitalRenderer(controller, getAssets());
 
-        // Link everything up and start rendering
-        mOrbitalView.setController(controller);
+        // Start the rendering thread
         mOrbitalView.setRenderer(renderer);
 
         // Render the view only when there is a change in the drawing data
