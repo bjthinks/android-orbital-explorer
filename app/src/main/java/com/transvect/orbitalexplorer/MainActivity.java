@@ -23,8 +23,8 @@ public class MainActivity extends Activity {
 
         // Inflate a GLSurfaceView instance and set it
         // as the ContentView for this Activity.
-        mOrbitalView = (OrbitalView) findViewById(R.id.orbitalview);
         setContentView(R.layout.activity_main);
+        mOrbitalView = (OrbitalView) findViewById(R.id.orbitalview);
     }
 
     private boolean hasGLES30() {
