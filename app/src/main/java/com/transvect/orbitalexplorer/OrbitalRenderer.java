@@ -40,7 +40,6 @@ public class OrbitalRenderer implements GLSurfaceView.Renderer {
     private AssetManager assetManager;
 
     OrbitalRenderer(Context context) {
-        mSurfaceIsNew = true;
         mWidth = -1;
         mHeight = -1;
 
@@ -76,8 +75,6 @@ public class OrbitalRenderer implements GLSurfaceView.Renderer {
         return shaderTransform;
     }
 
-    private boolean mSurfaceIsNew;
-
     @Override
     public void onDrawFrame(GL10 unused) {
         float[] shaderTransform = computeShaderTransform();
@@ -87,30 +84,24 @@ public class OrbitalRenderer implements GLSurfaceView.Renderer {
 
     @Override
     public void onSurfaceCreated(GL10 unused, EGLConfig config) {
-        mSurfaceIsNew = true;
         mWidth = -1;
         mHeight = -1;
+
+        // For pessimistic testing
+        // GLES30.glDisable(GLES30.GL_DITHER);
+        mDemoRenderStage.newContext(assetManager);
+        mFinalRenderStage.newContext(assetManager);
     }
 
     @Override
     public void onSurfaceChanged(GL10 unused, int width, int height) {
-        if (!mSurfaceIsNew && width == mWidth && height == mHeight)
+        if (width == mWidth && height == mHeight)
             return;
 
         mWidth = width;
         mHeight = height;
 
-        if (mSurfaceIsNew) {
-            // For pessimistic testing
-            // GLES30.glDisable(GLES30.GL_DITHER);
-
-            mDemoRenderStage.newContext(assetManager);
-            mFinalRenderStage.newContext(assetManager);
-        }
-
         mDemoRenderStage.resize(mWidth, mHeight);
         mFinalRenderStage.resize(mWidth, mHeight);
-
-        mSurfaceIsNew = false;
     }
 }
