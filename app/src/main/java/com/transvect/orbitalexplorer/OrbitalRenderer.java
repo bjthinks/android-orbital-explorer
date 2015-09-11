@@ -20,8 +20,7 @@ public class OrbitalRenderer implements GLSurfaceView.Renderer {
     private AssetManager mAssetManager;
     private DemoRenderStage mDemoRenderStage;
     private FinalRenderStage mFinalRenderStage;
-    private int mWidth;
-    private int mHeight;
+    private float mAspectRatio = 1.0f;
 
     OrbitalRenderer(Controller controller, AssetManager assetManager) {
         mController = controller;
@@ -40,15 +39,14 @@ public class OrbitalRenderer implements GLSurfaceView.Renderer {
 
     @Override
     public void onSurfaceChanged(GL10 unused, int width, int height) {
-        mWidth = width;
-        mHeight = height;
-        mDemoRenderStage.resize(mWidth, mHeight);
-        mFinalRenderStage.resize(mWidth, mHeight);
+        mAspectRatio = (float) width / (float) height;
+        mDemoRenderStage.resize(width, height);
+        mFinalRenderStage.resize(width, height);
     }
 
     @Override
     public void onDrawFrame(GL10 unused) {
-        float[] shaderTransform = mController.computeShaderTransform(mWidth, mHeight);
+        float[] shaderTransform = mController.computeShaderTransform(mAspectRatio);
         mDemoRenderStage.render(shaderTransform);
         mFinalRenderStage.render(mDemoRenderStage.getTexture());
     }
