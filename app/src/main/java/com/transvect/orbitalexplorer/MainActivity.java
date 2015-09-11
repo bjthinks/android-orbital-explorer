@@ -12,6 +12,7 @@ import android.view.MenuItem;
 public class MainActivity extends Activity {
 
     private OrbitalView mOrbitalView;
+    private Controller mController;
     private OrbitalRenderer mRenderer;
 
     @Override
@@ -28,11 +29,14 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
         mOrbitalView = (OrbitalView) findViewById(R.id.orbitalview);
 
+        // Encapsulate all communication with the render thread and all long-term state
+        mController = new Controller();
+
         // Make an OrbitalRenderer. Needs assets for shader code.
         mRenderer = new OrbitalRenderer(getAssets());
 
         // Attach the two to each other
-        mOrbitalView.setOrbitalRenderer(mRenderer);
+        mOrbitalView.setController(mRenderer, mController);
         mOrbitalView.setRenderer(mRenderer);
 
         // Render the view only when there is a change in the drawing data

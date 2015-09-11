@@ -18,6 +18,7 @@ public class OrbitalView extends GLSurfaceView {
     private static final String TAG = "OrbitalView";
 
     private OrbitalRenderer mRenderer;
+    private Controller mController;
 
     public OrbitalView(Context context) {
         super(context);
@@ -39,8 +40,9 @@ public class OrbitalView extends GLSurfaceView {
         mFlingDetector = new GestureDetector(context, new FlingListener());
     }
 
-    public void setOrbitalRenderer(OrbitalRenderer renderer) {
+    public void setController(OrbitalRenderer renderer, Controller controller) {
         mRenderer = renderer;
+        mController = controller;
     }
 
     private int mFirstPointerID = MotionEvent.INVALID_POINTER_ID;
