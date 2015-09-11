@@ -1,6 +1,7 @@
 package com.transvect.orbitalexplorer;
 
 import android.content.Context;
+import android.content.res.AssetManager;
 import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -35,14 +36,11 @@ public class OrbitalView extends GLSurfaceView {
         // Try to preserve our context, if possible
         setPreserveEGLContextOnPause(true);
 
-        // Set the Renderer for drawing on the GLSurfaceView
-        mRenderer = new OrbitalRenderer(context.getAssets());
-        setRenderer(mRenderer);
-
-        // Render the view only when there is a change in the drawing data
-        setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
-
         mFlingDetector = new GestureDetector(context, new FlingListener());
+    }
+
+    public void setOrbitalRenderer(OrbitalRenderer renderer) {
+        mRenderer = renderer;
     }
 
     private int mFirstPointerID = MotionEvent.INVALID_POINTER_ID;

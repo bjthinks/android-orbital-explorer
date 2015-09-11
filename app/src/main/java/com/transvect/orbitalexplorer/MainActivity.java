@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.pm.ConfigurationInfo;
+import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -11,6 +12,7 @@ import android.view.MenuItem;
 public class MainActivity extends Activity {
 
     private OrbitalView mOrbitalView;
+    private OrbitalRenderer mRenderer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +27,16 @@ public class MainActivity extends Activity {
         // as the ContentView for this Activity.
         setContentView(R.layout.activity_main);
         mOrbitalView = (OrbitalView) findViewById(R.id.orbitalview);
+
+        // Make an OrbitalRenderer. Needs assets for shader code.
+        mRenderer = new OrbitalRenderer(getAssets());
+
+        // Attach the two to each other
+        mOrbitalView.setOrbitalRenderer(mRenderer);
+        mOrbitalView.setRenderer(mRenderer);
+
+        // Render the view only when there is a change in the drawing data
+        mOrbitalView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
     }
 
     private boolean hasGLES30() {
