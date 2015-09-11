@@ -16,6 +16,7 @@ public class OrbitalRenderer implements GLSurfaceView.Renderer {
 
     private static final String TAG = "OrbitalRenderer";
 
+    private Controller mController;
     private DemoRenderStage mDemoRenderStage;
     private FinalRenderStage mFinalRenderStage;
 
@@ -39,10 +40,11 @@ public class OrbitalRenderer implements GLSurfaceView.Renderer {
 
     private AssetManager mAssetManager;
 
-    OrbitalRenderer(AssetManager assetManager) {
+    OrbitalRenderer(Controller controller, AssetManager assetManager) {
         mWidth = -1;
         mHeight = -1;
 
+        mController = controller;
         mAssetManager = assetManager;
         mDemoRenderStage = new DemoRenderStage();
         mFinalRenderStage = new FinalRenderStage();
