@@ -37,13 +37,13 @@ public class OrbitalRenderer implements GLSurfaceView.Renderer {
             mCameraDistance = 2.0;
     }
 
-    private AssetManager assetManager;
+    private AssetManager mAssetManager;
 
     OrbitalRenderer(Context context) {
         mWidth = -1;
         mHeight = -1;
 
-        assetManager = context.getAssets();
+        mAssetManager = context.getAssets();
         mDemoRenderStage = new DemoRenderStage();
         mFinalRenderStage = new FinalRenderStage();
     }
@@ -89,8 +89,8 @@ public class OrbitalRenderer implements GLSurfaceView.Renderer {
 
         // For pessimistic testing
         // GLES30.glDisable(GLES30.GL_DITHER);
-        mDemoRenderStage.newContext(assetManager);
-        mFinalRenderStage.newContext(assetManager);
+        mDemoRenderStage.newContext(mAssetManager);
+        mFinalRenderStage.newContext(mAssetManager);
     }
 
     @Override
