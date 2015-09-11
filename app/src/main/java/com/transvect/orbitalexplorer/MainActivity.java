@@ -12,8 +12,6 @@ import android.view.MenuItem;
 public class MainActivity extends Activity {
 
     private OrbitalView mOrbitalView;
-    private Controller mController;
-    private OrbitalRenderer mRenderer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,14 +28,14 @@ public class MainActivity extends Activity {
         mOrbitalView = (OrbitalView) findViewById(R.id.orbitalview);
 
         // Encapsulate all communication with the render thread and all long-term state
-        mController = new Controller();
+        Controller controller = new Controller();
 
         // Make an OrbitalRenderer. Needs assets for shader code.
-        mRenderer = new OrbitalRenderer(getAssets());
+        OrbitalRenderer renderer = new OrbitalRenderer(controller, getAssets());
 
         // Attach the two to each other
-        mOrbitalView.setController(mRenderer, mController);
-        mOrbitalView.setRenderer(mRenderer);
+        mOrbitalView.setController(renderer, controller);
+        mOrbitalView.setRenderer(renderer);
 
         // Render the view only when there is a change in the drawing data
         mOrbitalView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
