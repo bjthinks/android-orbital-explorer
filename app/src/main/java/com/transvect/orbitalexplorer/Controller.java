@@ -4,11 +4,11 @@ package com.transvect.orbitalexplorer;
  * Created by bwj on 9/11/15.
  */
 public class Controller {
-    public void rotateBy(Quaternion r) {
+    public synchronized void rotateBy(Quaternion r) {
         mTotalRotation = r.multiply(mTotalRotation);
     }
 
-    public Quaternion getTotalRotation() {
+    public synchronized Quaternion getTotalRotation() {
         return mTotalRotation;
     }
 
