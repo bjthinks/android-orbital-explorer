@@ -17,7 +17,6 @@ import android.view.ScaleGestureDetector;
 public class OrbitalView extends GLSurfaceView {
     private static final String TAG = "OrbitalView";
 
-    private OrbitalRenderer mRenderer;
     private Controller mController;
 
     public OrbitalView(Context context) {
@@ -40,8 +39,7 @@ public class OrbitalView extends GLSurfaceView {
         mFlingDetector = new GestureDetector(context, new FlingListener());
     }
 
-    public void setController(OrbitalRenderer renderer, Controller controller) {
-        mRenderer = renderer;
+    public void setController(Controller controller) {
         mController = controller;
     }
 

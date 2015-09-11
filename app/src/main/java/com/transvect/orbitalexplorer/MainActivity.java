@@ -34,7 +34,7 @@ public class MainActivity extends Activity {
         OrbitalRenderer renderer = new OrbitalRenderer(controller, getAssets());
 
         // Attach the two to each other
-        mOrbitalView.setController(renderer, controller);
+        mOrbitalView.setController(controller);
         mOrbitalView.setRenderer(renderer);
 
         // Render the view only when there is a change in the drawing data
