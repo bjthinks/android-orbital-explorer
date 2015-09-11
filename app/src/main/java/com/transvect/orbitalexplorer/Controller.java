@@ -22,7 +22,7 @@ public class Controller {
     public synchronized void rotateBy(Quaternion r) {
         mTotalRotation = r.multiply(mTotalRotation);
     }
-    
+
     public synchronized float[] computeShaderTransform(int width, int height) {
         float ratio = (float) Math.sqrt((double) width / (double) height);
         float leftRight = ratio;

@@ -17,17 +17,13 @@ public class OrbitalRenderer implements GLSurfaceView.Renderer {
     private static final String TAG = "OrbitalRenderer";
 
     private Controller mController;
+    private AssetManager mAssetManager;
     private DemoRenderStage mDemoRenderStage;
     private FinalRenderStage mFinalRenderStage;
-
-    private int mWidth, mHeight;
-
-    private AssetManager mAssetManager;
+    private int mWidth;
+    private int mHeight;
 
     OrbitalRenderer(Controller controller, AssetManager assetManager) {
-        mWidth = -1;
-        mHeight = -1;
-
         mController = controller;
         mAssetManager = assetManager;
         mDemoRenderStage = new DemoRenderStage();
@@ -35,17 +31,7 @@ public class OrbitalRenderer implements GLSurfaceView.Renderer {
     }
 
     @Override
-    public void onDrawFrame(GL10 unused) {
-        float[] shaderTransform = mController.computeShaderTransform(mWidth, mHeight);
-        mDemoRenderStage.render(shaderTransform);
-        mFinalRenderStage.render(mDemoRenderStage.getTexture());
-    }
-
-    @Override
     public void onSurfaceCreated(GL10 unused, EGLConfig config) {
-        mWidth = -1;
-        mHeight = -1;
-
         // For pessimistic testing
         // GLES30.glDisable(GLES30.GL_DITHER);
         mDemoRenderStage.newContext(mAssetManager);
@@ -54,13 +40,16 @@ public class OrbitalRenderer implements GLSurfaceView.Renderer {
 
     @Override
     public void onSurfaceChanged(GL10 unused, int width, int height) {
-        if (width == mWidth && height == mHeight)
-            return;
-
         mWidth = width;
         mHeight = height;
-
         mDemoRenderStage.resize(mWidth, mHeight);
         mFinalRenderStage.resize(mWidth, mHeight);
+    }
+
+    @Override
+    public void onDrawFrame(GL10 unused) {
+        float[] shaderTransform = mController.computeShaderTransform(mWidth, mHeight);
+        mDemoRenderStage.render(shaderTransform);
+        mFinalRenderStage.render(mDemoRenderStage.getTexture());
     }
 }
