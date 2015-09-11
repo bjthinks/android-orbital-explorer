@@ -176,7 +176,7 @@ public class OrbitalView extends GLSurfaceView {
             mController.rotateBy(xy_rotation);
 
             double scaleFactor = distance / mPreviousDistance;
-            mRenderer.scaleBy(scaleFactor);
+            mController.scaleBy(scaleFactor);
 
             requestRender();
         }

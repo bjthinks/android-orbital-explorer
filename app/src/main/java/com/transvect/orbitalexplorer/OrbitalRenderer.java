@@ -22,17 +22,6 @@ public class OrbitalRenderer implements GLSurfaceView.Renderer {
 
     private int mWidth, mHeight;
 
-    // TODO save these as preferences
-    private static double mCameraDistance = 3.0;
-
-    public void scaleBy(double f) {
-        mCameraDistance /= f;
-        if (mCameraDistance > 10.0)
-            mCameraDistance = 10.0;
-        if (mCameraDistance < 2.0)
-            mCameraDistance = 2.0;
-    }
-
     private AssetManager mAssetManager;
 
     OrbitalRenderer(Controller controller, AssetManager assetManager) {
@@ -51,7 +40,7 @@ public class OrbitalRenderer implements GLSurfaceView.Renderer {
         float leftRight = ratio;
         float bottomTop = 1.0f / ratio;
         float near = 1.0f;
-        float far = (float) (mCameraDistance + 1.0);
+        float far = (float) (mController.getCameraDistance() + 1.0);
         float[] projectionMatrix = new float[16];
         Matrix.frustumM(projectionMatrix, 0,
                 -leftRight, leftRight,
@@ -59,7 +48,7 @@ public class OrbitalRenderer implements GLSurfaceView.Renderer {
                 near, far);
 
         float[] viewMatrix = new float[16];
-        Matrix.setLookAtM(viewMatrix, 0, 0, 0, (float) (-mCameraDistance), 0f, 0f, 0f, 0f, 1.0f, 0.0f);
+        Matrix.setLookAtM(viewMatrix, 0, 0, 0, (float) (-mController.getCameraDistance()), 0f, 0f, 0f, 0f, 1.0f, 0.0f);
 
         float[] viewProjMatrix = new float[16];
         Matrix.multiplyMM(viewProjMatrix, 0, projectionMatrix, 0, viewMatrix, 0);
