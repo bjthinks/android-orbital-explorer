@@ -23,16 +23,16 @@ public class Controller {
         mCameraDistance /= f;
         if (mCameraDistance > 10.0)
             mCameraDistance = 10.0;
-        if (mCameraDistance < 2.0)
-            mCameraDistance = 2.0;
+        if (mCameraDistance < 0.5)
+            mCameraDistance = 0.5;
     }
 
     public synchronized float[] computeShaderTransform(float aspectRatio) {
         float ratio = (float) Math.sqrt(aspectRatio);
-        float leftRight = ratio;
-        float bottomTop = 1.0f / ratio;
-        float near = 1.0f;
+        float near = 0.25f;
         float far = (float) (mCameraDistance + 1.0);
+        float leftRight = near * ratio;
+        float bottomTop = near / ratio;
         float[] projectionMatrix = new float[16];
         Matrix.frustumM(projectionMatrix, 0,
                 -leftRight, leftRight,
