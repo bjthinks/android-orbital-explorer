@@ -16,7 +16,7 @@ import android.view.ScaleGestureDetector;
 public class OrbitalView extends GLSurfaceView {
     private static final String TAG = "OrbitalView";
 
-    OrbitalRenderer mRenderer;
+    private OrbitalRenderer mRenderer;
 
     public OrbitalView(Context context) {
         super(context);
