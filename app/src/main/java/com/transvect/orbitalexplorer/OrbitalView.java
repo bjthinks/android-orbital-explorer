@@ -135,12 +135,7 @@ public class OrbitalView extends GLSurfaceView {
             double dx = x - mPreviousX;
             double dy = y - mPreviousY;
             double meanSize = Math.sqrt(getWidth() * getHeight());
-            double rotx = Math.PI * dx / meanSize;
-            double roty = Math.PI * dy / meanSize;
-            Quaternion xz_rotation = Quaternion.rotation(rotx, new Vector3(0, 1, 0));
-            Quaternion yz_rotation = Quaternion.rotation(roty, new Vector3(-1, 0, 0));
-            Quaternion composite = yz_rotation.multiply(xz_rotation);
-            mController.rotateBy(composite);
+            mController.drag(dx / meanSize, dy / meanSize);
 
             requestRender();
         }
@@ -165,13 +160,13 @@ public class OrbitalView extends GLSurfaceView {
         double angle = Math.atan2(y2 - y1, x2 - x1);
         double distance = Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
         // Zero is highly unlikely, but don't take chances
-        if (distance < 1.0) distance = 1.0;
+        if (distance < 1.0)
+            distance = 1.0;
 
         if (actionable) {
 
             double angleDifference = angle - mPreviousAngle;
-            Quaternion xy_rotation = Quaternion.rotation(angleDifference, new Vector3(0, 0, 1));
-            mController.rotateBy(xy_rotation);
+            mController.spin(angleDifference);
 
             double scaleFactor = distance / mPreviousDistance;
             mController.scaleBy(scaleFactor);

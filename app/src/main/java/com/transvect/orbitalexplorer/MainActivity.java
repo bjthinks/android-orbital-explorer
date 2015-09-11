@@ -33,7 +33,7 @@ public class MainActivity extends Activity {
         // Make an OrbitalRenderer. Needs assets for shader code.
         OrbitalRenderer renderer = new OrbitalRenderer(controller, getAssets());
 
-        // Attach the two to each other
+        // Link everything up and start rendering
         mOrbitalView.setController(controller);
         mOrbitalView.setRenderer(renderer);
 

@@ -19,7 +19,21 @@ public class Controller {
             mCameraDistance = 2.0;
     }
 
-    public synchronized void rotateBy(Quaternion r) {
+    public synchronized void drag(double x, double y) {
+        double rotx = Math.PI * x;
+        double roty = Math.PI * y;
+        Quaternion xz_rotation = Quaternion.rotation(rotx, new Vector3(0, 1, 0));
+        Quaternion yz_rotation = Quaternion.rotation(roty, new Vector3(-1, 0, 0));
+        Quaternion composite = yz_rotation.multiply(xz_rotation);
+        rotateBy(composite);
+    }
+
+    public synchronized void spin(double theta) {
+        Quaternion xy_rotation = Quaternion.rotation(theta, new Vector3(0, 0, 1));
+        rotateBy(xy_rotation);
+    }
+
+    private void rotateBy(Quaternion r) {
         mTotalRotation = r.multiply(mTotalRotation);
     }
 
