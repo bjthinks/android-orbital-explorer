@@ -43,9 +43,6 @@ public class OrbitalRenderer implements GLSurfaceView.Renderer {
         mSurfaceIsNew = true;
         mWidth = -1;
         mHeight = -1;
-        mLastTime = System.currentTimeMillis();
-        mFramesDrawnThisSecond = 0;
-        mFPS = 0;
 
         assetManager = context.getAssets();
         mDemoRenderStage = new DemoRenderStage();
@@ -80,27 +77,12 @@ public class OrbitalRenderer implements GLSurfaceView.Renderer {
     }
 
     private boolean mSurfaceIsNew;
-    private long mLastTime;
-    private int mFramesDrawnThisSecond;
-    private int mFPS;
 
     @Override
     public void onDrawFrame(GL10 unused) {
         float[] shaderTransform = computeShaderTransform();
         mDemoRenderStage.render(shaderTransform);
         mFinalRenderStage.render(mDemoRenderStage.getTexture());
-
-        ++mFramesDrawnThisSecond;
-        long currentTime = System.currentTimeMillis();
-        if (currentTime - mLastTime >= 1000) {
-            mFPS = mFramesDrawnThisSecond;
-            mFramesDrawnThisSecond = 0;
-            mLastTime = currentTime;
-        }
-    }
-
-    public int getFPS() {
-        return mFPS;
     }
 
     @Override
