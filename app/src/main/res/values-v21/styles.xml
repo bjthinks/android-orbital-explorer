@@ -1,0 +1,13 @@
+<resources>
+
+<!-- Base application theme. -->
+<style name="AppTheme" parent="android:Theme.Material">
+    <item name="android:windowActionBarOverlay">true</item>
+    <item name="android:actionBarStyle">@style/MyActionBar</item>
+</style>
+
+<style name="MyActionBar" parent="android:Widget.Material.ActionBar">
+    <item name="android:background">@android:color/transparent</item>
+</style>
+
+</resources>
