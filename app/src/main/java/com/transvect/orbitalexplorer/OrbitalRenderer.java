@@ -34,36 +34,9 @@ public class OrbitalRenderer implements GLSurfaceView.Renderer {
         mFinalRenderStage = new FinalRenderStage();
     }
 
-    private float[] computeShaderTransform() {
-
-        float ratio = (float) Math.sqrt((double) mWidth / (double) mHeight);
-        float leftRight = ratio;
-        float bottomTop = 1.0f / ratio;
-        float near = 1.0f;
-        float far = (float) (mController.getCameraDistance() + 1.0);
-        float[] projectionMatrix = new float[16];
-        Matrix.frustumM(projectionMatrix, 0,
-                -leftRight, leftRight,
-                -bottomTop, bottomTop,
-                near, far);
-
-        float[] viewMatrix = new float[16];
-        Matrix.setLookAtM(viewMatrix, 0, 0, 0, (float) (-mController.getCameraDistance()), 0f, 0f, 0f, 0f, 1.0f, 0.0f);
-
-        float[] viewProjMatrix = new float[16];
-        Matrix.multiplyMM(viewProjMatrix, 0, projectionMatrix, 0, viewMatrix, 0);
-
-        float[] cameraRotation = mController.getTotalRotation().asRotationMatrix();
-
-        float[] shaderTransform = new float[16];
-        Matrix.multiplyMM(shaderTransform, 0, viewProjMatrix, 0, cameraRotation, 0);
-
-        return shaderTransform;
-    }
-
     @Override
     public void onDrawFrame(GL10 unused) {
-        float[] shaderTransform = computeShaderTransform();
+        float[] shaderTransform = mController.computeShaderTransform(mWidth, mHeight);
         mDemoRenderStage.render(shaderTransform);
         mFinalRenderStage.render(mDemoRenderStage.getTexture());
     }
