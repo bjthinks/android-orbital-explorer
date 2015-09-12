@@ -1,12 +1,24 @@
 package com.transvect.orbitalexplorer;
 
 import android.opengl.Matrix;
+import android.os.Bundle;
 
 public class Controller {
 
     // TODO save these as preferences
     private static Quaternion mTotalRotation = new Quaternion(1.0);
-    private static double mCameraDistance = 3.0;
+    private double mCameraDistance = 3.0;
+    private static final String cameraDistanceName = "cameraDistance";
+
+    public Controller(Bundle savedState) {
+        if (savedState != null) {
+            mCameraDistance = savedState.getDouble(cameraDistanceName);
+        }
+    }
+
+    public void saveState(Bundle outState) {
+        outState.putDouble(cameraDistanceName, mCameraDistance);
+    }
 
     public synchronized void drag(double x, double y) {
         Quaternion xz_rotation = Quaternion.rotation(Math.PI * x, new Vector3(0, 1, 0));

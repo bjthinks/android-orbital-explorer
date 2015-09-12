@@ -6,16 +6,19 @@ import android.content.Context;
 import android.content.pm.ConfigurationInfo;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 public class MainActivity extends Activity {
+    private static final String TAG = "MainActivity";
 
     private OrbitalView mOrbitalView;
+    private Controller mController;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected void onCreate(Bundle savedState) {
+        super.onCreate(savedState);
 
         if (!hasGLES30()) {
             // TODO show a helpful message
@@ -28,11 +31,11 @@ public class MainActivity extends Activity {
         mOrbitalView = (OrbitalView) findViewById(R.id.orbitalview);
 
         // Encapsulate all communication with the render thread and all long-term state
-        Controller controller = new Controller();
-        mOrbitalView.setController(controller);
+        mController = new Controller(savedState);
+        mOrbitalView.setController(mController);
 
         // Make an OrbitalRenderer. Needs assets for shader code.
-        OrbitalRenderer renderer = new OrbitalRenderer(controller, getAssets());
+        OrbitalRenderer renderer = new OrbitalRenderer(mController, getAssets());
 
         // Start the rendering thread
         mOrbitalView.setRenderer(renderer);
@@ -50,17 +53,25 @@ public class MainActivity extends Activity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        if (mOrbitalView != null)
+            mOrbitalView.onResume();
+    }
+
+    @Override
     protected void onPause() {
         super.onPause();
         if (mOrbitalView != null)
             mOrbitalView.onPause();
     }
 
+    // This might happen before or after onPause(), but if it needs to be called,
+    // it will always be called before onStop().
     @Override
-    protected void onResume() {
-        super.onResume();
-        if (mOrbitalView != null)
-            mOrbitalView.onResume();
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        mController.saveState(outState);
     }
 
     @Override
