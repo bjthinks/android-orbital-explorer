@@ -7,9 +7,10 @@ import android.util.Log;
 public class Controller {
     private static final String TAG = "Controller";
 
-    // TODO save these as preferences
     private Quaternion mTotalRotation = new Quaternion(1.0);
     private double mCameraDistance = 3.0;
+
+    // Keys for storing state in Bundle
     private static final String totalRotationName = "totalRotation";
     private static final String cameraDistanceName = "cameraDistance";
 
