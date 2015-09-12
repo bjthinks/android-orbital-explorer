@@ -38,5 +38,5 @@ void main() {
         linear_RGB = vec3(0, 0, 0);
 
     // TODO ask Chad about how to do this automatically
-    color = srgb_gamma(linear_RGB);
+    color = linear_RGB; // srgb_gamma(linear_RGB);
 }

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.pm.ConfigurationInfo;
+import android.opengl.GLES30;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.util.Log;
@@ -29,6 +30,7 @@ public class MainActivity extends Activity {
         // as the ContentView for this Activity.
         setContentView(R.layout.activity_main);
         mOrbitalView = (OrbitalView) findViewById(R.id.orbitalview);
+        mOrbitalView.setEGLWindowSurfaceFactory(new MySRGBSurfaceFactory());
 
         // Encapsulate all communication with the render thread and all long-term state
         mController = new Controller(savedState);
