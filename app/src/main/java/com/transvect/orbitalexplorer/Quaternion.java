@@ -1,6 +1,43 @@
 package com.transvect.orbitalexplorer;
 
-public class Quaternion {
+import android.os.Parcel;
+import android.os.Parcelable;
+import android.util.Log;
+
+public class Quaternion implements Parcelable {
+    public static final String TAG = "Quaternion";
+
+    // Parcelable crud
+    private Quaternion(Parcel in) {
+        r = in.readDouble();
+        i = in.readDouble();
+        j = in.readDouble();
+        k = in.readDouble();
+    }
+
+    @Override
+    public void writeToParcel(Parcel out, int flags) {
+        out.writeDouble(r);
+        out.writeDouble(i);
+        out.writeDouble(j);
+        out.writeDouble(k);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public static final Parcelable.Creator<Quaternion> CREATOR
+            = new Parcelable.Creator<Quaternion>() {
+        @Override
+        public Quaternion createFromParcel(Parcel in) {
+            return new Quaternion(in);
+        }
+        public Quaternion[] newArray(int size) {
+            return new Quaternion[size];
+        }
+    };
 
     private final double r, i, j, k;
 
