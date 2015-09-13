@@ -6,7 +6,7 @@ in vec3 front, back;
 out ivec3 color;
 
 float f(vec3 x) {
-    float nx = length(x);
+    float nx = sqrt(x.x*x.x + 2.*x.y*x.y + 4.*x.z*x.z);
     return exp(-nx*nx);
 }
 
