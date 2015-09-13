@@ -1,5 +1,6 @@
 package com.transvect.orbitalexplorer;
 
+import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,12 +12,15 @@ public class Controller {
     private Quaternion mRotationalMomentum = new Quaternion(1.0);
     private Quaternion mTotalRotation = new Quaternion(1.0);
     private double mCameraDistance = 3.0;
+    private OrbitalView mOrbitalView = null;
 
     // Keys for storing state in Bundle
     private static final String totalRotationName = "totalRotation";
     private static final String cameraDistanceName = "cameraDistance";
 
-    public Controller(Bundle savedState) {
+    public Controller(OrbitalView orbitalView, Bundle savedState) {
+        mOrbitalView = orbitalView;
+
         // TODO calculate something sensible here; should be constant * pixeldensity
         flingScale = 1.0 / 60000.0;
         if (savedState != null) {
@@ -40,10 +44,19 @@ public class Controller {
         Quaternion xz_rotation = Quaternion.rotation(Math.PI * x * flingScale, new Vector3(0, 1, 0));
         Quaternion yz_rotation = Quaternion.rotation(Math.PI * y * flingScale, new Vector3(-1, 0, 0));
         mRotationalMomentum = yz_rotation.multiply(xz_rotation);
+        mOrbitalView.setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
+    }
+
+    private void flingDecay() {
+        mTotalRotation = mRotationalMomentum.multiply(mTotalRotation);
+        mRotationalMomentum = mRotationalMomentum.pow(0.98);
+        if (mRotationalMomentum.real() > 0.0 && mRotationalMomentum.unreal().norm() < 0.0002)
+            stopFling();
     }
 
     public synchronized void stopFling() {
         mRotationalMomentum = new Quaternion(1.0);
+        mOrbitalView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
     }
 
     public synchronized void spin(double theta) {
@@ -60,9 +73,7 @@ public class Controller {
     }
 
     public synchronized float[] computeShaderTransform(float aspectRatio) {
-        mTotalRotation = mRotationalMomentum.multiply(mTotalRotation);
-        // TODO handle the case when this becomes too small to matter
-        mRotationalMomentum = mRotationalMomentum.pow(0.99);
+        flingDecay();
 
         float ratio = (float) Math.sqrt(aspectRatio);
         float near = 0.25f;
