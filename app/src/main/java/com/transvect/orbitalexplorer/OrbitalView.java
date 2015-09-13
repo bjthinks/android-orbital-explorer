@@ -2,6 +2,7 @@ package com.transvect.orbitalexplorer;
 
 import android.content.Context;
 import android.opengl.GLSurfaceView;
+import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.GestureDetector;
@@ -42,7 +43,7 @@ public class OrbitalView extends GLSurfaceView {
     private int mSecondPointerID = MotionEvent.INVALID_POINTER_ID;
 
     @Override
-    public boolean onTouchEvent(MotionEvent e) {
+    public boolean onTouchEvent(@NonNull MotionEvent e) {
 
         mFlingDetector.onTouchEvent(e);
 

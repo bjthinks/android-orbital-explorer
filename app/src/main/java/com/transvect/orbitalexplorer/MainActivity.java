@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.pm.ConfigurationInfo;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -69,7 +70,7 @@ public class MainActivity extends Activity {
     // This might happen before or after onPause(), but if it needs to be called,
     // it will always be called before onStop().
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         mController.saveState(outState);
     }
