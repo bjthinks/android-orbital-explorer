@@ -37,6 +37,6 @@ void main() {
         linear_RGB.b < 0.0 || linear_RGB.b > 1.0)
         linear_RGB = vec3(0, 0, 0);
 
-    // TODO ask Chad about how to do this automatically
+    // Need EGL 1.5 or EGL_KHR_gl_colorspace to do this automatically
     color = srgb_gamma(linear_RGB);
 }
