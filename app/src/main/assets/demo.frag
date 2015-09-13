@@ -16,7 +16,7 @@ void main() {
     const int steps = 10;
     vec3 inc = (front - back) / float(steps);
     lum += f(loc) / 2.0;
-    for (int i = 1; i < steps - 1; ++i) {
+    for (int i = 1; i < steps; ++i) {
         loc += inc;
         lum += f(loc);
     }

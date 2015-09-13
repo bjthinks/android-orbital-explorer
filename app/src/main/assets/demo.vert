@@ -1,4 +1,5 @@
 #version 300 es
+
 // Matrix to be applied to coordinates
 uniform mat4 shaderTransform;
 
@@ -9,7 +10,7 @@ in vec2 inPosition;
 out vec3 front, back;
 
 void main() {
-    gl_Position = vec4(inPosition,  0, 1);
+    gl_Position = vec4(inPosition, 0, 1);
     vec4 prefront = inverse(shaderTransform) * vec4(inPosition, 1, 1);
     vec4 preback = inverse(shaderTransform) * vec4(inPosition, -1, 1);
     front = prefront.xyz / prefront.w;
