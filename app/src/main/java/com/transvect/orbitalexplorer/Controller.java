@@ -8,7 +8,7 @@ import android.util.Log;
 public class Controller {
     private static final String TAG = "Controller";
 
-    private final double flingScale;
+    private final double pixelDensity;
     private Quaternion mRotationalMomentum = new Quaternion(1.0);
     private Quaternion mTotalRotation = new Quaternion(1.0);
     private double mCameraDistance = 3.0;
@@ -21,8 +21,8 @@ public class Controller {
     public Controller(OrbitalView orbitalView, Bundle savedState) {
         mOrbitalView = orbitalView;
 
-        // TODO calculate something sensible here; should be constant * pixeldensity
-        flingScale = 1.0 / 60000.0;
+        // TODO use a real value here
+        pixelDensity = 240.0;
         if (savedState != null) {
             mCameraDistance = savedState.getDouble(cameraDistanceName);
             mTotalRotation = savedState.getParcelable(totalRotationName);
@@ -41,8 +41,18 @@ public class Controller {
     }
 
     public synchronized void fling(double x, double y) {
-        Quaternion xz_rotation = Quaternion.rotation(Math.PI * x * flingScale, new Vector3(0, 1, 0));
-        Quaternion yz_rotation = Quaternion.rotation(Math.PI * y * flingScale, new Vector3(-1, 0, 0));
+        double flingScale = 40.0 * pixelDensity;
+        x /= flingScale;
+        y /= flingScale;
+        double flingNorm = Math.sqrt(x*x + y*y);
+        if (flingNorm > 1.0) {
+            x /= flingNorm;
+            y /= flingNorm;
+        }
+        x /= 5.0;
+        y /= 5.0;
+        Quaternion xz_rotation = Quaternion.rotation(Math.PI * x, new Vector3(0, 1, 0));
+        Quaternion yz_rotation = Quaternion.rotation(Math.PI * y, new Vector3(-1, 0, 0));
         mRotationalMomentum = yz_rotation.multiply(xz_rotation);
         mOrbitalView.setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
     }
