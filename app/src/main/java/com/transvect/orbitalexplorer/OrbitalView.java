@@ -53,6 +53,7 @@ public class OrbitalView extends GLSurfaceView {
                 // One bear in the bed
                 mFirstPointerID = e.getPointerId(0);
                 oneFingerEvent(e, false);
+                mController.stopFling();
                 break;
 
             case MotionEvent.ACTION_POINTER_DOWN:
@@ -182,8 +183,7 @@ public class OrbitalView extends GLSurfaceView {
 
         @Override
         public boolean onFling(MotionEvent event1, MotionEvent event2, float velocityX, float velocityY) {
-            // TODO implement flinging
-            Log.d(TAG, "Fling: velocity = ( " + velocityX + " , " + velocityY + " )");
+            mController.fling(velocityX, velocityY);
             return true;
         }
     }
