@@ -84,12 +84,11 @@ public class DemoRenderStage extends RenderStage {
         mTexture.bindToTexture2DAndResize(mWidth, mHeight);
     }
 
+    private static final int zeroes[] = {0, 0, 0, 0};
     public void render(float[] shaderTransform) {
         GLES30.glViewport(0, 0, mWidth, mHeight);
         GLES30.glBindFramebuffer(GLES30.GL_FRAMEBUFFER, mFramebufferId);
-        // TODO fix this for integer texture
-        GLES30.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-        GLES30.glClear(GLES30.GL_COLOR_BUFFER_BIT);
+        GLES30.glClearBufferiv(GLES30.GL_COLOR, 0, zeroes, 0);
         GLES30.glUseProgram(mProgram);
         int mvpMatrixHandle = GLES30.glGetUniformLocation(mProgram, "shaderTransform");
         GLES30.glUniformMatrix4fv(mvpMatrixHandle, 1, false, shaderTransform, 0);
