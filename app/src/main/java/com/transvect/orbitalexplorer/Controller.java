@@ -3,13 +3,11 @@ package com.transvect.orbitalexplorer;
 import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
 import android.os.Bundle;
-import android.util.Log;
 
 public class Controller {
     private static final String TAG = "Controller";
 
-    private final double pixelDensity;
-    private Vector2 mRotationalMomentum = new Vector2(0.0, 0.0);
+    private Vector2 mFlingVelocity = new Vector2(0.0, 0.0);
     private Quaternion mTotalRotation = new Quaternion(1.0);
     private double mCameraDistance = 3.0;
     private OrbitalView mOrbitalView = null;
@@ -21,8 +19,6 @@ public class Controller {
     public Controller(OrbitalView orbitalView, Bundle savedState) {
         mOrbitalView = orbitalView;
 
-        // TODO use a real value here
-        pixelDensity = 445.0;
         if (savedState != null) {
             mCameraDistance = savedState.getDouble(cameraDistanceName);
             mTotalRotation = savedState.getParcelable(totalRotationName);
@@ -35,32 +31,37 @@ public class Controller {
     }
 
     public synchronized void drag(double x, double y) {
+        // x and y are multiples of the mean screen size
         Quaternion xz_rotation = Quaternion.rotation(Math.PI * x, new Vector3(0, 1, 0));
         Quaternion yz_rotation = Quaternion.rotation(Math.PI * y, new Vector3(-1, 0, 0));
         mTotalRotation = yz_rotation.multiply(xz_rotation).multiply(mTotalRotation);
     }
 
+    private static final double MAX_FLING_SPEED = 6.0; // half-turns per second
+    private static final double MAX_FLING_TIME = 5.0; // seconds before stopping
+    private static final double FLING_SLOWDOWN = MAX_FLING_SPEED / MAX_FLING_TIME;
+
     public synchronized void fling(double x, double y) {
-        mRotationalMomentum = new Vector2(x, y).divide(pixelDensity * 60.0 * 5.0);
-        double momNorm = mRotationalMomentum.norm();
-        if (momNorm > 0.05)
-            mRotationalMomentum = mRotationalMomentum.multiply(0.05 / momNorm);
+        // x and y are multiples of the mean screen size per second
+        mFlingVelocity = new Vector2(x, y);
+        double flingSpeed = mFlingVelocity.norm();
+        if (flingSpeed > MAX_FLING_SPEED)
+            mFlingVelocity = mFlingVelocity.multiply(MAX_FLING_SPEED / flingSpeed);
         mOrbitalView.setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
     }
 
     private void flingDecay() {
-        final double slowdownRate = 0.05 / 60.0 / 5.0;
-        if (mRotationalMomentum.norm() < slowdownRate) {
-            mRotationalMomentum = new Vector2(0.0, 0.0);
+        if (mFlingVelocity.norm() < FLING_SLOWDOWN / 60.0) {
             stopFling();
         } else {
-            Vector2 velocityReduction = mRotationalMomentum.normalize().multiply(-slowdownRate);
-            mRotationalMomentum = mRotationalMomentum.add(velocityReduction);
+            Vector2 flingDirection = mFlingVelocity.normalize();
+            Vector2 velocityReduction = flingDirection.multiply(FLING_SLOWDOWN / 60.0);
+            mFlingVelocity = mFlingVelocity.subtract(velocityReduction);
         }
     }
 
     public synchronized void stopFling() {
-        mRotationalMomentum = new Vector2(0.0, 0.0);
+        mFlingVelocity = new Vector2(0.0, 0.0);
         mOrbitalView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
     }
 
@@ -78,7 +79,8 @@ public class Controller {
     }
 
     public synchronized float[] computeShaderTransform(float aspectRatio) {
-        drag(mRotationalMomentum.getX(), mRotationalMomentum.getY());
+        // TODO use actual FPS here and in flingDecay
+        drag(mFlingVelocity.getX() / 60.0, mFlingVelocity.getY() / 60.0);
         flingDecay();
 
         float ratio = (float) Math.sqrt(aspectRatio);

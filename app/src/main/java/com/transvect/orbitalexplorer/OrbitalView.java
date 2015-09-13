@@ -182,8 +182,10 @@ public class OrbitalView extends GLSurfaceView {
         }
 
         @Override
-        public boolean onFling(MotionEvent event1, MotionEvent event2, float velocityX, float velocityY) {
-            mController.fling(velocityX, velocityY);
+        public boolean onFling(MotionEvent event1, MotionEvent event2,
+                               float velocityX, float velocityY) {
+            double meanSize = Math.sqrt(getWidth() * getHeight());
+            mController.fling(velocityX / meanSize, velocityY / meanSize);
             return true;
         }
     }
