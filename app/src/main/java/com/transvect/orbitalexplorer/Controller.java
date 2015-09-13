@@ -9,7 +9,7 @@ public class Controller {
     private static final String TAG = "Controller";
 
     private final double pixelDensity;
-    private Quaternion mRotationalMomentum = new Quaternion(1.0);
+    private Vector2 mRotationalMomentum = new Vector2(0.0, 0.0);
     private Quaternion mTotalRotation = new Quaternion(1.0);
     private double mCameraDistance = 3.0;
     private OrbitalView mOrbitalView = null;
@@ -22,7 +22,7 @@ public class Controller {
         mOrbitalView = orbitalView;
 
         // TODO use a real value here
-        pixelDensity = 240.0;
+        pixelDensity = 445.0;
         if (savedState != null) {
             mCameraDistance = savedState.getDouble(cameraDistanceName);
             mTotalRotation = savedState.getParcelable(totalRotationName);
@@ -41,31 +41,26 @@ public class Controller {
     }
 
     public synchronized void fling(double x, double y) {
-        double flingScale = 40.0 * pixelDensity;
-        x /= flingScale;
-        y /= flingScale;
-        double flingNorm = Math.sqrt(x*x + y*y);
-        if (flingNorm > 1.0) {
-            x /= flingNorm;
-            y /= flingNorm;
-        }
-        x /= 5.0;
-        y /= 5.0;
-        Quaternion xz_rotation = Quaternion.rotation(Math.PI * x, new Vector3(0, 1, 0));
-        Quaternion yz_rotation = Quaternion.rotation(Math.PI * y, new Vector3(-1, 0, 0));
-        mRotationalMomentum = yz_rotation.multiply(xz_rotation);
+        mRotationalMomentum = new Vector2(x, y).divide(pixelDensity * 60.0 * 5.0);
+        double momNorm = mRotationalMomentum.norm();
+        if (momNorm > 0.05)
+            mRotationalMomentum = mRotationalMomentum.multiply(0.05 / momNorm);
         mOrbitalView.setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
     }
 
     private void flingDecay() {
-        mTotalRotation = mRotationalMomentum.multiply(mTotalRotation);
-        mRotationalMomentum = mRotationalMomentum.pow(0.98);
-        if (mRotationalMomentum.real() > 0.0 && mRotationalMomentum.unreal().norm() < 0.0002)
+        final double slowdownRate = 0.05 / 60.0 / 5.0;
+        if (mRotationalMomentum.norm() < slowdownRate) {
+            mRotationalMomentum = new Vector2(0.0, 0.0);
             stopFling();
+        } else {
+            Vector2 velocityReduction = mRotationalMomentum.normalize().multiply(-slowdownRate);
+            mRotationalMomentum = mRotationalMomentum.add(velocityReduction);
+        }
     }
 
     public synchronized void stopFling() {
-        mRotationalMomentum = new Quaternion(1.0);
+        mRotationalMomentum = new Vector2(0.0, 0.0);
         mOrbitalView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
     }
 
@@ -83,6 +78,7 @@ public class Controller {
     }
 
     public synchronized float[] computeShaderTransform(float aspectRatio) {
+        drag(mRotationalMomentum.getX(), mRotationalMomentum.getY());
         flingDecay();
 
         float ratio = (float) Math.sqrt(aspectRatio);
