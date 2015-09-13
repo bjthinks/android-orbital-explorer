@@ -1,6 +1,7 @@
 #version 300 es
+precision highp int;
 precision highp float;
-uniform sampler2D data;
+uniform isampler2D data;
 in vec2 texCoord;
 out vec3 color;
 
@@ -11,7 +12,7 @@ vec3 srgb_gamma(vec3 linear) {
 }
 
 void main() {
-    vec4 blet = texture(data, texCoord);
+    vec3 blet = vec3(texture(data, texCoord).xyz) / 2147483647.0;
 
     vec2 uv_prime = blet.xy;
     float Y = blet.z;
