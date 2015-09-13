@@ -84,8 +84,8 @@ public class Controller {
         flingDecay();
 
         float ratio = (float) Math.sqrt(aspectRatio);
-        float near = 0.25f;
-        float far = (float) (mCameraDistance + 1.0);
+        float near = (float) Math.max(0.5, mCameraDistance - 3.0);
+        float far = (float) (mCameraDistance + 3.0);
         float leftRight = near * ratio;
         float bottomTop = near / ratio;
         float[] projectionMatrix = new float[16];
