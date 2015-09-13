@@ -2,7 +2,7 @@
 precision highp int;
 precision highp float;
 uniform mat4 shaderTransform;
-in vec4 front, back;
+in vec3 front, back;
 out ivec3 color;
 
 float f(vec3 x) {
@@ -11,14 +11,10 @@ float f(vec3 x) {
 }
 
 void main() {
-    vec4 original_front = inverse(shaderTransform) * front;
-    vec4 original_back  = inverse(shaderTransform) * back;
-    original_front /= original_front.w;
-    original_back /= original_back.w;
     float lum = 0.0;
-    vec3 loc = original_back.xyz;
+    vec3 loc = back;
     const int steps = 10;
-    vec3 inc = (original_front - original_back).xyz / float(steps);
+    vec3 inc = (front - back) / float(steps);
     lum += f(loc) / 2.0;
     for (int i = 1; i < steps - 1; ++i) {
         loc += inc;
