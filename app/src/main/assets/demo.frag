@@ -6,8 +6,9 @@ in vec3 front, back;
 out ivec3 color;
 
 float f(vec3 x) {
-    float nx = sqrt(x.x*x.x + 2.*x.y*x.y + 4.*x.z*x.z);
-    return exp(-nx*nx);
+    vec3 foo = x * vec3(1.0, sqrt(2.0), 2.0);
+    float nx2 = dot(foo, foo);
+    return exp(-nx2);
 }
 
 void main() {
