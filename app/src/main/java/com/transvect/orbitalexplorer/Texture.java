@@ -2,6 +2,8 @@ package com.transvect.orbitalexplorer;
 
 import android.opengl.GLES30;
 
+import java.nio.Buffer;
+
 public class Texture {
 
     private final int mId;
@@ -29,5 +31,11 @@ public class Texture {
         bindToTexture2D();
         GLES30.glTexImage2D(GLES30.GL_TEXTURE_2D, 0, mInternalFormat,
                 width, height, 0, mFormat, mType, null);
+    }
+
+    public void bindToTexture2DAndSetImage(int width, int height, Buffer pixels) {
+        bindToTexture2D();
+        GLES30.glTexImage2D(GLES30.GL_TEXTURE_2D, 0, mInternalFormat,
+                width, height, 0, mFormat, mType, pixels);
     }
 }

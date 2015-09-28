@@ -74,8 +74,8 @@ public class Controller {
         mCameraDistance /= f;
         if (mCameraDistance > 10.0)
             mCameraDistance = 10.0;
-        if (mCameraDistance < 0.5)
-            mCameraDistance = 0.5;
+        if (mCameraDistance < 1.5)
+            mCameraDistance = 1.5;
     }
 
     public synchronized float[] computeShaderTransform(float aspectRatio) {
@@ -84,8 +84,8 @@ public class Controller {
         flingDecay();
 
         float ratio = (float) Math.sqrt(aspectRatio);
-        float near = (float) Math.max(0.5, mCameraDistance - 3.0);
-        float far = (float) (mCameraDistance + 3.0);
+        float near = (float) Math.max(0.5, mCameraDistance - 1.0);
+        float far = (float) (mCameraDistance + 1.0);
         float leftRight = near * ratio;
         float bottomTop = near / ratio;
         float[] projectionMatrix = new float[16];

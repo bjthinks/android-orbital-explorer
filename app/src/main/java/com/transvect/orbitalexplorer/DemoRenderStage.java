@@ -10,6 +10,8 @@ public class DemoRenderStage extends RenderStage {
 
     private int mProgram;
     private FloatBuffer mVertexBuffer;
+    private FloatBuffer mRadialData;
+    private Texture mRadialTexture;
     private Texture mTexture;
     private int mFramebufferId;
     private int mWidth, mHeight;
@@ -26,20 +28,51 @@ public class DemoRenderStage extends RenderStage {
                 1.0f, -1.0f,
         };
         mVertexBuffer = floatArrayToBuffer(squareCoordinates);
+
+        float radialData[] = {
+                0.95f,
+                0.85f,
+                0.75f,
+                0.65f,
+                0.55f,
+                0.45f,
+                0.35f,
+                0.25f,
+                0.15f,
+                0.05f,
+        };
+        mRadialData = floatArrayToBuffer(radialData);
     }
 
     public void newContext(AssetManager assetManager) {
+
+        // Create input textures with orbital data
+
+        // Data format
+        final int orbitalFormat = GLES30.GL_RED;
+        final int orbitalType = GLES30.GL_FLOAT;
+        final int orbitalInternalFormat = GLES30.GL_R32F;
+
+        // Create a texture
+        mRadialTexture = new Texture(orbitalFormat, orbitalType, orbitalInternalFormat);
+        mRadialTexture.bindToTexture2DAndSetImage(10, 1, mRadialData);
+
+        // Floating point textures are not filterable
+        GLES30.glTexParameteri(GLES30.GL_TEXTURE_2D,
+                GLES30.GL_TEXTURE_MIN_FILTER, GLES30.GL_NEAREST);
+        GLES30.glTexParameteri(GLES30.GL_TEXTURE_2D,
+                GLES30.GL_TEXTURE_MAG_FILTER, GLES30.GL_NEAREST);
 
         // The following three parameters have to match a row of Table 3.2 in the
         // OpenGL ES 3.0 specification, or we will get an OpenGL error. We also
         // need to choose a sized internal format which is color-renderable
         // according to Table 3.13 (in the absence of extensions).
-        final int format = GLES30.GL_RGBA_INTEGER;
-        final int type = GLES30.GL_INT;
-        final int internalFormat = GLES30.GL_RGBA32I;
+        final int renderFormat = GLES30.GL_RGBA_INTEGER;
+        final int renderType = GLES30.GL_INT;
+        final int renderInternalFormat = GLES30.GL_RGBA32I;
 
         // Create a texture to render to
-        mTexture = new Texture(format, type, internalFormat);
+        mTexture = new Texture(renderFormat, renderType, renderInternalFormat);
         mTexture.bindToTexture2DAndResize(1, 1);
 
         // Set the filters for sampling the bound texture, when sampling at
@@ -93,6 +126,10 @@ public class DemoRenderStage extends RenderStage {
         GLES30.glBindFramebuffer(GLES30.GL_FRAMEBUFFER, mFramebufferId);
         GLES30.glClearBufferiv(GLES30.GL_COLOR, 0, zeroes, 0);
         GLES30.glUseProgram(mProgram);
+        GLES30.glActiveTexture(GLES30.GL_TEXTURE0);
+        mRadialTexture.bindToTexture2D();
+        int radialHandle = GLES30.glGetUniformLocation(mProgram, "radial");
+        GLES30.glUniform1i(radialHandle, 0);
         int mvpMatrixHandle = GLES30.glGetUniformLocation(mProgram, "shaderTransform");
         GLES30.glUniformMatrix4fv(mvpMatrixHandle, 1, false, shaderTransform, 0);
         int inPositionHandle = GLES30.glGetAttribLocation(mProgram, "inPosition");
