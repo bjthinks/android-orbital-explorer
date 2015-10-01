@@ -8,14 +8,23 @@ out ivec3 color;
 // Orbital
 uniform sampler2D radial;
 
+float radialPart(float r) {
+    const float maximumRadius = 1.0;
+    const float numRadialSubdivisions = 10.0;
+    float positionInTexture = r / maximumRadius * numRadialSubdivisions;
+    if (positionInTexture >= numRadialSubdivisions)
+        return 0.0;
+    float leftTexturePosition = trunc(positionInTexture);
+    float leftTextureValue = texelFetch(radial, ivec2(leftTexturePosition, 0), 0).x;
+    float rightTexturePosition = leftTexturePosition + 1.0;
+    float rightTextureValue = texelFetch(radial, ivec2(rightTexturePosition, 0), 0).x;
+    float interpolationValue = fract(positionInTexture);
+    return mix(leftTextureValue, rightTextureValue, interpolationValue);
+}
+
 float f(vec3 x) {
     float r = length(x * vec3(1.0, sqrt(2.0), 2.0));
-    float val;
-    if (r > 1.0)
-        val = 0.0;
-    else
-        val = texture(radial, vec2(r, 0.5)).x;
-    return val;
+    return radialPart(r);
 }
 
 void main() {
