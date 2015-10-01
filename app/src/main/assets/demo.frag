@@ -2,15 +2,17 @@
 precision highp int;
 precision highp float;
 
+const vec2 white = vec2(0.19784, 0.46832);
+
 in vec3 front, back;
 out ivec3 color;
 
 // Orbital
 uniform sampler2D radial;
+const float maximumRadius = 1.0;
+const float numRadialSubdivisions = 10.0;
 
 float radialPart(float r) {
-    const float maximumRadius = 1.0;
-    const float numRadialSubdivisions = 10.0;
     float positionInTexture = r / maximumRadius * numRadialSubdivisions;
     if (positionInTexture >= numRadialSubdivisions)
         return 0.0;
@@ -28,6 +30,12 @@ float f(vec3 x) {
 }
 
 void main() {
+    float distanceFromOrigin = length(cross(front, back)) / length(front - back);
+    if (distanceFromOrigin > maximumRadius) {
+        color = ivec3(vec3(white, 0.0) * 2147483647.0);
+        return;
+    }
+
     float lum = 0.0;
     vec3 loc = back;
     const int steps = 4;
@@ -40,7 +48,6 @@ void main() {
     loc += inc;
     lum += f(loc) / 2.0;
     lum *= length(inc);
-    vec2 white = vec2(0.19784, 0.46832);
     vec3 result = vec3(white, lum);
     color = ivec3(result * 2147483647.0);
 }
