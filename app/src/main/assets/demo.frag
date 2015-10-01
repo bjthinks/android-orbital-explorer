@@ -30,24 +30,26 @@ float f(vec3 x) {
 }
 
 void main() {
+    vec3 span = back - front;
+
     float distanceFromOrigin = length(cross(front, back)) / length(front - back);
     if (distanceFromOrigin > maximumRadius) {
         color = ivec3(vec3(white, 0.0) * 2147483647.0);
         return;
     }
 
-    float lum = 0.0;
-    vec3 loc = back;
+    float total = 0.0;
+    vec3 location = front;
     const int steps = 4;
-    vec3 inc = (front - back) / float(steps);
-    lum += f(loc) / 2.0;
+    vec3 step = span / float(steps);
+    total += f(location) / 2.0;
     for (int i = 1; i < steps; ++i) {
-        loc += inc;
-        lum += f(loc);
+        location += step;
+        total += f(location);
     }
-    loc += inc;
-    lum += f(loc) / 2.0;
-    lum *= length(inc);
-    vec3 result = vec3(white, lum);
+    location += step;
+    total += f(location) / 2.0;
+    total *= length(step);
+    vec3 result = vec3(white, total);
     color = ivec3(result * 2147483647.0);
 }
