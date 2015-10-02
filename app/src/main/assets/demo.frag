@@ -24,21 +24,28 @@ float radialPart(float r) {
     return mix(leftTextureValue, rightTextureValue, interpolationValue);
 }
 
+float inclinationPart(float theta) {
+    float s = sin(theta);
+    return s * s;
+}
+
 float f(vec3 x) {
-    float r = length(x * vec3(1.0, sqrt(2.0), 2.0));
-    return radialPart(r);
+    float r = length(x);
+    float theta = acos(x.z / r);
+    return radialPart(r) * inclinationPart(theta);
 }
 
 void main() {
     vec3 span = back - front;
 
     float distanceFromOrigin = length(back - dot(back, span) / dot(span, span) * span);
+
     if (distanceFromOrigin > maximumRadius) {
         color = ivec3(vec3(white, 0.0) * 2147483647.0);
     } else {
         float total = 0.0;
         vec3 location = front;
-        const int steps = 4;
+        const int steps = 16;
         vec3 step = span / float(steps);
         total += f(location) / 2.0;
         for (int i = 1; i < steps; ++i) {
@@ -48,6 +55,8 @@ void main() {
         location += step;
         total += f(location) / 2.0;
         total *= length(step);
+        total *= 0.75;
+
         vec3 result = vec3(white, total);
         color = ivec3(result * 2147483647.0);
     }
