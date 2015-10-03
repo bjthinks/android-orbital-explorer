@@ -25,8 +25,8 @@ float radialPart(float r) {
 }
 
 float inclinationPart(float theta) {
-    float s = sin(theta);
-    return s * s;
+    float c = cos(theta);
+    return c * c;
 }
 
 float f(vec3 x) {
