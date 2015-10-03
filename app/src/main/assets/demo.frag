@@ -36,6 +36,13 @@ float f(vec3 x) {
 }
 
 void main() {
+    // Given: a parametric line as f(t) = position + t * direction, and a radius
+    // Then, the t values where the line intersects the sphere of the given radius
+    // centered at the origin are:
+    // t = (-dot(position, direction) +/- sqrt(dot(position, direction)^2 -
+    //      dot(direction, direction) * (dot(position, position) - radius^2))) /
+    //     dot(direction, direction)
+
     vec3 span = back - front;
 
     float distanceFromOrigin = length(back - dot(back, span) / dot(span, span) * span);
