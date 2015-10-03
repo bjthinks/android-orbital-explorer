@@ -45,16 +45,26 @@ void main() {
     } else {
         float total = 0.0;
         vec3 location = front;
-        const int steps = 16;
+        const int steps = 12;
         vec3 step = span / float(steps);
-        total += f(location) / 2.0;
-        for (int i = 1; i < steps; ++i) {
+        int i = 0;
+        total += f(location);
+        ++i;
+        location += step;
+        total += 4.0 * f(location);
+        ++i;
+        while (i < steps) {
             location += step;
-            total += f(location);
+            total += 2.0 * f(location);
+            ++i;
+            location += step;
+            total += 4.0 * f(location);
+            ++i;
         }
         location += step;
-        total += f(location) / 2.0;
-        total *= length(step);
+        total += f(location);
+        total *= length(step) / 3.0;
+
         total *= 0.75;
 
         vec3 result = vec3(white, total);
