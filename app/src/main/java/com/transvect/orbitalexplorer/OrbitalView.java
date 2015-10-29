@@ -4,12 +4,12 @@ import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.support.annotation.NonNull;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
+// import android.util.Log;
 
 public class OrbitalView extends GLSurfaceView {
-    private static final String TAG = "OrbitalView";
+    // private static final String TAG = "OrbitalView";
 
     private GestureDetector mFlingDetector;
 
@@ -174,7 +174,7 @@ public class OrbitalView extends GLSurfaceView {
     }
 
     private class FlingListener extends GestureDetector.SimpleOnGestureListener {
-        private static final String TAG = "FlingListener";
+        // private static final String TAG = "FlingListener";
 
         @Override
         public boolean onDown(MotionEvent event) {

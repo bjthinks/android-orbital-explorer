@@ -2,13 +2,13 @@ package com.transvect.orbitalexplorer;
 
 import android.content.res.AssetManager;
 import android.opengl.GLSurfaceView;
-import android.util.Log;
+// import android.util.Log;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 public class OrbitalRenderer implements GLSurfaceView.Renderer {
-    private static final String TAG = "OrbitalRenderer";
+    // private static final String TAG = "OrbitalRenderer";
 
     private Controller mController;
     private AssetManager mAssetManager;

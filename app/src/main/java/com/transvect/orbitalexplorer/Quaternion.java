@@ -2,10 +2,10 @@ package com.transvect.orbitalexplorer;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.util.Log;
+// import android.util.Log;
 
 public class Quaternion implements Parcelable {
-    public static final String TAG = "Quaternion";
+    // public static final String TAG = "Quaternion";
 
     // Parcelable crud
     private Quaternion(Parcel in) {
@@ -41,14 +41,14 @@ public class Quaternion implements Parcelable {
 
     private final double r, i, j, k;
 
-    public double real() { return r; }
+    /* public double real() { return r; }
     public double imag() { return i; }
     public double jmag() { return j; }
-    public double kmag() { return k; }
+    public double kmag() { return k; } */
 
-    public Vector3 unreal() {
+    /* public Vector3 unreal() {
         return new Vector3(i, j, k);
-    }
+    } */
 
     public Quaternion(double real, double imaginary, double jmaginary, double kmaginary) {
         r = real;
@@ -79,9 +79,9 @@ public class Quaternion implements Parcelable {
                 r * y.k + i * y.j - j * y.i + k * y.r);
     }
 
-    Quaternion multiply(double c) {
+    /* Quaternion multiply(double c) {
         return new Quaternion(r * c, i * c, j * c, k * c);
-    }
+    } */
 
     Quaternion divide(double c) {
         return new Quaternion(r / c, i / c, j / c, k / c);
@@ -95,7 +95,7 @@ public class Quaternion implements Parcelable {
         return divide(norm());
     }
 
-    Quaternion pow(double alpha) {
+    /* Quaternion pow(double alpha) {
         Quaternion normalized = normalize();
         double normalizedRealPart = normalized.real();
         Vector3 normalizedUnrealPart = normalized.unreal();
@@ -112,7 +112,7 @@ public class Quaternion implements Parcelable {
             normalizedExponential = new Quaternion(ac, normalizedUnrealPart.multiply(alpha));
         }
         return normalizedExponential.normalize().multiply(Math.pow(norm(), alpha));
-    }
+    } */
 
     static Quaternion rotation(double angle, Vector3 x) {
         x = x.normalize();

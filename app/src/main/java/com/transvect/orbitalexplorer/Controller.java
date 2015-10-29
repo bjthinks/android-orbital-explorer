@@ -5,7 +5,7 @@ import android.opengl.Matrix;
 import android.os.Bundle;
 
 public class Controller {
-    private static final String TAG = "Controller";
+    // private static final String TAG = "Controller";
 
     private Vector2 mFlingVelocity = new Vector2(0.0, 0.0);
     private Quaternion mTotalRotation = new Quaternion(1.0);
@@ -35,6 +35,7 @@ public class Controller {
         Quaternion xz_rotation = Quaternion.rotation(Math.PI * x, new Vector3(0, 1, 0));
         Quaternion yz_rotation = Quaternion.rotation(Math.PI * y, new Vector3(-1, 0, 0));
         mTotalRotation = yz_rotation.multiply(xz_rotation).multiply(mTotalRotation);
+        mTotalRotation = mTotalRotation.normalize();
     }
 
     private static final double MAX_FLING_SPEED = 6.0; // half-turns per second
@@ -68,6 +69,7 @@ public class Controller {
     public synchronized void spin(double theta) {
         Quaternion xy_rotation = Quaternion.rotation(theta, new Vector3(0, 0, 1));
         mTotalRotation = xy_rotation.multiply(mTotalRotation);
+        mTotalRotation = mTotalRotation.normalize();
     }
 
     public synchronized void zoom(double f) {

@@ -7,12 +7,12 @@ import android.content.pm.ConfigurationInfo;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+// import android.util.Log;
 
 public class MainActivity extends Activity {
-    private static final String TAG = "MainActivity";
+    // private static final String TAG = "MainActivity";
 
     private OrbitalView mOrbitalView;
     private Controller mController;
