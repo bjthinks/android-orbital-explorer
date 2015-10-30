@@ -8,17 +8,17 @@ public class Vector3 {
     public double getY() { return y; }
     public double getZ() { return z; }
 
-    Vector3(double xx, double yy, double zz) {
+    public Vector3(double xx, double yy, double zz) {
         x = xx;
         y = yy;
         z = zz;
     }
 
-    Vector3 multiply(double c) {
+    public Vector3 multiply(double c) {
         return new Vector3(x * c, y * c, z * c);
     }
 
-    Vector3 divide(double c) {
+    public Vector3 divide(double c) {
         return new Vector3(x / c, y / c, z / c);
     }
 
@@ -26,11 +26,11 @@ public class Vector3 {
         return new Vector3(-x, -y, -z);
     } */
 
-    double norm() {
+    public double norm() {
         return Math.sqrt(x * x + y * y + z * z);
     }
 
-    Vector3 normalize() {
+    public Vector3 normalize() {
         return divide(norm());
     }
 }

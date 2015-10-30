@@ -17,7 +17,7 @@ public class OrbitalRenderer implements GLSurfaceView.Renderer {
     private float mAspectRatio = 1.0f;
 
     // Main thread
-    OrbitalRenderer(Controller controller, AssetManager assetManager) {
+    public OrbitalRenderer(Controller controller, AssetManager assetManager) {
         mController = controller;
         mAssetManager = assetManager;
         mDemoRenderStage = new DemoRenderStage();

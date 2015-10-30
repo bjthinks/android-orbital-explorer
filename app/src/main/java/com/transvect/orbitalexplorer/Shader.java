@@ -16,7 +16,7 @@ public class Shader {
         return id;
     }
 
-    Shader(AssetManager assetManager, String filename, int shaderType) {
+    public Shader(AssetManager assetManager, String filename, int shaderType) {
         BufferedReader reader = null;
         String shaderSource = "";
         try {

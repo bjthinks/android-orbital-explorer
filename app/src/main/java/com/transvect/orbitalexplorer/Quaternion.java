@@ -71,7 +71,7 @@ public class Quaternion implements Parcelable {
         k = 0;
     }
 
-    Quaternion multiply(Quaternion y) {
+    public Quaternion multiply(Quaternion y) {
         return new Quaternion(
                 r * y.r - i * y.i - j * y.j - k * y.k,
                 r * y.i + i * y.r + j * y.k - k * y.j,
@@ -79,23 +79,23 @@ public class Quaternion implements Parcelable {
                 r * y.k + i * y.j - j * y.i + k * y.r);
     }
 
-    /* Quaternion multiply(double c) {
+    /* public Quaternion multiply(double c) {
         return new Quaternion(r * c, i * c, j * c, k * c);
     } */
 
-    Quaternion divide(double c) {
+    public Quaternion divide(double c) {
         return new Quaternion(r / c, i / c, j / c, k / c);
     }
 
-    double norm() {
+    public double norm() {
         return Math.sqrt(r * r + i * i + j * j + k * k);
     }
 
-    Quaternion normalize() {
+    public Quaternion normalize() {
         return divide(norm());
     }
 
-    /* Quaternion pow(double alpha) {
+    /* public Quaternion pow(double alpha) {
         Quaternion normalized = normalize();
         double normalizedRealPart = normalized.real();
         Vector3 normalizedUnrealPart = normalized.unreal();
@@ -114,14 +114,14 @@ public class Quaternion implements Parcelable {
         return normalizedExponential.normalize().multiply(Math.pow(norm(), alpha));
     } */
 
-    static Quaternion rotation(double angle, Vector3 x) {
+    public static Quaternion rotation(double angle, Vector3 x) {
         x = x.normalize();
         double s = Math.sin(angle / 2);
         double c = Math.cos(angle / 2);
         return new Quaternion(c, x.multiply(s));
     }
 
-    float[] asRotationMatrix() {
+    public float[] asRotationMatrix() {
         float[] result = new float[16];
         result[0] = (float) (r*r + i*i - j*j - k*k);
         result[1] = (float) (2*r*k + 2*i*j);

@@ -13,7 +13,7 @@ public class Texture {
         return mId;
     }
 
-    Texture(int format, int type, int internalFormat) {
+    public Texture(int format, int type, int internalFormat) {
         mFormat = format;
         mType = type;
         mInternalFormat = internalFormat;

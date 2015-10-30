@@ -7,24 +7,24 @@ public class Vector2 {
     public double getX() { return x; }
     public double getY() { return y; }
 
-    Vector2(double xx, double yy) {
+    public Vector2(double xx, double yy) {
         x = xx;
         y = yy;
     }
 
-    Vector2 add(Vector2 rhs) {
+    public Vector2 add(Vector2 rhs) {
         return new Vector2(x + rhs.x, y + rhs.y);
     }
 
-    Vector2 subtract(Vector2 rhs) {
+    public Vector2 subtract(Vector2 rhs) {
         return new Vector2(x - rhs.x, y - rhs.y);
     }
 
-    Vector2 multiply(double c) {
+    public Vector2 multiply(double c) {
         return new Vector2(x * c, y * c);
     }
 
-    Vector2 divide(double c) {
+    public Vector2 divide(double c) {
         return new Vector2(x / c, y / c);
     }
 
@@ -32,11 +32,11 @@ public class Vector2 {
         return new Vector2(-x, -y);
     } */
 
-    double norm() {
+    public double norm() {
         return Math.sqrt(x * x + y * y);
     }
 
-    Vector2 normalize() {
+    public Vector2 normalize() {
         return divide(norm());
     }
 }
