@@ -10,15 +10,15 @@ import javax.microedition.khronos.opengles.GL10;
 public class OrbitalRenderer implements GLSurfaceView.Renderer {
     // private static final String TAG = "OrbitalRenderer";
 
-    private Controller mController;
+    private OrbitalView mOrbitalView;
     private AssetManager mAssetManager;
     private DemoRenderStage mDemoRenderStage;
     private FinalRenderStage mFinalRenderStage;
     private float mAspectRatio = 1.0f;
 
     // Main thread
-    public OrbitalRenderer(Controller controller, AssetManager assetManager) {
-        mController = controller;
+    public OrbitalRenderer(OrbitalView orbitalView, AssetManager assetManager) {
+        mOrbitalView = orbitalView;
         mAssetManager = assetManager;
         mDemoRenderStage = new DemoRenderStage();
         mFinalRenderStage = new FinalRenderStage();
@@ -44,7 +44,7 @@ public class OrbitalRenderer implements GLSurfaceView.Renderer {
     // Rendering thread
     @Override
     public void onDrawFrame(GL10 unused) {
-        float[] shaderTransform = mController.computeShaderTransform(mAspectRatio);
+        float[] shaderTransform = mOrbitalView.getNextTransform(mAspectRatio);
         mDemoRenderStage.render(shaderTransform);
         mFinalRenderStage.render(mDemoRenderStage.getTexture());
     }

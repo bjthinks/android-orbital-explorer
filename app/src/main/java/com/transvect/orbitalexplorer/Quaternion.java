@@ -7,12 +7,9 @@ import android.os.Parcelable;
 public class Quaternion implements Parcelable {
     // public static final String TAG = "Quaternion";
 
-    // Parcelable crud
-    private Quaternion(Parcel in) {
-        r = in.readDouble();
-        i = in.readDouble();
-        j = in.readDouble();
-        k = in.readDouble();
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
     @Override
@@ -23,16 +20,13 @@ public class Quaternion implements Parcelable {
         out.writeDouble(k);
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
     public static final Parcelable.Creator<Quaternion> CREATOR
             = new Parcelable.Creator<Quaternion>() {
         @Override
         public Quaternion createFromParcel(Parcel in) {
-            return new Quaternion(in);
+            return new Quaternion(
+                    in.readDouble(), in.readDouble(),
+                    in.readDouble(), in.readDouble());
         }
         public Quaternion[] newArray(int size) {
             return new Quaternion[size];

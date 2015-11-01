@@ -2,6 +2,8 @@ package com.transvect.orbitalexplorer;
 
 import android.content.Context;
 import android.opengl.GLSurfaceView;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.view.GestureDetector;
@@ -11,6 +13,7 @@ import android.view.MotionEvent;
 public class OrbitalView extends GLSurfaceView {
     // private static final String TAG = "OrbitalView";
 
+    private Camera mCamera;
     private GestureDetector mFlingDetector;
 
     public OrbitalView(Context context) {
@@ -30,13 +33,52 @@ public class OrbitalView extends GLSurfaceView {
         // Try to preserve our context, if possible
         setPreserveEGLContextOnPause(true);
 
+        mCamera = new Camera();
         mFlingDetector = new GestureDetector(context, new FlingListener());
     }
 
-    private Controller mController;
+    @Override
+    protected Parcelable onSaveInstanceState() {
+        Parcelable superState = super.onSaveInstanceState();
+        SavedState ss = new SavedState(superState);
+        ss.camera = mCamera;
+        return ss;
+    }
 
-    public void setController(Controller controller) {
-        mController = controller;
+    @Override
+    protected void onRestoreInstanceState(Parcelable state) {
+        SavedState ss = (SavedState) state;
+        super.onRestoreInstanceState(ss.getSuperState());
+        mCamera = ss.camera;
+    }
+
+    static class SavedState extends BaseSavedState {
+        Camera camera;
+
+        SavedState(Parcelable superState) {
+            super(superState);
+        }
+
+        private SavedState(Parcel in) {
+            super(in);
+            camera = in.readParcelable(Camera.class.getClassLoader());
+        }
+
+        @Override
+        public void writeToParcel(Parcel out, int flags) {
+            super.writeToParcel(out, flags);
+            out.writeParcelable(camera, flags);
+        }
+
+        public static final Parcelable.Creator<SavedState> CREATOR
+                = new Parcelable.Creator<SavedState>() {
+            public SavedState createFromParcel(Parcel in) {
+                return new SavedState(in);
+            }
+            public SavedState[] newArray(int size) {
+                return new SavedState[size];
+            }
+        };
     }
 
     private int mFirstPointerID = MotionEvent.INVALID_POINTER_ID;
@@ -53,7 +95,8 @@ public class OrbitalView extends GLSurfaceView {
                 // One bear in the bed
                 mFirstPointerID = e.getPointerId(0);
                 oneFingerEvent(e, false);
-                mController.stopFling();
+                mCamera.stopFling();
+                setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
                 break;
 
             case MotionEvent.ACTION_POINTER_DOWN:
@@ -130,7 +173,7 @@ public class OrbitalView extends GLSurfaceView {
             double dx = x - mPreviousX;
             double dy = y - mPreviousY;
             double meanSize = Math.sqrt(getWidth() * getHeight());
-            mController.drag(dx / meanSize, dy / meanSize);
+            mCamera.drag(dx / meanSize, dy / meanSize);
 
             requestRender();
         }
@@ -161,10 +204,10 @@ public class OrbitalView extends GLSurfaceView {
         if (actionable) {
 
             double angleDifference = angle - mPreviousAngle;
-            mController.spin(angleDifference);
+            mCamera.twist(angleDifference);
 
             double zoomFactor = distance / mPreviousDistance;
-            mController.zoom(zoomFactor);
+            mCamera.zoom(zoomFactor);
 
             requestRender();
         }
@@ -185,8 +228,16 @@ public class OrbitalView extends GLSurfaceView {
         public boolean onFling(MotionEvent event1, MotionEvent event2,
                                float velocityX, float velocityY) {
             double meanSize = Math.sqrt(getWidth() * getHeight());
-            mController.fling(velocityX / meanSize, velocityY / meanSize);
+            mCamera.fling(velocityX / meanSize, velocityY / meanSize);
+            setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
+
             return true;
         }
+    }
+
+    public float[] getNextTransform(double aspectRatio) {
+        if (!mCamera.continueFling())
+            setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
+        return mCamera.computeShaderTransform(aspectRatio);
     }
 }

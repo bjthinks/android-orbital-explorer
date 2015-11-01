@@ -9,13 +9,13 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 // import android.util.Log;
 
 public class MainActivity extends Activity {
     // private static final String TAG = "MainActivity";
 
     private OrbitalView mOrbitalView;
-    private Controller mController;
 
     @Override
     protected void onCreate(Bundle savedState) {
@@ -31,12 +31,8 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
         mOrbitalView = (OrbitalView) findViewById(R.id.orbitalview);
 
-        // Encapsulate all communication with the render thread and all long-term state
-        mController = new Controller(mOrbitalView, savedState);
-        mOrbitalView.setController(mController);
-
         // Make an OrbitalRenderer. Needs assets for shader code.
-        OrbitalRenderer renderer = new OrbitalRenderer(mController, getAssets());
+        OrbitalRenderer renderer = new OrbitalRenderer(mOrbitalView, getAssets());
 
         // Start the rendering thread
         mOrbitalView.setRenderer(renderer);
@@ -53,11 +49,16 @@ public class MainActivity extends Activity {
         return majorVersion >= 3;
     }
 
+    // This might happen before or after onPause(), but if it needs to be called,
+    // it will always be called before onStop().
     @Override
-    protected void onResume() {
-        super.onResume();
-        if (mOrbitalView != null)
-            mOrbitalView.onResume();
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle inState) {
+        super.onRestoreInstanceState(inState);
     }
 
     @Override
@@ -67,12 +68,11 @@ public class MainActivity extends Activity {
             mOrbitalView.onPause();
     }
 
-    // This might happen before or after onPause(), but if it needs to be called,
-    // it will always be called before onStop().
     @Override
-    protected void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-        mController.saveState(outState);
+    protected void onResume() {
+        super.onResume();
+        if (mOrbitalView != null)
+            mOrbitalView.onResume();
     }
 
     @Override
