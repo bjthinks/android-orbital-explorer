@@ -38,7 +38,7 @@ public class OrbitalView extends GLSurfaceView {
     }
 
     @Override
-    protected Parcelable onSaveInstanceState() {
+    protected synchronized Parcelable onSaveInstanceState() {
         Parcelable superState = super.onSaveInstanceState();
         SavedState ss = new SavedState(superState);
         ss.camera = mCamera;
@@ -46,7 +46,7 @@ public class OrbitalView extends GLSurfaceView {
     }
 
     @Override
-    protected void onRestoreInstanceState(Parcelable state) {
+    protected synchronized void onRestoreInstanceState(Parcelable state) {
         SavedState ss = (SavedState) state;
         super.onRestoreInstanceState(ss.getSuperState());
         mCamera = ss.camera;
@@ -85,7 +85,7 @@ public class OrbitalView extends GLSurfaceView {
     private int mSecondPointerID = MotionEvent.INVALID_POINTER_ID;
 
     @Override
-    public boolean onTouchEvent(@NonNull MotionEvent e) {
+    public synchronized boolean onTouchEvent(@NonNull MotionEvent e) {
 
         mFlingDetector.onTouchEvent(e);
 
@@ -162,7 +162,7 @@ public class OrbitalView extends GLSurfaceView {
     private double mPreviousX;
     private double mPreviousY;
 
-    private void oneFingerEvent(MotionEvent e, boolean actionable) {
+    private synchronized void oneFingerEvent(MotionEvent e, boolean actionable) {
 
         int pointerIndex = e.findPointerIndex(mFirstPointerID);
 
@@ -185,7 +185,7 @@ public class OrbitalView extends GLSurfaceView {
     private double mPreviousDistance;
     private double mPreviousAngle;
 
-    private void twoFingerEvent(MotionEvent e, boolean actionable) {
+    private synchronized void twoFingerEvent(MotionEvent e, boolean actionable) {
 
         int firstPointerIndex  = e.findPointerIndex(mFirstPointerID);
         int secondPointerIndex = e.findPointerIndex(mSecondPointerID);
@@ -227,15 +227,17 @@ public class OrbitalView extends GLSurfaceView {
         @Override
         public boolean onFling(MotionEvent event1, MotionEvent event2,
                                float velocityX, float velocityY) {
-            double meanSize = Math.sqrt(getWidth() * getHeight());
-            mCamera.fling(velocityX / meanSize, velocityY / meanSize);
-            setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
+            synchronized (OrbitalView.this) {
+                double meanSize = Math.sqrt(getWidth() * getHeight());
+                mCamera.fling(velocityX / meanSize, velocityY / meanSize);
+                setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
+            }
 
             return true;
         }
     }
 
-    public float[] getNextTransform(double aspectRatio) {
+    public synchronized float[] getNextTransform(double aspectRatio) {
         if (!mCamera.continueFling())
             setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
         return mCamera.computeShaderTransform(aspectRatio);
