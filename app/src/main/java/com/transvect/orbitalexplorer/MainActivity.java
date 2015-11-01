@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 // import android.util.Log;
 
 public class MainActivity extends Activity {
@@ -30,15 +29,10 @@ public class MainActivity extends Activity {
         // as the ContentView for this Activity.
         setContentView(R.layout.activity_main);
         mOrbitalView = (OrbitalView) findViewById(R.id.orbitalview);
-
         // Make an OrbitalRenderer. Needs assets for shader code.
         OrbitalRenderer renderer = new OrbitalRenderer(mOrbitalView, getAssets());
-
         // Start the rendering thread
         mOrbitalView.setRenderer(renderer);
-
-        // Render the view only when there is a change in the drawing data
-        mOrbitalView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
     }
 
     private boolean hasGLES30() {

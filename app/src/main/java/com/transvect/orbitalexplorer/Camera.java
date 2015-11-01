@@ -1,7 +1,6 @@
 package com.transvect.orbitalexplorer;
 
 import android.opengl.Matrix;
-import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
 

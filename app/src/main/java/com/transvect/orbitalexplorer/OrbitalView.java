@@ -52,7 +52,7 @@ public class OrbitalView extends GLSurfaceView {
         mCamera = ss.camera;
     }
 
-    static class SavedState extends BaseSavedState {
+    private static class SavedState extends BaseSavedState {
         Camera camera;
 
         SavedState(Parcelable superState) {
@@ -237,6 +237,8 @@ public class OrbitalView extends GLSurfaceView {
         }
     }
 
+    // This function can be called by the rendering thread
+    // Hence the need for "synchronized" all over the place
     public synchronized float[] getNextTransform(double aspectRatio) {
         if (!mCamera.continueFling())
             setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
