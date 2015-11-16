@@ -34,8 +34,9 @@ public class DemoRenderStage extends RenderStage {
         for (int i = 0; i <= 1024; ++i) {
             double r = 16.0 * (double) i / 1024.0;
             double radialPart = testFunction.eval(r);
-            Log.d(TAG, "r = " + r + "   radialPart = " + radialPart);
-            radialData[i] = (float) (radialPart * radialPart);
+            if (i % 16 == 0)
+                Log.d(TAG, "r = " + r + "   radialPart = " + radialPart);
+            radialData[i] = (float) radialPart;
         }
         mRadialData = floatArrayToBuffer(radialData);
     }

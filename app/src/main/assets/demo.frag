@@ -2,6 +2,7 @@
 precision highp int;
 precision highp float;
 
+const float pi = 3.14159265358979;
 const vec2 white = vec2(0.19784, 0.46832);
 
 in vec3 front, back;
@@ -25,15 +26,24 @@ float radialPart(float r) {
 }
 
 float inclinationPart(float theta) {
-    float c = cos(theta);
-    return c * c;
-    return 1.0;
+    return 1.0 / sqrt(2.0);
 }
 
-float f(vec3 x) {
+vec2 longitudinalPart(float phi) {
+    return vec2(1.0 / sqrt(2.0 * pi), 0);
+}
+
+vec2 wavefunction(vec3 x) {
     float r = length(x);
-    /*float theta = acos(x.z / r);*/
-    return radialPart(r) /* * inclinationPart(theta)*/;
+    float theta = acos(x.z / r); //   0 to pi
+    float phi = atan(x.y, x.x);  // -pi to pi
+    return radialPart(r) * inclinationPart(theta) * longitudinalPart(phi);
+}
+
+vec3 integrand(vec3 x) {
+    vec2 w = wavefunction(x);
+    float len = length(w);
+    return len * vec3(w, len);
 }
 
 void main() {
@@ -51,31 +61,38 @@ void main() {
     if (distanceFromOrigin > maximumRadius) {
         color = ivec3(vec3(white, 0.0) * 2147483647.0);
     } else {
-        float total = 0.0;
+        vec3 total = vec3(0.0, 0.0, 0.0);
         vec3 location = front;
-        const int steps = 4;
+        const int steps = 8;
         vec3 step = span / float(steps);
         int i = 0;
-        total += f(location);
+        total += integrand(location);
         ++i;
         location += step;
-        total += 4.0 * f(location);
+        total += 4.0 * integrand(location);
         ++i;
         while (i < steps) {
             location += step;
-            total += 2.0 * f(location);
+            total += 2.0 * integrand(location);
             ++i;
             location += step;
-            total += 4.0 * f(location);
+            total += 4.0 * integrand(location);
             ++i;
         }
         location += step;
-        total += f(location);
+        total += integrand(location);
         total *= length(step) / 3.0;
 
-        total = 1.0 - exp(-total);
+        total *= 10.0;
 
-        vec3 result = vec3(white, total);
+        vec3 result;
+        if (total.z > 0.0) {
+            float totalScaleFactor = (1.0 - exp(-total.z)) / total.z;
+            total *= totalScaleFactor;
+            result = vec3(white + 0.06 * total.xy / total.z, 0.5 * total.z);
+        } else {
+            result = vec3(white, 0.0);
+        }
         color = ivec3(result * 2147483647.0);
     }
 }
