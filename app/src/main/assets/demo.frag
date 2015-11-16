@@ -12,6 +12,8 @@ out ivec3 color;
 uniform sampler2D radial;
 const float maximumRadius = 16.0;
 const float numRadialSubdivisions = 1024.0;
+uniform sampler2D azimuthal;
+const float numAzimuthalSubdivisions = 1024.0;
 
 float radialPart(float r) {
     float positionInTexture = r / maximumRadius * numRadialSubdivisions;
@@ -25,19 +27,26 @@ float radialPart(float r) {
     return mix(leftTextureValue, rightTextureValue, interpolationValue);
 }
 
-float inclinationPart(float theta) {
-    return 1.0 / sqrt(2.0);
+float azimuthalPart(float theta) {
+    float positionInTexture = theta / pi * numAzimuthalSubdivisions;
+    float leftTexturePosition = trunc(positionInTexture);
+    float leftTextureValue = texelFetch(azimuthal, ivec2(leftTexturePosition, 0), 0).x;
+    float rightTexturePosition = leftTexturePosition + 1.0;
+    float rightTextureValue = texelFetch(azimuthal, ivec2(rightTexturePosition, 0), 0).x;
+    float interpolationValue = fract(positionInTexture);
+    return mix(leftTextureValue, rightTextureValue, interpolationValue);
+    // was: return 1.0 / sqrt(2.0);
 }
 
 vec2 longitudinalPart(float phi) {
-    return vec2(1.0 / sqrt(2.0 * pi), 0);
+    return vec2(cos(phi), sin(phi)) / sqrt(2.0 * pi);
 }
 
 vec2 wavefunction(vec3 x) {
     float r = length(x);
     float theta = acos(x.z / r); //   0 to pi
     float phi = atan(x.y, x.x);  // -pi to pi
-    return radialPart(r) * inclinationPart(theta) * longitudinalPart(phi);
+    return radialPart(r) * azimuthalPart(theta) * longitudinalPart(phi);
 }
 
 vec3 integrand(vec3 x) {
@@ -83,7 +92,7 @@ void main() {
         total += integrand(location);
         total *= length(step) / 3.0;
 
-        total *= 10.0;
+        total *= 50.0;
 
         vec3 result;
         if (total.z > 0.0) {

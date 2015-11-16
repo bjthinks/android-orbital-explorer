@@ -11,7 +11,9 @@ public class DemoRenderStage extends RenderStage {
     private int mProgram;
     private FloatBuffer mVertexBuffer;
     private FloatBuffer mRadialData;
+    private FloatBuffer mAzimuthalData;
     private Texture mRadialTexture;
+    private Texture mAzimuthalTexture;
     private Texture mTexture;
     private int mFramebufferId;
     private int mWidth, mHeight;
@@ -29,16 +31,36 @@ public class DemoRenderStage extends RenderStage {
         };
         mVertexBuffer = floatArrayToBuffer(squareCoordinates);
 
-        RadialFunction testFunction = new RadialFunction(1, 2, 0); // 2s orbital
-        float radialData[] = new float[1024 + 1];
-        for (int i = 0; i <= 1024; ++i) {
-            double r = 16.0 * (double) i / 1024.0;
-            double radialPart = testFunction.eval(r);
-            if (i % 16 == 0)
-                Log.d(TAG, "r = " + r + "   radialPart = " + radialPart);
-            radialData[i] = (float) radialPart;
+        int Z = 1;
+        int N = 2;
+        int L = 1;
+        int M = 1;
+
+        {
+            RadialFunction radialFunction = new RadialFunction(Z, N, L); // 2s orbital
+            float radialData[] = new float[1024 + 1];
+            for (int i = 0; i <= 1024; ++i) {
+                double r = 16.0 * (double) i / 1024.0;
+                double radialPart = radialFunction.eval(r);
+                if (i % 16 == 0)
+                    Log.d(TAG, "r = " + r + "   radialPart = " + radialPart);
+                radialData[i] = (float) radialPart;
+            }
+            mRadialData = floatArrayToBuffer(radialData);
         }
-        mRadialData = floatArrayToBuffer(radialData);
+
+        {
+            AzimuthalFunction azimuthalFunction = new AzimuthalFunction();
+            float azimuthalData[] = new float[1024 + 1];
+            for (int i = 0; i <= 1024; ++i) {
+                double theta = Math.PI * (double) i / 1024.0;
+                double azimuthalPart = azimuthalFunction.eval(theta);
+                if (i % 16 == 0)
+                    Log.d(TAG, "theta = " + theta + "   azimuthalPart = " + azimuthalPart);
+                azimuthalData[i] = (float) azimuthalPart;
+            }
+            mAzimuthalData = floatArrayToBuffer(azimuthalData);
+        }
     }
 
     public void newContext(AssetManager assetManager) {
@@ -50,7 +72,7 @@ public class DemoRenderStage extends RenderStage {
         final int orbitalType = GLES30.GL_FLOAT;
         final int orbitalInternalFormat = GLES30.GL_R32F;
 
-        // Create a texture
+        // Create radial texture
         mRadialTexture = new Texture(orbitalFormat, orbitalType, orbitalInternalFormat);
         mRadialTexture.bindToTexture2DAndSetImage(1024 + 1, 1, mRadialData);
 
@@ -60,9 +82,19 @@ public class DemoRenderStage extends RenderStage {
         GLES30.glTexParameteri(GLES30.GL_TEXTURE_2D,
                 GLES30.GL_TEXTURE_MAG_FILTER, GLES30.GL_NEAREST);
 
+        // Create azimuthal texture
+        mAzimuthalTexture = new Texture(orbitalFormat, orbitalType, orbitalInternalFormat);
+        mAzimuthalTexture.bindToTexture2DAndSetImage(1024 + 1, 1, mAzimuthalData);
+
+        // Floating point textures are not filterable
+        GLES30.glTexParameteri(GLES30.GL_TEXTURE_2D,
+                GLES30.GL_TEXTURE_MIN_FILTER, GLES30.GL_NEAREST);
+        GLES30.glTexParameteri(GLES30.GL_TEXTURE_2D,
+                GLES30.GL_TEXTURE_MAG_FILTER, GLES30.GL_NEAREST);
+
         // The following three parameters have to match a row of Table 3.2 in the
         // OpenGL ES 3.0 specification, or we will get an OpenGL error. We also
-        // need to binomial a sized internal format which is color-renderable
+        // need to choose a sized internal format which is color-renderable
         // according to Table 3.13 (in the absence of extensions).
         final int renderFormat = GLES30.GL_RGBA_INTEGER;
         final int renderType = GLES30.GL_INT;
@@ -123,10 +155,17 @@ public class DemoRenderStage extends RenderStage {
         GLES30.glBindFramebuffer(GLES30.GL_FRAMEBUFFER, mFramebufferId);
         GLES30.glClearBufferiv(GLES30.GL_COLOR, 0, zeroes, 0);
         GLES30.glUseProgram(mProgram);
+
         GLES30.glActiveTexture(GLES30.GL_TEXTURE0);
         mRadialTexture.bindToTexture2D();
         int radialHandle = GLES30.glGetUniformLocation(mProgram, "radial");
         GLES30.glUniform1i(radialHandle, 0);
+
+        GLES30.glActiveTexture(GLES30.GL_TEXTURE1);
+        mAzimuthalTexture.bindToTexture2D();
+        int azimuthalHandle = GLES30.glGetUniformLocation(mProgram, "azimuthal");
+        GLES30.glUniform1i(azimuthalHandle, 1);
+
         int mvpMatrixHandle = GLES30.glGetUniformLocation(mProgram, "shaderTransform");
         GLES30.glUniformMatrix4fv(mvpMatrixHandle, 1, false, shaderTransform, 0);
         int inPositionHandle = GLES30.glGetAttribLocation(mProgram, "inPosition");
