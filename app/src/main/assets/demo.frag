@@ -9,8 +9,8 @@ out ivec3 color;
 
 // Orbital
 uniform sampler2D radial;
-const float maximumRadius = 1.0;
-const float numRadialSubdivisions = 10.0;
+const float maximumRadius = 16.0;
+const float numRadialSubdivisions = 1024.0;
 
 float radialPart(float r) {
     float positionInTexture = r / maximumRadius * numRadialSubdivisions;
@@ -27,12 +27,13 @@ float radialPart(float r) {
 float inclinationPart(float theta) {
     float c = cos(theta);
     return c * c;
+    return 1.0;
 }
 
 float f(vec3 x) {
     float r = length(x);
-    float theta = acos(x.z / r);
-    return radialPart(r) * inclinationPart(theta);
+    /*float theta = acos(x.z / r);*/
+    return radialPart(r) /* * inclinationPart(theta)*/;
 }
 
 void main() {
@@ -52,7 +53,7 @@ void main() {
     } else {
         float total = 0.0;
         vec3 location = front;
-        const int steps = 12;
+        const int steps = 4;
         vec3 step = span / float(steps);
         int i = 0;
         total += f(location);
@@ -72,7 +73,7 @@ void main() {
         total += f(location);
         total *= length(step) / 3.0;
 
-        total *= 0.75;
+        total = 1.0 - exp(-total);
 
         vec3 result = vec3(white, total);
         color = ivec3(result * 2147483647.0);

@@ -29,19 +29,14 @@ public class DemoRenderStage extends RenderStage {
         };
         mVertexBuffer = floatArrayToBuffer(squareCoordinates);
 
-        float radialData[] = {
-                0.0f,
-                0.2f,
-                0.4f,
-                0.6f,
-                0.8f,
-                1.0f,
-                0.8f,
-                0.6f,
-                0.4f,
-                0.2f,
-                0.0f,
-        };
+        RadialFunction testFunction = new RadialFunction(1, 2, 0); // 2s orbital
+        float radialData[] = new float[1024 + 1];
+        for (int i = 0; i <= 1024; ++i) {
+            double r = 16.0 * (double) i / 1024.0;
+            double radialPart = testFunction.eval(r);
+            Log.d(TAG, "r = " + r + "   radialPart = " + radialPart);
+            radialData[i] = (float) (radialPart * radialPart);
+        }
         mRadialData = floatArrayToBuffer(radialData);
     }
 
@@ -56,7 +51,7 @@ public class DemoRenderStage extends RenderStage {
 
         // Create a texture
         mRadialTexture = new Texture(orbitalFormat, orbitalType, orbitalInternalFormat);
-        mRadialTexture.bindToTexture2DAndSetImage(11, 1, mRadialData);
+        mRadialTexture.bindToTexture2DAndSetImage(1024 + 1, 1, mRadialData);
 
         // Floating point textures are not filterable
         GLES30.glTexParameteri(GLES30.GL_TEXTURE_2D,
@@ -66,7 +61,7 @@ public class DemoRenderStage extends RenderStage {
 
         // The following three parameters have to match a row of Table 3.2 in the
         // OpenGL ES 3.0 specification, or we will get an OpenGL error. We also
-        // need to choose a sized internal format which is color-renderable
+        // need to binomial a sized internal format which is color-renderable
         // according to Table 3.13 (in the absence of extensions).
         final int renderFormat = GLES30.GL_RGBA_INTEGER;
         final int renderType = GLES30.GL_INT;
