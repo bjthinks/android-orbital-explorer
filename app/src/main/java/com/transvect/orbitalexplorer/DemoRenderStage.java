@@ -144,8 +144,8 @@ public class DemoRenderStage extends RenderStage {
     }
 
     public void resize(int width, int height) {
-        mWidth = width;
-        mHeight = height;
+        mWidth = width / 3;
+        mHeight = height / 3;
         mTexture.bindToTexture2DAndResize(mWidth, mHeight);
     }
 
