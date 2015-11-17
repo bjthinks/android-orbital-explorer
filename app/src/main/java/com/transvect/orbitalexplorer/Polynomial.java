@@ -118,7 +118,23 @@ public class Polynomial {
         return result;
     }
 
-    /* public static void test() {
+    /* @Override
+    public String toString() {
+        String result = "";
+        for (int d = c.length - 1; d >= 0; --d)
+            if (c[d] != 0) {
+                if (result != "")
+                    result += " + ";
+                result += c[d];
+                if (d >= 2)
+                    result += " x^" + d;
+                else if (d == 1)
+                    result += " x";
+            }
+        return result;
+    }
+
+    public static void test() {
         String TAG = "Polynomial";
         Log.d(TAG, "Testing");
         TAG += " FAIL";
