@@ -30,6 +30,9 @@ float radialPart(float r) {
 
 float azimuthalPart(float theta) {
     float positionInTexture = theta / pi * numAzimuthalSubdivisions;
+    if (positionInTexture >= numAzimuthalSubdivisions)
+        // TODO handle this case more robustly
+        positionInTexture = numAzimuthalSubdivisions - 0.01;
     float leftTexturePosition = trunc(positionInTexture);
     float leftTextureValue = texelFetch(azimuthal, ivec2(leftTexturePosition, 0), 0).x;
     float rightTexturePosition = leftTexturePosition + 1.0;
@@ -47,6 +50,7 @@ vec2 longitudinalPart(float phi) {
 vec2 wavefunction(vec3 x) {
     float r = length(x);
     float theta = acos(x.z / r); //   0 to pi
+    // TODO this makes trouble if x.xy is small, or maybe even if just x.x is small
     float phi = atan(x.y, x.x);  // -pi to pi
     return radialPart(r) * azimuthalPart(theta) * longitudinalPart(phi);
 }
