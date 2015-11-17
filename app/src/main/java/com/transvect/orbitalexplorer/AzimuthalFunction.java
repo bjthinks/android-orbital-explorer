@@ -11,6 +11,8 @@ public class AzimuthalFunction {
 
     public AzimuthalFunction() {}
 
+    // Note that theta is "colatitude", i.e. 0 along (0, 0, 1), pi/2 when z=0,
+    // and pi along (0, 0, -1).
     public double eval(double theta) {
         return Math.sin(theta);
     }
