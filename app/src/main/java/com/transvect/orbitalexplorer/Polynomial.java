@@ -105,6 +105,19 @@ public class Polynomial {
         return multiply(new Polynomial(c));
     }
 
+    public Polynomial derivative() {
+        Polynomial result = new Polynomial();
+
+        if (c.length <= 1)
+            return result;
+
+        result.c = new double[c.length - 1];
+        for (int i = 1; i < c.length; ++i)
+            result.c[i - 1] = c[i] * (float) i;
+
+        return result;
+    }
+
     /* public static void test() {
         String TAG = "Polynomial";
         Log.d(TAG, "Testing");
@@ -190,6 +203,18 @@ public class Polynomial {
 
         // x+x = 2x
         testSame("x+x", x.add(x), x.multiply(2));
+
+        testSame("0'=0", zero.derivative(), zero);
+        testSame("1'=0", one.derivative(), zero);
+        testSame("x'=1", x.derivative(), one);
+        testSame("x^2'=2x", x2.derivative(), x.multiply(2));
+
+        // f = 3 x^3 + 4 x^2 + 6 x + 8
+        Polynomial f = x2.multiply(x).multiply(3).add(x2.multiply(4))
+                .add(x.multiply(6)).add(one.multiply(8));
+        // df = 9 x^2 + 8 x + 6
+        Polynomial df = x2.multiply(9).add(x.multiply(8)).add(one.multiply(6));
+        testSame("f'=df", f.derivative(), df);
 
         Log.d("Polynomial", "Test done");
     }
