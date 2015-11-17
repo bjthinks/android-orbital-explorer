@@ -12,7 +12,7 @@ public class OrbitalRenderer implements GLSurfaceView.Renderer {
 
     private OrbitalView mOrbitalView;
     private AssetManager mAssetManager;
-    private DemoRenderStage mDemoRenderStage;
+    private IntegrateRenderStage mIntegrateRenderStage;
     private FinalRenderStage mFinalRenderStage;
     private float mAspectRatio = 1.0f;
 
@@ -20,7 +20,7 @@ public class OrbitalRenderer implements GLSurfaceView.Renderer {
     public OrbitalRenderer(OrbitalView orbitalView, AssetManager assetManager) {
         mOrbitalView = orbitalView;
         mAssetManager = assetManager;
-        mDemoRenderStage = new DemoRenderStage();
+        mIntegrateRenderStage = new IntegrateRenderStage();
         mFinalRenderStage = new FinalRenderStage();
     }
 
@@ -29,7 +29,7 @@ public class OrbitalRenderer implements GLSurfaceView.Renderer {
     public void onSurfaceCreated(GL10 unused, EGLConfig config) {
         // For pessimistic testing
         // GLES30.glDisable(GLES30.GL_DITHER);
-        mDemoRenderStage.newContext(mAssetManager);
+        mIntegrateRenderStage.newContext(mAssetManager);
         mFinalRenderStage.newContext(mAssetManager);
     }
 
@@ -37,7 +37,7 @@ public class OrbitalRenderer implements GLSurfaceView.Renderer {
     @Override
     public void onSurfaceChanged(GL10 unused, int width, int height) {
         mAspectRatio = (float) width / (float) height;
-        mDemoRenderStage.resize(width, height);
+        mIntegrateRenderStage.resize(width, height);
         mFinalRenderStage.resize(width, height);
     }
 
@@ -45,7 +45,7 @@ public class OrbitalRenderer implements GLSurfaceView.Renderer {
     @Override
     public void onDrawFrame(GL10 unused) {
         float[] shaderTransform = mOrbitalView.getNextTransform(mAspectRatio);
-        mDemoRenderStage.render(shaderTransform);
-        mFinalRenderStage.render(mDemoRenderStage.getTexture());
+        mIntegrateRenderStage.render(shaderTransform);
+        mFinalRenderStage.render(mIntegrateRenderStage.getTexture());
     }
 }
