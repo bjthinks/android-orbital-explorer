@@ -43,8 +43,11 @@ float azimuthalPart(float theta) {
 }
 
 vec2 longitudinalPart(float phi) {
+    // Normalization constant so that this function times its conjugate,
+    // integrated from 0 to 2pi, yields 1
+    const float oneOverSqrt2PI = 1.0 / sqrt(2.0 * pi);
     float Mphi = M * phi;
-    return vec2(cos(Mphi), sin(Mphi)) / sqrt(2.0 * pi);
+    return vec2(cos(Mphi), sin(Mphi)) * oneOverSqrt2PI;
 }
 
 vec2 wavefunction(vec3 x) {
