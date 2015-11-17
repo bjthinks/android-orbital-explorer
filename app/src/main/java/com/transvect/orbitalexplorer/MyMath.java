@@ -11,10 +11,8 @@ public final class MyMath {
      * MyMath.legendrePolynomial(n) gives the polynomial
      * P_n(x) = (2^n n!)^-1 d^n/dx^n [(x^2-1)^n],
      * as per the definition on Wikipedia.
-     * Note that the parameter n in this function is typically equal to the L
-     * parameter of the spherical harmonic.
      */
-    public static Polynomial legendrePolynomial(int n) {
+    public static Polynomial legendrePolynomial(int L) {
         Polynomial result = new Polynomial(1.0);
 
         Polynomial xSquaredMinusOne =
@@ -22,10 +20,10 @@ public final class MyMath {
                         .multiply(Polynomial.variable())
                         .subtract(new Polynomial(1.0));
 
-        for (int i = 0; i < n; ++i)
+        for (int i = 0; i < L; ++i)
             result = result.multiply(xSquaredMinusOne);
 
-        for (int i = 0; i < n; ++i)
+        for (int i = 0; i < L; ++i)
             result = result.derivative().multiply(1.0 / (2.0 * (float) (i + 1)));
 
         return result;
