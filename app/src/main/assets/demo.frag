@@ -14,6 +14,7 @@ const float maximumRadius = 16.0;
 const float numRadialSubdivisions = 1024.0;
 uniform sampler2D azimuthal;
 const float numAzimuthalSubdivisions = 1024.0;
+uniform float M;
 
 float radialPart(float r) {
     float positionInTexture = r / maximumRadius * numRadialSubdivisions;
@@ -39,7 +40,8 @@ float azimuthalPart(float theta) {
 }
 
 vec2 longitudinalPart(float phi) {
-    return vec2(cos(phi), sin(phi)) / sqrt(2.0 * pi);
+    float Mphi = M * phi;
+    return vec2(cos(Mphi), sin(Mphi)) / sqrt(2.0 * pi);
 }
 
 vec2 wavefunction(vec3 x) {

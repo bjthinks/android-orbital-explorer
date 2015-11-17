@@ -166,11 +166,16 @@ public class DemoRenderStage extends RenderStage {
         int azimuthalHandle = GLES30.glGetUniformLocation(mProgram, "azimuthal");
         GLES30.glUniform1i(azimuthalHandle, 1);
 
+        int MHandle = GLES30.glGetUniformLocation(mProgram, "M");
+        GLES30.glUniform1f(MHandle, 1.0f);
+
         int mvpMatrixHandle = GLES30.glGetUniformLocation(mProgram, "shaderTransform");
         GLES30.glUniformMatrix4fv(mvpMatrixHandle, 1, false, shaderTransform, 0);
+
         int inPositionHandle = GLES30.glGetAttribLocation(mProgram, "inPosition");
         GLES30.glEnableVertexAttribArray(inPositionHandle);
         GLES30.glVertexAttribPointer(inPositionHandle, 2, GLES30.GL_FLOAT, false, 8, mVertexBuffer);
+
         GLES30.glDrawArrays(GLES30.GL_TRIANGLE_FAN, 0, 4);
         GLES30.glDisableVertexAttribArray(inPositionHandle);
         GLES30.glBindFramebuffer(GLES30.GL_FRAMEBUFFER, 0);
