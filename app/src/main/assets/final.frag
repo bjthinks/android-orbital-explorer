@@ -12,10 +12,10 @@ vec3 srgb_gamma(vec3 linear) {
 }
 
 void main() {
-    vec3 blet = vec3(texture(data, texCoord).xyz) / 2147483647.0;
+    vec3 spam = vec3(texture(data, texCoord).xyz) / 2147483647.0;
 
-    vec2 uv_prime = blet.xy;
-    float Y = blet.z;
+    vec2 uv_prime = spam.xy;
+    float Y = spam.z;
 
     // Convert CIE (u',v') color coordinates (as per CIELUV) to (x,y)
     vec2 xy = vec2(9.0, 4.0) * uv_prime;
