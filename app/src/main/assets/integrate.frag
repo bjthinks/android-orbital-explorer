@@ -81,25 +81,19 @@ void main() {
     } else {
         vec3 total = vec3(0.0, 0.0, 0.0);
         vec3 location = front;
-        const int steps = 8;
+        const int steps = 32;
         vec3 step = span / float(steps);
         int i = 0;
         total += integrand(location);
-        ++i;
-        location += step;
-        total += 4.0 * integrand(location);
         ++i;
         while (i < steps) {
             location += step;
             total += 2.0 * integrand(location);
             ++i;
-            location += step;
-            total += 4.0 * integrand(location);
-            ++i;
         }
         location += step;
         total += integrand(location);
-        total *= length(step) / 3.0;
+        total *= length(step) / 2.0;
 
         total *= 50.0;
 
