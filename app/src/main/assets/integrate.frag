@@ -53,7 +53,7 @@ vec2 longitudinalPart(float phi) {
 vec2 wavefunction(vec3 x) {
     float r = length(x);
     float theta = acos(x.z / r); //   0 to pi
-    // TODO this makes trouble if x.xy is small, or maybe even if just x.x is small
+    // TODO this might make trouble if x.xy is small
     float phi = atan(x.y, x.x);  // -pi to pi
     return radialPart(r) * azimuthalPart(theta) * longitudinalPart(phi);
 }
