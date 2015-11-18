@@ -14,6 +14,7 @@ public class IntegrateRenderStage extends RenderStage {
     private FloatBuffer mAzimuthalData;
     private Texture mRadialTexture;
     private Texture mAzimuthalTexture;
+    private int mM;
     private Texture mTexture;
     private int mFramebufferId;
     private int mWidth, mHeight;
@@ -31,10 +32,11 @@ public class IntegrateRenderStage extends RenderStage {
         };
         mVertexBuffer = floatArrayToBuffer(squareCoordinates);
 
-        int Z = 1;
-        int N = 2;
-        int L = 1;
+        int Z = 4;
+        int N = 4;
+        int L = 2;
         int M = 1;
+        mM = M;
 
         {
             RadialFunction radialFunction = new RadialFunction(Z, N, L); // 2s orbital
@@ -50,7 +52,7 @@ public class IntegrateRenderStage extends RenderStage {
         }
 
         {
-            AzimuthalFunction azimuthalFunction = new AzimuthalFunction();
+            AzimuthalFunction azimuthalFunction = new AzimuthalFunction(L, M);
             float azimuthalData[] = new float[1024 + 1];
             for (int i = 0; i <= 1024; ++i) {
                 double theta = Math.PI * (double) i / 1024.0;
@@ -167,7 +169,7 @@ public class IntegrateRenderStage extends RenderStage {
         GLES30.glUniform1i(azimuthalHandle, 1);
 
         int MHandle = GLES30.glGetUniformLocation(mProgram, "M");
-        GLES30.glUniform1f(MHandle, 1.0f);
+        GLES30.glUniform1f(MHandle, mM);
 
         int mvpMatrixHandle = GLES30.glGetUniformLocation(mProgram, "shaderTransform");
         GLES30.glUniformMatrix4fv(mvpMatrixHandle, 1, false, shaderTransform, 0);
