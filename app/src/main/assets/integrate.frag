@@ -3,7 +3,6 @@ precision highp int;
 precision highp float;
 
 const float pi = 3.14159265358979;
-const vec2 white = vec2(0.19784, 0.46832);
 
 in vec3 front, back;
 out ivec3 color;
@@ -77,7 +76,7 @@ void main() {
     float distanceFromOrigin = length(back - dot(back, span) / dot(span, span) * span);
 
     if (distanceFromOrigin > maximumRadius) {
-        color = ivec3(vec3(white, 0.0) * 2147483647.0);
+        color = ivec3(0);
     } else {
         vec3 total = vec3(0.0, 0.0, 0.0);
         vec3 location = front;
@@ -101,10 +100,10 @@ void main() {
         if (total.z > 0.0) {
             float totalScaleFactor = (1.0 - exp(-total.z)) / total.z;
             total *= totalScaleFactor;
-            spam = vec3(white + 0.06 * total.xy / total.z, 0.5 * total.z);
+            spam = vec3(0.06 * total.xy / total.z, 0.5 * total.z);
+            color = ivec3(spam * 2147483647.0);
         } else {
-            spam = vec3(white, 0.0);
+            color = ivec3(0);
         }
-        color = ivec3(spam * 2147483647.0);
     }
 }
