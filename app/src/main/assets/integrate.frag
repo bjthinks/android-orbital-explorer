@@ -100,7 +100,7 @@ void main() {
         if (total.z > 0.0) {
             float totalScaleFactor = (1.0 - exp(-total.z)) / total.z;
             total *= totalScaleFactor;
-            spam = vec3(0.06 * total.xy / total.z, 0.5 * total.z);
+            spam = vec3(total.xy / total.z, total.z);
             color = ivec3(spam * 2147483647.0);
         } else {
             color = ivec3(0);

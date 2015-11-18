@@ -15,8 +15,8 @@ void main() {
     vec3 spam = vec3(texture(data, texCoord).xyz) / 2147483647.0;
 
     const vec2 white = vec2(0.19784, 0.46832);
-    vec2 uv_prime = spam.xy + white;
-    float Y = spam.z;
+    vec2 uv_prime = 0.06 * spam.xy + white;
+    float Y = 0.5 * spam.z;
 
     // Convert CIE (u',v') color coordinates (as per CIELUV) to (x,y)
     vec2 xy = vec2(9.0, 4.0) * uv_prime;
