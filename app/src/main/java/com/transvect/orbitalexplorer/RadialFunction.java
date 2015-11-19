@@ -19,8 +19,8 @@ public class RadialFunction {
     private Polynomial mPolynomialPart;
 
     public RadialFunction(int Z, int N, int L) {
-        double dZ = Z;
-        double dN = N;
+        double dZ = (double) Z;
+        double dN = (double) N;
 
         radialScaleFactor = 2.0 * dZ / dN;
 

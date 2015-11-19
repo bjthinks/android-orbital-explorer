@@ -18,7 +18,7 @@ public final class MyMath {
         Polynomial xSquaredMinusOne =
                 Polynomial.variable()
                         .multiply(Polynomial.variable())
-                        .subtract(new Polynomial(1.0));
+                        .subtract(1.0);
 
         for (int i = 0; i < L; ++i)
             result = result.multiply(xSquaredMinusOne);

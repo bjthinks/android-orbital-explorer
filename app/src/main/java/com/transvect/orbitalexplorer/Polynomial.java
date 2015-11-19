@@ -98,7 +98,7 @@ public class Polynomial {
     }
 
     public Polynomial subtract(double c) {
-        return subtract(new Polynomial(c));
+        return add(-c);
     }
 
     public Polynomial multiply(double c) {
