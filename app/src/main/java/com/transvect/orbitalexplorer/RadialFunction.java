@@ -14,7 +14,7 @@ package com.transvect.orbitalexplorer;
  * Where L is a generalized (or "associated") Laguerre polynomial.
  */
 
-public class RadialFunction {
+public class RadialFunction implements Function {
     private double radialScaleFactor;
     private Polynomial mPolynomialPart;
 

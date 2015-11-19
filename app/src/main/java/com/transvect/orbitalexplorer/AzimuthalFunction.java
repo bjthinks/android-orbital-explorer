@@ -6,7 +6,7 @@ package com.transvect.orbitalexplorer;
  * This does NOT include the Condon-Shortley phase, which is not needed for this project.
  */
 
-public class AzimuthalFunction {
+public class AzimuthalFunction implements Function {
     private Polynomial mCosThetaPolynomial;
     private int mSinThetaPower;
 
