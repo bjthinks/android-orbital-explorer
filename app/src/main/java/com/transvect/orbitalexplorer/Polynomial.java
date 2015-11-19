@@ -26,18 +26,15 @@ public class Polynomial {
         return c.length - 1;
     }
 
-    public static Polynomial variable() {
-        Polynomial x = new Polynomial();
-        x.c = new double[2];
-        x.c[1] = 1.;
-        return x;
-    }
-
     public static Polynomial variableToThe(int power) {
         Polynomial x = new Polynomial();
         x.c = new double[power + 1];
         x.c[power] = 1.;
         return x;
+    }
+
+    public static Polynomial variable() {
+        return variableToThe(1);
     }
 
     public double eval(double x) {
@@ -96,6 +93,13 @@ public class Polynomial {
                 result.c[i + j] += c[i] * rhs.c[j];
         if (result.c[result.c.length - 1] == 0.)
             Log.w(TAG, "Polynomial multiplication underflow");
+        return result;
+    }
+
+    public Polynomial pow(int power) {
+        Polynomial result = new Polynomial(1.0);
+        for (int i = 0; i < power; ++i)
+            result = result.multiply(this);
         return result;
     }
 
@@ -239,6 +243,7 @@ public class Polynomial {
         testSame("f'=df", f.derivative(), df);
 
         testSame("x*x=x^2", x2, variableToThe(2));
+        testSame("x*x=(x)^2", x2, x.pow(2));
 
         Log.d("Polynomial", "Test done");
     }

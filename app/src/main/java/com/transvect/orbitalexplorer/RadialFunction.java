@@ -27,12 +27,7 @@ public class RadialFunction {
         double constant = Math.pow(2.0 * dZ / dN, 1.5)
                 * Math.sqrt(MyMath.factorial(N - L - 1) / (2.0 * dN * MyMath.factorial(N + L)));
 
-        Polynomial r = Polynomial.variable();
-        Polynomial r_to_the_L = new Polynomial(1.0);
-        for (int i = 0; i < L; ++i)
-            r_to_the_L = r_to_the_L.multiply(r);
-
-        mPolynomialPart = r_to_the_L.multiply(constant)
+        mPolynomialPart = Polynomial.variableToThe(L).multiply(constant)
                 .multiply(MyMath.generalizedLaguerrePolynomial(N - L - 1, 2 * L + 1));
     }
 

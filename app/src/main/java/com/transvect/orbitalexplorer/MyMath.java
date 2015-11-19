@@ -13,13 +13,7 @@ public final class MyMath {
      * as per the definition on Wikipedia.
      */
     public static Polynomial legendrePolynomial(int L) {
-        Polynomial result = new Polynomial(1.0);
-
-        Polynomial xSquaredMinusOne =
-                Polynomial.variableToThe(2).subtract(1.0);
-
-        for (int i = 0; i < L; ++i)
-            result = result.multiply(xSquaredMinusOne);
+        Polynomial result = Polynomial.variableToThe(2).subtract(1.0).pow(L);
 
         for (int i = 0; i < L; ++i)
             result = result.derivative().multiply(1.0 / (2.0 * (double) (i + 1)));
