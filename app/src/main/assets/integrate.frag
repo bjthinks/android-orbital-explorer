@@ -4,7 +4,7 @@ precision highp float;
 
 const float pi = 3.14159265358979;
 
-in vec3 front, back;
+in vec3 near, far;
 out ivec3 color;
 
 // Orbital
@@ -64,35 +64,15 @@ vec3 integrand(vec3 x) {
 }
 
 void main() {
-    // Given: a parametric line as f(t) = position + t * direction, and a radius
-    // Then, the t values where the line intersects the sphere of the given radius
-    // centered at the origin are:
-    // t = (-dot(position, direction) +/- sqrt(dot(position, direction)^2 -
-    //      dot(direction, direction) * (dot(position, position) - radius^2))) /
-    //     dot(direction, direction)
+    vec3 ray = far - near;
+    ray /= length(ray);
 
-    vec3 span = back - front;
-
-    float distanceFromOrigin = length(back - dot(back, span) / dot(span, span) * span);
+    float distanceFromOrigin = length(near);
 
     if (distanceFromOrigin > maximumRadius) {
         color = ivec3(0);
     } else {
-        vec3 total = vec3(0.0, 0.0, 0.0);
-        vec3 location = front;
-        const int steps = 32;
-        vec3 step = span / float(steps);
-        int i = 0;
-        total += integrand(location);
-        ++i;
-        while (i < steps) {
-            location += step;
-            total += 2.0 * integrand(location);
-            ++i;
-        }
-        location += step;
-        total += integrand(location);
-        total *= length(step) / 2.0;
+        vec3 total = integrand(near);
 
         total *= 50.0;
 

@@ -6,13 +6,13 @@ uniform mat4 shaderTransform;
 // Input vertex position = (+/-1, +/-1)
 in vec2 inPosition;
 
-// Output front and back coords
-out vec3 front, back;
+// Output near and far coords, where the line of sight intersects the frustum
+out vec3 near, far;
 
 void main() {
     gl_Position = vec4(inPosition, 0, 1);
-    vec4 prefront = inverse(shaderTransform) * vec4(inPosition, 1, 1);
-    vec4 preback = inverse(shaderTransform) * vec4(inPosition, -1, 1);
-    front = prefront.xyz / prefront.w;
-    back = preback.xyz / preback.w;
+    vec4 preNear = inverse(shaderTransform) * vec4(inPosition, -1, 1);
+    vec4 preFar = inverse(shaderTransform) * vec4(inPosition, 1, 1);
+    near = preNear.xyz / preNear.w;
+    far = preFar.xyz / preFar.w;
 }
