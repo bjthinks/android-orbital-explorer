@@ -43,10 +43,7 @@ public class IntegrateRenderStage extends RenderStage {
             float radialData[] = new float[1024 + 1];
             for (int i = 0; i <= 1024; ++i) {
                 double r = 16.0 * (double) i / 1024.0;
-                double radialPart = radialFunction.eval(r);
-                if (i % 16 == 0)
-                    Log.d(TAG, "r = " + r + "   radialPart = " + radialPart);
-                radialData[i] = (float) radialPart;
+                radialData[i] = (float) radialFunction.eval(r);
             }
             mRadialData = floatArrayToBuffer(radialData);
         }
@@ -56,10 +53,7 @@ public class IntegrateRenderStage extends RenderStage {
             float azimuthalData[] = new float[1024 + 1];
             for (int i = 0; i <= 1024; ++i) {
                 double theta = Math.PI * (double) i / 1024.0;
-                double azimuthalPart = azimuthalFunction.eval(theta);
-                if (i % 16 == 0)
-                    Log.d(TAG, "theta = " + theta + "   azimuthalPart = " + azimuthalPart);
-                azimuthalData[i] = (float) azimuthalPart;
+                azimuthalData[i] = (float) azimuthalFunction.eval(theta);
             }
             mAzimuthalData = floatArrayToBuffer(azimuthalData);
         }
