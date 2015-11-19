@@ -24,7 +24,7 @@ public final class MyMath {
             result = result.multiply(xSquaredMinusOne);
 
         for (int i = 0; i < L; ++i)
-            result = result.derivative().multiply(1.0 / (2.0 * (float) (i + 1)));
+            result = result.derivative().multiply(1.0 / (2.0 * (double) (i + 1)));
 
         return result;
     }
