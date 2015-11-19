@@ -10,11 +10,11 @@ public class IntegrateRenderStage extends RenderStage {
 
     private int mProgram;
     private FloatBuffer mVertexBuffer;
+    private WaveFunction mWaveFunction;
     private FloatBuffer mRadialData;
     private FloatBuffer mAzimuthalData;
     private Texture mRadialTexture;
     private Texture mAzimuthalTexture;
-    private int mM;
     private Texture mTexture;
     private int mFramebufferId;
     private int mWidth, mHeight;
@@ -36,24 +36,25 @@ public class IntegrateRenderStage extends RenderStage {
         int N = 4;
         int L = 2;
         int M = 1;
-        mM = M;
+
+        mWaveFunction = new WaveFunction(Z, N, L, M);
 
         {
-            RadialFunction radialFunction = new RadialFunction(Z, N, L); // 2s orbital
+            Function radial = mWaveFunction.getRadialFunction();
             float radialData[] = new float[1024 + 1];
             for (int i = 0; i <= 1024; ++i) {
                 double r = 16.0 * (double) i / 1024.0;
-                radialData[i] = (float) radialFunction.eval(r);
+                radialData[i] = (float) radial.eval(r);
             }
             mRadialData = floatArrayToBuffer(radialData);
         }
 
         {
-            AzimuthalFunction azimuthalFunction = new AzimuthalFunction(L, M);
+            Function azimuthal = mWaveFunction.getAzimuthalFunction();
             float azimuthalData[] = new float[1024 + 1];
             for (int i = 0; i <= 1024; ++i) {
                 double theta = Math.PI * (double) i / 1024.0;
-                azimuthalData[i] = (float) azimuthalFunction.eval(theta);
+                azimuthalData[i] = (float) azimuthal.eval(theta);
             }
             mAzimuthalData = floatArrayToBuffer(azimuthalData);
         }
@@ -163,7 +164,7 @@ public class IntegrateRenderStage extends RenderStage {
         GLES30.glUniform1i(azimuthalHandle, 1);
 
         int MHandle = GLES30.glGetUniformLocation(mProgram, "M");
-        GLES30.glUniform1f(MHandle, mM);
+        GLES30.glUniform1f(MHandle, (float) mWaveFunction.getM());
 
         int mvpMatrixHandle = GLES30.glGetUniformLocation(mProgram, "shaderTransform");
         GLES30.glUniformMatrix4fv(mvpMatrixHandle, 1, false, shaderTransform, 0);
