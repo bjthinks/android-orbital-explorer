@@ -38,26 +38,10 @@ public class IntegrateRenderStage extends RenderStage {
         int M = 1;
 
         mWaveFunction = new WaveFunction(Z, N, L, M);
-
-        {
-            Function radial = mWaveFunction.getRadialFunction();
-            float radialData[] = new float[1024 + 1];
-            for (int i = 0; i <= 1024; ++i) {
-                double r = 16.0 * (double) i / 1024.0;
-                radialData[i] = (float) radial.eval(r);
-            }
-            mRadialData = floatArrayToBuffer(radialData);
-        }
-
-        {
-            Function azimuthal = mWaveFunction.getAzimuthalFunction();
-            float azimuthalData[] = new float[1024 + 1];
-            for (int i = 0; i <= 1024; ++i) {
-                double theta = Math.PI * (double) i / 1024.0;
-                azimuthalData[i] = (float) azimuthal.eval(theta);
-            }
-            mAzimuthalData = floatArrayToBuffer(azimuthalData);
-        }
+        mRadialData = functionToBuffer(mWaveFunction.getRadialFunction(),
+                0.0, 16.0, 1024);
+        mAzimuthalData = functionToBuffer(mWaveFunction.getAzimuthalFunction(),
+                0.0, Math.PI, 1024);
     }
 
     public void newContext(AssetManager assetManager) {

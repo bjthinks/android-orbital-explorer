@@ -18,6 +18,15 @@ public class RenderStage {
         return fb;
     }
 
+    protected FloatBuffer functionToBuffer(Function f, double start, double end, int steps) {
+        float data[] = new float[steps + 1];
+        for (int i = 0; i <= steps; ++i) {
+            double x = start + (end - start) * (double) i / steps;
+            data[i] = (float) f.eval(x);
+        }
+        return floatArrayToBuffer(data);
+    }
+
     protected void getGLError() {
         int error;
         while ((error = GLES30.glGetError()) != 0)
