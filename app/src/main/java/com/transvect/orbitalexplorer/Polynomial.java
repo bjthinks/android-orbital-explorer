@@ -29,8 +29,14 @@ public class Polynomial {
     public static Polynomial variable() {
         Polynomial x = new Polynomial();
         x.c = new double[2];
-        x.c[0] = 0.;
         x.c[1] = 1.;
+        return x;
+    }
+
+    public static Polynomial variableToThe(int power) {
+        Polynomial x = new Polynomial();
+        x.c = new double[power + 1];
+        x.c[power] = 1.;
         return x;
     }
 
@@ -231,6 +237,8 @@ public class Polynomial {
         // df = 9 x^2 + 8 x + 6
         Polynomial df = x2.multiply(9).add(x.multiply(8)).add(one.multiply(6));
         testSame("f'=df", f.derivative(), df);
+
+        testSame("x*x=x^2", x2, variableToThe(2));
 
         Log.d("Polynomial", "Test done");
     }

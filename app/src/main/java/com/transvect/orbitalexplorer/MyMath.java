@@ -16,9 +16,7 @@ public final class MyMath {
         Polynomial result = new Polynomial(1.0);
 
         Polynomial xSquaredMinusOne =
-                Polynomial.variable()
-                        .multiply(Polynomial.variable())
-                        .subtract(1.0);
+                Polynomial.variableToThe(2).subtract(1.0);
 
         for (int i = 0; i < L; ++i)
             result = result.multiply(xSquaredMinusOne);
@@ -35,14 +33,11 @@ public final class MyMath {
      */
     public static Polynomial generalizedLaguerrePolynomial(int n, int a) {
         Polynomial result = new Polynomial();
-        Polynomial x = Polynomial.variable();
-        Polynomial x_to_the_i = new Polynomial(1);
-        double power_of_minus_one = 1;
         for (int i = 0; i <= n; ++i) {
-            double coeff = power_of_minus_one * binomial(n + a, n - i) / factorial(i);
-            result = result.add(x_to_the_i.multiply(coeff));
-            x_to_the_i = x_to_the_i.multiply(x);
-            power_of_minus_one *= -1;
+            double coeff = binomial(n + a, n - i) / factorial(i);
+            if (i % 2 == 1)
+                coeff = -coeff;
+            result = result.add(Polynomial.variableToThe(i).multiply(coeff));
         }
         return result;
     }
