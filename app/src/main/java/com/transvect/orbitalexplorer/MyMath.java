@@ -49,6 +49,33 @@ public final class MyMath {
         return result;
     }
 
+    public static double rombergIntegrate(Function f) {
+        Log.d(TAG, "----- Begin Romberg Integration -----");
+
+        double[] lessAccurateEstimate;
+        int n = 1;
+        double[] moreAccurateEstimate = new double[n];
+        moreAccurateEstimate[0] = trapezoidalEstimate(f, 1.0);
+
+        do {
+            ++n;
+            lessAccurateEstimate = moreAccurateEstimate;
+            moreAccurateEstimate = new double[n];
+            moreAccurateEstimate[0] = trapezoidalEstimate(f,
+                    Math.pow(0.5, (double) (n - 1)));
+            for (int i = 1; i < n; ++i) {
+                double c = Math.pow(4.0, (double) i);
+                moreAccurateEstimate[i] = c / (c - 1.0) * moreAccurateEstimate[i - 1]
+                        - 1.0 / (c - 1.0) * lessAccurateEstimate[i - 1];
+            }
+            Log.d(TAG, "Romberg estimate: " + moreAccurateEstimate[n - 1]);
+        } while (moreAccurateEstimate[n - 1] != moreAccurateEstimate[n-2]);
+
+        Log.d(TAG, "------- End Romberg Integration -------");
+
+        return moreAccurateEstimate[n - 1];
+    }
+
     // Estimate the integral of f using trapezoids of width stepSize
     public static double trapezoidalEstimate(Function f, double stepSize) {
         double previousResult = f.eval(0.0);
@@ -66,7 +93,8 @@ public final class MyMath {
             for (; i <= iMax; ++i)
                 nextResult += f.eval(-stepSize * (double) i) + f.eval(stepSize * (double) i);
         }
-        Log.d(TAG, "Integration done in " + iMax + " steps");
+        Log.d(TAG, "                                        "
+                + iMax + " steps, result is " + nextResult * stepSize);
         return nextResult * stepSize;
     }
 }
