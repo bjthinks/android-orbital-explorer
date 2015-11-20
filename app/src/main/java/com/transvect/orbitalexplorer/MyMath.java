@@ -50,8 +50,6 @@ public final class MyMath {
     }
 
     public static double rombergIntegrate(Function f) {
-        Log.d(TAG, "----- Begin Romberg Integration -----");
-
         double[] lessAccurateEstimate;
         int n = 1;
         double[] moreAccurateEstimate = new double[n];
@@ -68,10 +66,9 @@ public final class MyMath {
                 moreAccurateEstimate[i] = c / (c - 1.0) * moreAccurateEstimate[i - 1]
                         - 1.0 / (c - 1.0) * lessAccurateEstimate[i - 1];
             }
-            Log.d(TAG, "Romberg estimate: " + moreAccurateEstimate[n - 1]);
         } while (moreAccurateEstimate[n - 1] != moreAccurateEstimate[n-2]);
 
-        Log.d(TAG, "------- End Romberg Integration -------");
+        Log.d(TAG, "Romberg integration finished in " + n + " rounds");
 
         return moreAccurateEstimate[n - 1];
     }
@@ -93,8 +90,6 @@ public final class MyMath {
             for (; i <= iMax; ++i)
                 nextResult += f.eval(-stepSize * (double) i) + f.eval(stepSize * (double) i);
         }
-        Log.d(TAG, "                                        "
-                + iMax + " steps, result is " + nextResult * stepSize);
         return nextResult * stepSize;
     }
 }
