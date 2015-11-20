@@ -49,27 +49,22 @@ public final class MyMath {
         return result;
     }
 
-    // Example function
-    private static double f(double x) {
-        return Math.exp(-Math.abs(x));
-    }
-
     // Estimate the integral of f using trapezoids of width stepSize
-    public static double trapezoidalEstimate(double stepSize) {
-        double previousResult = f(0.0);
+    public static double trapezoidalEstimate(Function f, double stepSize) {
+        double previousResult = f.eval(0.0);
         double nextResult = previousResult;
         int i = 1;
         int stepsAtATime = 5;
         int iMax = stepsAtATime;
         for (; i <= iMax; ++i)
-            nextResult += f(-stepSize * (double) i) + f(stepSize * (double) i);
+            nextResult += f.eval(-stepSize * (double) i) + f.eval(stepSize * (double) i);
         if (previousResult == nextResult)
             Log.w(TAG, "Integration step size too large");
         while (previousResult != nextResult) {
             previousResult = nextResult;
             iMax += stepsAtATime;
             for (; i <= iMax; ++i)
-                nextResult += f(-stepSize * (double) i) + f(stepSize * (double) i);
+                nextResult += f.eval(-stepSize * (double) i) + f.eval(stepSize * (double) i);
         }
         Log.d(TAG, "Integration done in " + iMax + " steps");
         return nextResult * stepSize;
