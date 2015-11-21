@@ -249,6 +249,9 @@ public class Polynomial implements Function {
         testSame("x*x=x^2", x2, variableToThe(2));
         testSame("x*x=(x)^2", x2, x.pow(2));
 
+        if (x2.coefficient(0) != 0.0 || x2.coefficient(1) != 0.0 || x2.coefficient(2) != 1.0)
+            Log.w(TAG, "coefficient");
+
         Log.d("Polynomial", "Test done");
     }
 
