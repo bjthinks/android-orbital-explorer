@@ -8,20 +8,20 @@ public class OrthogonalPolynomials {
     Function w2;
 
     public OrthogonalPolynomials(Function w) {
-        w2 = w; //new Product(w, w);
+        w2 = new Product(w, w);
         int n = 8;
-        Polynomial[] foofoo = new Polynomial[n];
-        foofoo[0] = new Polynomial(1.0);
-        foofoo[1] = Polynomial.variable().subtract(MyMath.rombergIntegrate(
+        Polynomial[] basis = new Polynomial[n];
+        basis[0] = new Polynomial(1.0);
+        basis[1] = Polynomial.variable().subtract(MyMath.rombergIntegrate(
                 new Product(Polynomial.variable(), w)) / MyMath.rombergIntegrate(w));
         for (int i = 2; i < n; ++i) {
-            double B = innerProduct(new Product(Polynomial.variable(), foofoo[i - 1]),
-                    foofoo[i - 1]) / normSquared(foofoo[i - 1]);
-            double A = normSquared(foofoo[i - 1]) / normSquared(foofoo[i - 2]);
-            foofoo[i] = foofoo[i - 1].multiply(Polynomial.variable().subtract(B))
-                    .subtract(foofoo[i - 2].multiply(A));
-            Log.d(TAG, i + ":       " + foofoo[i].toString());
-            double[] roots = MyMath.solvePolynomial(foofoo[i]);
+            double B = innerProduct(new Product(Polynomial.variable(), basis[i - 1]),
+                    basis[i - 1]) / normSquared(basis[i - 1]);
+            double A = normSquared(basis[i - 1]) / normSquared(basis[i - 2]);
+            basis[i] = basis[i - 1].multiply(Polynomial.variable().subtract(B))
+                    .subtract(basis[i - 2].multiply(A));
+            Log.d(TAG, i + ":       " + basis[i].toString());
+            double[] roots = MyMath.solvePolynomial(basis[i]);
             String rootsString = "";
             for (int j = 0; j < roots.length; ++j)
                 rootsString += " " + roots[j];
