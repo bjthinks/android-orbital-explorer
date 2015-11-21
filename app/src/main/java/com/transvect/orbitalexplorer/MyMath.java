@@ -82,7 +82,8 @@ public final class MyMath {
         int iMax = stepsAtATime;
         for (; i <= iMax; ++i)
             nextResult += f.eval(-stepSize * (double) i) + f.eval(stepSize * (double) i);
-        if (previousResult == nextResult)
+        // TODO this check is not right
+        if (previousResult == nextResult && previousResult != 0.0)
             Log.w(TAG, "Integration step size too large");
         while (previousResult != nextResult) {
             previousResult = nextResult;
