@@ -128,6 +128,10 @@ public class Polynomial implements Function {
         return result;
     }
 
+    public double coefficient(int i) {
+        return c[i];
+    }
+
     /* @Override
     public String toString() {
         String result = "";
