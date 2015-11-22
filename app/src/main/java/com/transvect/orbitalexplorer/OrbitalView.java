@@ -8,7 +8,6 @@ import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
-// import android.util.Log;
 
 public class OrbitalView extends GLSurfaceView {
     // private static final String TAG = "OrbitalView";

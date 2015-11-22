@@ -2,7 +2,6 @@ package com.transvect.orbitalexplorer;
 
 import android.content.res.AssetManager;
 import android.opengl.GLSurfaceView;
-// import android.util.Log;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;

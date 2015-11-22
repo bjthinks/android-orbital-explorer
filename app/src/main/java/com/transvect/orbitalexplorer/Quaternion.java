@@ -2,7 +2,6 @@ package com.transvect.orbitalexplorer;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-// import android.util.Log;
 
 public class Quaternion implements Parcelable {
     // public static final String TAG = "Quaternion";
