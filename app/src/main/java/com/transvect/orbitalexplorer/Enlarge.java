@@ -37,6 +37,7 @@ public class Enlarge extends RenderStage {
     }
 
     public void render(Texture texture) {
+        GLES30.glBindFramebuffer(GLES30.GL_FRAMEBUFFER, 0);
         GLES30.glViewport(0, 0, mWidth, mHeight);
         GLES30.glUseProgram(mProgram);
 
