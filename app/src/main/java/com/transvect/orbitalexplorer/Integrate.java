@@ -16,6 +16,7 @@ public class Integrate extends RenderStage {
     private Texture mRadialTexture;
     private Texture mAzimuthalTexture;
     private Texture mTexture;
+    private Framebuffer mFramebuffer;
     private int mFramebufferId;
     private int mWidth, mHeight;
 
@@ -93,6 +94,7 @@ public class Integrate extends RenderStage {
                 GLES30.GL_TEXTURE_MAG_FILTER, GLES30.GL_NEAREST);
 
         // Generate framebuffer
+        mFramebuffer = new Framebuffer();
         int temp[] = new int[1];
         GLES30.glGenFramebuffers(1, temp, 0);
         mFramebufferId = temp[0];

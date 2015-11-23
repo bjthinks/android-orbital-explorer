@@ -29,7 +29,7 @@ public class OrbitalRenderer implements GLSurfaceView.Renderer {
     @Override
     public void onSurfaceCreated(GL10 unused, EGLConfig config) {
         // For pessimistic testing
-        // GLES30.glDisable(GLES30.GL_DITHER);
+        // GLES30.glEnable(GLES30.GL_DITHER);
         mIntegrate.newContext(mAssetManager);
         mColorModel.newContext(mAssetManager);
         mEnlarge.newContext(mAssetManager);

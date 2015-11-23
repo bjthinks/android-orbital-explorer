@@ -12,6 +12,7 @@ public class ColorModel extends RenderStage {
     private FloatBuffer mVertexBuffer;
     private int mProgram;
     private Texture mTexture;
+    private Framebuffer mFramebuffer;
     private int mFramebufferId;
     private int mWidth, mHeight;
 
@@ -55,6 +56,7 @@ public class ColorModel extends RenderStage {
                 GLES30.GL_TEXTURE_WRAP_T, GLES30.GL_CLAMP_TO_EDGE);
 
         // Generate framebuffer
+        mFramebuffer = new Framebuffer();
         int temp[] = new int[1];
         GLES30.glGenFramebuffers(1, temp, 0);
         mFramebufferId = temp[0];
