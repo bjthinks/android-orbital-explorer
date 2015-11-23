@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.pm.ConfigurationInfo;
-import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.Menu;
@@ -32,6 +31,13 @@ public class MainActivity extends Activity {
         OrbitalRenderer renderer = new OrbitalRenderer(mOrbitalView, getAssets());
         // Start the rendering thread
         mOrbitalView.setRenderer(renderer);
+
+        // new OrthogonalPolynomials(new WeightFunction());
+    }
+    private class WeightFunction implements Function {
+        public double eval(double x) {
+            return Math.exp(-Math.abs(x));
+        }
     }
 
     private boolean hasGLES30() {
