@@ -7,7 +7,7 @@ import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
 public class RenderStage {
-    private static final String TAG = "IntegrateRenderStage";
+    private static final String TAG = "Integrate";
 
     protected FloatBuffer floatArrayToBuffer(float[] array) {
         ByteBuffer bb = ByteBuffer.allocateDirect(array.length * 4);

@@ -11,16 +11,18 @@ public class OrbitalRenderer implements GLSurfaceView.Renderer {
 
     private OrbitalView mOrbitalView;
     private AssetManager mAssetManager;
-    private IntegrateRenderStage mIntegrateRenderStage;
-    private FinalRenderStage mFinalRenderStage;
+    private Integrate mIntegrate;
+    private ColorModel mColorModel;
+    private Enlarge mEnlarge;
     private float mAspectRatio = 1.0f;
 
     // Main thread
     public OrbitalRenderer(OrbitalView orbitalView, AssetManager assetManager) {
         mOrbitalView = orbitalView;
         mAssetManager = assetManager;
-        mIntegrateRenderStage = new IntegrateRenderStage();
-        mFinalRenderStage = new FinalRenderStage();
+        mIntegrate = new Integrate();
+        mColorModel = new ColorModel();
+        mEnlarge = new Enlarge();
     }
 
     // Rendering thread
@@ -28,23 +30,26 @@ public class OrbitalRenderer implements GLSurfaceView.Renderer {
     public void onSurfaceCreated(GL10 unused, EGLConfig config) {
         // For pessimistic testing
         // GLES30.glDisable(GLES30.GL_DITHER);
-        mIntegrateRenderStage.newContext(mAssetManager);
-        mFinalRenderStage.newContext(mAssetManager);
+        mIntegrate.newContext(mAssetManager);
+        mColorModel.newContext(mAssetManager);
+        mEnlarge.newContext(mAssetManager);
     }
 
     // Rendering thread
     @Override
     public void onSurfaceChanged(GL10 unused, int width, int height) {
         mAspectRatio = (float) width / (float) height;
-        mIntegrateRenderStage.resize(width, height);
-        mFinalRenderStage.resize(width, height);
+        mIntegrate.resize(width, height);
+        mColorModel.resize(width, height);
+        mEnlarge.resize(width, height);
     }
 
     // Rendering thread
     @Override
     public void onDrawFrame(GL10 unused) {
         float[] shaderTransform = mOrbitalView.getNextTransform(mAspectRatio);
-        mIntegrateRenderStage.render(shaderTransform);
-        mFinalRenderStage.render(mIntegrateRenderStage.getTexture());
+        mIntegrate.render(shaderTransform);
+        mColorModel.render(mIntegrate.getTexture());
+        // mEnlarge.render(mColorModel.getTexture());
     }
 }

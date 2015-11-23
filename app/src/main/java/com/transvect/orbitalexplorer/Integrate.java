@@ -5,8 +5,8 @@ import android.opengl.GLES30;
 import android.util.Log;
 import java.nio.FloatBuffer;
 
-public class IntegrateRenderStage extends RenderStage {
-    private static final String TAG = "IntegrateRenderStage";
+public class Integrate extends RenderStage {
+    private static final String TAG = "Integrate";
 
     private int mProgram;
     private FloatBuffer mVertexBuffer;
@@ -23,7 +23,7 @@ public class IntegrateRenderStage extends RenderStage {
         return mTexture;
     }
 
-    IntegrateRenderStage() {
+    Integrate() {
         float squareCoordinates[] = {
                 -1.0f, -1.0f,
                 -1.0f,  1.0f,

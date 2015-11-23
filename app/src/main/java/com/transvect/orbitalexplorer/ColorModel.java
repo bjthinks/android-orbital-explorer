@@ -4,13 +4,13 @@ import android.content.res.AssetManager;
 import android.opengl.GLES30;
 import java.nio.FloatBuffer;
 
-public class FinalRenderStage extends RenderStage {
+public class ColorModel extends RenderStage {
 
     private FloatBuffer mVertexBuffer;
     private int mProgram;
     private int mWidth, mHeight;
 
-    FinalRenderStage() {
+    ColorModel() {
         float squareCoordinates[] = {
                 -1.0f, -1.0f,
                 -1.0f,  1.0f,
