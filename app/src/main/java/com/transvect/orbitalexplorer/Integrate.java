@@ -93,19 +93,7 @@ public class Integrate extends RenderStage {
                 GLES30.GL_TEXTURE_MAG_FILTER, GLES30.GL_NEAREST);
 
         mFramebuffer = new Framebuffer();
-        mFramebuffer.bindToAttachmentPoint();
-
-        // Attach the texture to the bound framebuffer
-        GLES30.glFramebufferTexture2D(GLES30.GL_FRAMEBUFFER, GLES30.GL_COLOR_ATTACHMENT0,
-                GLES30.GL_TEXTURE_2D, mTexture.getId(), 0);
-
-        // Check if framebuffer is complete
-        int status = GLES30.glCheckFramebufferStatus(GLES30.GL_FRAMEBUFFER);
-        if (status != GLES30.GL_FRAMEBUFFER_COMPLETE)
-            Log.e(TAG, "Framebuffer not complete");
-
-        // Un-bind framebuffer -- this returns drawing to the default framebuffer
-        GLES30.glBindFramebuffer(GLES30.GL_FRAMEBUFFER, 0);
+        mFramebuffer.bindAndSetTexture(mTexture);
 
         getGLError();
 
@@ -125,7 +113,6 @@ public class Integrate extends RenderStage {
         mTexture.bindToTexture2DAndResize(mWidth, mHeight);
     }
 
-    private static final int zeroes[] = {0, 0, 0, 0};
     public void render(float[] shaderTransform) {
         mFramebuffer.bindToAttachmentPoint();
         GLES30.glViewport(0, 0, mWidth, mHeight);
@@ -151,6 +138,7 @@ public class Integrate extends RenderStage {
         GLES30.glEnableVertexAttribArray(inPositionHandle);
         GLES30.glVertexAttribPointer(inPositionHandle, 2, GLES30.GL_FLOAT, false, 8, mVertexBuffer);
 
+        final int zeroes[] = {0, 0, 0, 0};
         GLES30.glClearBufferiv(GLES30.GL_COLOR, 0, zeroes, 0);
         GLES30.glDrawArrays(GLES30.GL_TRIANGLE_FAN, 0, 4);
         GLES30.glDisableVertexAttribArray(inPositionHandle);

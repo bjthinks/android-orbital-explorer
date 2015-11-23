@@ -55,19 +55,7 @@ public class ColorModel extends RenderStage {
                 GLES30.GL_TEXTURE_WRAP_T, GLES30.GL_CLAMP_TO_EDGE);
 
         mFramebuffer = new Framebuffer();
-        mFramebuffer.bindToAttachmentPoint();
-
-        // Attach the texture to the bound framebuffer
-        GLES30.glFramebufferTexture2D(GLES30.GL_FRAMEBUFFER, GLES30.GL_COLOR_ATTACHMENT0,
-                GLES30.GL_TEXTURE_2D, mTexture.getId(), 0);
-
-        // Check if framebuffer is complete
-        int status = GLES30.glCheckFramebufferStatus(GLES30.GL_FRAMEBUFFER);
-        if (status != GLES30.GL_FRAMEBUFFER_COMPLETE)
-            Log.e(TAG, "Framebuffer not complete");
-
-        // Un-bind framebuffer -- this returns drawing to the default framebuffer
-        GLES30.glBindFramebuffer(GLES30.GL_FRAMEBUFFER, 0);
+        mFramebuffer.bindAndSetTexture(mTexture);
 
         getGLError();
 
