@@ -36,8 +36,8 @@ public class ColorModel extends RenderStage {
         // according to Table 3.13 (in the absence of extensions).
         // Since this output will be enlarged, we also want texture-filterable.
         final int renderFormat = GLES30.GL_RGBA;
-        final int renderType = GLES30.GL_UNSIGNED_BYTE; //GL_UNSIGNED_INT_2_10_10_10_REV;
-        final int renderInternalFormat = GLES30.GL_RGBA8; //GL_RGB10_A2;
+        final int renderType = GLES30.GL_UNSIGNED_INT_2_10_10_10_REV;
+        final int renderInternalFormat = GLES30.GL_RGB10_A2;
 
         // Create a texture to render to
         mTexture = new Texture(renderFormat, renderType, renderInternalFormat);
