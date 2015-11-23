@@ -125,8 +125,8 @@ public class Integrate extends RenderStage {
     }
 
     public void resize(int width, int height) {
-        mWidth = width / 6;
-        mHeight = height / 6;
+        mWidth = width;
+        mHeight = height;
         mTexture.bindToTexture2DAndResize(mWidth, mHeight);
     }
 
