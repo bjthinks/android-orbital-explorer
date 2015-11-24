@@ -9,7 +9,7 @@ import java.nio.FloatBuffer;
 public class RenderStage {
     private static final String TAG = "Integrate";
 
-    protected FloatBuffer floatArrayToBuffer(float[] array) {
+    protected static FloatBuffer floatArrayToBuffer(float[] array) {
         ByteBuffer bb = ByteBuffer.allocateDirect(array.length * 4);
         bb.order(ByteOrder.nativeOrder());
         FloatBuffer fb = bb.asFloatBuffer();
@@ -18,7 +18,7 @@ public class RenderStage {
         return fb;
     }
 
-    protected FloatBuffer functionToBuffer(Function f, double start, double end, int steps) {
+    protected static FloatBuffer functionToBuffer(Function f, double start, double end, int steps) {
         float data[] = new float[steps + 1];
         for (int i = 0; i <= steps; ++i) {
             double x = start + (end - start) * (double) i / steps;
@@ -27,7 +27,7 @@ public class RenderStage {
         return floatArrayToBuffer(data);
     }
 
-    protected void getGLError() {
+    protected static void getGLError() {
         int error;
         while ((error = GLES30.glGetError()) != 0)
             Log.e(TAG, "OpenGL error code " + error);

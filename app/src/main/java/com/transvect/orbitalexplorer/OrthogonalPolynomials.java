@@ -29,7 +29,7 @@ public class OrthogonalPolynomials {
     }
 
     private double normSquared(Function f) {
-        Function f2 = new Square(f);
+        Function f2 = new Squared(f);
         Function integrand = new Product(f2, mW);
         return MyMath.rombergIntegrate(integrand);
     }

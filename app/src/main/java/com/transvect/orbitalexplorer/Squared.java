@@ -1,9 +1,9 @@
 package com.transvect.orbitalexplorer;
 
-public class Square implements Function {
+public class Squared implements Function {
     Function mF;
 
-    public Square(Function f) {
+    public Squared(Function f) {
         mF = f;
     }
 
