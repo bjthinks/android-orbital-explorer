@@ -65,23 +65,30 @@ vec3 integrand(vec3 x) {
 
 void main() {
     vec3 ray = far - near;
-    ray /= length(ray);
 
-    float distanceFromOrigin = length(near);
+    vec3 total = vec3(0.0, 0.0, 0.0);
+    vec3 location = near;
+    const int steps = 32;
+    vec3 step = ray / float(steps);
+    int i = 0;
+    total += integrand(location);
+    ++i;
+    while (i < steps) {
+        location += step;
+        total += 2.0 * integrand(location);
+        ++i;
+    }
+    location += step;
+    total += integrand(location);
+    total *= length(step) / 2.0;
 
-    if (distanceFromOrigin > maximumRadius) {
-        color = ivec3(0);
+    total *= 50.0;
+
+    if (total.z > 0.0) {
+        float totalScaleFactor = (1.0 - exp(-total.z)) / total.z;
+        total *= totalScaleFactor;
+        color = ivec3(total * 2147483647.0);
     } else {
-        vec3 total = integrand(near);
-
-        total *= 50.0;
-
-        if (total.z > 0.0) {
-            float totalScaleFactor = (1.0 - exp(-total.z)) / total.z;
-            total *= totalScaleFactor;
-            color = ivec3(total * 2147483647.0);
-        } else {
-            color = ivec3(0);
-        }
+        color = ivec3(0);
     }
 }

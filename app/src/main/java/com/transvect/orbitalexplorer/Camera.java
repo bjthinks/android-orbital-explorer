@@ -117,8 +117,8 @@ public class Camera implements Parcelable {
 
     public float[] computeShaderTransform(double aspectRatio) {
         float ratio = (float) Math.sqrt(aspectRatio);
-        float near = (float) mCameraDistance;
-        float far = (float) (mCameraDistance + 1.0);
+        float near = (float) Math.max(1.0f, mCameraDistance - 16.0);
+        float far = (float) (mCameraDistance + 16.0);
         float leftRight = near * ratio;
         float bottomTop = near / ratio;
         float[] projectionMatrix = new float[16];
