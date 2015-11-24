@@ -37,7 +37,7 @@ public class Camera implements Parcelable {
         }
     };
 
-    private double mCameraDistance = 32.0;
+    private double mCameraDistance = 16.0;
     private static final double MIN_CAMERA_DISTANCE = 1.0;
     private static final double MAX_CAMERA_DISTANCE = 32.0;
 
@@ -50,7 +50,7 @@ public class Camera implements Parcelable {
             mCameraDistance = MAX_CAMERA_DISTANCE;
     }
 
-    private Quaternion mTotalRotation = new Quaternion(1.0);
+    private Quaternion mTotalRotation = Quaternion.rotation(Math.PI / 2.0, X_HAT);
     private static final Vector3 X_HAT = new Vector3(1, 0, 0);
     private static final Vector3 Y_HAT = new Vector3(0, 1, 0);
     private static final Vector3 Z_HAT = new Vector3(0, 0, 1);
