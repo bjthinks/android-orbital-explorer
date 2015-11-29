@@ -55,7 +55,7 @@ public class SymmetricTridiagonalMatrix {
             mOffDiagonal[1] = newOffDiagonal1;
         }
 
-        for (int i = 1; i <= 2; ++i) {
+        for (int i = 1; i <= mN - 2; ++i) {
             double c = mOffDiagonal[i - 1] / Math.sqrt(mOffDiagonal[i - 1] * mOffDiagonal[i - 1]
                     + badElement * badElement);
             double s = badElement / Math.sqrt(mOffDiagonal[i - 1] * mOffDiagonal[i - 1]
@@ -68,17 +68,15 @@ public class SymmetricTridiagonalMatrix {
                     + s * c * (mDiagonal[i] - mDiagonal[i + 1]);
             double newNextDiagonal = s * s * mDiagonal[i] - 2.0 * s * c * mOffDiagonal[i]
                     + c * c * mDiagonal[i + 1];
-            double newNextOffDiagonal = 0.0;
-            if (i != 2) {
-                newNextOffDiagonal = -c * mOffDiagonal[i + 1];
+            if (i != mN - 2) {
+                double newNextOffDiagonal = -c * mOffDiagonal[i + 1];
                 badElement = s * mOffDiagonal[i + 1];
+                mOffDiagonal[i + 1] = newNextOffDiagonal;
             }
             mOffDiagonal[i - 1] = newPriorOffDiagonal;
             mDiagonal[i] = newDiagonal;
             mOffDiagonal[i] = newOffDiagonal;
             mDiagonal[i + 1] = newNextDiagonal;
-            if (i != 2)
-                mOffDiagonal[i + 1] = newNextOffDiagonal;
         }
     }
 
