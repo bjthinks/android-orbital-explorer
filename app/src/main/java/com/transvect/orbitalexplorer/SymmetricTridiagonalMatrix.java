@@ -34,12 +34,28 @@ public class SymmetricTridiagonalMatrix {
     void QRReductionStep() {
         double badElement = 0.0;
 
+        double lambda;
+        {
+            double a = mDiagonal[mN - 2];
+            double b = mOffDiagonal[mN - 2];
+            double c = mDiagonal[mN - 1];
+            double d = Math.sqrt((a - c) * (a - c) + 4.0 * b * b);
+            double lambda1 = (a + c + d) / 2.0;
+            double lambda2 = (a + c - d) / 2.0;
+            if (Math.abs(lambda1) < Math.abs(lambda2))
+                lambda = lambda1;
+            else
+                lambda = lambda2;
+        }
+        Log.d(TAG, "Lambda = " + lambda);
+
         for (int i = 0; i <= mN - 2; ++i) {
+
             double s, c;
             if (i == 0) {
-                double n = Math.sqrt(mDiagonal[0] * mDiagonal[0]
+                double n = Math.sqrt((mDiagonal[0] - lambda) * (mDiagonal[0] - lambda)
                         + mOffDiagonal[0] * mOffDiagonal[0]);
-                c = mDiagonal[0] / n;
+                c = (mDiagonal[0] - lambda) / n;
                 s = mOffDiagonal[0] / n;
             } else {
                 double n = Math.sqrt(mOffDiagonal[i - 1] * mOffDiagonal[i - 1]
@@ -48,12 +64,18 @@ public class SymmetricTridiagonalMatrix {
                 s = badElement / n;
             }
 
-            double newDiagonal     = c * c * mDiagonal[i] + ( 2.0 * s * c ) * mOffDiagonal[i]
-                    + s * s * mDiagonal[i + 1];
-            double newOffDiagonal  = s * c * mDiagonal[i] - (c * c - s * s) * mOffDiagonal[i]
-                    - s * c * mDiagonal[i + 1];
-            double newNextDiagonal = s * s * mDiagonal[i] - ( 2.0 * s * c ) * mOffDiagonal[i]
-                    + c * c * mDiagonal[i + 1];
+            double newDiagonal
+                    = c * c * (mDiagonal[i] - lambda)
+                    + 2.0 * s * c * mOffDiagonal[i]
+                    + s * s * (mDiagonal[i + 1] - lambda);
+            double newOffDiagonal
+                    = s * c * (mDiagonal[i] - lambda)
+                    + (s * s - c * c) * mOffDiagonal[i]
+                    - s * c * (mDiagonal[i + 1] - lambda);
+            double newNextDiagonal
+                    = s * s * (mDiagonal[i] - lambda)
+                    - ( 2.0 * s * c ) * mOffDiagonal[i]
+                    + c * c * (mDiagonal[i + 1] - lambda);
 
             if (i != 0)
                 mOffDiagonal[i - 1] = c * mOffDiagonal[i - 1] + s * badElement;
@@ -63,9 +85,9 @@ public class SymmetricTridiagonalMatrix {
                 mOffDiagonal[i + 1] *= -c;
             }
 
-            mDiagonal[i] = newDiagonal;
+            mDiagonal[i] = newDiagonal + lambda;
             mOffDiagonal[i] = newOffDiagonal;
-            mDiagonal[i + 1] = newNextDiagonal;
+            mDiagonal[i + 1] = newNextDiagonal + lambda;
         }
     }
 
