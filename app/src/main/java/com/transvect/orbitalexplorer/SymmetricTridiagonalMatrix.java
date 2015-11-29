@@ -31,7 +31,7 @@ public class SymmetricTridiagonalMatrix {
         mOffDiagonal[i] = x;
     }
 
-    void QRReduce() {
+    void QRReductionStep() {
         double badElement = 0.0;
 
         for (int i = 0; i <= mN - 2; ++i) {

@@ -44,7 +44,7 @@ public class MainActivity extends Activity {
         M.setOffDiagonal(2, 0.75);
         M.setOffDiagonal(3, 1.25);
         for (int i = 0; i < 1000; ++i)
-            M.QRReduce();
+            M.QRReductionStep();
         M.print();
     }
     private class WeightFunction implements Function {
