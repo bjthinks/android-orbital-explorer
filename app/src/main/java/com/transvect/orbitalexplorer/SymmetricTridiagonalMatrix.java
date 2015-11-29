@@ -55,48 +55,30 @@ public class SymmetricTridiagonalMatrix {
             mOffDiagonal[1] = newOffDiagonal1;
         }
 
-        {
-            double c = mOffDiagonal[0] / Math.sqrt(mOffDiagonal[0] * mOffDiagonal[0]
+        for (int i = 1; i <= 2; ++i) {
+            double c = mOffDiagonal[i - 1] / Math.sqrt(mOffDiagonal[i - 1] * mOffDiagonal[i - 1]
                     + badElement * badElement);
-            double s = badElement / Math.sqrt(mOffDiagonal[0] * mOffDiagonal[0]
-                    + badElement * badElement);
-
-            double newOffDiagonal0 = c * mOffDiagonal[0] + s * badElement;
-            double newDiagonal1 = c * c * mDiagonal[1] + 2.0 * s * c * mOffDiagonal[1]
-                    + s * s * mDiagonal[2];
-            double newOffDiagonal1 = (s * s - c * c) * mOffDiagonal[1]
-                    + s * c * (mDiagonal[1] - mDiagonal[2]);
-            double newDiagonal2 = s * s * mDiagonal[1] - 2.0 * s * c * mOffDiagonal[1]
-                    + c * c * mDiagonal[2];
-            double newOffDiagonal2 = -c * mOffDiagonal[2];
-            badElement = s * mOffDiagonal[2];
-            mOffDiagonal[0] = newOffDiagonal0;
-            mDiagonal[1] = newDiagonal1;
-            mOffDiagonal[1] = newOffDiagonal1;
-            mDiagonal[2] = newDiagonal2;
-            mOffDiagonal[2] = newOffDiagonal2;
-        }
-
-        {
-            double c = mOffDiagonal[1] / Math.sqrt(mOffDiagonal[1] * mOffDiagonal[1]
-                    + badElement * badElement);
-            double s = badElement / Math.sqrt(mOffDiagonal[1] * mOffDiagonal[1]
+            double s = badElement / Math.sqrt(mOffDiagonal[i - 1] * mOffDiagonal[i - 1]
                     + badElement * badElement);
 
-            double newOffDiagonal1 = c * mOffDiagonal[1] + s * badElement;
-            double newDiagonal2 = c * c * mDiagonal[2] + 2.0 * s * c * mOffDiagonal[2]
-                    + s * s * mDiagonal[3];
-            double newOffDiagonal2 = (s * s - c * c) * mOffDiagonal[2]
-                    + s * c * (mDiagonal[2] - mDiagonal[3]);
-            double newDiagonal3 = s * s * mDiagonal[2] - 2.0 * s * c * mOffDiagonal[2]
-                    + c * c * mDiagonal[3];
-            // double newOffDiagonal3 = -c * mOffDiagonal[3];
-            // badElement = s * mOffDiagonal[3];
-            mOffDiagonal[1] = newOffDiagonal1;
-            mDiagonal[2] = newDiagonal2;
-            mOffDiagonal[2] = newOffDiagonal2;
-            mDiagonal[3] = newDiagonal3;
-            // mOffDiagonal[3] = newOffDiagonal3;
+            double newPriorOffDiagonal = c * mOffDiagonal[i - 1] + s * badElement;
+            double newDiagonal = c * c * mDiagonal[i] + 2.0 * s * c * mOffDiagonal[i]
+                    + s * s * mDiagonal[i + 1];
+            double newOffDiagonal = (s * s - c * c) * mOffDiagonal[i]
+                    + s * c * (mDiagonal[i] - mDiagonal[i + 1]);
+            double newNextDiagonal = s * s * mDiagonal[i] - 2.0 * s * c * mOffDiagonal[i]
+                    + c * c * mDiagonal[i + 1];
+            double newNextOffDiagonal = 0.0;
+            if (i != 2) {
+                newNextOffDiagonal = -c * mOffDiagonal[i + 1];
+                badElement = s * mOffDiagonal[i + 1];
+            }
+            mOffDiagonal[i - 1] = newPriorOffDiagonal;
+            mDiagonal[i] = newDiagonal;
+            mOffDiagonal[i] = newOffDiagonal;
+            mDiagonal[i + 1] = newNextDiagonal;
+            if (i != 2)
+                mOffDiagonal[i + 1] = newNextOffDiagonal;
         }
     }
 
