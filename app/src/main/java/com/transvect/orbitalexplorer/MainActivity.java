@@ -33,15 +33,17 @@ public class MainActivity extends Activity {
         mOrbitalView.setRenderer(renderer);
 
         // new OrthogonalPolynomials(new WeightFunction());
-        SymmetricTridiagonalMatrix M = new SymmetricTridiagonalMatrix(4);
+        SymmetricTridiagonalMatrix M = new SymmetricTridiagonalMatrix(5);
         M.setDiagonal(0, 5);
         M.setDiagonal(1, 4);
         M.setDiagonal(2, 7);
         M.setDiagonal(3, 6);
+        M.setDiagonal(4, 8);
         M.setOffDiagonal(0, 1);
         M.setOffDiagonal(1, 1.5);
         M.setOffDiagonal(2, 0.75);
-        for (int i = 0; i < 100; ++i)
+        M.setOffDiagonal(3, 1.25);
+        for (int i = 0; i < 1000; ++i)
             M.QRReduce();
         M.print();
     }

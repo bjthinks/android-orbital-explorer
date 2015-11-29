@@ -48,18 +48,15 @@ public class SymmetricTridiagonalMatrix {
                 s = badElement / n;
             }
 
-            double newDiagonal = c * c * mDiagonal[i] + 2.0 * s * c * mOffDiagonal[i]
+            double newDiagonal     = c * c * mDiagonal[i] + ( 2.0 * s * c ) * mOffDiagonal[i]
                     + s * s * mDiagonal[i + 1];
-            double newOffDiagonal = s * s * mOffDiagonal[i] - s * c * mDiagonal[i + 1];
-            double newNextDiagonal = c * c * mDiagonal[i + 1] - s * c * mOffDiagonal[i];
+            double newOffDiagonal  = s * c * mDiagonal[i] - (c * c - s * s) * mOffDiagonal[i]
+                    - s * c * mDiagonal[i + 1];
+            double newNextDiagonal = s * s * mDiagonal[i] - ( 2.0 * s * c ) * mOffDiagonal[i]
+                    + c * c * mDiagonal[i + 1];
 
-            if (i != 0) {
-                newOffDiagonal -= c * c * mOffDiagonal[i];
-                newOffDiagonal += s * c * mDiagonal[i];
+            if (i != 0)
                 mOffDiagonal[i - 1] = c * mOffDiagonal[i - 1] + s * badElement;
-                newNextDiagonal += s * s * mDiagonal[i];
-                newNextDiagonal -= s * c * mOffDiagonal[i]; // Yes, again
-            }
 
             if (i != mN - 2) {
                 badElement = s * mOffDiagonal[i + 1];
@@ -67,8 +64,8 @@ public class SymmetricTridiagonalMatrix {
             }
 
             mDiagonal[i] = newDiagonal;
-            mDiagonal[i + 1] = newNextDiagonal;
             mOffDiagonal[i] = newOffDiagonal;
+            mDiagonal[i + 1] = newNextDiagonal;
         }
     }
 
