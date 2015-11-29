@@ -32,51 +32,43 @@ public class SymmetricTridiagonalMatrix {
     }
 
     void QRReduce() {
-        // Start by left and right multiplying by the upper left 2x2 matrix
-        // [ c  s ]
-        // [ s -c ]
-        // where (c,s) = (diag[0], offdiag[0]) / sqrt(diag[0]^2 + offdiag[0])
-        double badElement;
-        {
-            double c = mDiagonal[0] / Math.sqrt(mDiagonal[0] * mDiagonal[0]
-                    + mOffDiagonal[0] * mOffDiagonal[0]);
-            double s = mOffDiagonal[0] / Math.sqrt(mDiagonal[0] * mDiagonal[0]
-                    + mOffDiagonal[0] * mOffDiagonal[0]);
+        double badElement = 0.0;
 
-            double newDiagonal0 = c * c * mDiagonal[0] + 2.0 * s * c * mOffDiagonal[0]
-                    + s * s * mDiagonal[1];
-            double newOffDiagonal0 = s * s * mOffDiagonal[0] - s * c * mDiagonal[1];
-            double newDiagonal1 = c * c * mDiagonal[1] - s * c * mOffDiagonal[0];
-            double newOffDiagonal1 = -c * mOffDiagonal[1];
-            badElement = s * mOffDiagonal[1]; // Position (0,2)
-            mDiagonal[0] = newDiagonal0;
-            mDiagonal[1] = newDiagonal1;
-            mOffDiagonal[0] = newOffDiagonal0;
-            mOffDiagonal[1] = newOffDiagonal1;
-        }
+        for (int i = 0; i <= mN - 2; ++i) {
+            double s, c;
+            if (i == 0) {
+                double n = Math.sqrt(mDiagonal[0] * mDiagonal[0]
+                        + mOffDiagonal[0] * mOffDiagonal[0]);
+                c = mDiagonal[0] / n;
+                s = mOffDiagonal[0] / n;
+            } else {
+                double n = Math.sqrt(mOffDiagonal[i - 1] * mOffDiagonal[i - 1]
+                        + badElement * badElement);
+                c = mOffDiagonal[i - 1] / n;
+                s = badElement / n;
+            }
 
-        for (int i = 1; i <= mN - 2; ++i) {
-            double c = mOffDiagonal[i - 1] / Math.sqrt(mOffDiagonal[i - 1] * mOffDiagonal[i - 1]
-                    + badElement * badElement);
-            double s = badElement / Math.sqrt(mOffDiagonal[i - 1] * mOffDiagonal[i - 1]
-                    + badElement * badElement);
-
-            double newPriorOffDiagonal = c * mOffDiagonal[i - 1] + s * badElement;
             double newDiagonal = c * c * mDiagonal[i] + 2.0 * s * c * mOffDiagonal[i]
                     + s * s * mDiagonal[i + 1];
-            double newOffDiagonal = (s * s - c * c) * mOffDiagonal[i]
-                    + s * c * (mDiagonal[i] - mDiagonal[i + 1]);
-            double newNextDiagonal = s * s * mDiagonal[i] - 2.0 * s * c * mOffDiagonal[i]
-                    + c * c * mDiagonal[i + 1];
-            if (i != mN - 2) {
-                double newNextOffDiagonal = -c * mOffDiagonal[i + 1];
-                badElement = s * mOffDiagonal[i + 1];
-                mOffDiagonal[i + 1] = newNextOffDiagonal;
+            double newOffDiagonal = s * s * mOffDiagonal[i] - s * c * mDiagonal[i + 1];
+            double newNextDiagonal = c * c * mDiagonal[i + 1] - s * c * mOffDiagonal[i];
+
+            if (i != 0) {
+                newOffDiagonal -= c * c * mOffDiagonal[i];
+                newOffDiagonal += s * c * mDiagonal[i];
+                mOffDiagonal[i - 1] = c * mOffDiagonal[i - 1] + s * badElement;
+                newNextDiagonal += s * s * mDiagonal[i];
+                newNextDiagonal -= s * c * mOffDiagonal[i]; // Yes, again
             }
-            mOffDiagonal[i - 1] = newPriorOffDiagonal;
+
+            if (i != mN - 2) {
+                badElement = s * mOffDiagonal[i + 1];
+                mOffDiagonal[i + 1] *= -c;
+            }
+
             mDiagonal[i] = newDiagonal;
-            mOffDiagonal[i] = newOffDiagonal;
             mDiagonal[i + 1] = newNextDiagonal;
+            mOffDiagonal[i] = newOffDiagonal;
         }
     }
 
