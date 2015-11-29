@@ -42,8 +42,8 @@ public class MainActivity extends Activity {
         M.setOffDiagonal(1, 1.5);
         M.setOffDiagonal(2, 0.75);
         for (int i = 0; i < 100; ++i)
-            M.QRReduce(false);
-        M.QRReduce(true);
+            M.QRReduce();
+        M.print();
     }
     private class WeightFunction implements Function {
         public double eval(double x) {

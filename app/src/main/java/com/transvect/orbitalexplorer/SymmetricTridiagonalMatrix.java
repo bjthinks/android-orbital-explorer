@@ -31,8 +31,7 @@ public class SymmetricTridiagonalMatrix {
         mOffDiagonal[i] = x;
     }
 
-    void QRReduce(boolean log) {
-        if (log) print();
+    void QRReduce() {
         // Start by left and right multiplying by the upper left 2x2 matrix
         // [ c  s ]
         // [ s -c ]
@@ -43,9 +42,6 @@ public class SymmetricTridiagonalMatrix {
                     + mOffDiagonal[0] * mOffDiagonal[0]);
             double s = mOffDiagonal[0] / Math.sqrt(mDiagonal[0] * mDiagonal[0]
                     + mOffDiagonal[0] * mOffDiagonal[0]);
-            if (log) Log.d(TAG, " ");
-            if (log) Log.d(TAG, "s = " + s);
-            if (log) Log.d(TAG, "c = " + c);
 
             double newDiagonal0 = c * c * mDiagonal[0] + 2.0 * s * c * mOffDiagonal[0]
                     + s * s * mDiagonal[1];
@@ -57,9 +53,6 @@ public class SymmetricTridiagonalMatrix {
             mDiagonal[1] = newDiagonal1;
             mOffDiagonal[0] = newOffDiagonal0;
             mOffDiagonal[1] = newOffDiagonal1;
-            if (log) Log.d(TAG, " ");
-            if (log) print();
-            if (log) Log.d(TAG, "bad element = " + badElement);
         }
 
         {
@@ -67,9 +60,6 @@ public class SymmetricTridiagonalMatrix {
                     + badElement * badElement);
             double s = badElement / Math.sqrt(mOffDiagonal[0] * mOffDiagonal[0]
                     + badElement * badElement);
-            if (log) Log.d(TAG, " ");
-            if (log) Log.d(TAG, "s = " + s);
-            if (log) Log.d(TAG, "c = " + c);
 
             double newOffDiagonal0 = c * mOffDiagonal[0] + s * badElement;
             double newDiagonal1 = c * c * mDiagonal[1] + 2.0 * s * c * mOffDiagonal[1]
@@ -85,9 +75,6 @@ public class SymmetricTridiagonalMatrix {
             mOffDiagonal[1] = newOffDiagonal1;
             mDiagonal[2] = newDiagonal2;
             mOffDiagonal[2] = newOffDiagonal2;
-            if (log) Log.d(TAG, " ");
-            if (log) print();
-            if (log) Log.d(TAG, "bad element = " + badElement);
         }
 
         {
@@ -95,9 +82,6 @@ public class SymmetricTridiagonalMatrix {
                     + badElement * badElement);
             double s = badElement / Math.sqrt(mOffDiagonal[1] * mOffDiagonal[1]
                     + badElement * badElement);
-            if (log) Log.d(TAG, " ");
-            if (log) Log.d(TAG, "s = " + s);
-            if (log) Log.d(TAG, "c = " + c);
 
             double newOffDiagonal1 = c * mOffDiagonal[1] + s * badElement;
             double newDiagonal2 = c * c * mDiagonal[2] + 2.0 * s * c * mOffDiagonal[2]
@@ -113,17 +97,10 @@ public class SymmetricTridiagonalMatrix {
             mOffDiagonal[2] = newOffDiagonal2;
             mDiagonal[3] = newDiagonal3;
             // mOffDiagonal[3] = newOffDiagonal3;
-            if (log) Log.d(TAG, " ");
-            if (log) print();
-            // Log.d(TAG, "bad element = " + badElement);
         }
-
-        if (log) Log.d(TAG, " ");
-        if (log) Log.d(TAG, "END ROUND");
-        if (log) Log.d(TAG, " ");
     }
 
-    private void print() {
+    public void print() {
         for (int i = 0; i < mN; ++i)
             Log.d(TAG, "Diag " + i + ": " + getDiagonal(i));
         for (int i = 0; i < mN - 1; ++i)
