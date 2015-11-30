@@ -33,11 +33,16 @@ public class SymmetricTridiagonalMatrix {
 
     public void QRReduce() {
         int n = mN;
+        int fail = 0;
         while (n > 1) {
-            Log.d(TAG, "n = " + n);
             QRReductionStep(n);
-            while (n > 1 && Math.abs(mOffDiagonal[n - 2]) < 1e-15 * mDiagonal[n - 1])
+            ++fail;
+            while (n > 1 && Math.abs(mOffDiagonal[n - 2]) < 1e-15 * Math.abs(mDiagonal[n - 1])) {
                 --n;
+                fail = 0;
+            }
+            if (fail > 32)
+                throw new RuntimeException();
         }
     }
 
