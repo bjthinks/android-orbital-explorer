@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.pm.ConfigurationInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -43,9 +44,7 @@ public class MainActivity extends Activity {
         M.setOffDiagonal(1, 1.5);
         M.setOffDiagonal(2, 0.75);
         M.setOffDiagonal(3, 1.25);
-        for (int i = 0; i < 5; ++i) {
-            M.QRReductionStep();
-        }
+        M.QRReduce();
         M.print();
     }
     private class WeightFunction implements Function {

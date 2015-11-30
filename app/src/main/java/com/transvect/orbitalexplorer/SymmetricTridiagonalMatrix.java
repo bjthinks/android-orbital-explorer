@@ -31,14 +31,24 @@ public class SymmetricTridiagonalMatrix {
         mOffDiagonal[i] = x;
     }
 
-    void QRReductionStep() {
+    public void QRReduce() {
+        int n = mN;
+        while (n > 1) {
+            Log.d(TAG, "n = " + n);
+            QRReductionStep(n);
+            while (n > 1 && Math.abs(mOffDiagonal[n - 2]) < 1e-15 * mDiagonal[n - 1])
+                --n;
+        }
+    }
+
+    private void QRReductionStep(int n) {
         // Choose a "deflation" parameter lambda equal to the larger eigenvalue
         // of the lower-right 2x2 minor.
         double lambda;
         {
-            double a = mDiagonal[mN - 2];
-            double b = mOffDiagonal[mN - 2];
-            double c = mDiagonal[mN - 1];
+            double a = mDiagonal[n - 2];
+            double b = mOffDiagonal[n - 2];
+            double c = mDiagonal[n - 1];
             double d = Math.sqrt((a - c) * (a - c) + 4.0 * b * b);
             double lambda1 = (a + c + d) / 2.0;
             double lambda2 = (a + c - d) / 2.0;
@@ -47,10 +57,9 @@ public class SymmetricTridiagonalMatrix {
             else
                 lambda = lambda2;
         }
-        Log.d(TAG, "Lambda = " + lambda);
 
         double badElement = 0.0;
-        for (int i = 0; i <= mN - 2; ++i) {
+        for (int i = 0; i <= n - 2; ++i) {
 
             double diagonal = mDiagonal[i] - lambda;
             double offDiagonal = mOffDiagonal[i];
@@ -64,9 +73,9 @@ public class SymmetricTridiagonalMatrix {
                 c = mOffDiagonal[i - 1];
                 s = badElement;
             }
-            double n = Math.sqrt(c * c + s * s);
-            c /= n;
-            s /= n;
+            double norm = Math.sqrt(c * c + s * s);
+            c /= norm;
+            s /= norm;
 
             double newDiagonal     = c * c * diagonal + 2.0 * s * c * offDiagonal
                     + s * s * nextDiagonal;
@@ -78,7 +87,7 @@ public class SymmetricTridiagonalMatrix {
             if (i != 0)
                 mOffDiagonal[i - 1] = c * mOffDiagonal[i - 1] + s * badElement;
 
-            if (i != mN - 2) {
+            if (i != n - 2) {
                 badElement = s * mOffDiagonal[i + 1];
                 mOffDiagonal[i + 1] *= -c;
             }
