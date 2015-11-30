@@ -8,11 +8,14 @@ public class SymmetricTridiagonalMatrix {
     int mN;
     double[] mDiagonal;
     double[] mOffDiagonal;
+    double[] mComponent;
 
     public SymmetricTridiagonalMatrix(int N) {
         mN = N;
         mDiagonal = new double[N];
         mOffDiagonal = new double[N - 1];
+        mComponent = new double[N];
+        mComponent[0] = 1.0;
     }
 
     public double getDiagonal(int i) {
@@ -100,6 +103,12 @@ public class SymmetricTridiagonalMatrix {
             mDiagonal[i] = newDiagonal + lambda;
             mOffDiagonal[i] = newOffDiagonal;
             mDiagonal[i + 1] = newNextDiagonal + lambda;
+
+            // Also update the first components of the eigenvectors
+            double newComponent     = c * mComponent[i] + s * mComponent[i + 1];
+            double newNextComponent = s * mComponent[i] - c * mComponent[i + 1];
+            mComponent[i] = newComponent;
+            mComponent[i + 1] = newNextComponent;
         }
     }
 
@@ -108,5 +117,7 @@ public class SymmetricTridiagonalMatrix {
             Log.d(TAG, "Diag " + i + ": " + mDiagonal[i]);
         for (int i = 0; i < mN - 1; ++i)
             Log.d(TAG, "Off-diag " + i + ": " + mOffDiagonal[i]);
+        for (int i = 0; i < mN; ++i)
+            Log.d(TAG, "EV 1st component " + i + ": " + mComponent[i]);
     }
 }
