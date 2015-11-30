@@ -10,6 +10,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.util.Random;
+
 public class MainActivity extends Activity {
     // private static final String TAG = "MainActivity";
 
@@ -34,16 +36,12 @@ public class MainActivity extends Activity {
         mOrbitalView.setRenderer(renderer);
 
         // new OrthogonalPolynomials(new WeightFunction());
-        SymmetricTridiagonalMatrix M = new SymmetricTridiagonalMatrix(5);
-        M.setDiagonal(0, 5);
-        M.setDiagonal(1, 4);
-        M.setDiagonal(2, 7);
-        M.setDiagonal(3, 6);
-        M.setDiagonal(4, 8);
-        M.setOffDiagonal(0, 1);
-        M.setOffDiagonal(1, 1.5);
-        M.setOffDiagonal(2, 0.75);
-        M.setOffDiagonal(3, 1.25);
+        int n = 100;
+        SymmetricTridiagonalMatrix M = new SymmetricTridiagonalMatrix(n);
+        for (int i = 0; i < n; ++i)
+            M.setDiagonal(i, 2.0 * Math.random() - 1.0);
+        for (int i = 0; i < n - 1; ++i)
+            M.setOffDiagonal(i, 2.0 * Math.random() - 1.0);
         M.QRReduce();
         M.print();
     }
