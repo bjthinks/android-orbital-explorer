@@ -105,8 +105,8 @@ public class SymmetricTridiagonalMatrix {
 
     public void print() {
         for (int i = 0; i < mN; ++i)
-            Log.d(TAG, "Diag " + i + ": " + getDiagonal(i));
+            Log.d(TAG, "Diag " + i + ": " + mDiagonal[i]);
         for (int i = 0; i < mN - 1; ++i)
-            Log.d(TAG, "Off-diag " + i + ": " + getOffDiagonal(i));
+            Log.d(TAG, "Off-diag " + i + ": " + mOffDiagonal[i]);
     }
 }
