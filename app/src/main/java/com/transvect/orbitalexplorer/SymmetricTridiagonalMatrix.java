@@ -15,19 +15,19 @@ public class SymmetricTridiagonalMatrix {
         mOffDiagonal = new double[N - 1];
     }
 
-    double getDiagonal(int i) {
+    public double getDiagonal(int i) {
         return mDiagonal[i];
     }
 
-    double getOffDiagonal(int i) {
+    public double getOffDiagonal(int i) {
         return mOffDiagonal[i];
     }
 
-    void setDiagonal(int i, double x) {
+    public void setDiagonal(int i, double x) {
         mDiagonal[i] = x;
     }
 
-    void setOffDiagonal(int i, double x) {
+    public void setOffDiagonal(int i, double x) {
         mOffDiagonal[i] = x;
     }
 
