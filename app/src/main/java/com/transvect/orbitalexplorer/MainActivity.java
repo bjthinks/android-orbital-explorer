@@ -35,19 +35,23 @@ public class MainActivity extends Activity {
         // Start the rendering thread
         mOrbitalView.setRenderer(renderer);
 
-        // new OrthogonalPolynomials(new WeightFunction());
-        int n = 100;
-        SymmetricTridiagonalMatrix M = new SymmetricTridiagonalMatrix(n);
-        for (int i = 0; i < n; ++i)
-            M.setDiagonal(i, 2.0 * Math.random() - 1.0);
-        for (int i = 0; i < n - 1; ++i)
-            M.setOffDiagonal(i, 2.0 * Math.random() - 1.0);
-        M.QRReduce();
-        M.print();
+        new GaussianQuadrature(new WeightFunction(0.0), 2);
     }
     private class WeightFunction implements Function {
+        private double mA;
+
+        public WeightFunction(double a) {
+            mA = a;
+        }
+
         public double eval(double x) {
-            return Math.exp(-Math.abs(x));
+            double r = Math.sqrt(mA * mA + x * x);
+            if (x > 0.0)
+                return Math.exp(-r);
+            else if (x == 0.0)
+                return 0.5 * Math.exp(-r);
+            else
+                return 0.0;
         }
     }
 

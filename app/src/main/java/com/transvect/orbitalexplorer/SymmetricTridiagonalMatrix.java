@@ -26,6 +26,10 @@ public class SymmetricTridiagonalMatrix {
         return mOffDiagonal[i];
     }
 
+    public double getComponent(int i) {
+        return mComponent[i];
+    }
+
     public void setDiagonal(int i, double x) {
         mDiagonal[i] = x;
     }
