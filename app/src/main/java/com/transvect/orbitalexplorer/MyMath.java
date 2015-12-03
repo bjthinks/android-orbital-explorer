@@ -68,8 +68,6 @@ public final class MyMath {
             }
         } while (moreAccurateEstimate[n - 1] != moreAccurateEstimate[n-2]);
 
-        Log.d(TAG, "Romberg integration finished in " + n + " rounds");
-
         return moreAccurateEstimate[n - 1];
     }
 

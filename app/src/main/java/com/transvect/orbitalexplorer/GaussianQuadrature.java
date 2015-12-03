@@ -20,7 +20,6 @@ public class GaussianQuadrature {
             Polynomial xToTheI = Polynomial.variableToThe(i);
             Function integrand = new Product(xToTheI, W);
             moments[i] = MyMath.rombergIntegrate(integrand);
-            Log.d(TAG, "Moment " + i + ": " + moments[i]);
         }
 
         /*
@@ -52,13 +51,6 @@ public class GaussianQuadrature {
         }
         // Now, (D * R)[i][j] = C[i][j]. Note that C has extra columns from the above
         // calculation, which we no longer need.
-        Log.d(TAG, "--- MATRIX DR ---");
-        for (int i = 0; i < N + 1; ++i) {
-            String s = "";
-            for (int j = 0; j < N + 1; ++j)
-                s += " " + C[i][j];
-            Log.d(TAG, "Row " + i + ":" + s);
-        }
 
         /*
          * Step III: The matrix D * R = C above implicitly encodes the Cholesky decomposition
