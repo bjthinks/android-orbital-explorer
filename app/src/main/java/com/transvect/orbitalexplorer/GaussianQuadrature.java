@@ -9,6 +9,16 @@ import android.util.Log;
 public class GaussianQuadrature {
     private static final String TAG = "GaussianQuadrature";
 
+    private double[] mNode, mWeight;
+
+    public double getNode(int i) {
+        return mNode[i];
+    }
+
+    public double getWeight(int i) {
+        return mWeight[i];
+    }
+
     public GaussianQuadrature(Function W, int N) {
 
         /*
@@ -81,9 +91,11 @@ public class GaussianQuadrature {
          */
 
         J.QRReduce();
-        Log.d(TAG, "--- NODES AND WEIGHTS ---");
-        for (int i = 0; i < N; ++i)
-            Log.d(TAG, "Node " + J.getDiagonal(i) + ", weight "
-                    + Math.pow(J.getComponent(i), 2.0) * moments[0]);
+        mNode = new double[N];
+        mWeight = new double[N];
+        for (int i = 0; i < N; ++i) {
+            mNode[i] = J.getDiagonal(i);
+            mWeight[i] = Math.pow(J.getComponent(i), 2.0) * moments[0];
+        }
     }
 }

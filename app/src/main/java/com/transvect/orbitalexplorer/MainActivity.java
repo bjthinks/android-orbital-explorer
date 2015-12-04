@@ -35,7 +35,11 @@ public class MainActivity extends Activity {
         // Start the rendering thread
         mOrbitalView.setRenderer(renderer);
 
-        new GaussianQuadrature(new WeightFunction(0.0), 2);
+        int N = 2;
+        GaussianQuadrature GQ = new GaussianQuadrature(new WeightFunction(0.0), N);
+        for (int i = 0; i < N; ++i)
+            Log.d("MainActivity", "Node " + GQ.getNode(i) + ", weight "
+                    + GQ.getWeight(i));
     }
     private class WeightFunction implements Function {
         private double mA;
