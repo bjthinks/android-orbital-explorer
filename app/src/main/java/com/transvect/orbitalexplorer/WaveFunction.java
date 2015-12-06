@@ -2,7 +2,7 @@ package com.transvect.orbitalexplorer;
 
 public class WaveFunction {
 
-    private Function mRadialFunction;
+    private RadialFunction mRadialFunction;
     private Function mAzimuthalFunction;
     private int mM;
 
@@ -12,7 +12,7 @@ public class WaveFunction {
         mM = M;
     }
 
-    public Function getRadialFunction() {
+    public RadialFunction getRadialFunction() {
         return mRadialFunction;
     }
 
