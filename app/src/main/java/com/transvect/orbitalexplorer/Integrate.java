@@ -13,8 +13,12 @@ public class Integrate extends RenderStage {
     private WaveFunction mWaveFunction;
     private FloatBuffer mRadialData;
     private FloatBuffer mAzimuthalData;
+    private FloatBuffer mQuadratureWeights;
+    private FloatBuffer mQuadratureWeights2;
     private Texture mRadialTexture;
     private Texture mAzimuthalTexture;
+    private Texture mQuadratureWeightTexture;
+    private Texture mQuadratureWeightTexture2;
     private Texture mTexture;
     private Framebuffer mFramebuffer;
     private int mWidth, mHeight;
@@ -38,10 +42,66 @@ public class Integrate extends RenderStage {
         int M = 1;
 
         mWaveFunction = new WaveFunction(Z, N, L, M);
-        mRadialData = functionToBuffer(mWaveFunction.getRadialFunction(),
-                0.0, 16.0, 1024);
+        RadialFunction radialFunction = mWaveFunction.getRadialFunction();
+        mRadialData = functionToBuffer(radialFunction.nonExponentialPart(), 0.0, 16.0, 1024);
         mAzimuthalData = functionToBuffer(mWaveFunction.getAzimuthalFunction(),
                 0.0, Math.PI, 1024);
+
+        // Set up Gaussian Quadrature
+        float[] quadratureWeights = new float[4 * 1025];
+        float[] quadratureWeights2 = new float[4 * 1025];
+        // Multiply by 2 because wave function is squared
+        double exponentialConstant = 2.0 * radialFunction.exponentialConstant();
+        for (int i = 0; i <= 1024; ++i) {
+            double distanceFromOrigin = 16.0 * (double) i / 1024.0;
+            WeightFunction weightFunction
+                    = new WeightFunction(exponentialConstant, distanceFromOrigin);
+            GaussianQuadrature GQ = new GaussianQuadrature(weightFunction, 4);
+            quadratureWeights[4 * i]     = (float) GQ.getNode(0);
+            quadratureWeights[4 * i + 1] = (float) GQ.getWeight(0);
+            quadratureWeights[4 * i + 2] = (float) GQ.getNode(1);
+            quadratureWeights[4 * i + 3] = (float) GQ.getWeight(1);
+            quadratureWeights2[4 * i]     = (float) GQ.getNode(2);
+            quadratureWeights2[4 * i + 1] = (float) GQ.getWeight(2);
+            quadratureWeights2[4 * i + 2] = (float) GQ.getNode(3);
+            quadratureWeights2[4 * i + 3] = (float) GQ.getWeight(3);
+            if (i % 16 == 0)
+                Log.d(TAG, "Data " + i + " :"
+                        + " " + quadratureWeights[4 * i]
+                        + " " + quadratureWeights[4 * i + 1]
+                        + " " + quadratureWeights[4 * i + 2]
+                        + " " + quadratureWeights[4 * i + 3]
+                        + " " + quadratureWeights2[4 * i]
+                        + " " + quadratureWeights2[4 * i + 1]
+                        + " " + quadratureWeights2[4 * i + 2]
+                        + " " + quadratureWeights2[4 * i + 3]);
+        }
+        mQuadratureWeights = floatArrayToBuffer(quadratureWeights);
+        mQuadratureWeights2 = floatArrayToBuffer(quadratureWeights2);
+    }
+
+    private class WeightFunction implements Function {
+        private double mExponentialConstant;
+        private double mDistanceFromOrigin;
+
+        public WeightFunction(double exponentialConstant, double distanceFromOrigin) {
+            mExponentialConstant = exponentialConstant;
+            mDistanceFromOrigin = distanceFromOrigin;
+        }
+
+        public double eval(double x) {
+            if (x < 0.0)
+                return 0.0;
+
+            double r = Math.sqrt(mDistanceFromOrigin * mDistanceFromOrigin + x * x);
+            // Multiply by 2 because the wave function is squared
+            double value = Math.exp(mExponentialConstant * r);
+
+            if (x == 0.0)
+                value *= 0.5;
+
+            return value;
+        }
     }
 
     public void newContext(AssetManager assetManager) {
@@ -66,6 +126,30 @@ public class Integrate extends RenderStage {
         // Create azimuthal texture
         mAzimuthalTexture = new Texture(orbitalFormat, orbitalType, orbitalInternalFormat);
         mAzimuthalTexture.bindToTexture2DAndSetImage(1024 + 1, 1, mAzimuthalData);
+
+        // Floating point textures are not filterable
+        GLES30.glTexParameteri(GLES30.GL_TEXTURE_2D,
+                GLES30.GL_TEXTURE_MIN_FILTER, GLES30.GL_NEAREST);
+        GLES30.glTexParameteri(GLES30.GL_TEXTURE_2D,
+                GLES30.GL_TEXTURE_MAG_FILTER, GLES30.GL_NEAREST);
+
+        final int quadratureFormat = GLES30.GL_RGBA;
+        final int quadratureType = GLES30.GL_FLOAT;
+        final int quadratureInternalFormat = GLES30.GL_RGBA32F;
+        // Create quadrature weight texture
+        mQuadratureWeightTexture
+                = new Texture(quadratureFormat, quadratureType, quadratureInternalFormat);
+        mQuadratureWeightTexture.bindToTexture2DAndSetImage(1024 + 1, 1, mQuadratureWeights);
+
+        // Floating point textures are not filterable
+        GLES30.glTexParameteri(GLES30.GL_TEXTURE_2D,
+                GLES30.GL_TEXTURE_MIN_FILTER, GLES30.GL_NEAREST);
+        GLES30.glTexParameteri(GLES30.GL_TEXTURE_2D,
+                GLES30.GL_TEXTURE_MAG_FILTER, GLES30.GL_NEAREST);
+
+        mQuadratureWeightTexture2
+                = new Texture(quadratureFormat, quadratureType, quadratureInternalFormat);
+        mQuadratureWeightTexture2.bindToTexture2DAndSetImage(1024 + 1, 1, mQuadratureWeights2);
 
         // Floating point textures are not filterable
         GLES30.glTexParameteri(GLES30.GL_TEXTURE_2D,
@@ -127,6 +211,16 @@ public class Integrate extends RenderStage {
         mAzimuthalTexture.bindToTexture2D();
         int azimuthalHandle = GLES30.glGetUniformLocation(mProgram, "azimuthal");
         GLES30.glUniform1i(azimuthalHandle, 1);
+
+        GLES30.glActiveTexture(GLES30.GL_TEXTURE2);
+        mQuadratureWeightTexture.bindToTexture2D();
+        int quadratureWeightHandle = GLES30.glGetUniformLocation(mProgram, "quadrature");
+        GLES30.glUniform1i(quadratureWeightHandle, 2);
+
+        GLES30.glActiveTexture(GLES30.GL_TEXTURE3);
+        mQuadratureWeightTexture2.bindToTexture2D();
+        int quadratureWeightHandle2 = GLES30.glGetUniformLocation(mProgram, "quadrature2");
+        GLES30.glUniform1i(quadratureWeightHandle2, 3);
 
         int MHandle = GLES30.glGetUniformLocation(mProgram, "M");
         GLES30.glUniform1f(MHandle, (float) mWaveFunction.getM());

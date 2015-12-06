@@ -34,29 +34,6 @@ public class MainActivity extends Activity {
         OrbitalRenderer renderer = new OrbitalRenderer(mOrbitalView, getAssets());
         // Start the rendering thread
         mOrbitalView.setRenderer(renderer);
-
-        int N = 2;
-        GaussianQuadrature GQ = new GaussianQuadrature(new WeightFunction(0.0), N);
-        for (int i = 0; i < N; ++i)
-            Log.d("MainActivity", "Node " + GQ.getNode(i) + ", weight "
-                    + GQ.getWeight(i));
-    }
-    private class WeightFunction implements Function {
-        private double mA;
-
-        public WeightFunction(double a) {
-            mA = a;
-        }
-
-        public double eval(double x) {
-            double r = Math.sqrt(mA * mA + x * x);
-            if (x > 0.0)
-                return Math.exp(-r);
-            else if (x == 0.0)
-                return 0.5 * Math.exp(-r);
-            else
-                return 0.0;
-        }
     }
 
     private boolean hasGLES30() {

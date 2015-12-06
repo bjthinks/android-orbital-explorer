@@ -38,7 +38,7 @@ public class Camera implements Parcelable {
     };
 
     private double mCameraDistance = 16.0;
-    private static final double MIN_CAMERA_DISTANCE = 1.0;
+    private static final double MIN_CAMERA_DISTANCE = 1.5;
     private static final double MAX_CAMERA_DISTANCE = 32.0;
 
     // Two finger zoom by an incremental size ratio of f
@@ -117,8 +117,8 @@ public class Camera implements Parcelable {
 
     public float[] computeShaderTransform(double aspectRatio) {
         float ratio = (float) Math.sqrt(aspectRatio);
-        float near = (float) Math.max(1.0f, mCameraDistance - 16.0);
-        float far = (float) (mCameraDistance + 16.0);
+        float near = (float) mCameraDistance;
+        float far = (float) (mCameraDistance + 1.0);
         float leftRight = near * ratio;
         float bottomTop = near / ratio;
         float[] projectionMatrix = new float[16];
