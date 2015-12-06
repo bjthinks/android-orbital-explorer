@@ -15,24 +15,34 @@ package com.transvect.orbitalexplorer;
  */
 
 public class RadialFunction implements Function {
-    private double radialScaleFactor;
+    private double mRadialScaleFactor;
+    private double mExponentialConstant;
     private Polynomial mPolynomialPart;
 
     public RadialFunction(int Z, int N, int L) {
         double dZ = (double) Z;
         double dN = (double) N;
 
-        radialScaleFactor = 2.0 * dZ / dN;
+        mRadialScaleFactor = 2.0 * dZ / dN;
 
-        double constant = Math.pow(2.0 * dZ / dN, 1.5)
+        mExponentialConstant = -mRadialScaleFactor / 2.0;
+
+        double constantFactors = Math.pow(2.0 * dZ / dN, 1.5)
                 * Math.sqrt(MyMath.factorial(N - L - 1) / (2.0 * dN * MyMath.factorial(N + L)));
 
-        mPolynomialPart = Polynomial.variableToThe(L).multiply(constant)
+        mPolynomialPart = Polynomial.variableToThe(L).multiply(constantFactors)
                 .multiply(MyMath.generalizedLaguerrePolynomial(N - L - 1, 2 * L + 1));
     }
 
+    public double exponentialConstant() {
+        return mExponentialConstant;
+    }
+
+    public double nonExponentialPart(double r) {
+        return mPolynomialPart.eval(mRadialScaleFactor * r);
+    }
+
     public double eval(double r) {
-        double scaledR = radialScaleFactor * r;
-        return mPolynomialPart.eval(scaledR) * Math.exp(- scaledR / 2.0);
+        return nonExponentialPart(r) * Math.exp(exponentialConstant() * r);
     }
 }
