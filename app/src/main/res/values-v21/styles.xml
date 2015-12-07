@@ -1,15 +1,16 @@
 <resources>
 
-<!-- Base application theme. -->
-<style name="AppTheme" parent="android:Theme.Material">
-    <item name="android:windowActionBarOverlay">true</item>
-    <item name="android:actionBarStyle">@style/MyActionBar</item>
-    <item name="android:windowTranslucentStatus">true</item>
-    <item name="android:windowTranslucentNavigation">true</item>
-</style>
+    <style name="OpaqueTheme" parent="android:Theme.Material" />
 
-<style name="MyActionBar" parent="android:Widget.Material.ActionBar">
-    <item name="android:background">@android:color/transparent</item>
-</style>
+    <style name="TransparentTheme" parent="android:Theme.Material">
+        <item name="android:windowActionBarOverlay">true</item>
+        <item name="android:actionBarStyle">@style/TransparentActionBar</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentNavigation">true</item>
+    </style>
+
+    <style name="TransparentActionBar" parent="android:Widget.Material.ActionBar">
+        <item name="android:background">@android:color/transparent</item>
+    </style>
 
 </resources>
