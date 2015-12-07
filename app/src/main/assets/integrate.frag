@@ -15,7 +15,7 @@ uniform sampler2D azimuthal;
 const float numAzimuthalSubdivisions = 1024.0;
 uniform sampler2D quadrature;
 uniform sampler2D quadrature2;
-const float numQuadratureSubdivisions = 1024.0;
+const float numQuadratureSubdivisions = 64.0;
 uniform float M;
 
 float radialPart(float r) {

@@ -48,12 +48,12 @@ public class Integrate extends RenderStage {
                 0.0, Math.PI, 1024);
 
         // Set up Gaussian Quadrature
-        float[] quadratureWeights = new float[4 * 1025];
-        float[] quadratureWeights2 = new float[4 * 1025];
+        float[] quadratureWeights = new float[4 * 65];
+        float[] quadratureWeights2 = new float[4 * 65];
         // Multiply by 2 because wave function is squared
         double exponentialConstant = 2.0 * radialFunction.exponentialConstant();
-        for (int i = 0; i <= 1024; ++i) {
-            double distanceFromOrigin = 16.0 * (double) i / 1024.0;
+        for (int i = 0; i <= 64; ++i) {
+            double distanceFromOrigin = 16.0 * (double) i / 64.0;
             WeightFunction weightFunction
                     = new WeightFunction(exponentialConstant, distanceFromOrigin);
             GaussianQuadrature GQ = new GaussianQuadrature(weightFunction, 4);
@@ -65,7 +65,7 @@ public class Integrate extends RenderStage {
             quadratureWeights2[4 * i + 1] = (float) GQ.getWeight(2);
             quadratureWeights2[4 * i + 2] = (float) GQ.getNode(3);
             quadratureWeights2[4 * i + 3] = (float) GQ.getWeight(3);
-            if (i % 16 == 0)
+            if (i % 8 == 0)
                 Log.d(TAG, "Data " + i + " :"
                         + " " + quadratureWeights[4 * i]
                         + " " + quadratureWeights[4 * i + 1]
@@ -139,7 +139,7 @@ public class Integrate extends RenderStage {
         // Create quadrature weight texture
         mQuadratureWeightTexture
                 = new Texture(quadratureFormat, quadratureType, quadratureInternalFormat);
-        mQuadratureWeightTexture.bindToTexture2DAndSetImage(1024 + 1, 1, mQuadratureWeights);
+        mQuadratureWeightTexture.bindToTexture2DAndSetImage(64 + 1, 1, mQuadratureWeights);
 
         // Floating point textures are not filterable
         GLES30.glTexParameteri(GLES30.GL_TEXTURE_2D,
@@ -149,7 +149,7 @@ public class Integrate extends RenderStage {
 
         mQuadratureWeightTexture2
                 = new Texture(quadratureFormat, quadratureType, quadratureInternalFormat);
-        mQuadratureWeightTexture2.bindToTexture2DAndSetImage(1024 + 1, 1, mQuadratureWeights2);
+        mQuadratureWeightTexture2.bindToTexture2DAndSetImage(64 + 1, 1, mQuadratureWeights2);
 
         // Floating point textures are not filterable
         GLES30.glTexParameteri(GLES30.GL_TEXTURE_2D,
