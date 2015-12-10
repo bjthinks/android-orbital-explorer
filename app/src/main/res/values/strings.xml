@@ -2,4 +2,30 @@
     <string name="app_name">Orbital Explorer</string>
     <string name="action_example">Example action</string>
     <string name="action_settings">Settings</string>
+
+    <string name="pref_sync">Sync</string>
+    <string name="pref_sync_summ">Sync something</string>
+    <string name="pref_syncConnectionType">Connection type</string>
+    <string-array name="pref_syncConnectionTypes_entries">
+        <item>Type I</item>
+        <item>Type II</item>
+        <item>Type III</item>
+    </string-array>
+    <string-array name="pref_syncConnectionTypes_values">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+    <string name="pref_syncConnectionTypes_default">2</string>
+
+    <string name="prefColorTitle">Color Mode</string>
+    <string-array name="prefColorEntries">
+        <item>Normal</item>
+        <item>Grayscale</item>
+    </string-array>
+    <string-array name="prefColorValues">
+        <item>0</item>
+        <item>1</item>
+    </string-array>
+    <string name="prefColorDefault">0</string>
 </resources>

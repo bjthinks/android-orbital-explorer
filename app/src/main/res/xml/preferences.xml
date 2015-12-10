@@ -1,8 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
     <CheckBoxPreference
         android:key="pref_sync"
-        android:title="Color Mode"
-        android:summary="This doesn't do anything"
+        android:title="@string/pref_sync"
+        android:summary="@string/pref_sync_summ"
         android:defaultValue="true" />
+    <ListPreference
+        android:dependency="pref_sync"
+        android:key="pref_syncConnectionType"
+        android:title="@string/pref_syncConnectionType"
+        android:dialogTitle="@string/pref_syncConnectionType"
+        android:entries="@array/pref_syncConnectionTypes_entries"
+        android:entryValues="@array/pref_syncConnectionTypes_values"
+        android:defaultValue="@string/pref_syncConnectionTypes_default" />
+    <ListPreference
+        android:key="prefColor"
+        android:title="@string/prefColorTitle"
+        android:dialogTitle="@string/prefColorTitle"
+        android:entries="@array/prefColorEntries"
+        android:entryValues="@array/prefColorValues"
+        android:defaultValue="@string/prefColorDefault" />
 </PreferenceScreen>
