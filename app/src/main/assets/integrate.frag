@@ -17,6 +17,7 @@ uniform sampler2D quadrature;
 uniform sampler2D quadrature2;
 const float numQuadratureSubdivisions = 64.0;
 uniform float M;
+uniform int colorMode;
 
 float radialPart(float r) {
     float positionInTexture = r / maximumRadius * numRadialSubdivisions;
@@ -117,6 +118,13 @@ void main() {
     total *= 50.0;
 
     if (total.z > 0.0) {
+        if (colorMode == 1)
+            total.xy = vec2(0);
+        else if (colorMode == 2) {
+            float angle = pi * 4.0 / 9.0;
+            vec2 good = vec2(cos(angle), sin(angle));
+            total.xy = good * dot(total.xy, good);
+        }
         float totalScaleFactor = (1.0 - exp(-total.z)) / total.z;
         total *= totalScaleFactor;
         color = ivec3(total * 2147483647.0);

@@ -1,5 +1,6 @@
 package com.transvect.orbitalexplorer;
 
+import android.content.Context;
 import android.content.res.AssetManager;
 import android.opengl.GLSurfaceView;
 
@@ -17,10 +18,10 @@ public class OrbitalRenderer implements GLSurfaceView.Renderer {
     private float mAspectRatio = 1.0f;
 
     // Main thread
-    public OrbitalRenderer(OrbitalView orbitalView, AssetManager assetManager) {
+    public OrbitalRenderer(OrbitalView orbitalView, Context context, AssetManager assetManager) {
         mOrbitalView = orbitalView;
         mAssetManager = assetManager;
-        mIntegrate = new Integrate();
+        mIntegrate = new Integrate(context);
         mColorModel = new ColorModel();
         mEnlarge = new Enlarge();
     }

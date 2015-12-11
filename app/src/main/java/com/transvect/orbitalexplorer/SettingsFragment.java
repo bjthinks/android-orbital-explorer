@@ -8,7 +8,7 @@ import android.preference.PreferenceFragment;
 import android.util.Log;
 
 public class SettingsFragment extends PreferenceFragment
-        /* implements SharedPreferences.OnSharedPreferenceChangeListener */ {
+        implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -16,15 +16,14 @@ public class SettingsFragment extends PreferenceFragment
         addPreferencesFromResource(R.xml.preferences);
     }
 
-    /* @Override
+    @Override
     public void onResume() {
         super.onResume();
         getPreferenceManager().getSharedPreferences()
                 .registerOnSharedPreferenceChangeListener(this);
-        ListPreference listPref = (ListPreference)
-                findPreference("prefColor");
-        if (listPref != null)
-            listPref.setSummary(listPref.getEntry());
+        ListPreference prefColor = (ListPreference) findPreference("prefColor");
+        if (prefColor != null)
+            prefColor.setSummary(prefColor.getEntry());
     }
 
     @Override
@@ -42,5 +41,5 @@ public class SettingsFragment extends PreferenceFragment
             ListPreference listPref = (ListPreference) pref;
             pref.setSummary(listPref.getEntry());
         }
-    } */
+    }
 }

@@ -1,5 +1,6 @@
 package com.transvect.orbitalexplorer;
 
+import android.content.Context;
 import android.content.res.AssetManager;
 import android.opengl.GLES30;
 import android.util.Log;
@@ -7,6 +8,8 @@ import java.nio.FloatBuffer;
 
 public class Integrate extends RenderStage {
     private static final String TAG = "Integrate";
+
+    RenderPreferences mRenderPreferences;
 
     private int mProgram;
     private FloatBuffer mVertexBuffer;
@@ -27,7 +30,9 @@ public class Integrate extends RenderStage {
         return mTexture;
     }
 
-    Integrate() {
+    Integrate(Context context) {
+        mRenderPreferences = new RenderPreferences(context);
+
         float squareCoordinates[] = {
                 -1.0f, -1.0f,
                 -1.0f,  1.0f,
@@ -221,6 +226,9 @@ public class Integrate extends RenderStage {
         mQuadratureWeightTexture2.bindToTexture2D();
         int quadratureWeightHandle2 = GLES30.glGetUniformLocation(mProgram, "quadrature2");
         GLES30.glUniform1i(quadratureWeightHandle2, 3);
+
+        int colorModeHandle = GLES30.glGetUniformLocation(mProgram, "colorMode");
+        GLES30.glUniform1i(colorModeHandle, mRenderPreferences.getColorMode());
 
         int MHandle = GLES30.glGetUniformLocation(mProgram, "M");
         GLES30.glUniform1f(MHandle, (float) mWaveFunction.getM());

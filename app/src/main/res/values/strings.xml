@@ -22,10 +22,12 @@
     <string-array name="prefColorEntries">
         <item>Normal</item>
         <item>Grayscale</item>
+        <item>Red-green colorblind (experimental)</item>
     </string-array>
     <string-array name="prefColorValues">
         <item>0</item>
         <item>1</item>
+        <item>2</item>
     </string-array>
     <string name="prefColorDefault">0</string>
 </resources>
