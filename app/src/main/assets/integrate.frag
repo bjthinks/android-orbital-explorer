@@ -32,17 +32,21 @@ float radialPart(float r) {
 }
 
 float azimuthalPart(float theta) {
+    float result;
     float positionInTexture = theta / pi * numAzimuthalSubdivisions;
-    if (positionInTexture >= numAzimuthalSubdivisions)
-        // TODO handle this case more robustly
-        positionInTexture = numAzimuthalSubdivisions - 0.01;
-    float leftTexturePosition = trunc(positionInTexture);
-    float leftTextureValue = texelFetch(azimuthal, ivec2(leftTexturePosition, 0), 0).x;
-    float rightTexturePosition = leftTexturePosition + 1.0;
-    float rightTextureValue = texelFetch(azimuthal, ivec2(rightTexturePosition, 0), 0).x;
-    float interpolationValue = fract(positionInTexture);
-    return mix(leftTextureValue, rightTextureValue, interpolationValue);
-    // was: return 1.0 / sqrt(2.0);
+    if (positionInTexture >= numAzimuthalSubdivisions) {
+        float rightTexturePosition = numAzimuthalSubdivisions;
+        float rightTextureValue = texelFetch(azimuthal, ivec2(rightTexturePosition, 0), 0).x;
+        result = rightTextureValue;
+    } else {
+        float leftTexturePosition = trunc(positionInTexture);
+        float leftTextureValue = texelFetch(azimuthal, ivec2(leftTexturePosition, 0), 0).x;
+        float rightTexturePosition = leftTexturePosition + 1.0;
+        float rightTextureValue = texelFetch(azimuthal, ivec2(rightTexturePosition, 0), 0).x;
+        float interpolationValue = fract(positionInTexture);
+        result = mix(leftTextureValue, rightTextureValue, interpolationValue);
+    }
+    return result;
 }
 
 vec4 quadratureData(float distanceToOrigin) {

@@ -26,6 +26,8 @@ public class Integrate extends RenderStage {
     private Framebuffer mFramebuffer;
     private int mWidth, mHeight;
 
+    private final int AZIMUTHAL_TEXTURE_SIZE = 65;
+
     public Texture getTexture() {
         return mTexture;
     }
@@ -50,7 +52,7 @@ public class Integrate extends RenderStage {
         RadialFunction radialFunction = mWaveFunction.getRadialFunction();
         mRadialData = functionToBuffer(radialFunction.nonExponentialPart(), 0.0, 16.0, 1024);
         mAzimuthalData = functionToBuffer(mWaveFunction.getAzimuthalFunction(),
-                0.0, Math.PI, 1024);
+                0.0, Math.PI, AZIMUTHAL_TEXTURE_SIZE - 1);
 
         // Set up Gaussian Quadrature
         float[] quadratureWeights = new float[4 * 65];
@@ -130,7 +132,7 @@ public class Integrate extends RenderStage {
 
         // Create azimuthal texture
         mAzimuthalTexture = new Texture(orbitalFormat, orbitalType, orbitalInternalFormat);
-        mAzimuthalTexture.bindToTexture2DAndSetImage(1024 + 1, 1, mAzimuthalData);
+        mAzimuthalTexture.bindToTexture2DAndSetImage(AZIMUTHAL_TEXTURE_SIZE, 1, mAzimuthalData);
 
         // Floating point textures are not filterable
         GLES30.glTexParameteri(GLES30.GL_TEXTURE_2D,
@@ -227,7 +229,7 @@ public class Integrate extends RenderStage {
 
         setUniformFloat("maximumRadius", 16.0f);
         setUniformFloat("numRadialSubdivisions", 1024.0f);
-        setUniformFloat("numAzimuthalSubdivisions", 1024.0f);
+        setUniformFloat("numAzimuthalSubdivisions", (float) (AZIMUTHAL_TEXTURE_SIZE - 1));
         setUniformFloat("numQuadratureSubdivisions", 64.0f);
         setUniformFloat("M", (float) mWaveFunction.getM());
 
