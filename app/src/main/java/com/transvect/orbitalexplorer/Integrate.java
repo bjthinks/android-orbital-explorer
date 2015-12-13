@@ -26,6 +26,7 @@ public class Integrate extends RenderStage {
     private Framebuffer mFramebuffer;
     private int mWidth, mHeight;
 
+    private final int RADIAL_TEXTURE_SIZE = 129;
     private final int AZIMUTHAL_TEXTURE_SIZE = 65;
 
     public Texture getTexture() {
@@ -50,7 +51,8 @@ public class Integrate extends RenderStage {
 
         mWaveFunction = new WaveFunction(Z, N, L, M);
         RadialFunction radialFunction = mWaveFunction.getRadialFunction();
-        mRadialData = functionToBuffer(radialFunction.nonExponentialPart(), 0.0, 16.0, 1024);
+        mRadialData = functionToBuffer(radialFunction.nonExponentialPart(),
+                0.0, 16.0, RADIAL_TEXTURE_SIZE - 1);
         mAzimuthalData = functionToBuffer(mWaveFunction.getAzimuthalFunction(),
                 0.0, Math.PI, AZIMUTHAL_TEXTURE_SIZE - 1);
 
@@ -122,7 +124,7 @@ public class Integrate extends RenderStage {
 
         // Create radial texture
         mRadialTexture = new Texture(orbitalFormat, orbitalType, orbitalInternalFormat);
-        mRadialTexture.bindToTexture2DAndSetImage(1024 + 1, 1, mRadialData);
+        mRadialTexture.bindToTexture2DAndSetImage(RADIAL_TEXTURE_SIZE, 1, mRadialData);
 
         // Floating point textures are not filterable
         GLES30.glTexParameteri(GLES30.GL_TEXTURE_2D,
@@ -228,7 +230,7 @@ public class Integrate extends RenderStage {
         setUniformInt("colorMode", mRenderPreferences.getColorMode());
 
         setUniformFloat("maximumRadius", 16.0f);
-        setUniformFloat("numRadialSubdivisions", 1024.0f);
+        setUniformFloat("numRadialSubdivisions", (float) (RADIAL_TEXTURE_SIZE - 1));
         setUniformFloat("numAzimuthalSubdivisions", (float) (AZIMUTHAL_TEXTURE_SIZE - 1));
         setUniformFloat("numQuadratureSubdivisions", 64.0f);
         setUniformFloat("M", (float) mWaveFunction.getM());
