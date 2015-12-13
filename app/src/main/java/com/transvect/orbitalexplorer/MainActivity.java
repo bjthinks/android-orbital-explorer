@@ -32,7 +32,7 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
         mOrbitalView = (OrbitalView) findViewById(R.id.orbitalview);
         // Make an OrbitalRenderer. Needs assets for shader code.
-        OrbitalRenderer renderer = new OrbitalRenderer(mOrbitalView, this, getAssets());
+        OrbitalRenderer renderer = new OrbitalRenderer(mOrbitalView, this);
         // Start the rendering thread
         mOrbitalView.setRenderer(renderer);
     }

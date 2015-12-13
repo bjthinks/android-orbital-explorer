@@ -18,9 +18,9 @@ public class OrbitalRenderer implements GLSurfaceView.Renderer {
     private float mAspectRatio = 1.0f;
 
     // Main thread
-    public OrbitalRenderer(OrbitalView orbitalView, Context context, AssetManager assetManager) {
+    public OrbitalRenderer(OrbitalView orbitalView, Context context) {
         mOrbitalView = orbitalView;
-        mAssetManager = assetManager;
+        mAssetManager = context.getAssets();
         mIntegrate = new Integrate(context);
         mColorModel = new ColorModel();
         mEnlarge = new Enlarge();
