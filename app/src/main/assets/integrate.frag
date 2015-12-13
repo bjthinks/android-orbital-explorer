@@ -9,13 +9,13 @@ out ivec3 color;
 
 // Orbital
 uniform sampler2D radial;
-const float maximumRadius = 16.0;
-const float numRadialSubdivisions = 1024.0;
+uniform float maximumRadius;
+uniform float numRadialSubdivisions;
 uniform sampler2D azimuthal;
-const float numAzimuthalSubdivisions = 1024.0;
+uniform float numAzimuthalSubdivisions;
 uniform sampler2D quadrature;
 uniform sampler2D quadrature2;
-const float numQuadratureSubdivisions = 64.0;
+uniform float numQuadratureSubdivisions;
 uniform float M;
 uniform int colorMode;
 

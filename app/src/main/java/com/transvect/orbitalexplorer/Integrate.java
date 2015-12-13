@@ -209,29 +209,27 @@ public class Integrate extends RenderStage {
 
         GLES30.glActiveTexture(GLES30.GL_TEXTURE0);
         mRadialTexture.bindToTexture2D();
-        int radialHandle = GLES30.glGetUniformLocation(mProgram, "radial");
-        GLES30.glUniform1i(radialHandle, 0);
+        setUniformInt("radial", 0);
 
         GLES30.glActiveTexture(GLES30.GL_TEXTURE1);
         mAzimuthalTexture.bindToTexture2D();
-        int azimuthalHandle = GLES30.glGetUniformLocation(mProgram, "azimuthal");
-        GLES30.glUniform1i(azimuthalHandle, 1);
+        setUniformInt("azimuthal", 1);
 
         GLES30.glActiveTexture(GLES30.GL_TEXTURE2);
         mQuadratureWeightTexture.bindToTexture2D();
-        int quadratureWeightHandle = GLES30.glGetUniformLocation(mProgram, "quadrature");
-        GLES30.glUniform1i(quadratureWeightHandle, 2);
+        setUniformInt("quadrature", 2);
 
         GLES30.glActiveTexture(GLES30.GL_TEXTURE3);
         mQuadratureWeightTexture2.bindToTexture2D();
-        int quadratureWeightHandle2 = GLES30.glGetUniformLocation(mProgram, "quadrature2");
-        GLES30.glUniform1i(quadratureWeightHandle2, 3);
+        setUniformInt("quadrature2", 3);
 
-        int colorModeHandle = GLES30.glGetUniformLocation(mProgram, "colorMode");
-        GLES30.glUniform1i(colorModeHandle, mRenderPreferences.getColorMode());
+        setUniformInt("colorMode", mRenderPreferences.getColorMode());
 
-        int MHandle = GLES30.glGetUniformLocation(mProgram, "M");
-        GLES30.glUniform1f(MHandle, (float) mWaveFunction.getM());
+        setUniformFloat("maximumRadius", 16.0f);
+        setUniformFloat("numRadialSubdivisions", 1024.0f);
+        setUniformFloat("numAzimuthalSubdivisions", 1024.0f);
+        setUniformFloat("numQuadratureSubdivisions", 64.0f);
+        setUniformFloat("M", (float) mWaveFunction.getM());
 
         int mvpMatrixHandle = GLES30.glGetUniformLocation(mProgram, "shaderTransform");
         GLES30.glUniformMatrix4fv(mvpMatrixHandle, 1, false, shaderTransform, 0);
@@ -245,5 +243,15 @@ public class Integrate extends RenderStage {
         GLES30.glDrawArrays(GLES30.GL_TRIANGLE_FAN, 0, 4);
         GLES30.glDisableVertexAttribArray(inPositionHandle);
         getGLError();
+    }
+
+    void setUniformInt(String name, int value) {
+        int handle = GLES30.glGetUniformLocation(mProgram, name);
+        GLES30.glUniform1i(handle, value);
+    }
+
+    void setUniformFloat(String name, float value) {
+        int handle = GLES30.glGetUniformLocation(mProgram, name);
+        GLES30.glUniform1f(handle, value);
     }
 }
