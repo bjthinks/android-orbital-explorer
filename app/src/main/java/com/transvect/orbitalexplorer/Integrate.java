@@ -27,8 +27,8 @@ public class Integrate extends RenderStage {
     private int mWidth, mHeight;
 
     private final double MAXIMUM_RADIUS = 16.0;
-    private final int RADIAL_TEXTURE_SIZE = 129;
-    private final int AZIMUTHAL_TEXTURE_SIZE = 65;
+    private final int RADIAL_TEXTURE_SIZE = 128;
+    private final int AZIMUTHAL_TEXTURE_SIZE = 64;
     private final int QUADRATURE_SIZE = 128;
 
     public Texture getTexture() {
