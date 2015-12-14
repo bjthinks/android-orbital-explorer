@@ -1,15 +1,15 @@
 <resources>
 
-    <style name="OpaqueTheme" parent="android:Theme.Holo" />
-
-    <style name="TransparentTheme" parent="android:Theme.Holo">
-        <item name="android:windowActionBarOverlay">true</item>
-        <item name="android:actionBarStyle">@style/TransparentActionBar</item>
+    <style name="OpaqueTheme" parent="android:Theme.Holo">
     </style>
 
-    <!-- TODO make icon and test if it shows on Holo action bar -->
-    <style name="TransparentActionBar" parent="android:Widget.Holo.ActionBar">
-        <item name="android:background">@android:color/transparent</item>
+    <style name="TransparentTheme" parent="OpaqueTheme">
+        <item name="android:textColorPrimary">@color/white</item>
+        <item name="android:textColorSecondary">@color/white</item>
+        <item name="android:windowBackground">@null</item>
+
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowActionBar">false</item>
     </style>
 
 </resources>
