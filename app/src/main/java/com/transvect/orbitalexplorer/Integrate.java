@@ -26,8 +26,10 @@ public class Integrate extends RenderStage {
     private Framebuffer mFramebuffer;
     private int mWidth, mHeight;
 
+    private final double MAXIMUM_RADIUS = 16.0;
     private final int RADIAL_TEXTURE_SIZE = 129;
     private final int AZIMUTHAL_TEXTURE_SIZE = 65;
+    private final int QUADRATURE_SIZE = 128;
 
     public Texture getTexture() {
         return mTexture;
@@ -52,17 +54,17 @@ public class Integrate extends RenderStage {
         mWaveFunction = new WaveFunction(Z, N, L, M);
         RadialFunction radialFunction = mWaveFunction.getRadialFunction();
         mRadialData = functionToBuffer(radialFunction.nonExponentialPart(),
-                0.0, 16.0, RADIAL_TEXTURE_SIZE - 1);
+                0.0, MAXIMUM_RADIUS, RADIAL_TEXTURE_SIZE - 1);
         mAzimuthalData = functionToBuffer(mWaveFunction.getAzimuthalFunction(),
                 0.0, Math.PI, AZIMUTHAL_TEXTURE_SIZE - 1);
 
         // Set up Gaussian Quadrature
-        float[] quadratureWeights = new float[4 * 65];
-        float[] quadratureWeights2 = new float[4 * 65];
+        float[] quadratureWeights = new float[4 * QUADRATURE_SIZE];
+        float[] quadratureWeights2 = new float[4 * QUADRATURE_SIZE];
         // Multiply by 2 because wave function is squared
         double exponentialConstant = 2.0 * radialFunction.exponentialConstant();
-        for (int i = 0; i <= 64; ++i) {
-            double distanceFromOrigin = 16.0 * (double) i / 64.0;
+        for (int i = 0; i < QUADRATURE_SIZE; ++i) {
+            double distanceFromOrigin = MAXIMUM_RADIUS * (double) i / (double) QUADRATURE_SIZE;
             WeightFunction weightFunction
                     = new WeightFunction(exponentialConstant, distanceFromOrigin);
             GaussianQuadrature GQ = new GaussianQuadrature(weightFunction, 4);
@@ -148,7 +150,8 @@ public class Integrate extends RenderStage {
         // Create quadrature weight texture
         mQuadratureWeightTexture
                 = new Texture(quadratureFormat, quadratureType, quadratureInternalFormat);
-        mQuadratureWeightTexture.bindToTexture2DAndSetImage(64 + 1, 1, mQuadratureWeights);
+        mQuadratureWeightTexture.bindToTexture2DAndSetImage(
+                QUADRATURE_SIZE, 1, mQuadratureWeights);
 
         // Floating point textures are not filterable
         GLES30.glTexParameteri(GLES30.GL_TEXTURE_2D,
@@ -158,7 +161,8 @@ public class Integrate extends RenderStage {
 
         mQuadratureWeightTexture2
                 = new Texture(quadratureFormat, quadratureType, quadratureInternalFormat);
-        mQuadratureWeightTexture2.bindToTexture2DAndSetImage(64 + 1, 1, mQuadratureWeights2);
+        mQuadratureWeightTexture2.bindToTexture2DAndSetImage(
+                QUADRATURE_SIZE, 1, mQuadratureWeights2);
 
         // Floating point textures are not filterable
         GLES30.glTexParameteri(GLES30.GL_TEXTURE_2D,
@@ -229,10 +233,10 @@ public class Integrate extends RenderStage {
 
         setUniformInt("colorMode", mRenderPreferences.getColorMode());
 
-        setUniformFloat("maximumRadius", 16.0f);
+        setUniformFloat("maximumRadius", (float) MAXIMUM_RADIUS);
         setUniformFloat("numRadialSubdivisions", (float) (RADIAL_TEXTURE_SIZE - 1));
         setUniformFloat("numAzimuthalSubdivisions", (float) (AZIMUTHAL_TEXTURE_SIZE - 1));
-        setUniformFloat("numQuadratureSubdivisions", 64.0f);
+        setUniformFloat("numQuadratureSubdivisions", (float) (QUADRATURE_SIZE - 1));
         setUniformFloat("M", (float) mWaveFunction.getM());
 
         int mvpMatrixHandle = GLES30.glGetUniformLocation(mProgram, "shaderTransform");
