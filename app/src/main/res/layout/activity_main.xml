@@ -2,17 +2,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.transvect.orbitalexplorer.MainActivity">
+    tools:context=".MainActivity">
 
     <com.transvect.orbitalexplorer.OrbitalView
         android:id="@+id/orbitalview"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <Toolbar
+    <android.support.v7.widget.Toolbar
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:title="Orbital Explorer" />
 
 </RelativeLayout>

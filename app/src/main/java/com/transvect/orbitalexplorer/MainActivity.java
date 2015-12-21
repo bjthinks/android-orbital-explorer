@@ -5,16 +5,17 @@ import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ConfigurationInfo;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toolbar;
-
+import android.support.v7.widget.Toolbar;
 import java.util.Random;
 
-public class MainActivity extends Activity {
+public class MainActivity extends AppCompatActivity {
     // private static final String TAG = "MainActivity";
 
     private OrbitalView mOrbitalView;
@@ -35,10 +36,12 @@ public class MainActivity extends Activity {
         // Inflate a Toolbar instance and set it
         // as the ActionBar for this Activity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setActionBar(toolbar);
+        setSupportActionBar(toolbar);
 
-        // Adjust toolbar downward so it doesn't overlap the Status Bar
-        toolbar.setPadding(0, getStatusBarHeight(), 0, 0);
+        // Can we use a translucent status bar?
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) // API 19+
+            // Adjust toolbar downward so it doesn't overlap the Status Bar
+            toolbar.setPadding(0, getStatusBarHeight(), 0, 0);
 
         mOrbitalView = (OrbitalView) findViewById(R.id.orbitalview);
         // Make an OrbitalRenderer. Needs assets for shader code.
