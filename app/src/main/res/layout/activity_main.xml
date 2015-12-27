@@ -1,8 +1,14 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<android.support.v4.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+
+    xmlns:tools="http://schemas.android.com/tools"
     tools:context=".MainActivity">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
     <com.transvect.orbitalexplorer.OrbitalView
         android:id="@+id/orbitalview"
@@ -13,7 +19,16 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:title="Orbital Explorer" />
+        android:layout_height="wrap_content" />
 
-</RelativeLayout>
+    </FrameLayout>
+
+    <ListView
+        android:id="@+id/main_menu"
+        android:layout_width="240dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:choiceMode="singleChoice"
+        android:background="#000" />
+
+</android.support.v4.widget.DrawerLayout>

@@ -13,6 +13,10 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
@@ -33,15 +37,30 @@ public class MainActivity extends AppCompatActivity {
         // as the ContentView for this Activity.
         setContentView(R.layout.activity_main);
 
-        // Inflate a Toolbar instance and set it
-        // as the ActionBar for this Activity
+        // Inflate a Toolbar instance
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        ListView menu = (ListView) findViewById(R.id.main_menu);
+
+        // Set toolbar properties
+        toolbar.setTitle("Orbital Explorer XXX");
 
         // Can we use a translucent status bar?
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) // API 19+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            // API 19+, yay!
+
             // Adjust toolbar downward so it doesn't overlap the Status Bar
             toolbar.setPadding(0, getStatusBarHeight(), 0, 0);
+
+            // Adjust menu as well
+            menu.setPadding(0, getStatusBarHeight(), 0, 0);
+        }
+
+        // Set the toolbar as the ActionBar for this Activity
+        setSupportActionBar(toolbar);
+
+        String[] blet = { "abc", "def", "really long name that never seems to end" };
+        menu.setAdapter(new ArrayAdapter<String>(this, R.layout.menu_item, blet));
+        //menu.setPadding(0, 50, 0, 100);
 
         mOrbitalView = (OrbitalView) findViewById(R.id.orbitalview);
         // Make an OrbitalRenderer. Needs assets for shader code.
