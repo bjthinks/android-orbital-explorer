@@ -80,18 +80,52 @@ vec2 longitudinalPart(float phi) {
     return vec2(cos(Mphi), sin(Mphi)) * oneOverSqrt2PI;
 }
 
-vec2 wavefunction(vec3 x) {
+vec4 wavefunction_pair(vec3 center, vec3 offset) {
+    vec4 result;
+
+    vec3 x = center - offset;
     float r = length(x);
+    float radialValue = radialPart(r);
+
     float theta = acos(x.z / r); //   0 to pi
     // TODO this might make trouble if x.xy is small
     float phi = atan(x.y, x.x);  // -pi to pi
-    return radialPart(r) * azimuthalPart(theta) * longitudinalPart(phi);
+    result.xy = radialValue * azimuthalPart(theta) * longitudinalPart(phi);
+
+    x = center + offset;
+
+    theta = acos(x.z / r); //   0 to pi
+    // TODO this might make trouble if x.xy is small
+    phi = atan(x.y, x.x);  // -pi to pi
+    result.zw = radialPart(r) * azimuthalPart(theta) * longitudinalPart(phi);
+
+    return result;
 }
 
-vec3 integrand(vec3 x) {
-    vec2 w = wavefunction(x);
-    float len = length(w);
-    return len * vec3(w, len);
+vec3 integrand_pair(vec3 center, vec3 offset) {
+    vec3 result;
+
+    vec3 x = center - offset;
+    float r = length(x);
+    float radialValue = radialPart(r);
+
+    float theta = acos(x.z / r); //   0 to pi
+    // TODO this might make trouble if x.xy is small
+    float phi = atan(x.y, x.x);  // -pi to pi
+    vec2 result1 = radialValue * azimuthalPart(theta) * longitudinalPart(phi);
+    float len1 = length(result1);
+    result = len1 * vec3(result1, len1);
+
+    x = center + offset;
+
+    theta = acos(x.z / r); //   0 to pi
+    // TODO this might make trouble if x.xy is small
+    phi = atan(x.y, x.x);  // -pi to pi
+    vec2 result2 = radialPart(r) * azimuthalPart(theta) * longitudinalPart(phi);
+    float len2 = length(result2);
+    result += len2 * vec3(result2, len2);
+
+    return result;
 }
 
 void main() {
@@ -113,11 +147,11 @@ void main() {
     vec3 total;
     vec4 q;
     q = quadratureData(distanceToOrigin);
-    total  = q.y * (integrand(center + q.x * ray) + integrand(center - q.x * ray));
-    total += q.w * (integrand(center + q.z * ray) + integrand(center - q.z * ray));
+    total  = q.y * integrand_pair(center, q.x * ray);
+    total += q.w * integrand_pair(center, q.z * ray);
     q = quadratureData2(distanceToOrigin);
-    total += q.y * (integrand(center + q.x * ray) + integrand(center - q.x * ray));
-    total += q.w * (integrand(center + q.z * ray) + integrand(center - q.z * ray));
+    total += q.y * integrand_pair(center, q.x * ray);
+    total += q.w * integrand_pair(center, q.z * ray);
 
     total *= 50.0;
 
