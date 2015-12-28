@@ -37,10 +37,13 @@ public class OrbitalRenderer implements GLSurfaceView.Renderer {
     // Rendering thread
     @Override
     public void onSurfaceChanged(GL10 unused, int width, int height) {
-        final int scaleDownFactor = 4;
         mAspectRatio = (float) width / (float) height;
-        mIntegrate .resize(width / scaleDownFactor, height / scaleDownFactor);
-        mColorModel.resize(width / scaleDownFactor, height / scaleDownFactor);
+
+        final double scaleDownFactor = 4.0;
+        int smallWidth = (int) (width / scaleDownFactor);
+        int smallHeight = (int) (height / scaleDownFactor);
+        mIntegrate.resize(smallWidth, smallHeight);
+        mColorModel.resize(smallWidth, smallHeight);
         mEnlarge.resize(width, height);
     }
 
