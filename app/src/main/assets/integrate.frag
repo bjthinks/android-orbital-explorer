@@ -80,52 +80,30 @@ vec2 longitudinalPart(float phi) {
     return vec2(cos(Mphi), sin(Mphi)) * oneOverSqrt2PI;
 }
 
-vec4 wavefunction_pair(vec3 center, vec3 offset) {
-    vec4 result;
-
-    vec3 x = center - offset;
-    float r = length(x);
-    float radialValue = radialPart(r);
-
-    float theta = acos(x.z / r); //   0 to pi
+vec2 angularPart(vec3 x, float r) {
+    float theta = acos(x.z / r); // 0 to pi
     // TODO this might make trouble if x.xy is small
-    float phi = atan(x.y, x.x);  // -pi to pi
-    result.xy = radialValue * azimuthalPart(theta) * longitudinalPart(phi);
-
-    x = center + offset;
-
-    theta = acos(x.z / r); //   0 to pi
-    // TODO this might make trouble if x.xy is small
-    phi = atan(x.y, x.x);  // -pi to pi
-    result.zw = radialPart(r) * azimuthalPart(theta) * longitudinalPart(phi);
-
-    return result;
+    float phi = atan(x.y, x.x); // -pi to pi
+    return azimuthalPart(theta) * longitudinalPart(phi);
 }
 
 vec3 integrand_pair(vec3 center, vec3 offset) {
-    vec3 result;
-
     vec3 x = center - offset;
     float r = length(x);
     float radialValue = radialPart(r);
+    float radialSign = sign(radialValue);
 
-    float theta = acos(x.z / r); //   0 to pi
-    // TODO this might make trouble if x.xy is small
-    float phi = atan(x.y, x.x);  // -pi to pi
-    vec2 result1 = radialValue * azimuthalPart(theta) * longitudinalPart(phi);
-    float len1 = length(result1);
-    result = len1 * vec3(result1, len1);
+    vec2 result = angularPart(x, r);
+    float len = length(result);
+    vec3 total = len * vec3(radialSign * result, len);
 
     x = center + offset;
 
-    theta = acos(x.z / r); //   0 to pi
-    // TODO this might make trouble if x.xy is small
-    phi = atan(x.y, x.x);  // -pi to pi
-    vec2 result2 = radialPart(r) * azimuthalPart(theta) * longitudinalPart(phi);
-    float len2 = length(result2);
-    result += len2 * vec3(result2, len2);
+    result = angularPart(x, r);
+    len = length(result);
+    total += len * vec3(radialSign * result, len);
 
-    return result;
+    return radialValue * radialValue * total;
 }
 
 void main() {
