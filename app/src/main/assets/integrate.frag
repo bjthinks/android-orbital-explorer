@@ -11,6 +11,7 @@ out ivec3 color;
 uniform sampler2D radial;
 uniform float maximumRadius;
 uniform float numRadialSubdivisions;
+uniform float exponentialConstant;
 uniform sampler2D azimuthal;
 uniform float numAzimuthalSubdivisions;
 uniform sampler2D quadrature;
@@ -103,7 +104,7 @@ vec3 integrand_pair(vec3 center, vec3 offset) {
     len = length(result);
     total += len * vec3(radialSign * result, len);
 
-    return radialValue * radialValue * total;
+    return exp(exponentialConstant * r) * radialValue * radialValue * total;
 }
 
 void main() {

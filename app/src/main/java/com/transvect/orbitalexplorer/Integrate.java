@@ -16,6 +16,7 @@ public class Integrate extends RenderStage {
     private WaveFunction mWaveFunction;
     private FloatBuffer mRadialData;
     private FloatBuffer mAzimuthalData;
+    private double mExponentialConstant;
     private FloatBuffer mQuadratureWeights;
     private FloatBuffer mQuadratureWeights2;
     private Texture mRadialTexture;
@@ -29,7 +30,7 @@ public class Integrate extends RenderStage {
     private final double MAXIMUM_RADIUS = 16.0;
     private final int RADIAL_TEXTURE_SIZE = 128;
     private final int AZIMUTHAL_TEXTURE_SIZE = 64;
-    private final int QUADRATURE_SIZE = 128;
+    private final int QUADRATURE_SIZE = 16;
 
     public Texture getTexture() {
         return mTexture;
@@ -62,41 +63,42 @@ public class Integrate extends RenderStage {
         float[] quadratureWeights = new float[4 * QUADRATURE_SIZE];
         float[] quadratureWeights2 = new float[4 * QUADRATURE_SIZE];
         // Multiply by 2 because wave function is squared
-        double exponentialConstant = 2.0 * radialFunction.exponentialConstant();
+        mExponentialConstant = 2.0 * radialFunction.exponentialConstant();
         for (int i = 0; i < QUADRATURE_SIZE; ++i) {
             double distanceFromOrigin = MAXIMUM_RADIUS * (double) i / (double) QUADRATURE_SIZE;
             WeightFunction weightFunction
-                    = new WeightFunction(exponentialConstant, distanceFromOrigin);
+                    = new WeightFunction(distanceFromOrigin);
             GaussianQuadrature GQ = new GaussianQuadrature(weightFunction, 4);
             quadratureWeights[4 * i]     = (float) GQ.getNode(0);
-            quadratureWeights[4 * i + 1] = (float) GQ.getWeight(0);
+            quadratureWeights[4 * i + 1] = (float) (GQ.getWeight(0)
+                    / weightFunction.eval(GQ.getNode(0)));
             quadratureWeights[4 * i + 2] = (float) GQ.getNode(1);
-            quadratureWeights[4 * i + 3] = (float) GQ.getWeight(1);
+            quadratureWeights[4 * i + 3] = (float) (GQ.getWeight(1)
+                    / weightFunction.eval(GQ.getNode(1)));
             quadratureWeights2[4 * i]     = (float) GQ.getNode(2);
-            quadratureWeights2[4 * i + 1] = (float) GQ.getWeight(2);
+            quadratureWeights2[4 * i + 1] = (float) (GQ.getWeight(2)
+                    / weightFunction.eval(GQ.getNode(2)));
             quadratureWeights2[4 * i + 2] = (float) GQ.getNode(3);
-            quadratureWeights2[4 * i + 3] = (float) GQ.getWeight(3);
-            if (i % 8 == 0)
-                Log.d(TAG, "Data " + i + " :"
-                        + " " + quadratureWeights[4 * i]
-                        + " " + quadratureWeights[4 * i + 1]
-                        + " " + quadratureWeights[4 * i + 2]
-                        + " " + quadratureWeights[4 * i + 3]
-                        + " " + quadratureWeights2[4 * i]
-                        + " " + quadratureWeights2[4 * i + 1]
-                        + " " + quadratureWeights2[4 * i + 2]
-                        + " " + quadratureWeights2[4 * i + 3]);
+            quadratureWeights2[4 * i + 3] = (float) (GQ.getWeight(3)
+                    / weightFunction.eval(GQ.getNode(3)));
+            Log.d(TAG, "Data " + i + " :"
+                    + " " + quadratureWeights[4 * i]
+                    + " " + quadratureWeights[4 * i + 1]
+                    + " " + quadratureWeights[4 * i + 2]
+                    + " " + quadratureWeights[4 * i + 3]
+                    + " " + quadratureWeights2[4 * i]
+                    + " " + quadratureWeights2[4 * i + 1]
+                    + " " + quadratureWeights2[4 * i + 2]
+                    + " " + quadratureWeights2[4 * i + 3]);
         }
         mQuadratureWeights = floatArrayToBuffer(quadratureWeights);
         mQuadratureWeights2 = floatArrayToBuffer(quadratureWeights2);
     }
 
     private class WeightFunction implements Function {
-        private double mExponentialConstant;
         private double mDistanceFromOrigin;
 
-        public WeightFunction(double exponentialConstant, double distanceFromOrigin) {
-            mExponentialConstant = exponentialConstant;
+        public WeightFunction(double distanceFromOrigin) {
             mDistanceFromOrigin = distanceFromOrigin;
         }
 
@@ -233,6 +235,7 @@ public class Integrate extends RenderStage {
 
         setUniformInt("colorMode", mRenderPreferences.getColorMode());
 
+        setUniformFloat("exponentialConstant", (float) mExponentialConstant);
         setUniformFloat("maximumRadius", (float) MAXIMUM_RADIUS);
         setUniformFloat("numRadialSubdivisions", (float) (RADIAL_TEXTURE_SIZE - 1));
         setUniformFloat("numAzimuthalSubdivisions", (float) (AZIMUTHAL_TEXTURE_SIZE - 1));
