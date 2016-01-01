@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
         ListView menu = (ListView) findViewById(R.id.main_menu);
 
         // Set toolbar properties
-        toolbar.setTitle("Orbital Explorer XXX");
+        toolbar.setTitle("Orbital Explorer");
 
         // Can we use a translucent status bar?
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
         // Set the toolbar as the ActionBar for this Activity
         setSupportActionBar(toolbar);
 
-        String[] blet = { "abc", "def", "really long name that never seems to end" };
+        String[] blet = { "Settings" };
         menu.setAdapter(new ArrayAdapter<String>(this, R.layout.menu_item, blet));
         //menu.setPadding(0, 50, 0, 100);
 
