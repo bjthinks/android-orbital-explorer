@@ -27,6 +27,13 @@ public class RenderStage {
         return floatArrayToBuffer(data);
     }
 
+    protected void setTexture2DMinMagFilters(int minFilter, int magFilter) {
+        GLES30.glTexParameteri(GLES30.GL_TEXTURE_2D,
+                GLES30.GL_TEXTURE_MIN_FILTER, minFilter);
+        GLES30.glTexParameteri(GLES30.GL_TEXTURE_2D,
+                GLES30.GL_TEXTURE_MAG_FILTER, magFilter);
+    }
+
     protected static void getGLError() {
         int error;
         while ((error = GLES30.glGetError()) != 0)

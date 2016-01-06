@@ -131,20 +131,14 @@ public class Integrate extends RenderStage {
         mRadialTexture.bindToTexture2DAndSetImage(RADIAL_TEXTURE_SIZE, 1, mRadialData);
 
         // Floating point textures are not filterable
-        GLES30.glTexParameteri(GLES30.GL_TEXTURE_2D,
-                GLES30.GL_TEXTURE_MIN_FILTER, GLES30.GL_NEAREST);
-        GLES30.glTexParameteri(GLES30.GL_TEXTURE_2D,
-                GLES30.GL_TEXTURE_MAG_FILTER, GLES30.GL_NEAREST);
+        setTexture2DMinMagFilters(GLES30.GL_NEAREST, GLES30.GL_NEAREST);
 
         // Create azimuthal texture
         mAzimuthalTexture = new Texture(orbitalFormat, orbitalType, orbitalInternalFormat);
         mAzimuthalTexture.bindToTexture2DAndSetImage(AZIMUTHAL_TEXTURE_SIZE, 1, mAzimuthalData);
 
         // Floating point textures are not filterable
-        GLES30.glTexParameteri(GLES30.GL_TEXTURE_2D,
-                GLES30.GL_TEXTURE_MIN_FILTER, GLES30.GL_NEAREST);
-        GLES30.glTexParameteri(GLES30.GL_TEXTURE_2D,
-                GLES30.GL_TEXTURE_MAG_FILTER, GLES30.GL_NEAREST);
+        setTexture2DMinMagFilters(GLES30.GL_NEAREST, GLES30.GL_NEAREST);
 
         final int quadratureFormat = GLES30.GL_RGBA;
         final int quadratureType = GLES30.GL_FLOAT;
@@ -156,10 +150,7 @@ public class Integrate extends RenderStage {
                 QUADRATURE_SIZE, 1, mQuadratureWeights);
 
         // Floating point textures are not filterable
-        GLES30.glTexParameteri(GLES30.GL_TEXTURE_2D,
-                GLES30.GL_TEXTURE_MIN_FILTER, GLES30.GL_NEAREST);
-        GLES30.glTexParameteri(GLES30.GL_TEXTURE_2D,
-                GLES30.GL_TEXTURE_MAG_FILTER, GLES30.GL_NEAREST);
+        setTexture2DMinMagFilters(GLES30.GL_NEAREST, GLES30.GL_NEAREST);
 
         mQuadratureWeightTexture2
                 = new Texture(quadratureFormat, quadratureType, quadratureInternalFormat);
@@ -167,10 +158,7 @@ public class Integrate extends RenderStage {
                 QUADRATURE_SIZE, 1, mQuadratureWeights2);
 
         // Floating point textures are not filterable
-        GLES30.glTexParameteri(GLES30.GL_TEXTURE_2D,
-                GLES30.GL_TEXTURE_MIN_FILTER, GLES30.GL_NEAREST);
-        GLES30.glTexParameteri(GLES30.GL_TEXTURE_2D,
-                GLES30.GL_TEXTURE_MAG_FILTER, GLES30.GL_NEAREST);
+        setTexture2DMinMagFilters(GLES30.GL_NEAREST, GLES30.GL_NEAREST);
 
         // The following three parameters have to match a row of Table 3.2 in the
         // OpenGL ES 3.0 specification, or we will get an OpenGL error. We also
@@ -186,10 +174,7 @@ public class Integrate extends RenderStage {
 
         // Set the filters for sampling the bound texture, when sampling at
         // a different resolution than native.
-        GLES30.glTexParameteri(GLES30.GL_TEXTURE_2D,
-                GLES30.GL_TEXTURE_MIN_FILTER, GLES30.GL_NEAREST);
-        GLES30.glTexParameteri(GLES30.GL_TEXTURE_2D,
-                GLES30.GL_TEXTURE_MAG_FILTER, GLES30.GL_NEAREST);
+        setTexture2DMinMagFilters(GLES30.GL_NEAREST, GLES30.GL_NEAREST);
 
         mFramebuffer = new Framebuffer();
         mFramebuffer.bindAndSetTexture(mTexture);
