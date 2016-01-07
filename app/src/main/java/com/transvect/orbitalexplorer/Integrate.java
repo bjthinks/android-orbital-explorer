@@ -67,21 +67,19 @@ public class Integrate extends RenderStage {
             WeightFunction weightFunction
                     = new WeightFunction(distanceFromOrigin);
             GaussianQuadrature GQ = new GaussianQuadrature(weightFunction, QUADRATURE_POINTS);
+            String logMessage = "Data " + i + " :";
+
             for (int j = 0; j < QUADRATURE_POINTS; ++j) {
                 quadratureWeights[2 * QUADRATURE_POINTS * i + 2 * j]
                         = (float) GQ.getNode(j);
                 quadratureWeights[2 * QUADRATURE_POINTS * i + 2 * j + 1]
                         = (float) (GQ.getWeight(j) / weightFunction.eval(GQ.getNode(j)));
+
+                logMessage += " " + quadratureWeights[2 * QUADRATURE_POINTS * i + 2 * j];
+                logMessage += " " + quadratureWeights[2 * QUADRATURE_POINTS * i + 2 * j + 1];
             }
-            Log.d(TAG, "Data " + i + " :"
-                    + " " + quadratureWeights[8 * i]
-                    + " " + quadratureWeights[8 * i + 1]
-                    + " " + quadratureWeights[8 * i + 2]
-                    + " " + quadratureWeights[8 * i + 3]
-                    + " " + quadratureWeights[8 * i + 4]
-                    + " " + quadratureWeights[8 * i + 5]
-                    + " " + quadratureWeights[8 * i + 6]
-                    + " " + quadratureWeights[8 * i + 7]);
+
+            Log.d(TAG, logMessage);
         }
         mQuadratureWeights = floatArrayToBuffer(quadratureWeights);
     }
@@ -198,6 +196,7 @@ public class Integrate extends RenderStage {
         setUniformInt("quadrature", 2);
 
         setUniformInt("colorMode", mRenderPreferences.getColorMode());
+        setUniformInt("numQuadraturePoints", QUADRATURE_POINTS);
 
         setUniformFloat("exponentialConstant", (float) mExponentialConstant);
         setUniformFloat("maximumRadius", (float) MAXIMUM_RADIUS);

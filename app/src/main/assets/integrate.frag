@@ -16,6 +16,7 @@ uniform sampler2D azimuthal;
 uniform float numAzimuthalSubdivisions;
 uniform sampler2D quadrature;
 uniform float numQuadratureSubdivisions;
+uniform int numQuadraturePoints;
 uniform float M;
 uniform int colorMode;
 
@@ -113,15 +114,10 @@ void main() {
 
     vec3 total = vec3(0);
     vec2 q;
-    q = quadratureData(distanceToOrigin, 0);
-    total += q.y * integrand_pair(center, q.x * ray);
-    q = quadratureData(distanceToOrigin, 1);
-    total += q.y * integrand_pair(center, q.x * ray);
-    q = quadratureData(distanceToOrigin, 2);
-    total += q.y * integrand_pair(center, q.x * ray);
-    q = quadratureData(distanceToOrigin, 3);
-    total += q.y * integrand_pair(center, q.x * ray);
-
+    for (int i = 0; i < numQuadraturePoints; ++i) {
+        q = quadratureData(distanceToOrigin, i);
+        total += q.y * integrand_pair(center, q.x * ray);
+    }
     total *= 50.0;
 
     if (total.z > 0.0) {
