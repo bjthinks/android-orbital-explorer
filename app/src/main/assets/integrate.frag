@@ -15,7 +15,6 @@ uniform float exponentialConstant;
 uniform sampler2D azimuthal;
 uniform float numAzimuthalSubdivisions;
 uniform sampler2D quadrature;
-uniform sampler2D quadrature2;
 uniform float numQuadratureSubdivisions;
 uniform float M;
 uniform int colorMode;
@@ -50,25 +49,14 @@ float azimuthalPart(float theta) {
     return result;
 }
 
-vec4 quadratureData(float distanceToOrigin) {
+vec2 quadratureData(float distanceToOrigin, int point) {
     float positionInTexture = distanceToOrigin / maximumRadius * numQuadratureSubdivisions;
     if (positionInTexture >= numQuadratureSubdivisions)
-        return vec4(0.0);
+        return vec2(0.0);
     float leftTexturePosition = trunc(positionInTexture);
-    vec4 leftTextureValue = texelFetch(quadrature, ivec2(leftTexturePosition, 0), 0);
+    vec2 leftTextureValue = texelFetch(quadrature, ivec2(point, leftTexturePosition), 0).xy;
     float rightTexturePosition = leftTexturePosition + 1.0;
-    vec4 rightTextureValue = texelFetch(quadrature, ivec2(rightTexturePosition, 0), 0);
-    float interpolationValue = fract(positionInTexture);
-    return mix(leftTextureValue, rightTextureValue, interpolationValue);
-}
-vec4 quadratureData2(float distanceToOrigin) {
-    float positionInTexture = distanceToOrigin / maximumRadius * numQuadratureSubdivisions;
-    if (positionInTexture >= numQuadratureSubdivisions)
-        return vec4(0.0);
-    float leftTexturePosition = trunc(positionInTexture);
-    vec4 leftTextureValue = texelFetch(quadrature2, ivec2(leftTexturePosition, 0), 0);
-    float rightTexturePosition = leftTexturePosition + 1.0;
-    vec4 rightTextureValue = texelFetch(quadrature2, ivec2(rightTexturePosition, 0), 0);
+    vec2 rightTextureValue = texelFetch(quadrature, ivec2(point, rightTexturePosition), 0).xy;
     float interpolationValue = fract(positionInTexture);
     return mix(leftTextureValue, rightTextureValue, interpolationValue);
 }
@@ -123,14 +111,16 @@ void main() {
     vec3 center = near - dot(near, ray) * ray;
     float distanceToOrigin = length(center);
 
-    vec3 total;
-    vec4 q;
-    q = quadratureData(distanceToOrigin);
-    total  = q.y * integrand_pair(center, q.x * ray);
-    total += q.w * integrand_pair(center, q.z * ray);
-    q = quadratureData2(distanceToOrigin);
+    vec3 total = vec3(0);
+    vec2 q;
+    q = quadratureData(distanceToOrigin, 0);
     total += q.y * integrand_pair(center, q.x * ray);
-    total += q.w * integrand_pair(center, q.z * ray);
+    q = quadratureData(distanceToOrigin, 1);
+    total += q.y * integrand_pair(center, q.x * ray);
+    q = quadratureData(distanceToOrigin, 2);
+    total += q.y * integrand_pair(center, q.x * ray);
+    q = quadratureData(distanceToOrigin, 3);
+    total += q.y * integrand_pair(center, q.x * ray);
 
     total *= 50.0;
 

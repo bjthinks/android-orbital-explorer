@@ -18,11 +18,9 @@ public class Integrate extends RenderStage {
     private FloatBuffer mAzimuthalData;
     private double mExponentialConstant;
     private FloatBuffer mQuadratureWeights;
-    private FloatBuffer mQuadratureWeights2;
     private Texture mRadialTexture;
     private Texture mAzimuthalTexture;
     private Texture mQuadratureWeightTexture;
-    private Texture mQuadratureWeightTexture2;
     private Texture mTexture;
     private Framebuffer mFramebuffer;
     private int mWidth, mHeight;
@@ -30,6 +28,7 @@ public class Integrate extends RenderStage {
     private final double MAXIMUM_RADIUS = 16.0;
     private final int RADIAL_TEXTURE_SIZE = 128;
     private final int AZIMUTHAL_TEXTURE_SIZE = 64;
+    private final int QUADRATURE_POINTS = 4;
     private final int QUADRATURE_SIZE = 16;
 
     public Texture getTexture() {
@@ -60,39 +59,31 @@ public class Integrate extends RenderStage {
                 0.0, Math.PI, AZIMUTHAL_TEXTURE_SIZE - 1);
 
         // Set up Gaussian Quadrature
-        float[] quadratureWeights = new float[4 * QUADRATURE_SIZE];
-        float[] quadratureWeights2 = new float[4 * QUADRATURE_SIZE];
+        float[] quadratureWeights = new float[2 * QUADRATURE_POINTS * QUADRATURE_SIZE];
         // Multiply by 2 because wave function is squared
         mExponentialConstant = 2.0 * radialFunction.exponentialConstant();
         for (int i = 0; i < QUADRATURE_SIZE; ++i) {
             double distanceFromOrigin = MAXIMUM_RADIUS * (double) i / (double) QUADRATURE_SIZE;
             WeightFunction weightFunction
                     = new WeightFunction(distanceFromOrigin);
-            GaussianQuadrature GQ = new GaussianQuadrature(weightFunction, 4);
-            quadratureWeights[4 * i]     = (float) GQ.getNode(0);
-            quadratureWeights[4 * i + 1] = (float) (GQ.getWeight(0)
-                    / weightFunction.eval(GQ.getNode(0)));
-            quadratureWeights[4 * i + 2] = (float) GQ.getNode(1);
-            quadratureWeights[4 * i + 3] = (float) (GQ.getWeight(1)
-                    / weightFunction.eval(GQ.getNode(1)));
-            quadratureWeights2[4 * i]     = (float) GQ.getNode(2);
-            quadratureWeights2[4 * i + 1] = (float) (GQ.getWeight(2)
-                    / weightFunction.eval(GQ.getNode(2)));
-            quadratureWeights2[4 * i + 2] = (float) GQ.getNode(3);
-            quadratureWeights2[4 * i + 3] = (float) (GQ.getWeight(3)
-                    / weightFunction.eval(GQ.getNode(3)));
+            GaussianQuadrature GQ = new GaussianQuadrature(weightFunction, QUADRATURE_POINTS);
+            for (int j = 0; j < QUADRATURE_POINTS; ++j) {
+                quadratureWeights[2 * QUADRATURE_POINTS * i + 2 * j]
+                        = (float) GQ.getNode(j);
+                quadratureWeights[2 * QUADRATURE_POINTS * i + 2 * j + 1]
+                        = (float) (GQ.getWeight(j) / weightFunction.eval(GQ.getNode(j)));
+            }
             Log.d(TAG, "Data " + i + " :"
-                    + " " + quadratureWeights[4 * i]
-                    + " " + quadratureWeights[4 * i + 1]
-                    + " " + quadratureWeights[4 * i + 2]
-                    + " " + quadratureWeights[4 * i + 3]
-                    + " " + quadratureWeights2[4 * i]
-                    + " " + quadratureWeights2[4 * i + 1]
-                    + " " + quadratureWeights2[4 * i + 2]
-                    + " " + quadratureWeights2[4 * i + 3]);
+                    + " " + quadratureWeights[8 * i]
+                    + " " + quadratureWeights[8 * i + 1]
+                    + " " + quadratureWeights[8 * i + 2]
+                    + " " + quadratureWeights[8 * i + 3]
+                    + " " + quadratureWeights[8 * i + 4]
+                    + " " + quadratureWeights[8 * i + 5]
+                    + " " + quadratureWeights[8 * i + 6]
+                    + " " + quadratureWeights[8 * i + 7]);
         }
         mQuadratureWeights = floatArrayToBuffer(quadratureWeights);
-        mQuadratureWeights2 = floatArrayToBuffer(quadratureWeights2);
     }
 
     private class WeightFunction implements Function {
@@ -140,22 +131,14 @@ public class Integrate extends RenderStage {
         // Floating point textures are not filterable
         setTexture2DMinMagFilters(GLES30.GL_NEAREST, GLES30.GL_NEAREST);
 
-        final int quadratureFormat = GLES30.GL_RGBA;
+        final int quadratureFormat = GLES30.GL_RG;
         final int quadratureType = GLES30.GL_FLOAT;
-        final int quadratureInternalFormat = GLES30.GL_RGBA32F;
+        final int quadratureInternalFormat = GLES30.GL_RG32F;
         // Create quadrature weight texture
         mQuadratureWeightTexture
                 = new Texture(quadratureFormat, quadratureType, quadratureInternalFormat);
         mQuadratureWeightTexture.bindToTexture2DAndSetImage(
-                QUADRATURE_SIZE, 1, mQuadratureWeights);
-
-        // Floating point textures are not filterable
-        setTexture2DMinMagFilters(GLES30.GL_NEAREST, GLES30.GL_NEAREST);
-
-        mQuadratureWeightTexture2
-                = new Texture(quadratureFormat, quadratureType, quadratureInternalFormat);
-        mQuadratureWeightTexture2.bindToTexture2DAndSetImage(
-                QUADRATURE_SIZE, 1, mQuadratureWeights2);
+                QUADRATURE_POINTS, QUADRATURE_SIZE, mQuadratureWeights);
 
         // Floating point textures are not filterable
         setTexture2DMinMagFilters(GLES30.GL_NEAREST, GLES30.GL_NEAREST);
@@ -213,10 +196,6 @@ public class Integrate extends RenderStage {
         GLES30.glActiveTexture(GLES30.GL_TEXTURE2);
         mQuadratureWeightTexture.bindToTexture2D();
         setUniformInt("quadrature", 2);
-
-        GLES30.glActiveTexture(GLES30.GL_TEXTURE3);
-        mQuadratureWeightTexture2.bindToTexture2D();
-        setUniformInt("quadrature2", 3);
 
         setUniformInt("colorMode", mRenderPreferences.getColorMode());
 
