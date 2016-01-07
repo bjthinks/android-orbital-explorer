@@ -132,6 +132,17 @@ public class Polynomial implements Function {
         return c[i];
     }
 
+    // From p(x) and k, compute p(k * x)
+    public Polynomial rescaleX(double k) {
+        Polynomial result = new Polynomial();
+        result.c = new double[c.length];
+
+        for (int i = 0; i < c.length; ++i)
+            result.c[i] = c[i] * Math.pow(k, (double) i);
+
+        return result;
+    }
+
     /* @Override
     public String toString() {
         String result = "";

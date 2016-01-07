@@ -34,7 +34,7 @@ public class RadialFunction implements Function {
         mPolynomialPart = Polynomial.variableToThe(L).multiply(constantFactors)
                 .multiply(MyMath.generalizedLaguerrePolynomial(N - L - 1, 2 * L + 1));
 
-        mNonExponentialPart = new NonExponentialPart();
+        mNonExponentialPart = mPolynomialPart.rescaleX(mRadialScaleFactor);
     }
 
     public double exponentialConstant() {
@@ -47,11 +47,5 @@ public class RadialFunction implements Function {
 
     public double eval(double r) {
         return mNonExponentialPart.eval(r) * Math.exp(exponentialConstant() * r);
-    }
-
-    public class NonExponentialPart implements Function {
-        public double eval(double r) {
-            return mPolynomialPart.eval(mRadialScaleFactor * r);
-        }
     }
 }
