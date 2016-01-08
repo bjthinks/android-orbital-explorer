@@ -38,10 +38,8 @@ vec2 longitudinalPart(float phi) {
 }
 
 vec2 angularPart(vec3 x, float r) {
-    float theta = acos(x.z / r); // 0 to pi
-    // TODO this might make trouble if x.xy is small
     float phi = atan(0.0, 1.0); //atan(x.y, x.x); // -pi to pi
-    return azimuthalPart(1.0) * longitudinalPart(phi);
+    return vec2(1.0, 0.0);
 }
 
 vec3 integrand_pair(vec3 center, vec3 offset) {
@@ -51,16 +49,8 @@ vec3 integrand_pair(vec3 center, vec3 offset) {
     float radialSign = sign(radialValue);
 
     vec2 result = angularPart(x, r);
-    float len = length(result);
-    vec3 total = len * vec3(radialSign * result, len);
+    vec3 total = vec3(radialSign * result, 0.0);
 
-    x = center + offset;
-
-    result = angularPart(x, r);
-    len = length(result);
-    total += len * vec3(radialSign * result, len);
-
-    total *= pow(r, powerOfR) * exp(exponentialConstant * r) * radialValue * radialValue;
     return total;
 }
 
