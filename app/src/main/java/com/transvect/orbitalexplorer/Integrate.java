@@ -4,12 +4,17 @@ import android.content.Context;
 import android.content.res.AssetManager;
 import android.opengl.GLES30;
 import android.util.Log;
-import java.nio.FloatBuffer;
 
-public class Integrate extends RenderStage {
+public class Integrate {
     private static final String TAG = "Integrate";
 
     Integrate(Context context) {
+    }
+
+    protected static void getGLError() {
+        int error;
+        while ((error = GLES30.glGetError()) != 0)
+            Log.e("Integrate", "OpenGL error code " + error);
     }
 
     public void newContext(AssetManager assetManager) {
