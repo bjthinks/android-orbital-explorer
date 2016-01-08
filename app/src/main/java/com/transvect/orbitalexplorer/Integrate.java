@@ -46,9 +46,9 @@ public class Integrate extends RenderStage {
         };
         mVertexBuffer = floatArrayToBuffer(squareCoordinates);
 
-        int Z = 6;
-        int N = 5;
-        int L = 3;
+        int Z = 8;
+        int N = 6;
+        int L = 4;
         int M = 1;
 
         mWaveFunction = new WaveFunction(Z, N, L, M);
