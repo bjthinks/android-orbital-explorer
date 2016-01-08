@@ -50,10 +50,6 @@ public class RadialFunction implements Function {
         return mOscillatingPart;
     }
 
-    public Polynomial polynomialPart() {
-        return Polynomial.variableToThe(mPowerOfR).multiply(mOscillatingPart);
-    }
-
     public double eval(double r) {
         return mOscillatingPart.eval(r)
                 * Math.pow(r, mPowerOfR)
