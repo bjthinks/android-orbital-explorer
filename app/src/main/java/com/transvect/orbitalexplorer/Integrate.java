@@ -28,7 +28,7 @@ public class Integrate extends RenderStage {
     private final double MAXIMUM_RADIUS = 16.0;
     private final int RADIAL_TEXTURE_SIZE = 128;
     private final int AZIMUTHAL_TEXTURE_SIZE = 64;
-    private final int QUADRATURE_POINTS = 3;
+    private final int QUADRATURE_POINTS = 2;
     private final int QUADRATURE_SIZE = 16;
 
     public Texture getTexture() {
@@ -46,9 +46,9 @@ public class Integrate extends RenderStage {
         };
         mVertexBuffer = floatArrayToBuffer(squareCoordinates);
 
-        int Z = 4;
-        int N = 4;
-        int L = 2;
+        int Z = 6;
+        int N = 5;
+        int L = 3;
         int M = 1;
 
         mWaveFunction = new WaveFunction(Z, N, L, M);
