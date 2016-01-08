@@ -27,10 +27,10 @@ public class RadialFunction implements Function {
 
         mExponentialConstant = -radialScaleFactor / 2.0;
 
+        mPowerOfR = L;
+
         double constantFactors = Math.pow(2.0 * dZ / dN, 1.5)
                 * Math.sqrt(MyMath.factorial(N - L - 1) / (2.0 * dN * MyMath.factorial(N + L)));
-
-        mPowerOfR = L;
 
         mOscillatingPart = MyMath.generalizedLaguerrePolynomial(N - L - 1, 2 * L + 1)
                 .rescaleX(radialScaleFactor)
