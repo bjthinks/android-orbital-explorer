@@ -74,7 +74,7 @@ vec2 longitudinalPart(float phi) {
 vec2 angularPart(vec3 x, float r) {
     float theta = acos(x.z / r); // 0 to pi
     // TODO this might make trouble if x.xy is small
-    float phi = atan(x.y, x.x); // -pi to pi
+    float phi = atan(0.0, 1.0); //atan(x.y, x.x); // -pi to pi
     return azimuthalPart(theta) * longitudinalPart(phi);
 }
 

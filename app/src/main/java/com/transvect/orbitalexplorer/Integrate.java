@@ -170,7 +170,11 @@ public class Integrate extends RenderStage {
         mProgram = GLES30.glCreateProgram();
         GLES30.glAttachShader(mProgram, vertexShader.getId());
         GLES30.glAttachShader(mProgram, fragmentShader.getId());
-        GLES30.glLinkProgram(mProgram);
+        try {
+            GLES30.glLinkProgram(mProgram);
+        } catch (Exception e) {
+            Log.e(TAG, e.getLocalizedMessage());
+        }
         getGLError();
     }
 
