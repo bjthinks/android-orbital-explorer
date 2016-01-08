@@ -18,6 +18,7 @@ uniform sampler2D quadrature;
 uniform float numQuadratureSubdivisions;
 uniform int numQuadraturePoints;
 uniform float M;
+uniform float powerOfR;
 uniform int colorMode;
 
 float radialPart(float r) {

@@ -204,6 +204,7 @@ public class Integrate extends RenderStage {
         setUniformFloat("numAzimuthalSubdivisions", (float) (AZIMUTHAL_TEXTURE_SIZE - 1));
         setUniformFloat("numQuadratureSubdivisions", (float) (QUADRATURE_SIZE - 1));
         setUniformFloat("M", (float) mWaveFunction.getM());
+        setUniformFloat("powerOfR", (float) mWaveFunction.getRadialFunction().powerOfR());
 
         int mvpMatrixHandle = GLES30.glGetUniformLocation(mProgram, "shaderTransform");
         GLES30.glUniformMatrix4fv(mvpMatrixHandle, 1, false, shaderTransform, 0);
