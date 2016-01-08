@@ -67,7 +67,7 @@ public class Integrate extends RenderStage {
             WeightFunction weightFunction
                     = new WeightFunction(distanceFromOrigin);
             GaussianQuadrature GQ = new GaussianQuadrature(weightFunction, QUADRATURE_POINTS);
-            String logMessage = "Data " + i + " :";
+            String logMessage = "Data " + distanceFromOrigin;
 
             for (int j = 0; j < QUADRATURE_POINTS; ++j) {
                 quadratureWeights[2 * QUADRATURE_POINTS * i + 2 * j]
