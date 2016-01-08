@@ -63,7 +63,7 @@ public class Integrate extends RenderStage {
         // Multiply by 2 because wave function is squared
         mExponentialConstant = 2.0 * radialFunction.exponentialConstant();
         for (int i = 0; i < QUADRATURE_SIZE; ++i) {
-            double distanceFromOrigin = MAXIMUM_RADIUS * (double) i / (double) QUADRATURE_SIZE;
+            double distanceFromOrigin = MAXIMUM_RADIUS * (double) i / (double) (QUADRATURE_SIZE - 1);
             WeightFunction weightFunction
                     = new WeightFunction(distanceFromOrigin);
             GaussianQuadrature GQ = new GaussianQuadrature(weightFunction, QUADRATURE_POINTS);
