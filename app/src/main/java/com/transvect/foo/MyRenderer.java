@@ -1,4 +1,4 @@
-package com.transvect.orbitalexplorer;
+package com.transvect.foo;
 
 import android.opengl.GLES30;
 import android.opengl.GLSurfaceView;
