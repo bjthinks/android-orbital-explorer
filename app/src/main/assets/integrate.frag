@@ -22,60 +22,26 @@ uniform float powerOfR;
 uniform int colorMode;
 
 float radialPart(float r) {
-    float positionInTexture = r / maximumRadius * numRadialSubdivisions;
-    if (positionInTexture >= numRadialSubdivisions)
-        return 0.0;
-    float leftTexturePosition = trunc(positionInTexture);
-    float leftTextureValue = texelFetch(radial, ivec2(leftTexturePosition, 0), 0).x;
-    float rightTexturePosition = leftTexturePosition + 1.0;
-    float rightTextureValue = texelFetch(radial, ivec2(rightTexturePosition, 0), 0).x;
-    float interpolationValue = fract(positionInTexture);
-    return mix(leftTextureValue, rightTextureValue, interpolationValue);
+    return 1.5;
 }
 
 float azimuthalPart(float theta) {
-    float result;
-    float positionInTexture = theta / pi * numAzimuthalSubdivisions;
-    if (positionInTexture >= numAzimuthalSubdivisions) {
-        float rightTexturePosition = numAzimuthalSubdivisions;
-        float rightTextureValue = texelFetch(azimuthal, ivec2(rightTexturePosition, 0), 0).x;
-        result = rightTextureValue;
-    } else {
-        float leftTexturePosition = trunc(positionInTexture);
-        float leftTextureValue = texelFetch(azimuthal, ivec2(leftTexturePosition, 0), 0).x;
-        float rightTexturePosition = leftTexturePosition + 1.0;
-        float rightTextureValue = texelFetch(azimuthal, ivec2(rightTexturePosition, 0), 0).x;
-        float interpolationValue = fract(positionInTexture);
-        result = mix(leftTextureValue, rightTextureValue, interpolationValue);
-    }
-    return result;
+        return 1.5;
 }
 
 vec2 quadratureData(float distanceToOrigin, int point) {
-    float positionInTexture = distanceToOrigin / maximumRadius * numQuadratureSubdivisions;
-    if (positionInTexture >= numQuadratureSubdivisions)
-        return vec2(0.0);
-    float leftTexturePosition = trunc(positionInTexture);
-    vec2 leftTextureValue = texelFetch(quadrature, ivec2(point, leftTexturePosition), 0).xy;
-    float rightTexturePosition = leftTexturePosition + 1.0;
-    vec2 rightTextureValue = texelFetch(quadrature, ivec2(point, rightTexturePosition), 0).xy;
-    float interpolationValue = fract(positionInTexture);
-    return mix(leftTextureValue, rightTextureValue, interpolationValue);
+    return vec2(1.0, 1.0);
 }
 
 vec2 longitudinalPart(float phi) {
-    // Normalization constant so that this function times its conjugate,
-    // integrated from 0 to 2pi, yields 1
-    const float oneOverSqrt2PI = 1.0 / sqrt(2.0 * pi);
-    float Mphi = M * phi;
-    return vec2(cos(Mphi), sin(Mphi)) * oneOverSqrt2PI;
+    return vec2(1.0, 0.0);
 }
 
 vec2 angularPart(vec3 x, float r) {
     float theta = acos(x.z / r); // 0 to pi
     // TODO this might make trouble if x.xy is small
     float phi = atan(0.0, 1.0); //atan(x.y, x.x); // -pi to pi
-    return azimuthalPart(theta) * longitudinalPart(phi);
+    return azimuthalPart(1.0) * longitudinalPart(phi);
 }
 
 vec3 integrand_pair(vec3 center, vec3 offset) {
