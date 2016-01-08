@@ -21,75 +21,23 @@ uniform float M;
 uniform float powerOfR;
 uniform int colorMode;
 
-float radialPart(float r) {
-    return 1.5;
-}
-
-float azimuthalPart(float theta) {
-        return 1.5;
-}
-
-vec2 quadratureData(float distanceToOrigin, int point) {
-    return vec2(1.0, 1.0);
-}
-
-vec2 longitudinalPart(float phi) {
-    return vec2(1.0, 0.0);
-}
-
-vec2 angularPart(vec3 x, float r) {
+vec2 angularPart() {
     float phi = atan(0.0, 1.0); //atan(x.y, x.x); // -pi to pi
     return vec2(1.0, 0.0);
 }
 
 vec3 integrand_pair(vec3 center, vec3 offset) {
-    vec3 x = center - offset;
-    float r = length(x);
-    float radialValue = radialPart(r);
-    float radialSign = sign(radialValue);
-
-    vec2 result = angularPart(x, r);
-    vec3 total = vec3(radialSign * result, 0.0);
-
-    return total;
+    return vec3(0.0);
 }
 
 void main() {
-    vec3 ray = far - near;
-    ray /= length(ray);
-
-    // We need to find the point on the near <--> far line which is closest to
-    // the origin.
-    // dot(center, ray) = 0
-    // center = near + t * ray
-    // dot(near + t * ray, ray) = 0
-    // dot(near, ray) + t * dot(ray, ray) = 0
-    // dot(near, ray) + t = 0
-    // t = - dot(near, ray)
-
-    vec3 center = near - dot(near, ray) * ray;
-    float distanceToOrigin = length(center);
-
     vec3 total = vec3(0);
     vec2 q;
     for (int i = 0; i < numQuadraturePoints; ++i) {
-        q = quadratureData(distanceToOrigin, i);
-        total += q.y * integrand_pair(center, q.x * ray);
+        total += vec3(angularPart(), 0.0);
     }
-    total *= 50.0;
 
-    if (total.z > 0.0) {
-        if (colorMode == 1)
-            total.xy = vec2(0);
-        else if (colorMode == 2) {
-            float angle = pi * 4.0 / 9.0;
-            vec2 good = vec2(cos(angle), sin(angle));
-            total.xy = good * dot(total.xy, good);
-        }
-        float totalScaleFactor = (1.0 - exp(-total.z)) / total.z;
-        total *= totalScaleFactor;
-        color = ivec3(total * 2147483647.0);
-    } else {
-        color = ivec3(0);
-    }
+    float totalScaleFactor = (1.0 - exp(-total.z)) / total.z;
+    total *= totalScaleFactor;
+    color = ivec3(total * 2147483647.0);
 }
