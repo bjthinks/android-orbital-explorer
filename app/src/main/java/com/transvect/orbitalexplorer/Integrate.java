@@ -53,7 +53,7 @@ public class Integrate extends RenderStage {
 
         mWaveFunction = new WaveFunction(Z, N, L, M);
         RadialFunction radialFunction = mWaveFunction.getRadialFunction();
-        mRadialData = functionToBuffer(radialFunction.nonExponentialPart(),
+        mRadialData = functionToBuffer(radialFunction.polynomialPart(),
                 0.0, MAXIMUM_RADIUS, RADIAL_TEXTURE_SIZE - 1);
         mAzimuthalData = functionToBuffer(mWaveFunction.getAzimuthalFunction(),
                 0.0, Math.PI, AZIMUTHAL_TEXTURE_SIZE - 1);

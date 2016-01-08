@@ -16,7 +16,8 @@ package com.transvect.orbitalexplorer;
 
 public class RadialFunction implements Function {
     private double mExponentialConstant;
-    private Function mNonExponentialPart;
+    private int mPowerOfR;
+    private Polynomial mOscillatingPart;
 
     public RadialFunction(int Z, int N, int L) {
         double dZ = (double) Z;
@@ -29,21 +30,33 @@ public class RadialFunction implements Function {
         double constantFactors = Math.pow(2.0 * dZ / dN, 1.5)
                 * Math.sqrt(MyMath.factorial(N - L - 1) / (2.0 * dN * MyMath.factorial(N + L)));
 
-        Polynomial polynomialPart = Polynomial.variableToThe(L).multiply(constantFactors)
-                .multiply(MyMath.generalizedLaguerrePolynomial(N - L - 1, 2 * L + 1));
+        mPowerOfR = L;
 
-        mNonExponentialPart = polynomialPart.rescaleX(radialScaleFactor);
+        mOscillatingPart = MyMath.generalizedLaguerrePolynomial(N - L - 1, 2 * L + 1)
+                .rescaleX(radialScaleFactor)
+                .multiply(Math.pow(radialScaleFactor, mPowerOfR))
+                .multiply(constantFactors);
     }
 
     public double exponentialConstant() {
         return mExponentialConstant;
     }
 
-    public Function nonExponentialPart() {
-        return mNonExponentialPart;
+    public int powerOfR() {
+        return mPowerOfR;
+    }
+
+    public Polynomial oscillatingPart() {
+        return mOscillatingPart;
+    }
+
+    public Polynomial polynomialPart() {
+        return Polynomial.variableToThe(mPowerOfR).multiply(mOscillatingPart);
     }
 
     public double eval(double r) {
-        return mNonExponentialPart.eval(r) * Math.exp(exponentialConstant() * r);
+        return mOscillatingPart.eval(r)
+                * Math.pow(r, mPowerOfR)
+                * Math.exp(mExponentialConstant * r);
     }
 }
