@@ -39,18 +39,6 @@ public class MainActivity extends AppCompatActivity {
         mOrbitalView.setRenderer(renderer);
     }
 
-    // This might happen before or after onPause(), but if it needs to be called,
-    // it will always be called before onStop().
-    @Override
-    protected void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Bundle inState) {
-        super.onRestoreInstanceState(inState);
-    }
-
     @Override
     protected void onPause() {
         super.onPause();
