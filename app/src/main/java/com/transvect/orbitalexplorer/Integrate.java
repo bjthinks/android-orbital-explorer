@@ -8,9 +8,6 @@ import android.util.Log;
 public class Integrate {
     private static final String TAG = "Integrate";
 
-    Integrate(Context context) {
-    }
-
     protected static void getGLError() {
         int error;
         while ((error = GLES30.glGetError()) != 0)
@@ -30,11 +27,5 @@ public class Integrate {
             Log.e(TAG, e.getLocalizedMessage());
         }
         getGLError();
-    }
-
-    public void resize(int width, int height) {
-    }
-
-    public void render(float[] shaderTransform) {
     }
 }

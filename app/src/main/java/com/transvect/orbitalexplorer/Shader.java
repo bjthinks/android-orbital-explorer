@@ -40,8 +40,5 @@ public class Shader {
         id = GLES30.glCreateShader(shaderType);
         GLES30.glShaderSource(id, shaderSource);
         GLES30.glCompileShader(id);
-        String result = GLES30.glGetShaderInfoLog(id);
-        if (!result.equals(""))
-            Log.e(TAG, result);
     }
 }
