@@ -30,6 +30,7 @@ public class Integrate extends RenderStage {
     private final int AZIMUTHAL_TEXTURE_SIZE = 64;
     private final int QUADRATURE_POINTS = 3;
     private final int QUADRATURE_SIZE = 16;
+    private final boolean USE_POWER_OF_R = true;
 
     public Texture getTexture() {
         return mTexture;
@@ -53,8 +54,13 @@ public class Integrate extends RenderStage {
 
         mWaveFunction = new WaveFunction(Z, N, L, M);
         RadialFunction radialFunction = mWaveFunction.getRadialFunction();
-        mRadialData = functionToBuffer(radialFunction.polynomialPart(),
-                0.0, MAXIMUM_RADIUS, RADIAL_TEXTURE_SIZE - 1);
+        if (USE_POWER_OF_R) {
+            mRadialData = functionToBuffer(radialFunction.oscillatingPart(),
+                    0.0, MAXIMUM_RADIUS, RADIAL_TEXTURE_SIZE - 1);
+        } else {
+            mRadialData = functionToBuffer(radialFunction.polynomialPart(),
+                    0.0, MAXIMUM_RADIUS, RADIAL_TEXTURE_SIZE - 1);
+        }
         mAzimuthalData = functionToBuffer(mWaveFunction.getAzimuthalFunction(),
                 0.0, Math.PI, AZIMUTHAL_TEXTURE_SIZE - 1);
 
@@ -98,6 +104,9 @@ public class Integrate extends RenderStage {
             double r = Math.sqrt(mDistanceFromOrigin * mDistanceFromOrigin + x * x);
             // Multiply by 2 because the wave function is squared
             double value = Math.exp(mExponentialConstant * r);
+            // Multiply by 2 because the wave function is squared
+            if (USE_POWER_OF_R)
+                value *= Math.pow(r, 2.0 * mWaveFunction.getRadialFunction().powerOfR());
 
             if (x == 0.0)
                 value *= 0.5;
@@ -197,6 +206,7 @@ public class Integrate extends RenderStage {
 
         setUniformInt("colorMode", mRenderPreferences.getColorMode());
         setUniformInt("numQuadraturePoints", QUADRATURE_POINTS);
+        setUniformInt("usePowerOfR", USE_POWER_OF_R ? 1 : 0);
 
         setUniformFloat("exponentialConstant", (float) mExponentialConstant);
         setUniformFloat("maximumRadius", (float) MAXIMUM_RADIUS);
@@ -204,7 +214,8 @@ public class Integrate extends RenderStage {
         setUniformFloat("numAzimuthalSubdivisions", (float) (AZIMUTHAL_TEXTURE_SIZE - 1));
         setUniformFloat("numQuadratureSubdivisions", (float) (QUADRATURE_SIZE - 1));
         setUniformFloat("M", (float) mWaveFunction.getM());
-        setUniformFloat("powerOfR", (float) mWaveFunction.getRadialFunction().powerOfR());
+        // Multiply by 2 because the wave function is squared
+        setUniformFloat("powerOfR", (float) (2 * mWaveFunction.getRadialFunction().powerOfR()));
 
         int mvpMatrixHandle = GLES30.glGetUniformLocation(mProgram, "shaderTransform");
         GLES30.glUniformMatrix4fv(mvpMatrixHandle, 1, false, shaderTransform, 0);

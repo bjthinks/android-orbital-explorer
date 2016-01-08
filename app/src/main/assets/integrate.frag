@@ -20,6 +20,7 @@ uniform int numQuadraturePoints;
 uniform float M;
 uniform float powerOfR;
 uniform int colorMode;
+uniform bool usePowerOfR;
 
 float radialPart(float r) {
     float positionInTexture = r / maximumRadius * numRadialSubdivisions;
@@ -94,7 +95,10 @@ vec3 integrand_pair(vec3 center, vec3 offset) {
     len = length(result);
     total += len * vec3(radialSign * result, len);
 
-    return exp(exponentialConstant * r) * radialValue * radialValue * total;
+    total *= exp(exponentialConstant * r) * radialValue * radialValue;
+    if (usePowerOfR)
+        total *= pow(r, powerOfR);
+    return total;
 }
 
 void main() {
