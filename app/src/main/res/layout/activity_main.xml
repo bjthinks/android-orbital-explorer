@@ -1,34 +1,7 @@
-<android.support.v4.widget.DrawerLayout
+<com.transvect.orbitalexplorer.MyView
     xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/orbitalview"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".MainActivity">
-
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-    <com.transvect.orbitalexplorer.OrbitalView
-        android:id="@+id/orbitalview"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
-    <android.support.v7.widget.Toolbar
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    </FrameLayout>
-
-    <ListView
-        android:id="@+id/main_menu"
-        android:layout_width="240dp"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        android:choiceMode="singleChoice"
-        android:background="#000" />
-
-</android.support.v4.widget.DrawerLayout>
+    tools:context=".MainActivity" />

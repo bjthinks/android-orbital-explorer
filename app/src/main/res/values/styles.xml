@@ -1,9 +1,3 @@
 <resources>
-
-    <style name="TransparentTheme" parent="Theme.AppCompat.NoActionBar">
-    </style>
-
-    <style name="OpaqueTheme" parent="Theme.AppCompat">
-    </style>
-
+    <style name="AppTheme" parent="android:Theme"/>
 </resources>
