@@ -52,7 +52,6 @@ public class OrbitalRenderer implements GLSurfaceView.Renderer {
     public void onDrawFrame(GL10 unused) {
         float[] shaderTransform = mOrbitalView.getNextTransform(mAspectRatio);
         mIntegrate.render(shaderTransform);
-        mColorModel.render(mIntegrate.getTexture());
         mEnlarge.render(mColorModel.getTexture());
     }
 }
