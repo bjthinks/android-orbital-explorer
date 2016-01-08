@@ -10,9 +10,6 @@ public class Camera implements Parcelable {
     public Camera() {
     }
 
-    public Camera(double cameraDistance, Quaternion totalRotation) {
-    }
-
     @Override
     public int describeContents() {
         return 0;
@@ -25,7 +22,7 @@ public class Camera implements Parcelable {
             = new Parcelable.Creator<Camera>() {
         @Override
         public Camera createFromParcel(Parcel in) {
-            return new Camera(0.0, new Quaternion(0.0));
+            return new Camera();
         }
         public Camera[] newArray(int size) {
             return new Camera[size];
