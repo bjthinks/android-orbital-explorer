@@ -3,7 +3,7 @@ precision highp int;
 precision highp float;
 uniform isampler2D data;
 in vec2 texCoord;
-out vec3 color;
+out uvec3 color;
 
 vec3 srgb_gamma(vec3 linear) {
     return mix(linear * 12.92,
@@ -46,5 +46,5 @@ void main() {
         linear_RGB = vec3(1, 0, 1);
 
     // Need EGL 1.5 or EGL_KHR_gl_colorspace to do this automatically
-    color = srgb_gamma(linear_RGB);
+    color = uvec3(srgb_gamma(linear_RGB) * 65535.0);
 }

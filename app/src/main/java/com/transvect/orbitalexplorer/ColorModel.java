@@ -35,9 +35,9 @@ public class ColorModel extends RenderStage {
         // need to choose a sized internal format which is color-renderable
         // according to Table 3.13 (in the absence of extensions).
         // Since this output will be enlarged, we also want texture-filterable.
-        final int renderFormat = GLES30.GL_RGBA;
-        final int renderType = GLES30.GL_UNSIGNED_INT_2_10_10_10_REV;
-        final int renderInternalFormat = GLES30.GL_RGB10_A2;
+        final int renderFormat = GLES30.GL_RGBA_INTEGER;
+        final int renderType = GLES30.GL_UNSIGNED_SHORT;
+        final int renderInternalFormat = GLES30.GL_RGBA16UI;
 
         // Create a texture to render to
         mTexture = new Texture(renderFormat, renderType, renderInternalFormat);
@@ -86,8 +86,8 @@ public class ColorModel extends RenderStage {
         GLES30.glEnableVertexAttribArray(inPositionHandle);
         GLES30.glVertexAttribPointer(inPositionHandle, 2, GLES30.GL_FLOAT, false, 8, mVertexBuffer);
 
-        GLES30.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-        GLES30.glClear(GLES30.GL_COLOR_BUFFER_BIT);
+        final int zeroes[] = {0, 0, 0, 0};
+        GLES30.glClearBufferuiv(GLES30.GL_COLOR, 0, zeroes, 0);
         GLES30.glDrawArrays(GLES30.GL_TRIANGLE_FAN, 0, 4);
         GLES30.glDisableVertexAttribArray(inPositionHandle);
         getGLError();
