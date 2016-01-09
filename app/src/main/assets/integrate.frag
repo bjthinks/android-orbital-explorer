@@ -37,9 +37,7 @@ float azimuthalPart(float theta) {
     float result;
     float positionInTexture = theta / pi * numAzimuthalSubdivisions;
     if (positionInTexture >= numAzimuthalSubdivisions) {
-        float rightTexturePosition = numAzimuthalSubdivisions;
-        float rightTextureValue = texelFetch(azimuthal, ivec2(rightTexturePosition, 0), 0).x;
-        result = rightTextureValue;
+        result = texelFetch(azimuthal, ivec2(numAzimuthalSubdivisions, 0), 0).x;
     } else {
         float leftTexturePosition = trunc(positionInTexture);
         float leftTextureValue = texelFetch(azimuthal, ivec2(leftTexturePosition, 0), 0).x;
