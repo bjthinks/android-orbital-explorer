@@ -29,5 +29,7 @@ void main() {
 
     vec2 interp = fract(texCoord);
     vec3 linear_RGB = mix(mix(lb, rb, interp.x), mix(lt, rt, interp.x), interp.y) / 65535.0;
+
+    // Need EGL 1.5 or EGL_KHR_gl_colorspace for automatic gamma
     color = srgb_gamma(linear_RGB);
 }
