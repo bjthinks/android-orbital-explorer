@@ -5,12 +5,6 @@ uniform isampler2D data;
 in vec2 texCoord;
 out uvec3 color;
 
-vec3 srgb_gamma(vec3 linear) {
-    return mix(linear * 12.92,
-               1.055 * pow(linear, vec3(1.0 / 2.4)) - vec3(0.055),
-               greaterThan(linear, vec3(0.0031308)));
-}
-
 void main() {
     vec3 total = vec3(texture(data, texCoord).xyz) / 2147483647.0;
 
@@ -46,5 +40,5 @@ void main() {
         linear_RGB = vec3(1, 0, 1);
 
     // Need EGL 1.5 or EGL_KHR_gl_colorspace to do this automatically
-    color = uvec3(srgb_gamma(linear_RGB) * 65535.0);
+    color = uvec3(linear_RGB * 65535.0);
 }

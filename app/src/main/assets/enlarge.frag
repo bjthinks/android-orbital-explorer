@@ -6,6 +6,12 @@ uniform vec2 texSize;
 in vec2 boxCoord;
 out vec3 color;
 
+vec3 srgb_gamma(vec3 linear) {
+    return mix(linear * 12.92,
+               1.055 * pow(linear, vec3(1.0 / 2.4)) - vec3(0.055),
+               greaterThan(linear, vec3(0.0031308)));
+}
+
 void main() {
     // This is what we want to do, but our texture is not filterable.
     //color = vec3(texture(data, boxCoord).xyz);
@@ -22,5 +28,6 @@ void main() {
     vec3 rt = vec3(texelFetch(data, rightTop, 0).xyz);
 
     vec2 interp = fract(texCoord);
-    color = mix(mix(lb, rb, interp.x), mix(lt, rt, interp.x), interp.y) / 65535.0;
+    vec3 linear_RGB = mix(mix(lb, rb, interp.x), mix(lt, rt, interp.x), interp.y) / 65535.0;
+    color = srgb_gamma(linear_RGB);
 }
