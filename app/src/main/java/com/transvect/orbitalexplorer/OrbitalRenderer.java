@@ -3,19 +3,19 @@ package com.transvect.orbitalexplorer;
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.opengl.GLSurfaceView;
+import android.util.Log;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 public class OrbitalRenderer implements GLSurfaceView.Renderer {
-    // private static final String TAG = "OrbitalRenderer";
+    private static final String TAG = "OrbitalRenderer";
 
     private OrbitalView mOrbitalView;
     private AssetManager mAssetManager;
     private Integrate mIntegrate;
     private ColorModel mColorModel;
     private Enlarge mEnlarge;
-    private float mAspectRatio = 1.0f;
 
     // Main thread
     public OrbitalRenderer(OrbitalView orbitalView, Context context) {
@@ -34,6 +34,8 @@ public class OrbitalRenderer implements GLSurfaceView.Renderer {
         mEnlarge.newContext(mAssetManager);
     }
 
+    private float mAspectRatio = 1.0f;
+
     // Rendering thread
     @Override
     public void onSurfaceChanged(GL10 unused, int width, int height) {
@@ -47,6 +49,8 @@ public class OrbitalRenderer implements GLSurfaceView.Renderer {
         mEnlarge.resize(width, height);
     }
 
+    private long then = 0;
+
     // Rendering thread
     @Override
     public void onDrawFrame(GL10 unused) {
@@ -54,5 +58,12 @@ public class OrbitalRenderer implements GLSurfaceView.Renderer {
         mIntegrate.render(shaderTransform);
         mColorModel.render(mIntegrate.getTexture());
         mEnlarge.render(mColorModel.getTexture());
+
+        boolean LOG_FPS = true;
+        if (LOG_FPS) {
+            long now = System.currentTimeMillis();
+            Log.d(TAG, "Frame time " + (now - then) + "ms");
+            then = now;
+        }
     }
 }
