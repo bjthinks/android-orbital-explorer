@@ -8,7 +8,6 @@ import java.nio.FloatBuffer;
 public class Enlarge extends RenderStage {
     private FloatBuffer mVertexBuffer;
     private int mProgram;
-    private int mWidth, mHeight;
 
     public Enlarge() {
         float squareCoordinates[] = {
@@ -31,7 +30,11 @@ public class Enlarge extends RenderStage {
         getGLError();
     }
 
-    public void resize(int width, int height) {
+    private int mInputWidth, mInputHeight;
+    private int mWidth, mHeight;
+    public void resize(int inputWidth, int inputHeight, int width, int height) {
+        mInputWidth = inputWidth;
+        mInputHeight = inputHeight;
         mWidth = width;
         mHeight = height;
     }
@@ -45,6 +48,9 @@ public class Enlarge extends RenderStage {
         texture.bindToTexture2D();
         int dataHandle = GLES30.glGetUniformLocation(mProgram, "data");
         GLES30.glUniform1i(dataHandle, 0);
+
+        int texSizeHandle = GLES30.glGetUniformLocation(mProgram, "texSize");
+        GLES30.glUniform2f(texSizeHandle, (float) mInputWidth, (float) mInputHeight);
 
         int inPositionHandle = GLES30.glGetAttribLocation(mProgram, "inPosition");
         GLES30.glEnableVertexAttribArray(inPositionHandle);

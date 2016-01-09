@@ -46,7 +46,7 @@ public class OrbitalRenderer implements GLSurfaceView.Renderer {
         int smallHeight = (int) (height / scaleDownFactor);
         mIntegrate.resize(smallWidth, smallHeight);
         mColorModel.resize(smallWidth, smallHeight);
-        mEnlarge.resize(width, height);
+        mEnlarge.resize(smallWidth, smallHeight, width, height);
     }
 
     private long then = 0;

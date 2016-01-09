@@ -45,7 +45,7 @@ public class ColorModel extends RenderStage {
 
         // Set the filters for sampling the bound texture, when sampling at
         // a different resolution than native.
-        setTexture2DMinMagFilters(GLES30.GL_NEAREST, GLES30.GL_LINEAR);
+        setTexture2DMinMagFilters(GLES30.GL_NEAREST, GLES30.GL_NEAREST);
         GLES30.glTexParameteri(GLES30.GL_TEXTURE_2D,
                 GLES30.GL_TEXTURE_WRAP_S, GLES30.GL_CLAMP_TO_EDGE);
         GLES30.glTexParameteri(GLES30.GL_TEXTURE_2D,
