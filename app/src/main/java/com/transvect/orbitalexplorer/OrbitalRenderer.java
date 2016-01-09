@@ -41,7 +41,7 @@ public class OrbitalRenderer implements GLSurfaceView.Renderer {
     public void onSurfaceChanged(GL10 unused, int width, int height) {
         mAspectRatio = (float) width / (float) height;
 
-        final double scaleDownFactor = 4.0;
+        final double scaleDownFactor = 256.0;
         int smallWidth = (int) (width / scaleDownFactor);
         int smallHeight = (int) (height / scaleDownFactor);
         mIntegrate.resize(smallWidth, smallHeight);
