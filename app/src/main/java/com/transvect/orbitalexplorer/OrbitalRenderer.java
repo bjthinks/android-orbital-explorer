@@ -13,22 +13,22 @@ public class OrbitalRenderer implements GLSurfaceView.Renderer {
 
     private OrbitalView mOrbitalView;
     private AssetManager mAssetManager;
-    private Integrate mIntegrate;
-    private Enlarge mEnlarge;
+    private Integrator mIntegrator;
+    private ScreenDrawer mScreenDrawer;
 
     // Main thread
     public OrbitalRenderer(OrbitalView orbitalView, Context context) {
         mOrbitalView = orbitalView;
         mAssetManager = context.getAssets();
-        mIntegrate = new Integrate(context);
-        mEnlarge = new Enlarge();
+        mIntegrator = new Integrator(context);
+        mScreenDrawer = new ScreenDrawer();
     }
 
     // Rendering thread
     @Override
     public void onSurfaceCreated(GL10 unused, EGLConfig config) {
-        mIntegrate.newContext(mAssetManager);
-        mEnlarge.newContext(mAssetManager);
+        mIntegrator.newContext(mAssetManager);
+        mScreenDrawer.newContext(mAssetManager);
     }
 
     private float mAspectRatio = 1.0f;
@@ -41,8 +41,8 @@ public class OrbitalRenderer implements GLSurfaceView.Renderer {
         final double scaleDownFactor = 4.0;
         int smallWidth = (int) (width / scaleDownFactor);
         int smallHeight = (int) (height / scaleDownFactor);
-        mIntegrate.resize(smallWidth, smallHeight);
-        mEnlarge.resize(smallWidth, smallHeight, width, height);
+        mIntegrator.resize(smallWidth, smallHeight);
+        mScreenDrawer.resize(smallWidth, smallHeight, width, height);
     }
 
     private long then = 0;
@@ -51,8 +51,8 @@ public class OrbitalRenderer implements GLSurfaceView.Renderer {
     @Override
     public void onDrawFrame(GL10 unused) {
         float[] shaderTransform = mOrbitalView.getNextTransform(mAspectRatio);
-        mIntegrate.render(shaderTransform);
-        mEnlarge.render(mIntegrate.getTexture());
+        mIntegrator.render(shaderTransform);
+        mScreenDrawer.render(mIntegrator.getTexture());
 
         boolean LOG_FPS = true;
         if (LOG_FPS) {

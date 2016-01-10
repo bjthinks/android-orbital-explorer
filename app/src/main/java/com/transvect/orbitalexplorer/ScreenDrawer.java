@@ -5,11 +5,11 @@ import android.opengl.GLES30;
 
 import java.nio.FloatBuffer;
 
-public class Enlarge extends RenderStage {
+public class ScreenDrawer extends RenderStage {
     private FloatBuffer mVertexBuffer;
     private int mProgram;
 
-    public Enlarge() {
+    public ScreenDrawer() {
         float squareCoordinates[] = {
                 -1.0f, -1.0f,
                 -1.0f,  1.0f,
@@ -21,8 +21,8 @@ public class Enlarge extends RenderStage {
 
     public void newContext(AssetManager assetManager) {
         // Compile & link GLSL program
-        Shader vertexShader = new Shader(assetManager, "enlarge.vert", GLES30.GL_VERTEX_SHADER);
-        Shader fragmentShader = new Shader(assetManager, "enlarge.frag", GLES30.GL_FRAGMENT_SHADER);
+        Shader vertexShader = new Shader(assetManager, "screendrawer.vert", GLES30.GL_VERTEX_SHADER);
+        Shader fragmentShader = new Shader(assetManager, "screendrawer.frag", GLES30.GL_FRAGMENT_SHADER);
         mProgram = GLES30.glCreateProgram();
         GLES30.glAttachShader(mProgram, vertexShader.getId());
         GLES30.glAttachShader(mProgram, fragmentShader.getId());

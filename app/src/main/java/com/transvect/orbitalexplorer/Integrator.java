@@ -6,8 +6,8 @@ import android.opengl.GLES30;
 import android.util.Log;
 import java.nio.FloatBuffer;
 
-public class Integrate extends RenderStage {
-    private static final String TAG = "Integrate";
+public class Integrator extends RenderStage {
+    private static final String TAG = "Integrator";
 
     RenderPreferences mRenderPreferences;
 
@@ -35,7 +35,7 @@ public class Integrate extends RenderStage {
         return mTexture;
     }
 
-    Integrate(Context context) {
+    Integrator(Context context) {
         mRenderPreferences = new RenderPreferences(context);
 
         float squareCoordinates[] = {
@@ -169,8 +169,8 @@ public class Integrate extends RenderStage {
         getGLError();
 
         // Compile & link GLSL program
-        Shader vertexShader = new Shader(assetManager, "integrate.vert", GLES30.GL_VERTEX_SHADER);
-        Shader fragmentShader = new Shader(assetManager, "integrate.frag", GLES30.GL_FRAGMENT_SHADER);
+        Shader vertexShader = new Shader(assetManager, "integrator.vert", GLES30.GL_VERTEX_SHADER);
+        Shader fragmentShader = new Shader(assetManager, "integrator.frag", GLES30.GL_FRAGMENT_SHADER);
         mProgram = GLES30.glCreateProgram();
         GLES30.glAttachShader(mProgram, vertexShader.getId());
         GLES30.glAttachShader(mProgram, fragmentShader.getId());
