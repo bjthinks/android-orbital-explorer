@@ -118,9 +118,12 @@ void main() {
         q = quadratureData(distanceToOrigin, i);
         total += q.y * integrand_pair(center, q.x * ray);
     }
-    total *= 50.0;
 
     if (total.z > 0.0) {
+        // Increase brightness
+        total *= 50.0;
+
+        // Handle greyscale and color blind mode
         if (colorMode == 1)
             total.xy = vec2(0);
         else if (colorMode == 2) {
@@ -128,8 +131,9 @@ void main() {
             vec2 good = vec2(cos(angle), sin(angle));
             total.xy = good * dot(total.xy, good);
         }
-        float totalScaleFactor = (1.0 - exp(-total.z)) / total.z;
-        total *= totalScaleFactor;
+
+        total.xy /= total.z;
+        total.z = 1.0 - exp(-total.z);
         color = ivec3(total * 32767.0);
     } else {
         color = ivec3(0);

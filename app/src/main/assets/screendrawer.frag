@@ -33,7 +33,7 @@ void main() {
     const vec2 white = vec2(0.19784, 0.46832);
     vec2 uv_prime = white;
     if (total.z > 0.0)
-        uv_prime += 0.06 * total.xy / total.z;
+        uv_prime += 0.06 * total.xy;
     float Y = 0.5 * total.z;
 
     // Convert CIE (u',v') color coordinates (as per CIELUV) to (x,y)
