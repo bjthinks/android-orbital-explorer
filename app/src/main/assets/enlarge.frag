@@ -1,7 +1,7 @@
 #version 300 es
 precision highp int;
 precision highp float;
-uniform usampler2D data;
+uniform isampler2D data;
 uniform vec2 texSize;
 in vec2 boxCoord;
 out vec3 color;
@@ -14,7 +14,7 @@ vec3 srgb_gamma(vec3 linear) {
 
 void main() {
     // This is what we want to do, but our texture is not filterable.
-    //color = vec3(texture(data, boxCoord).xyz);
+    //total = vec3(texture(data, boxCoord).xyz);
 
     vec2 texCoord = boxCoord * texSize - vec2(0.5);
     ivec2 leftBottom = ivec2(floor(texCoord));
@@ -28,7 +28,32 @@ void main() {
     vec3 rt = vec3(texelFetch(data, rightTop, 0).xyz);
 
     vec2 interp = fract(texCoord);
-    vec3 linear_RGB = mix(mix(lb, rb, interp.x), mix(lt, rt, interp.x), interp.y) / 65535.0;
+    vec3 total = mix(mix(lb, rb, interp.x), mix(lt, rt, interp.x), interp.y) / 2147483647.0;
+
+    const vec2 white = vec2(0.19784, 0.46832);
+    vec2 uv_prime = white;
+    if (total.z > 0.0)
+        uv_prime += 0.06 * total.xy / total.z;
+    float Y = 0.5 * total.z;
+
+    // Convert CIE (u',v') color coordinates (as per CIELUV) to (x,y)
+    vec2 xy = vec2(9.0, 4.0) * uv_prime;
+    xy /= dot(vec3(6.0, -16.0, 12.0), vec3(uv_prime, 1.0));
+
+    // Add z, defined as 1 - x - y
+    vec3 xyz = vec3(xy, 1.0 - xy.x - xy.y);
+
+    // Convert xyz to XYZ
+    vec3 XYZ = (Y / xyz.y) * xyz;
+
+    // Convert XYZ to linear (i.e. pre-gamma) RGB values
+    mat3 XYZ_to_linear_RGB = mat3( 3.2406, -0.9689,  0.0557,
+                                  -1.5372,  1.8758, -0.2040,
+                                  -0.4986,  0.0415,  1.0570);
+    vec3 linear_RGB = XYZ_to_linear_RGB * XYZ;
+
+    if (any(greaterThan(linear_RGB, vec3(1))) || any(lessThan(linear_RGB, vec3(0))))
+        linear_RGB = vec3(1, 0, 1);
 
     // Need EGL 1.5 or EGL_KHR_gl_colorspace for automatic gamma
     color = srgb_gamma(linear_RGB);

@@ -14,7 +14,6 @@ public class OrbitalRenderer implements GLSurfaceView.Renderer {
     private OrbitalView mOrbitalView;
     private AssetManager mAssetManager;
     private Integrate mIntegrate;
-    private ColorModel mColorModel;
     private Enlarge mEnlarge;
 
     // Main thread
@@ -22,7 +21,6 @@ public class OrbitalRenderer implements GLSurfaceView.Renderer {
         mOrbitalView = orbitalView;
         mAssetManager = context.getAssets();
         mIntegrate = new Integrate(context);
-        mColorModel = new ColorModel();
         mEnlarge = new Enlarge();
     }
 
@@ -30,7 +28,6 @@ public class OrbitalRenderer implements GLSurfaceView.Renderer {
     @Override
     public void onSurfaceCreated(GL10 unused, EGLConfig config) {
         mIntegrate.newContext(mAssetManager);
-        mColorModel.newContext(mAssetManager);
         mEnlarge.newContext(mAssetManager);
     }
 
@@ -45,7 +42,6 @@ public class OrbitalRenderer implements GLSurfaceView.Renderer {
         int smallWidth = (int) (width / scaleDownFactor);
         int smallHeight = (int) (height / scaleDownFactor);
         mIntegrate.resize(smallWidth, smallHeight);
-        mColorModel.resize(smallWidth, smallHeight);
         mEnlarge.resize(smallWidth, smallHeight, width, height);
     }
 
@@ -56,8 +52,7 @@ public class OrbitalRenderer implements GLSurfaceView.Renderer {
     public void onDrawFrame(GL10 unused) {
         float[] shaderTransform = mOrbitalView.getNextTransform(mAspectRatio);
         mIntegrate.render(shaderTransform);
-        mColorModel.render(mIntegrate.getTexture());
-        mEnlarge.render(mColorModel.getTexture());
+        mEnlarge.render(mIntegrate.getTexture());
 
         boolean LOG_FPS = true;
         if (LOG_FPS) {
