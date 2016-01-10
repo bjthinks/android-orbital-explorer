@@ -130,7 +130,7 @@ void main() {
         }
         float totalScaleFactor = (1.0 - exp(-total.z)) / total.z;
         total *= totalScaleFactor;
-        color = ivec3(total * 2147483647.0);
+        color = ivec3(total * 32767.0);
     } else {
         color = ivec3(0);
     }

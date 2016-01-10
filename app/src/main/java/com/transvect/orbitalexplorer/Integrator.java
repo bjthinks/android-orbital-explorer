@@ -148,8 +148,8 @@ public class Integrator extends RenderStage {
         // need to choose a sized internal format which is color-renderable
         // according to Table 3.13 (in the absence of extensions).
         final int renderFormat = GLES30.GL_RGBA_INTEGER;
-        final int renderType = GLES30.GL_INT;
-        final int renderInternalFormat = GLES30.GL_RGBA32I;
+        final int renderType = GLES30.GL_SHORT;
+        final int renderInternalFormat = GLES30.GL_RGBA16I;
 
         // Create a texture to render to
         mTexture = new Texture(renderFormat, renderType, renderInternalFormat);

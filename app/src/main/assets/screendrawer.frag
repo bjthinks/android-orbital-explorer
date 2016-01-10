@@ -28,7 +28,7 @@ void main() {
     vec3 rt = vec3(texelFetch(data, rightTop, 0).xyz);
 
     vec2 interp = fract(texCoord);
-    vec3 total = mix(mix(lb, rb, interp.x), mix(lt, rt, interp.x), interp.y) / 2147483647.0;
+    vec3 total = mix(mix(lb, rb, interp.x), mix(lt, rt, interp.x), interp.y) / 32767.0;
 
     const vec2 white = vec2(0.19784, 0.46832);
     vec2 uv_prime = white;
