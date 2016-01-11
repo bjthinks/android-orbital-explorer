@@ -22,6 +22,7 @@ public class OrbitalRenderer implements GLSurfaceView.Renderer {
     public OrbitalRenderer(OrbitalView orbitalView, Activity context) {
         mMetrics = new DisplayMetrics();
         context.getWindowManager().getDefaultDisplay().getMetrics(mMetrics);
+        Log.d(TAG, "densityDpi = " + mMetrics.densityDpi);
 
         mOrbitalView = orbitalView;
         mAssetManager = context.getAssets();
