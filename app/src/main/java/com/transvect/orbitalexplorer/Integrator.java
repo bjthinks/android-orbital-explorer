@@ -28,7 +28,7 @@ public class Integrator extends RenderStage {
     private final double MAXIMUM_RADIUS = 16.0;
     private final int RADIAL_TEXTURE_SIZE = 256;
     private final int AZIMUTHAL_TEXTURE_SIZE = 256;
-    private final int QUADRATURE_POINTS = 2;
+    private int mQuadraturePoints;
     private final int QUADRATURE_SIZE = 64;
 
     public Texture getTexture() {
@@ -51,6 +51,9 @@ public class Integrator extends RenderStage {
         int L = 4;
         int M = 1;
 
+        mQuadraturePoints = Math.max(N - L, L - M + 1);
+        Log.d(TAG, "Quadrature points = " + mQuadraturePoints);
+
         mWaveFunction = new WaveFunction(Z, N, L, M);
         RadialFunction radialFunction = mWaveFunction.getRadialFunction();
         mRadialData = functionToBuffer2(radialFunction.oscillatingPart(),
@@ -59,32 +62,32 @@ public class Integrator extends RenderStage {
                 0.0, Math.PI, AZIMUTHAL_TEXTURE_SIZE - 1);
 
         // Set up Gaussian Quadrature
-        float[] quadratureWeights = new float[4 * QUADRATURE_POINTS * QUADRATURE_SIZE];
+        float[] quadratureWeights = new float[4 * mQuadraturePoints * QUADRATURE_SIZE];
         // Multiply by 2 because wave function is squared
         mExponentialConstant = 2.0 * radialFunction.exponentialConstant();
         for (int i = 0; i < QUADRATURE_SIZE; ++i) {
             double distanceFromOrigin = MAXIMUM_RADIUS * (double) i / (double) (QUADRATURE_SIZE - 1);
             WeightFunction weightFunction
                     = new WeightFunction(distanceFromOrigin);
-            GaussianQuadrature GQ = new GaussianQuadrature(weightFunction, QUADRATURE_POINTS);
+            GaussianQuadrature GQ = new GaussianQuadrature(weightFunction, mQuadraturePoints);
             String logMessage = "Data " + distanceFromOrigin;
 
-            for (int j = 0; j < QUADRATURE_POINTS; ++j) {
-                quadratureWeights[4 * QUADRATURE_POINTS * i + 4 * j]
+            for (int j = 0; j < mQuadraturePoints; ++j) {
+                quadratureWeights[4 * mQuadraturePoints * i + 4 * j]
                         = (float) GQ.getNode(j);
-                quadratureWeights[4 * QUADRATURE_POINTS * i + 4 * j + 1]
+                quadratureWeights[4 * mQuadraturePoints * i + 4 * j + 1]
                         = (float) (GQ.getWeight(j) / weightFunction.eval(GQ.getNode(j)));
 
                 // Backfill previous
                 if (i > 0) {
-                    quadratureWeights[4 * QUADRATURE_POINTS * (i - 1) + 4 * j + 2]
-                            = quadratureWeights[4 * QUADRATURE_POINTS * i + 4 * j];
-                    quadratureWeights[4 * QUADRATURE_POINTS * (i - 1) + 4 * j + 3]
-                            = quadratureWeights[4 * QUADRATURE_POINTS * i + 4 * j + 1];
+                    quadratureWeights[4 * mQuadraturePoints * (i - 1) + 4 * j + 2]
+                            = quadratureWeights[4 * mQuadraturePoints * i + 4 * j];
+                    quadratureWeights[4 * mQuadraturePoints * (i - 1) + 4 * j + 3]
+                            = quadratureWeights[4 * mQuadraturePoints * i + 4 * j + 1];
                 }
 
-                logMessage += " " + quadratureWeights[4 * QUADRATURE_POINTS * i + 4 * j];
-                logMessage += " " + quadratureWeights[4 * QUADRATURE_POINTS * i + 4 * j + 1];
+                logMessage += " " + quadratureWeights[4 * mQuadraturePoints * i + 4 * j];
+                logMessage += " " + quadratureWeights[4 * mQuadraturePoints * i + 4 * j + 1];
             }
 
             Log.d(TAG, logMessage);
@@ -149,7 +152,7 @@ public class Integrator extends RenderStage {
         mQuadratureWeightTexture
                 = new Texture(quadratureFormat, quadratureType, quadratureInternalFormat);
         mQuadratureWeightTexture.bindToTexture2DAndSetImage(
-                QUADRATURE_POINTS, QUADRATURE_SIZE, mQuadratureWeights);
+                mQuadraturePoints, QUADRATURE_SIZE, mQuadratureWeights);
 
         // Floating point textures are not filterable
         setTexture2DMinMagFilters(GLES30.GL_NEAREST, GLES30.GL_NEAREST);
@@ -213,7 +216,7 @@ public class Integrator extends RenderStage {
         setUniformInt("quadrature", 2);
 
         setUniformInt("colorMode", mRenderPreferences.getColorMode());
-        setUniformInt("numQuadraturePoints", QUADRATURE_POINTS);
+        setUniformInt("numQuadraturePoints", mQuadraturePoints);
 
         setUniformFloat("exponentialConstant", (float) mExponentialConstant);
         setUniformFloat("maximumRadius", (float) MAXIMUM_RADIUS);
