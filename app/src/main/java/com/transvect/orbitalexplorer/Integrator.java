@@ -224,6 +224,10 @@ public class Integrator extends RenderStage {
         // Multiply by 2 because the wave function is squared
         setUniformFloat("powerOfR", (float) (2 * mWaveFunction.getRadialFunction().powerOfR()));
 
+        // For testing
+        setUniformFloat("zero", 0.0f);
+        setUniformFloat("one", 1.0f);
+
         int mvpMatrixHandle = GLES30.glGetUniformLocation(mProgram, "shaderTransform");
         GLES30.glUniformMatrix4fv(mvpMatrixHandle, 1, false, shaderTransform, 0);
 

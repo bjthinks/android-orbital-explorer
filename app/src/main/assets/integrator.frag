@@ -21,6 +21,10 @@ uniform float M;
 uniform float powerOfR;
 uniform int colorMode;
 
+// For testing
+uniform float zero;
+uniform float one;
+
 float radialPart(float r) {
     float positionInTexture = r / maximumRadius * numRadialSubdivisions;
     if (positionInTexture >= numRadialSubdivisions)
@@ -65,8 +69,7 @@ vec2 longitudinalPart(float phi) {
 
 vec2 angularPart(vec3 x, float r) {
     float theta = acos(x.z / r); // 0 to pi
-    // TODO this might make trouble if x.xy is small
-    float phi = atan(x.y, x.x); // -pi to pi
+    float phi = atan(x.y, x.x); // -pi to pi (always numerically safe)
     return azimuthalPart(theta) * longitudinalPart(phi);
 }
 
