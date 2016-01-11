@@ -59,7 +59,7 @@ public class Integrator extends RenderStage {
                 0.0, Math.PI, AZIMUTHAL_TEXTURE_SIZE - 1);
 
         // Set up Gaussian Quadrature
-        float[] quadratureWeights = new float[2 * QUADRATURE_POINTS * QUADRATURE_SIZE];
+        float[] quadratureWeights = new float[4 * QUADRATURE_POINTS * QUADRATURE_SIZE];
         // Multiply by 2 because wave function is squared
         mExponentialConstant = 2.0 * radialFunction.exponentialConstant();
         for (int i = 0; i < QUADRATURE_SIZE; ++i) {
@@ -70,13 +70,21 @@ public class Integrator extends RenderStage {
             String logMessage = "Data " + distanceFromOrigin;
 
             for (int j = 0; j < QUADRATURE_POINTS; ++j) {
-                quadratureWeights[2 * QUADRATURE_POINTS * i + 2 * j]
+                quadratureWeights[4 * QUADRATURE_POINTS * i + 4 * j]
                         = (float) GQ.getNode(j);
-                quadratureWeights[2 * QUADRATURE_POINTS * i + 2 * j + 1]
+                quadratureWeights[4 * QUADRATURE_POINTS * i + 4 * j + 1]
                         = (float) (GQ.getWeight(j) / weightFunction.eval(GQ.getNode(j)));
 
-                logMessage += " " + quadratureWeights[2 * QUADRATURE_POINTS * i + 2 * j];
-                logMessage += " " + quadratureWeights[2 * QUADRATURE_POINTS * i + 2 * j + 1];
+                // Backfill previous
+                if (i > 0) {
+                    quadratureWeights[4 * QUADRATURE_POINTS * (i - 1) + 4 * j + 2]
+                            = quadratureWeights[4 * QUADRATURE_POINTS * i + 4 * j];
+                    quadratureWeights[4 * QUADRATURE_POINTS * (i - 1) + 4 * j + 3]
+                            = quadratureWeights[4 * QUADRATURE_POINTS * i + 4 * j + 1];
+                }
+
+                logMessage += " " + quadratureWeights[4 * QUADRATURE_POINTS * i + 4 * j];
+                logMessage += " " + quadratureWeights[4 * QUADRATURE_POINTS * i + 4 * j + 1];
             }
 
             Log.d(TAG, logMessage);
@@ -134,9 +142,9 @@ public class Integrator extends RenderStage {
         // Floating point textures are not filterable
         setTexture2DMinMagFilters(GLES30.GL_NEAREST, GLES30.GL_NEAREST);
 
-        final int quadratureFormat = GLES30.GL_RG;
+        final int quadratureFormat = GLES30.GL_RGBA;
         final int quadratureType = GLES30.GL_FLOAT;
-        final int quadratureInternalFormat = GLES30.GL_RG32F;
+        final int quadratureInternalFormat = GLES30.GL_RGBA32F;
         // Create quadrature weight texture
         mQuadratureWeightTexture
                 = new Texture(quadratureFormat, quadratureType, quadratureInternalFormat);

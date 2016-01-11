@@ -49,12 +49,10 @@ vec2 quadratureData(float distanceToOrigin, int point) {
     float positionInTexture = distanceToOrigin / maximumRadius * numQuadratureSubdivisions;
     if (positionInTexture >= numQuadratureSubdivisions)
         return vec2(0.0);
-    float leftTexturePosition = trunc(positionInTexture);
-    vec2 leftTextureValue = texelFetch(quadrature, ivec2(point, leftTexturePosition), 0).xy;
-    float rightTexturePosition = leftTexturePosition + 1.0;
-    vec2 rightTextureValue = texelFetch(quadrature, ivec2(point, rightTexturePosition), 0).xy;
+    float texturePosition = trunc(positionInTexture);
+    vec4 textureValue = texelFetch(quadrature, ivec2(point, texturePosition), 0);
     float interpolationValue = fract(positionInTexture);
-    return mix(leftTextureValue, rightTextureValue, interpolationValue);
+    return mix(textureValue.xy, textureValue.zw, interpolationValue);
 }
 
 vec2 longitudinalPart(float phi) {
