@@ -83,8 +83,8 @@ public class OrbitalRenderer implements GLSurfaceView.Renderer {
 
         if (recentPerformance < -30.0) {
             performanceScalingFactor /= Math.pow(2.0, 0.125);
-            if (performanceScalingFactor < 0.01)
-                performanceScalingFactor = 0.01;
+            if (performanceScalingFactor < 0.25)
+                performanceScalingFactor = 0.25;
             resizeIntegration();
             recentPerformance = 0.0;
         }
