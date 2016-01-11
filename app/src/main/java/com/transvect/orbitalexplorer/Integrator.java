@@ -53,7 +53,7 @@ public class Integrator extends RenderStage {
 
         mWaveFunction = new WaveFunction(Z, N, L, M);
         RadialFunction radialFunction = mWaveFunction.getRadialFunction();
-        mRadialData = functionToBuffer(radialFunction.oscillatingPart(),
+        mRadialData = functionToBuffer2(radialFunction.oscillatingPart(),
                 0.0, MAXIMUM_RADIUS, RADIAL_TEXTURE_SIZE - 1);
         mAzimuthalData = functionToBuffer2(mWaveFunction.getAzimuthalFunction(),
                 0.0, Math.PI, AZIMUTHAL_TEXTURE_SIZE - 1);
@@ -117,15 +117,15 @@ public class Integrator extends RenderStage {
         final int orbitalType = GLES30.GL_FLOAT;
         final int orbitalInternalFormat = GLES30.GL_R32F;
 
+        final int orbitalFormat2 = GLES30.GL_RG;
+        final int orbitalInternalFormat2 = GLES30.GL_RG32F;
+
         // Create radial texture
-        mRadialTexture = new Texture(orbitalFormat, orbitalType, orbitalInternalFormat);
+        mRadialTexture = new Texture(orbitalFormat2, orbitalType, orbitalInternalFormat2);
         mRadialTexture.bindToTexture2DAndSetImage(RADIAL_TEXTURE_SIZE, 1, mRadialData);
 
         // Floating point textures are not filterable
         setTexture2DMinMagFilters(GLES30.GL_NEAREST, GLES30.GL_NEAREST);
-
-        final int orbitalFormat2 = GLES30.GL_RG;
-        final int orbitalInternalFormat2 = GLES30.GL_RG32F;
 
         // Create azimuthal texture
         mAzimuthalTexture = new Texture(orbitalFormat2, orbitalType, orbitalInternalFormat2);

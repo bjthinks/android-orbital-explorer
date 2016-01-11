@@ -25,12 +25,10 @@ float radialPart(float r) {
     float positionInTexture = r / maximumRadius * numRadialSubdivisions;
     if (positionInTexture >= numRadialSubdivisions)
         return 0.0;
-    float leftTexturePosition = trunc(positionInTexture);
-    float leftTextureValue = texelFetch(radial, ivec2(leftTexturePosition, 0), 0).x;
-    float rightTexturePosition = leftTexturePosition + 1.0;
-    float rightTextureValue = texelFetch(radial, ivec2(rightTexturePosition, 0), 0).x;
+    float texturePosition = trunc(positionInTexture);
+    vec2 textureValue = texelFetch(radial, ivec2(texturePosition, 0), 0).xy;
     float interpolationValue = fract(positionInTexture);
-    return mix(leftTextureValue, rightTextureValue, interpolationValue);
+    return mix(textureValue.x, textureValue.y, interpolationValue);
 }
 
 float azimuthalPart(float theta) {
