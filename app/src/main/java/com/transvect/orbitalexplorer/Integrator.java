@@ -55,7 +55,7 @@ public class Integrator extends RenderStage {
         RadialFunction radialFunction = mWaveFunction.getRadialFunction();
         mRadialData = functionToBuffer(radialFunction.oscillatingPart(),
                 0.0, MAXIMUM_RADIUS, RADIAL_TEXTURE_SIZE - 1);
-        mAzimuthalData = functionToBuffer(mWaveFunction.getAzimuthalFunction(),
+        mAzimuthalData = functionToBuffer2(mWaveFunction.getAzimuthalFunction(),
                 0.0, Math.PI, AZIMUTHAL_TEXTURE_SIZE - 1);
 
         // Set up Gaussian Quadrature
@@ -124,8 +124,11 @@ public class Integrator extends RenderStage {
         // Floating point textures are not filterable
         setTexture2DMinMagFilters(GLES30.GL_NEAREST, GLES30.GL_NEAREST);
 
+        final int orbitalFormat2 = GLES30.GL_RG;
+        final int orbitalInternalFormat2 = GLES30.GL_RG32F;
+
         // Create azimuthal texture
-        mAzimuthalTexture = new Texture(orbitalFormat, orbitalType, orbitalInternalFormat);
+        mAzimuthalTexture = new Texture(orbitalFormat2, orbitalType, orbitalInternalFormat2);
         mAzimuthalTexture.bindToTexture2DAndSetImage(AZIMUTHAL_TEXTURE_SIZE, 1, mAzimuthalData);
 
         // Floating point textures are not filterable

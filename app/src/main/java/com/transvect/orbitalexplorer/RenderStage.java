@@ -27,6 +27,17 @@ public class RenderStage {
         return floatArrayToBuffer(data);
     }
 
+    protected static FloatBuffer functionToBuffer2(Function f, double start, double end, int steps) {
+        float data[] = new float[2 * (steps + 1)];
+        for (int i = 0; i <= steps; ++i) {
+            double x = start + (end - start) * (double) i / steps;
+            data[2 * i] = (float) f.eval(x);
+            x = start + (end - start) * (double) (i + 1) / steps;
+            data[2 * i + 1] = (float) f.eval(x);
+        }
+        return floatArrayToBuffer(data);
+    }
+
     protected void setTexture2DMinMagFilters(int minFilter, int magFilter) {
         GLES30.glTexParameteri(GLES30.GL_TEXTURE_2D,
                 GLES30.GL_TEXTURE_MIN_FILTER, minFilter);

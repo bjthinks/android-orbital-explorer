@@ -39,12 +39,10 @@ float azimuthalPart(float theta) {
     if (positionInTexture >= numAzimuthalSubdivisions) {
         result = texelFetch(azimuthal, ivec2(numAzimuthalSubdivisions, 0), 0).x;
     } else {
-        float leftTexturePosition = trunc(positionInTexture);
-        float leftTextureValue = texelFetch(azimuthal, ivec2(leftTexturePosition, 0), 0).x;
-        float rightTexturePosition = leftTexturePosition + 1.0;
-        float rightTextureValue = texelFetch(azimuthal, ivec2(rightTexturePosition, 0), 0).x;
+        float texturePosition = trunc(positionInTexture);
+        vec2 textureValue = texelFetch(azimuthal, ivec2(texturePosition, 0), 0).xy;
         float interpolationValue = fract(positionInTexture);
-        result = mix(leftTextureValue, rightTextureValue, interpolationValue);
+        result = mix(textureValue.x, textureValue.y, interpolationValue);
     }
     return result;
 }
