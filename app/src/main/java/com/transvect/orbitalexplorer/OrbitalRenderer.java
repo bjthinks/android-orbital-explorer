@@ -52,7 +52,8 @@ public class OrbitalRenderer implements GLSurfaceView.Renderer {
     }
 
     private void resizeIntegration() {
-        double scaleDownFactor = performanceScalingFactor * 80.0 / mMetrics.densityDpi;
+        double scaleDownFactor = performanceScalingFactor * 160.0
+                / Math.max(160.0, mMetrics.densityDpi);
         int integrationWidth  = (int) (scaleDownFactor * mWidth);
         int integrationHeight = (int) (scaleDownFactor * mHeight);
         mIntegrator.resize(integrationWidth, integrationHeight);
@@ -82,10 +83,12 @@ public class OrbitalRenderer implements GLSurfaceView.Renderer {
             recentPerformance -= Math.log((double) -frameGoodness);
 
         if (recentPerformance < -30.0) {
-            performanceScalingFactor /= Math.pow(2.0, 0.125);
-            if (performanceScalingFactor < 0.25)
-                performanceScalingFactor = 0.25;
-            resizeIntegration();
+            if (performanceScalingFactor > 0.125) {
+                performanceScalingFactor /= Math.pow(2.0, 0.125);
+                if (performanceScalingFactor < 0.125)
+                    performanceScalingFactor = 0.125;
+                resizeIntegration();
+            }
             recentPerformance = 0.0;
         }
 
