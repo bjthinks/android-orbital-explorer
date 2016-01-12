@@ -28,12 +28,14 @@ void main() {
     vec3 rt = vec3(texelFetch(data, rightTop, 0).xyz);
 
     vec2 interp = fract(texCoord);
-    vec3 total = mix(mix(lb, rb, interp.x), mix(lt, rt, interp.x), interp.y) / 32767.0;
+    // needs to be divided by 32767.0
+    vec3 total = mix(mix(lb, rb, interp.x), mix(lt, rt, interp.x), interp.y);
 
     const vec2 white = vec2(0.19784, 0.46832);
     vec2 uv_prime = white;
-    if (total.z > 0.0)
-        uv_prime += 0.06 * total.xy;
+    // if z is zero, then x and y are also zero, so the below "if" is redundant
+    //if (total.z > 0.0)
+    uv_prime += total.xy * (0.06 / 32767.0);
 
     // Convert CIE (u',v') color coordinates (as per CIELUV) to (x,y)
     vec2 xy = vec2(9.0, 4.0) * uv_prime;
@@ -43,7 +45,7 @@ void main() {
     vec3 xyz = vec3(xy, 1.0 - xy.x - xy.y);
 
     // Convert xyz to XYZ
-    float Y = 0.5 * total.z;
+    float Y = total.z * (0.5 / 32767.0);
     vec3 XYZ = (Y / xyz.y) * xyz;
 
     // Convert XYZ to linear (i.e. pre-gamma) RGB values
