@@ -76,7 +76,6 @@ public class Integrator extends RenderStage {
             WeightFunction weightFunction
                     = new WeightFunction(distanceFromOrigin);
             GaussianQuadrature GQ = new GaussianQuadrature(weightFunction, mQuadraturePoints);
-            String logMessage = "Data " + distanceFromOrigin;
 
             for (int j = 0; j < mQuadraturePoints; ++j) {
                 quadratureWeights[4 * mQuadraturePoints * i + 4 * j]
@@ -91,12 +90,7 @@ public class Integrator extends RenderStage {
                     quadratureWeights[4 * mQuadraturePoints * (i - 1) + 4 * j + 3]
                             = quadratureWeights[4 * mQuadraturePoints * i + 4 * j + 1];
                 }
-
-                logMessage += " " + quadratureWeights[4 * mQuadraturePoints * i + 4 * j];
-                logMessage += " " + quadratureWeights[4 * mQuadraturePoints * i + 4 * j + 1];
             }
-
-            Log.d(TAG, logMessage);
         }
         mQuadratureWeights = floatArrayToBuffer(quadratureWeights);
     }
