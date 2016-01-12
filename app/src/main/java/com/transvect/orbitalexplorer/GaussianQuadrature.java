@@ -97,5 +97,19 @@ public class GaussianQuadrature {
             mNode[i] = J.getDiagonal(i);
             mWeight[i] = Math.pow(J.getComponent(i), 2.0) * moments[0];
         }
+
+        // The nodes and weights will be nearly sorted, and there aren't very many of them,
+        // so we pass them through an insertion sort.
+        for (int i = 1; i < N; ++i) {
+            for (int j = i; j > 0 && mNode[j - 1] > mNode[j]; --j) {
+                double tempNode = mNode[j];
+                mNode[j] = mNode[j - 1];
+                mNode[j - 1] = tempNode;
+
+                double tempWeight = mWeight[j];
+                mWeight[j] = mWeight[j - 1];
+                mWeight[j - 1] = tempWeight;
+            }
+        }
     }
 }
