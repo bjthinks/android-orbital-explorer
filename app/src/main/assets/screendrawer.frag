@@ -33,8 +33,6 @@ void main() {
 
     const vec2 white = vec2(0.19784, 0.46832);
     vec2 uv_prime = white;
-    // if z is zero, then x and y are also zero, so the below "if" is redundant
-    //if (total.z > 0.0)
     uv_prime += total.xy * (0.06 / 32767.0);
 
     // Convert CIE (u',v') color coordinates (as per CIELUV) to (x,y)
