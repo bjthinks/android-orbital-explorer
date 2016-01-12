@@ -51,7 +51,13 @@ public class Integrator extends RenderStage {
         int L = 4;
         int M = 1;
 
-        mQuadraturePoints = Math.max(N - L, L - M + 1);
+        int hardness1 = N - L;      // radial nodes make rendering hard
+        int hardness2 = L - M + 1;  // azimuthal nodes make rendering hard
+        int greaterHardness = Math.max(hardness1, hardness2);
+        int lesserHardness  = Math.min(hardness1, hardness2);
+        // The below formula comes from tons of experimentation and seems to give
+        // eye-accurate renderings of all orbitals.
+        mQuadraturePoints = greaterHardness + lesserHardness / 2 + M / 3;
         Log.d(TAG, "Quadrature points = " + mQuadraturePoints);
 
         mWaveFunction = new WaveFunction(Z, N, L, M);
