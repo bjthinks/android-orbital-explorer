@@ -52,6 +52,13 @@ public class ScreenDrawer extends RenderStage {
         int texSizeHandle = GLES30.glGetUniformLocation(mProgram, "texSize");
         GLES30.glUniform2f(texSizeHandle, (float) mInputWidth, (float) mInputHeight);
 
+        int colorRotation = GLES30.glGetUniformLocation(mProgram, "colorRotation");
+        float[] rot = new float[4];
+        double t = 2 * Math.PI * (double) (System.currentTimeMillis() % 10000) / 10000.0;
+        rot[0] = (float) Math.cos(t);  rot[2] = (float) -Math.sin(t);
+        rot[1] = (float) Math.sin(t);  rot[3] = (float) Math.cos(t);
+        GLES30.glUniformMatrix2fv(colorRotation, 1, false, rot, 0);
+
         int inPositionHandle = GLES30.glGetAttribLocation(mProgram, "inPosition");
         GLES30.glEnableVertexAttribArray(inPositionHandle);
         GLES30.glVertexAttribPointer(inPositionHandle, 2, GLES30.GL_FLOAT, false, 8, mVertexBuffer);

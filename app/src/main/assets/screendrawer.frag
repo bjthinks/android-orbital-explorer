@@ -3,6 +3,7 @@ precision highp int;
 precision highp float;
 uniform isampler2D data;
 uniform vec2 texSize;
+uniform mat2 colorRotation;
 in vec2 boxCoord;
 out vec3 color;
 
@@ -31,9 +32,11 @@ void main() {
     // needs to be divided by 32767.0
     vec3 total = mix(mix(lb, rb, interp.x), mix(lt, rt, interp.x), interp.y);
 
-    const vec2 white = vec2(0.19784, 0.46832);
-    vec2 uv_prime = white;
-    uv_prime += total.xy * (0.06 / 32767.0);
+    vec2 uv_prime = total.xy / 32767.0;
+    uv_prime = colorRotation * uv_prime;
+    uv_prime *= 0.06;
+
+    uv_prime += vec2(0.19784, 0.46832); // white
 
     // Convert CIE (u',v') color coordinates (as per CIELUV) to (x,y)
     vec2 xy = vec2(9.0, 4.0) * uv_prime;
