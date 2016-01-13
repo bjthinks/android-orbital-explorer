@@ -1,6 +1,7 @@
 package com.transvect.orbitalexplorer;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.res.AssetManager;
 import android.opengl.GLSurfaceView;
 import android.util.DisplayMetrics;
@@ -12,19 +13,17 @@ import javax.microedition.khronos.opengles.GL10;
 public class OrbitalRenderer implements GLSurfaceView.Renderer {
     private static final String TAG = "OrbitalRenderer";
 
-    private DisplayMetrics mMetrics;
+    private int mDpi;
     private OrbitalView mOrbitalView;
     private AssetManager mAssetManager;
     private Integrator mIntegrator;
     private ScreenDrawer mScreenDrawer;
 
     // Main thread
-    public OrbitalRenderer(OrbitalView orbitalView, Activity context) {
-        mMetrics = new DisplayMetrics();
-        context.getWindowManager().getDefaultDisplay().getMetrics(mMetrics);
-
+    public OrbitalRenderer(OrbitalView orbitalView, Context context) {
         mOrbitalView = orbitalView;
         mAssetManager = context.getAssets();
+        mDpi = context.getResources().getDisplayMetrics().densityDpi;
         mIntegrator = new Integrator(context);
         mScreenDrawer = new ScreenDrawer();
     }
@@ -51,8 +50,7 @@ public class OrbitalRenderer implements GLSurfaceView.Renderer {
     }
 
     private void resizeIntegration() {
-        double scaleDownFactor = performanceScalingFactor * 160.0
-                / Math.max(160.0, mMetrics.densityDpi);
+        double scaleDownFactor = performanceScalingFactor * 160.0 / Math.max(160.0, mDpi);
         int integrationWidth  = (int) (scaleDownFactor * mWidth);
         int integrationHeight = (int) (scaleDownFactor * mHeight);
         mIntegrator.resize(integrationWidth, integrationHeight);

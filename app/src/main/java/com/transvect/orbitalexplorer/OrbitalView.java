@@ -6,6 +6,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 
@@ -35,6 +36,9 @@ public class OrbitalView extends GLSurfaceView {
 
         mCamera = new Camera();
         mFlingDetector = new GestureDetector(context, new FlingListener());
+
+        // Start the rendering thread
+        setRenderer(new OrbitalRenderer(this, context));
     }
 
     @Override

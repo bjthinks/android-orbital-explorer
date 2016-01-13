@@ -63,10 +63,6 @@ public class MainActivity extends AppCompatActivity {
         //menu.setPadding(0, 50, 0, 100);
 
         mOrbitalView = (OrbitalView) findViewById(R.id.orbitalview);
-        // Make an OrbitalRenderer. Needs assets for shader code.
-        OrbitalRenderer renderer = new OrbitalRenderer(mOrbitalView, this);
-        // Start the rendering thread
-        mOrbitalView.setRenderer(renderer);
     }
 
     private int getStatusBarHeight() {
