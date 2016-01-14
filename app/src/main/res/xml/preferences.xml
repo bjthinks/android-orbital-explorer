@@ -7,10 +7,10 @@
         android:summary="@string/pref_sync_summ"
         android:defaultValue="true" /> -->
     <ListPreference
-        android:key="prefColor"
-        android:title="@string/prefColorTitle"
-        android:dialogTitle="@string/prefColorTitle"
-        android:entries="@array/prefColorEntries"
-        android:entryValues="@array/prefColorValues"
-        android:defaultValue="@string/prefColorDefault" />
+        android:key="prefColorMode"
+        android:title="@string/prefColorMode_Title"
+        android:dialogTitle="@string/prefColorMode_Title"
+        android:entries="@array/prefColorMode_Entries"
+        android:entryValues="@array/prefColorMode_Values"
+        android:defaultValue="@string/prefColorMode_Default" />
 </PreferenceScreen>

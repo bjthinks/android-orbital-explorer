@@ -21,9 +21,9 @@ public class SettingsFragment extends PreferenceFragment
         super.onResume();
         getPreferenceManager().getSharedPreferences()
                 .registerOnSharedPreferenceChangeListener(this);
-        ListPreference prefColor = (ListPreference) findPreference("prefColor");
-        if (prefColor != null)
-            prefColor.setSummary(prefColor.getEntry());
+        ListPreference prefColorMode = (ListPreference) findPreference("prefColorMode");
+        if (prefColorMode != null)
+            prefColorMode.setSummary(prefColorMode.getEntry());
     }
 
     @Override

@@ -1,17 +1,16 @@
 <resources>
     <string name="app_name">Orbital Explorer</string>
-    <string name="action_settings">Settings</string>
 
-    <string name="prefColorTitle">Color Mode</string>
-    <string-array name="prefColorEntries">
+    <string name="prefColorMode_Title">Color Mode</string>
+    <string-array name="prefColorMode_Entries">
         <item>Normal</item>
         <item>Grayscale</item>
         <item>Red-green colorblind (experimental)</item>
     </string-array>
-    <string-array name="prefColorValues">
+    <string-array name="prefColorMode_Values">
         <item>0</item>
         <item>1</item>
         <item>2</item>
     </string-array>
-    <string name="prefColorDefault">0</string>
+    <string name="prefColorMode_Default">0</string>
 </resources>

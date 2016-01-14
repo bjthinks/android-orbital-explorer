@@ -13,7 +13,7 @@ public class RenderPreferences
 
     RenderPreferences(Context context) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        mColorMode = Integer.parseInt(preferences.getString("prefColor", "0"));
+        mColorMode = Integer.parseInt(preferences.getString("prefColorMode", "0"));
         preferences.registerOnSharedPreferenceChangeListener(this);
     }
 
@@ -22,9 +22,8 @@ public class RenderPreferences
     }
 
     @Override
-    synchronized public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
-                                                       String key) {
-        if (key.equals("prefColor"))
-            mColorMode = Integer.parseInt(sharedPreferences.getString("prefColor", "0"));
+    synchronized public void onSharedPreferenceChanged(SharedPreferences preferences, String key) {
+        if (key.equals("prefColorMode"))
+            mColorMode = Integer.parseInt(preferences.getString("prefColorMode", "0"));
     }
 }
