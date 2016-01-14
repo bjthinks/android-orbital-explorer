@@ -58,10 +58,6 @@ public class MainActivity extends AppCompatActivity {
         // Set the toolbar as the ActionBar for this Activity
         setSupportActionBar(toolbar);
 
-        String[] blet = { "Settings" };
-        menu.setAdapter(new ArrayAdapter<String>(this, R.layout.menu_item, blet));
-        //menu.setPadding(0, 50, 0, 100);
-
         mOrbitalView = (OrbitalView) findViewById(R.id.orbitalview);
     }
 

@@ -29,6 +29,7 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:choiceMode="singleChoice"
-        android:background="#000" />
+        android:background="#000"
+        android:entries="@array/mainMenuItems" />
 
 </android.support.v4.widget.DrawerLayout>
