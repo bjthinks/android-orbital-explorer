@@ -16,7 +16,8 @@ public class IntegerChanger extends LinearLayout {
     private ImageButton upArrow;
     private ImageButton downArrow;
     private TextView text;
-    private Integer value;
+    private int value;
+    private int minValue, maxValue;
 
     public IntegerChanger(Context context) {
         super(context);
@@ -51,7 +52,7 @@ public class IntegerChanger extends LinearLayout {
         upArrow.setOnClickListener(new Modifier(1));
         downArrow.setOnClickListener(new Modifier(-1));
 
-        setValue(0);
+        text.setText(String.format("%d", value));
     }
 
     private class Modifier implements OnClickListener {
@@ -72,7 +73,22 @@ public class IntegerChanger extends LinearLayout {
     }
 
     public void setValue(int v) {
-        value = v;
-        text.setText(value.toString());
+        if (v < minValue)
+            v = minValue;
+        if (v > maxValue)
+            v = maxValue;
+        if (value != v) {
+            value = v;
+            text.setText(String.format("%d", value));
+        }
+    }
+
+    public void setRange(int lo, int hi) {
+        minValue = lo;
+        maxValue = hi;
+        if (value < lo)
+            setValue(lo);
+        if (value > hi)
+            setValue(hi);
     }
 }

@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
         // as the ContentView for this Activity.
         setContentView(R.layout.activity_main);
 
-        // Inflate a Toolbar instance
+        // Find the toolbar and menu
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         ListView menu = (ListView) findViewById(R.id.main_menu);
 
@@ -57,6 +57,17 @@ public class MainActivity extends AppCompatActivity {
 
         // Set the toolbar as the ActionBar for this Activity
         setSupportActionBar(toolbar);
+
+        /*
+        // Find the orbital controls
+        IntegerChanger nChanger = (IntegerChanger) findViewById(R.id.nchanger);
+        IntegerChanger lChanger = (IntegerChanger) findViewById(R.id.lchanger);
+        IntegerChanger mChanger = (IntegerChanger) findViewById(R.id.mchanger);
+
+        nChanger.setRange(1, 8);
+        lChanger.setRange(0, 7);
+        mChanger.setRange(-7, 7);
+        */
 
         mOrbitalView = (OrbitalView) findViewById(R.id.orbitalview);
     }
