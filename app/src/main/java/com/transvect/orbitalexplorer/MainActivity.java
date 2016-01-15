@@ -58,16 +58,8 @@ public class MainActivity extends AppCompatActivity {
         // Set the toolbar as the ActionBar for this Activity
         setSupportActionBar(toolbar);
 
-        /*
-        // Find the orbital controls
-        IntegerChanger nChanger = (IntegerChanger) findViewById(R.id.nchanger);
-        IntegerChanger lChanger = (IntegerChanger) findViewById(R.id.lchanger);
-        IntegerChanger mChanger = (IntegerChanger) findViewById(R.id.mchanger);
-
-        nChanger.setRange(1, 8);
-        lChanger.setRange(0, 7);
-        mChanger.setRange(-7, 7);
-        */
+        // Find the orbital control
+        // OrbitalSelector orbitalSelector = (OrbitalSelector) findViewById(R.id.orbitalselector);
 
         mOrbitalView = (OrbitalView) findViewById(R.id.orbitalview);
     }

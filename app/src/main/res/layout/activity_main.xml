@@ -30,25 +30,10 @@
                 android:layout_width="1dp"
                 android:layout_height="400dp" />
 
-            <LinearLayout
+            <com.transvect.orbitalexplorer.OrbitalSelector
+                android:id="@+id/orbitalselector"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <com.transvect.orbitalexplorer.IntegerChanger
-                    android:id="@+id/nchanger"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-                <com.transvect.orbitalexplorer.IntegerChanger
-                    android:id="@+id/lchanger"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-                <com.transvect.orbitalexplorer.IntegerChanger
-                    android:id="@+id/mchanger"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-
-            </LinearLayout>
+                android:layout_height="wrap_content" />
 
         </LinearLayout> -->
 
