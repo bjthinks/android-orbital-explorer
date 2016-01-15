@@ -18,6 +18,7 @@ public class IntegerChanger extends LinearLayout {
     private TextView text;
     private int value;
     private int minValue, maxValue;
+    private OnChangeListener onChangeListener;
 
     public IntegerChanger(Context context) {
         super(context);
@@ -80,6 +81,8 @@ public class IntegerChanger extends LinearLayout {
         if (value != v) {
             value = v;
             text.setText(String.format("%d", value));
+            if (onChangeListener != null)
+                onChangeListener.onChange();
         }
     }
 
@@ -90,5 +93,9 @@ public class IntegerChanger extends LinearLayout {
             setValue(lo);
         if (value > hi)
             setValue(hi);
+    }
+
+    public void setOnChangeListener(OnChangeListener ocl) {
+        onChangeListener = ocl;
     }
 }
