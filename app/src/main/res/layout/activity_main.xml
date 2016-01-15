@@ -10,16 +10,31 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    <com.transvect.orbitalexplorer.OrbitalView
-        android:id="@+id/orbitalview"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        <com.transvect.orbitalexplorer.OrbitalView
+            android:id="@+id/orbitalview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
-    <android.support.v7.widget.Toolbar
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        <android.support.v7.widget.Toolbar
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <!-- <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="400dp" />
+            <com.transvect.orbitalexplorer.IntegerChanger
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+
+        </LinearLayout> -->
 
     </FrameLayout>
 
