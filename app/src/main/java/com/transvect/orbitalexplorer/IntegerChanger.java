@@ -48,20 +48,23 @@ public class IntegerChanger extends LinearLayout {
         downArrow = (ImageButton) findViewById(R.id.integerchanger_downarrow);
         text = (TextView) findViewById(R.id.integerchanger_value);
 
-        upArrow.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                setValue(value + 1);
-            }
-        });
-        downArrow.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                setValue(value - 1);
-            }
-        });
+        upArrow.setOnClickListener(new Modifier(1));
+        downArrow.setOnClickListener(new Modifier(-1));
 
         setValue(0);
+    }
+
+    private class Modifier implements OnClickListener {
+        private int delta;
+
+        public Modifier(int d) {
+            delta = d;
+        }
+
+        @Override
+        public void onClick(View view) {
+            setValue(value + delta);
+        }
     }
 
     public int getValue() {
