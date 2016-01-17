@@ -110,7 +110,6 @@ public class OrbitalSelector extends LinearLayout {
         public void onClick(View view) {
             if (N < maxN)
                 increaseN();
-            Log.d(TAG, "N up");
         }
     }
 
@@ -119,7 +118,6 @@ public class OrbitalSelector extends LinearLayout {
         public void onClick(View view) {
             if (N > 0)
                 decreaseN();
-            Log.d(TAG, "N down");
         }
     }
 
@@ -128,7 +126,6 @@ public class OrbitalSelector extends LinearLayout {
         public void onClick(View view) {
             if (L < maxN - 1)
                 increaseL();
-            Log.d(TAG, "L up");
         }
     }
 
@@ -137,7 +134,6 @@ public class OrbitalSelector extends LinearLayout {
         public void onClick(View view) {
             if (L > 0)
                 decreaseL();
-            Log.d(TAG, "L down");
         }
     }
 
@@ -146,7 +142,6 @@ public class OrbitalSelector extends LinearLayout {
         public void onClick(View view) {
             if (M < maxN - 1)
                 increaseM();
-            Log.d(TAG, "M up");
         }
     }
 
@@ -155,7 +150,6 @@ public class OrbitalSelector extends LinearLayout {
         public void onClick(View view) {
             if (M > 1 - maxN)
                 decreaseM();
-            Log.d(TAG, "M down");
         }
     }
 }
