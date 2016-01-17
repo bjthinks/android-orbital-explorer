@@ -58,30 +58,38 @@ public class OrbitalSelector extends LinearLayout {
         mChanger.setInteger(M);
 
         nChanger.setOnUpListener(  new OnClickListener() {
-            public void onClick(View v) { increaseN(); newOrbital(); }
+            public void onClick(View v) { increaseN(); orbitalChanged(); }
         });
         nChanger.setOnDownListener(new OnClickListener() {
-            public void onClick(View v) { decreaseN(); newOrbital(); }
+            public void onClick(View v) { decreaseN(); orbitalChanged(); }
         });
         lChanger.setOnUpListener(  new OnClickListener() {
-            public void onClick(View v) { increaseL(); newOrbital(); }
+            public void onClick(View v) { increaseL(); orbitalChanged(); }
         });
         lChanger.setOnDownListener(new OnClickListener() {
-            public void onClick(View v) { decreaseL(); newOrbital(); }
+            public void onClick(View v) { decreaseL(); orbitalChanged(); }
         });
-        mChanger.setOnUpListener(  new OnClickListener() {
-            public void onClick(View v) { increaseM(); newOrbital();
+        mChanger.setOnUpListener(new OnClickListener() {
+            public void onClick(View v) {
+                increaseM();
+                orbitalChanged();
             }
         });
         mChanger.setOnDownListener(new OnClickListener() {
-            public void onClick(View v) { decreaseM(); newOrbital();
+            public void onClick(View v) {
+                decreaseM();
+                orbitalChanged();
             }
         });
     }
 
-    private void newOrbital() {
+    public void setOrbitalChangedListener(OrbitalChangedListener listener) {
+        orbitalChangedListener = listener;
+    }
+
+    private void orbitalChanged() {
         if (orbitalChangedListener != null)
-            orbitalChangedListener.newOrbital();
+            orbitalChangedListener.onOrbitalChanged(new Orbital(N, N, L, M));
     }
 
     private void increaseN() {
@@ -136,5 +144,16 @@ public class OrbitalSelector extends LinearLayout {
             if (M < -L)
                 increaseL();
         }
+    }
+
+    public void setOrbital(int N_, int L_, int M_) {
+        Log.d(TAG, "SETTING ORBITAL TO " + N_ + " " + L_ + " " + M_);
+        N = N_;
+        L = L_;
+        M = M_;
+        nChanger.setInteger(N);
+        lChanger.setInteger(L);
+        mChanger.setInteger(M);
+        orbitalChanged();
     }
 }

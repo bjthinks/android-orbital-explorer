@@ -1,5 +1,5 @@
 package com.transvect.orbitalexplorer;
 
 public interface OrbitalChangedListener {
-    void newOrbital();
+    void onOrbitalChanged(Orbital o);
 }

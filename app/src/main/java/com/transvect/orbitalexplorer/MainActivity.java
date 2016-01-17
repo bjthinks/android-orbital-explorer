@@ -58,10 +58,13 @@ public class MainActivity extends AppCompatActivity {
         // Set the toolbar as the ActionBar for this Activity
         setSupportActionBar(toolbar);
 
-        // Find the orbital control
-        // OrbitalSelector orbitalSelector = (OrbitalSelector) findViewById(R.id.orbitalselector);
-
+        // Get references to the orbital selector and view
+        OrbitalSelector orbitalSelector = (OrbitalSelector) findViewById(R.id.orbitalselector);
         mOrbitalView = (OrbitalView) findViewById(R.id.orbitalview);
+
+        // Find the orbital control
+        orbitalSelector.setOrbitalChangedListener(mOrbitalView);
+        orbitalSelector.setOrbital(6, 4, 1);
     }
 
     private int getStatusBarHeight() {

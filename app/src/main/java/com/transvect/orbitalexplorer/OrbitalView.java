@@ -7,12 +7,13 @@ import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 
 // TODO review concurrency
-public class OrbitalView extends GLSurfaceView {
-    // private static final String TAG = "OrbitalView";
+public class OrbitalView extends GLSurfaceView implements OrbitalChangedListener {
+    private static final String TAG = "OrbitalView";
 
     private Camera mCamera;
     private GestureDetector mFlingDetector;
@@ -83,6 +84,11 @@ public class OrbitalView extends GLSurfaceView {
                 return new SavedState[size];
             }
         };
+    }
+
+    @Override
+    public void onOrbitalChanged(Orbital o) {
+        Log.d(TAG, "Orbital changed, now (" + o.Z + "," + o.N + "," + o.L + "," + o.M + ")");
     }
 
     private int mFirstPointerID = MotionEvent.INVALID_POINTER_ID;
