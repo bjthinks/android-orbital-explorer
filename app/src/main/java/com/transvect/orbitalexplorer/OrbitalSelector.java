@@ -4,18 +4,15 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 public class OrbitalSelector extends LinearLayout {
 
     private static final String TAG = "OrbitalSelector";
 
-    private IntegerChanger nChanger;
-    private IntegerChanger lChanger;
-    private IntegerChanger mChanger;
+    private ValueChanger nChanger;
+    private ValueChanger lChanger;
+    private ValueChanger mChanger;
 
     public OrbitalSelector(Context context) {
         super(context);
@@ -36,16 +33,16 @@ public class OrbitalSelector extends LinearLayout {
         setOrientation(HORIZONTAL);
         LayoutInflater inflater
                 = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        inflater.inflate(R.layout.orbitalselector_view, this);
+        inflater.inflate(R.layout.view_orbitalselector, this);
     }
 
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
 
-        nChanger = (IntegerChanger) findViewById(R.id.nchanger);
-        lChanger = (IntegerChanger) findViewById(R.id.lchanger);
-        mChanger = (IntegerChanger) findViewById(R.id.mchanger);
+        nChanger = (ValueChanger) findViewById(R.id.nchanger);
+        lChanger = (ValueChanger) findViewById(R.id.lchanger);
+        mChanger = (ValueChanger) findViewById(R.id.mchanger);
 
         nChanger.setRange(1, 8);
         lChanger.setRange(0, 0);
