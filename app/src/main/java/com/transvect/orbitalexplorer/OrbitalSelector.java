@@ -21,6 +21,8 @@ public class OrbitalSelector extends LinearLayout {
     private ValueChanger lChanger;
     private ValueChanger mChanger;
 
+    private OrbitalChangedListener orbitalChangedListener;
+
     public OrbitalSelector(Context context) {
         super(context);
         constructorSetup(context);
@@ -55,24 +57,31 @@ public class OrbitalSelector extends LinearLayout {
         lChanger.setInteger(L);
         mChanger.setInteger(M);
 
-        nChanger.setOnUpListener(new OnClickListener() {
-            public void onClick(View v) { increaseN(); }
+        nChanger.setOnUpListener(  new OnClickListener() {
+            public void onClick(View v) { increaseN(); newOrbital(); }
         });
         nChanger.setOnDownListener(new OnClickListener() {
-            public void onClick(View v) { decreaseN(); }
+            public void onClick(View v) { decreaseN(); newOrbital(); }
         });
-        lChanger.setOnUpListener(new OnClickListener() {
-            public void onClick(View v) { increaseL(); }
+        lChanger.setOnUpListener(  new OnClickListener() {
+            public void onClick(View v) { increaseL(); newOrbital(); }
         });
         lChanger.setOnDownListener(new OnClickListener() {
-            public void onClick(View v) { decreaseL(); }
+            public void onClick(View v) { decreaseL(); newOrbital(); }
         });
-        mChanger.setOnUpListener(new OnClickListener() {
-            public void onClick(View v) { increaseM(); }
+        mChanger.setOnUpListener(  new OnClickListener() {
+            public void onClick(View v) { increaseM(); newOrbital();
+            }
         });
         mChanger.setOnDownListener(new OnClickListener() {
-            public void onClick(View v) { decreaseM(); }
+            public void onClick(View v) { decreaseM(); newOrbital();
+            }
         });
+    }
+
+    private void newOrbital() {
+        if (orbitalChangedListener != null)
+            orbitalChangedListener.newOrbital();
     }
 
     private void increaseN() {
