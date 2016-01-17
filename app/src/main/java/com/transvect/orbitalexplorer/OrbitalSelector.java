@@ -4,11 +4,18 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.LinearLayout;
 
 public class OrbitalSelector extends LinearLayout {
 
     private static final String TAG = "OrbitalSelector";
+
+    private static final int maxN = 8;
+
+    private int N = 1;
+    private int L = 0;
+    private int M = 0;
 
     private ValueChanger nChanger;
     private ValueChanger lChanger;
@@ -44,38 +51,111 @@ public class OrbitalSelector extends LinearLayout {
         lChanger = (ValueChanger) findViewById(R.id.lchanger);
         mChanger = (ValueChanger) findViewById(R.id.mchanger);
 
-        nChanger.setRange(1, 8);
-        lChanger.setRange(0, 0);
-        mChanger.setRange(0, 0);
+        nChanger.setInteger(N);
+        lChanger.setInteger(L);
+        mChanger.setInteger(M);
 
-        nChanger.setOnChangeListener(new NChanged());
-        lChanger.setOnChangeListener(new LChanged());
-        mChanger.setOnChangeListener(new MChanged());
+        nChanger.setOnUpListener(new NUp());
+        nChanger.setOnDownListener(new NDown());
+        lChanger.setOnUpListener(new LUp());
+        lChanger.setOnDownListener(new LDown());
+        mChanger.setOnUpListener(new MUp());
+        mChanger.setOnDownListener(new MDown());
     }
 
-    private class NChanged implements OnChangeListener {
+    private void increaseN() {
+        ++N;
+        nChanger.setInteger(N);
+    }
+
+    private void decreaseN() {
+        --N;
+        nChanger.setInteger(N);
+        if (L >= N)
+            decreaseL();
+    }
+
+    private void increaseL() {
+        ++L;
+        lChanger.setInteger(L);
+        if (L >= N)
+            increaseN();
+    }
+
+    private void decreaseL() {
+        --L;
+        lChanger.setInteger(L);
+        if (M > L)
+            decreaseM();
+        else if (M < -L)
+            increaseM();
+    }
+
+    private void increaseM() {
+        ++M;
+        mChanger.setInteger(M);
+        if (M > L)
+            increaseL();
+    }
+
+    private void decreaseM() {
+        --M;
+        mChanger.setInteger(M);
+        if (M < -L)
+            increaseL();
+    }
+
+    private class NUp implements OnClickListener {
         @Override
-        public void onChange() {
-            int newN = nChanger.getValue();
-            Log.d(TAG, "N changed to " + newN);
-            lChanger.setRange(0, newN - 1);
+        public void onClick(View view) {
+            if (N < maxN)
+                increaseN();
+            Log.d(TAG, "N up");
         }
     }
 
-    private class LChanged implements OnChangeListener {
+    private class NDown implements OnClickListener {
         @Override
-        public void onChange() {
-            int newL = lChanger.getValue();
-            Log.d(TAG, "L changed to " + newL);
-            mChanger.setRange(-newL, newL);
+        public void onClick(View view) {
+            if (N > 0)
+                decreaseN();
+            Log.d(TAG, "N down");
         }
     }
 
-    private class MChanged implements OnChangeListener {
+    private class LUp implements OnClickListener {
         @Override
-        public void onChange() {
-            int newM = mChanger.getValue();
-            Log.d(TAG, "M changed to " + newM);
+        public void onClick(View view) {
+            if (L < maxN - 1)
+                increaseL();
+            Log.d(TAG, "L up");
+        }
+    }
+
+    private class LDown implements OnClickListener {
+        @Override
+        public void onClick(View view) {
+            if (L > 0)
+                decreaseL();
+            Log.d(TAG, "L down");
+        }
+    }
+
+    private class MUp implements OnClickListener {
+        @Override
+        public void onClick(View view) {
+            if (M < maxN - 1)
+                increaseM();
+            Log.d(TAG, "M up");
+        }
+    }
+
+    private class MDown implements OnClickListener {
+        @Override
+        public void onClick(View view) {
+            if (M > 1 - maxN)
+                decreaseM();
+            Log.d(TAG, "M down");
         }
     }
 }

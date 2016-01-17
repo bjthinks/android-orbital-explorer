@@ -3,7 +3,6 @@ package com.transvect.orbitalexplorer;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -12,12 +11,9 @@ public class ValueChanger extends LinearLayout {
 
     private static final String TAG = "ValueChanger";
 
+    private TextView text;
     private ImageButton upArrow;
     private ImageButton downArrow;
-    private TextView text;
-    private int value;
-    private int minValue, maxValue;
-    private OnChangeListener onChangeListener;
 
     public ValueChanger(Context context) {
         super(context);
@@ -48,53 +44,21 @@ public class ValueChanger extends LinearLayout {
         upArrow = (ImageButton) findViewById(R.id.integerchanger_uparrow);
         downArrow = (ImageButton) findViewById(R.id.integerchanger_downarrow);
         text = (TextView) findViewById(R.id.integerchanger_value);
-
-        upArrow.setOnClickListener(new Modifier(1));
-        downArrow.setOnClickListener(new Modifier(-1));
-
-        text.setText(String.format("%d", value));
     }
 
-    private class Modifier implements OnClickListener {
-        private int delta;
-
-        public Modifier(int d) {
-            delta = d;
-        }
-
-        @Override
-        public void onClick(View view) {
-            setValue(value + delta);
-        }
+    public void setText(String t) {
+        text.setText(t);
     }
 
-    public int getValue() {
-        return value;
+    public void setInteger(int i) {
+        text.setText(String.format("%d", i));
     }
 
-    public void setValue(int v) {
-        if (v < minValue)
-            v = minValue;
-        if (v > maxValue)
-            v = maxValue;
-        if (value != v) {
-            value = v;
-            text.setText(String.format("%d", value));
-            if (onChangeListener != null)
-                onChangeListener.onChange();
-        }
+    public void setOnUpListener(OnClickListener ocl) {
+        upArrow.setOnClickListener(ocl);
     }
 
-    public void setRange(int lo, int hi) {
-        minValue = lo;
-        maxValue = hi;
-        if (value < lo)
-            setValue(lo);
-        if (value > hi)
-            setValue(hi);
-    }
-
-    public void setOnChangeListener(OnChangeListener ocl) {
-        onChangeListener = ocl;
+    public void setOnDownListener(OnClickListener ocl) {
+        downArrow.setOnClickListener(ocl);
     }
 }
