@@ -55,101 +55,77 @@ public class OrbitalSelector extends LinearLayout {
         lChanger.setInteger(L);
         mChanger.setInteger(M);
 
-        nChanger.setOnUpListener(new NUp());
-        nChanger.setOnDownListener(new NDown());
-        lChanger.setOnUpListener(new LUp());
-        lChanger.setOnDownListener(new LDown());
-        mChanger.setOnUpListener(new MUp());
-        mChanger.setOnDownListener(new MDown());
+        nChanger.setOnUpListener(new OnClickListener() {
+            public void onClick(View v) { increaseN(); }
+        });
+        nChanger.setOnDownListener(new OnClickListener() {
+            public void onClick(View v) { decreaseN(); }
+        });
+        lChanger.setOnUpListener(new OnClickListener() {
+            public void onClick(View v) { increaseL(); }
+        });
+        lChanger.setOnDownListener(new OnClickListener() {
+            public void onClick(View v) { decreaseL(); }
+        });
+        mChanger.setOnUpListener(new OnClickListener() {
+            public void onClick(View v) { increaseM(); }
+        });
+        mChanger.setOnDownListener(new OnClickListener() {
+            public void onClick(View v) { decreaseM(); }
+        });
     }
 
     private void increaseN() {
-        ++N;
-        nChanger.setInteger(N);
+        if (N < maxN) {
+            ++N;
+            nChanger.setInteger(N);
+        }
     }
 
     private void decreaseN() {
-        --N;
-        nChanger.setInteger(N);
-        if (L >= N)
-            decreaseL();
-    }
-
-    private void increaseL() {
-        ++L;
-        lChanger.setInteger(L);
-        if (L >= N)
-            increaseN();
-    }
-
-    private void decreaseL() {
-        --L;
-        lChanger.setInteger(L);
-        if (M > L)
-            decreaseM();
-        else if (M < -L)
-            increaseM();
-    }
-
-    private void increaseM() {
-        ++M;
-        mChanger.setInteger(M);
-        if (M > L)
-            increaseL();
-    }
-
-    private void decreaseM() {
-        --M;
-        mChanger.setInteger(M);
-        if (M < -L)
-            increaseL();
-    }
-
-    private class NUp implements OnClickListener {
-        @Override
-        public void onClick(View view) {
-            if (N < maxN)
-                increaseN();
-        }
-    }
-
-    private class NDown implements OnClickListener {
-        @Override
-        public void onClick(View view) {
-            if (N > 0)
-                decreaseN();
-        }
-    }
-
-    private class LUp implements OnClickListener {
-        @Override
-        public void onClick(View view) {
-            if (L < maxN - 1)
-                increaseL();
-        }
-    }
-
-    private class LDown implements OnClickListener {
-        @Override
-        public void onClick(View view) {
-            if (L > 0)
+        if (N > 1) {
+            --N;
+            nChanger.setInteger(N);
+            if (L >= N)
                 decreaseL();
         }
     }
 
-    private class MUp implements OnClickListener {
-        @Override
-        public void onClick(View view) {
-            if (M < maxN - 1)
+    private void increaseL() {
+        if (L < maxN - 1) {
+            ++L;
+            lChanger.setInteger(L);
+            if (L >= N)
+                increaseN();
+        }
+    }
+
+    private void decreaseL() {
+        if (L > 0) {
+            --L;
+            lChanger.setInteger(L);
+            if (M > L)
+                decreaseM();
+            else if (M < -L)
                 increaseM();
         }
     }
 
-    private class MDown implements OnClickListener {
-        @Override
-        public void onClick(View view) {
-            if (M > 1 - maxN)
-                decreaseM();
+    private void increaseM() {
+        if (M < maxN - 1) {
+            ++M;
+            mChanger.setInteger(M);
+            if (M > L)
+                increaseL();
+        }
+    }
+
+    private void decreaseM() {
+        if (M > 1 - maxN) {
+            --M;
+            mChanger.setInteger(M);
+            if (M < -L)
+                increaseL();
         }
     }
 }
