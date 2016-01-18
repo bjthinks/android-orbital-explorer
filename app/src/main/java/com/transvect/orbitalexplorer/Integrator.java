@@ -16,9 +16,6 @@ public class Integrator extends RenderStage {
 
     Orbital orbital;
 
-    private float[] mRadialData;
-    private float[] mAzimuthalData;
-    private float[] mQuadratureWeights;
     private Texture mRadialTexture;
     private Texture mAzimuthalTexture;
     private Texture mQuadratureWeightTexture;
@@ -29,7 +26,6 @@ public class Integrator extends RenderStage {
     private final double MAXIMUM_RADIUS = 16.0;
     private final int RADIAL_TEXTURE_SIZE = 256;
     private final int AZIMUTHAL_TEXTURE_SIZE = 256;
-    private int mQuadraturePoints;
     private final int QUADRATURE_SIZE = 64;
 
     public Texture getTexture() {
@@ -47,41 +43,23 @@ public class Integrator extends RenderStage {
         };
         mVertexBuffer = floatArrayToBuffer(squareCoordinates);
 
-        int Z = 8;
-        int N = 6;
-        int L = 4;
-        int M = 1;
-
-        orbital = new Orbital(Z, N, L, M);
-
-        mRadialData = orbital.getRadialData();
-        mAzimuthalData = orbital.getAzimuthalData();
-        mQuadraturePoints = orbital.getQuadraturePoints();
-        mQuadratureWeights = orbital.getQuadratureData();
+        orbital = new Orbital(8, 6, 4, 1);
     }
 
     public void newContext(AssetManager assetManager) {
 
-        // Create input textures with orbital data
-
-        // Data format
-        final int orbitalFormat = GLES30.GL_RED;
-        final int orbitalType = GLES30.GL_FLOAT;
-        final int orbitalInternalFormat = GLES30.GL_R32F;
-
-        final int orbitalFormat2 = GLES30.GL_RG;
-        final int orbitalInternalFormat2 = GLES30.GL_RG32F;
-
         // Create radial texture
-        mRadialTexture = new Texture(orbitalFormat2, orbitalType, orbitalInternalFormat2);
-        mRadialTexture.bindToTexture2DAndSetImage(RADIAL_TEXTURE_SIZE, 1, mRadialData);
+        mRadialTexture = new Texture(GLES30.GL_RG, GLES30.GL_FLOAT, GLES30.GL_RG32F);
+        mRadialTexture.bindToTexture2DAndSetImage(
+                RADIAL_TEXTURE_SIZE, 1, orbital.getRadialData());
 
         // Floating point textures are not filterable
         setTexture2DMinMagFilters(GLES30.GL_NEAREST, GLES30.GL_NEAREST);
 
         // Create azimuthal texture
-        mAzimuthalTexture = new Texture(orbitalFormat2, orbitalType, orbitalInternalFormat2);
-        mAzimuthalTexture.bindToTexture2DAndSetImage(AZIMUTHAL_TEXTURE_SIZE, 1, mAzimuthalData);
+        mAzimuthalTexture = new Texture(GLES30.GL_RG, GLES30.GL_FLOAT, GLES30.GL_RG32F);
+        mAzimuthalTexture.bindToTexture2DAndSetImage(
+                AZIMUTHAL_TEXTURE_SIZE, 1, orbital.getAzimuthalData());
 
         // Floating point textures are not filterable
         setTexture2DMinMagFilters(GLES30.GL_NEAREST, GLES30.GL_NEAREST);
@@ -93,21 +71,17 @@ public class Integrator extends RenderStage {
         mQuadratureWeightTexture
                 = new Texture(quadratureFormat, quadratureType, quadratureInternalFormat);
         mQuadratureWeightTexture.bindToTexture2DAndSetImage(
-                mQuadraturePoints, QUADRATURE_SIZE, mQuadratureWeights);
+                orbital.getQuadraturePoints(), QUADRATURE_SIZE, orbital.getQuadratureData());
 
         // Floating point textures are not filterable
         setTexture2DMinMagFilters(GLES30.GL_NEAREST, GLES30.GL_NEAREST);
 
-        // The following three parameters have to match a row of Table 3.2 in the
+        // Create a texture to render to.
+        // The following parameters have to match a row of Table 3.2 in the
         // OpenGL ES 3.0 specification, or we will get an OpenGL error. We also
         // need to choose a sized internal format which is color-renderable
         // according to Table 3.13 (in the absence of extensions).
-        final int renderFormat = GLES30.GL_RGBA_INTEGER;
-        final int renderType = GLES30.GL_SHORT;
-        final int renderInternalFormat = GLES30.GL_RGBA16I;
-
-        // Create a texture to render to
-        mTexture = new Texture(renderFormat, renderType, renderInternalFormat);
+        mTexture = new Texture(GLES30.GL_RGBA_INTEGER, GLES30.GL_SHORT, GLES30.GL_RGBA16I);
         mTexture.bindToTexture2DAndResize(1, 1);
 
         // Set the filters for sampling the bound texture, when sampling at
@@ -140,6 +114,7 @@ public class Integrator extends RenderStage {
     }
 
     public void render(float[] shaderTransform) {
+
         mFramebuffer.bindToAttachmentPoint();
         GLES30.glViewport(0, 0, mWidth, mHeight);
         GLES30.glUseProgram(mProgram);
@@ -157,7 +132,7 @@ public class Integrator extends RenderStage {
         setUniformInt("quadrature", 2);
 
         setUniformInt("colorMode", mRenderPreferences.getColorMode());
-        setUniformInt("numQuadraturePoints", mQuadraturePoints);
+        setUniformInt("numQuadraturePoints", orbital.getQuadraturePoints());
 
         setUniformFloat("exponentialConstant", (float) (2.0 * orbital.getRadialExponent()));
         setUniformFloat("maximumRadius", (float) MAXIMUM_RADIUS);
