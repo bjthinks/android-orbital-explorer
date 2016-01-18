@@ -25,13 +25,14 @@ public class Orbital {
         exponentialConstant = waveFunction.getRadialFunction().exponentialConstant();
         powerOfR = waveFunction.getRadialFunction().powerOfR();
 
-        int hardness1 = N - L;      // radial nodes make rendering hard
-        int hardness2 = L - M + 1;  // azimuthal nodes make rendering hard
-        int greaterHardness = Math.max(hardness1, hardness2);
-        int lesserHardness  = Math.min(hardness1, hardness2);
+        int difficulty1 = N - L;      // radial nodes make rendering hard
+        int difficulty2 = L - M + 1;  // azimuthal nodes make rendering hard
+        int greaterDifficulty = Math.max(difficulty1, difficulty2);
+        int lesserDifficulty  = Math.min(difficulty1, difficulty2);
+
         // The below formula comes from tons of experimentation and seems to give
         // eye-accurate renderings of all orbitals.
-        quadraturePoints = greaterHardness + lesserHardness / 2 + M / 3;
+        quadraturePoints = greaterDifficulty + lesserDifficulty / 2 + M / 3;
     }
 
     float[] getRadialData() {
