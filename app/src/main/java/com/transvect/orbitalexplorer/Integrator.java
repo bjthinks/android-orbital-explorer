@@ -16,16 +16,18 @@ public class Integrator extends RenderStage {
 
     Orbital orbital;
 
+    private int radialDataSize;
     private Texture mRadialTexture;
+
+    private int azimuthalDataSize;
     private Texture mAzimuthalTexture;
+
     private Texture mQuadratureWeightTexture;
     private Texture mTexture;
     private Framebuffer mFramebuffer;
     private int mWidth, mHeight;
 
     private final double MAXIMUM_RADIUS = 16.0;
-    private final int RADIAL_TEXTURE_SIZE = 256;
-    private final int AZIMUTHAL_TEXTURE_SIZE = 256;
     private final int QUADRATURE_SIZE = 64;
 
     public Texture getTexture() {
@@ -50,16 +52,18 @@ public class Integrator extends RenderStage {
 
         // Create radial texture
         mRadialTexture = new Texture(GLES30.GL_RG, GLES30.GL_FLOAT, GLES30.GL_RG32F);
-        mRadialTexture.bindToTexture2DAndSetImage(
-                RADIAL_TEXTURE_SIZE, 1, orbital.getRadialData());
+        float[] radialData = orbital.getRadialData();
+        radialDataSize = radialData.length / 2;
+        mRadialTexture.bindToTexture2DAndSetImage(radialDataSize, 1, radialData);
 
         // Floating point textures are not filterable
         setTexture2DMinMagFilters(GLES30.GL_NEAREST, GLES30.GL_NEAREST);
 
         // Create azimuthal texture
         mAzimuthalTexture = new Texture(GLES30.GL_RG, GLES30.GL_FLOAT, GLES30.GL_RG32F);
-        mAzimuthalTexture.bindToTexture2DAndSetImage(
-                AZIMUTHAL_TEXTURE_SIZE, 1, orbital.getAzimuthalData());
+        float[] azimuthalData = orbital.getAzimuthalData();
+        azimuthalDataSize = azimuthalData.length / 2;
+        mAzimuthalTexture.bindToTexture2DAndSetImage(azimuthalDataSize, 1, azimuthalData);
 
         // Floating point textures are not filterable
         setTexture2DMinMagFilters(GLES30.GL_NEAREST, GLES30.GL_NEAREST);
@@ -136,8 +140,8 @@ public class Integrator extends RenderStage {
 
         setUniformFloat("exponentialConstant", (float) (2.0 * orbital.getRadialExponent()));
         setUniformFloat("maximumRadius", (float) MAXIMUM_RADIUS);
-        setUniformFloat("numRadialSubdivisions", (float) (RADIAL_TEXTURE_SIZE - 1));
-        setUniformFloat("numAzimuthalSubdivisions", (float) (AZIMUTHAL_TEXTURE_SIZE - 1));
+        setUniformFloat("numRadialSubdivisions", (float) (radialDataSize - 1));
+        setUniformFloat("numAzimuthalSubdivisions", (float) (azimuthalDataSize - 1));
         setUniformFloat("numQuadratureSubdivisions", (float) (QUADRATURE_SIZE - 1));
         setUniformFloat("M", (float) orbital.getM());
         // Multiply by 2 because the wave function is squared
