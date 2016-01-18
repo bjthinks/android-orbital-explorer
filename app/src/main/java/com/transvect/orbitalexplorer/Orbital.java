@@ -35,6 +35,14 @@ public class Orbital {
         quadraturePoints = greaterDifficulty + lesserDifficulty / 2 + M / 3;
     }
 
+    double getRadialExponent() {
+        return waveFunction.getRadialFunction().exponentialConstant();
+    }
+
+    int getRadialPower() {
+        return waveFunction.getRadialFunction().powerOfR();
+    }
+
     float[] getRadialData() {
         return RenderStage.functionToBuffer2(waveFunction.getRadialFunction().oscillatingPart(),
                 0.0, MAXIMUM_RADIUS, RADIAL_TEXTURE_SIZE - 1);
@@ -43,6 +51,10 @@ public class Orbital {
     float[] getAzimuthalData() {
         return RenderStage.functionToBuffer2(waveFunction.getAzimuthalFunction(),
                 0.0, Math.PI, AZIMUTHAL_TEXTURE_SIZE - 1);
+    }
+
+    public int getM() {
+        return waveFunction.getM();
     }
 
     int getQuadraturePoints() {

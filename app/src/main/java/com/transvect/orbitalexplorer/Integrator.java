@@ -13,7 +13,9 @@ public class Integrator extends RenderStage {
 
     private int mProgram;
     private FloatBuffer mVertexBuffer;
-    private WaveFunction mWaveFunction;
+
+    Orbital orbital;
+
     private float[] mRadialData;
     private float[] mAzimuthalData;
     private float[] mQuadratureWeights;
@@ -50,9 +52,8 @@ public class Integrator extends RenderStage {
         int L = 4;
         int M = 1;
 
-        Orbital orbital = new Orbital(Z, N, L, M);
+        orbital = new Orbital(Z, N, L, M);
 
-        mWaveFunction = new WaveFunction(Z, N, L, M);
         mRadialData = orbital.getRadialData();
         mAzimuthalData = orbital.getAzimuthalData();
         mQuadraturePoints = orbital.getQuadraturePoints();
@@ -158,15 +159,14 @@ public class Integrator extends RenderStage {
         setUniformInt("colorMode", mRenderPreferences.getColorMode());
         setUniformInt("numQuadraturePoints", mQuadraturePoints);
 
-        setUniformFloat("exponentialConstant", (float)
-                (2.0 * mWaveFunction.getRadialFunction().exponentialConstant()));
+        setUniformFloat("exponentialConstant", (float) (2.0 * orbital.getRadialExponent()));
         setUniformFloat("maximumRadius", (float) MAXIMUM_RADIUS);
         setUniformFloat("numRadialSubdivisions", (float) (RADIAL_TEXTURE_SIZE - 1));
         setUniformFloat("numAzimuthalSubdivisions", (float) (AZIMUTHAL_TEXTURE_SIZE - 1));
         setUniformFloat("numQuadratureSubdivisions", (float) (QUADRATURE_SIZE - 1));
-        setUniformFloat("M", (float) mWaveFunction.getM());
+        setUniformFloat("M", (float) orbital.getM());
         // Multiply by 2 because the wave function is squared
-        setUniformFloat("powerOfR", (float) (2 * mWaveFunction.getRadialFunction().powerOfR()));
+        setUniformFloat("powerOfR", (float) (2 * orbital.getRadialPower()));
 
         // For testing
         setUniformFloat("zero", 0.0f);
