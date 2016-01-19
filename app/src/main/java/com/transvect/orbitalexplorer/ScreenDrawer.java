@@ -6,18 +6,9 @@ import android.opengl.GLES30;
 import java.nio.FloatBuffer;
 
 public class ScreenDrawer extends RenderStage {
-    private FloatBuffer mVertexBuffer;
     private int mProgram;
 
-    public ScreenDrawer() {
-        float squareCoordinates[] = {
-                -1.0f, -1.0f,
-                -1.0f,  1.0f,
-                1.0f,  1.0f,
-                1.0f, -1.0f,
-        };
-        mVertexBuffer = floatArrayToBuffer(squareCoordinates);
-    }
+    public ScreenDrawer() {}
 
     public void newContext(AssetManager assetManager) {
         // Compile & link GLSL program
@@ -62,7 +53,8 @@ public class ScreenDrawer extends RenderStage {
 
         int inPositionHandle = GLES30.glGetAttribLocation(mProgram, "inPosition");
         GLES30.glEnableVertexAttribArray(inPositionHandle);
-        GLES30.glVertexAttribPointer(inPositionHandle, 2, GLES30.GL_FLOAT, false, 8, mVertexBuffer);
+        GLES30.glVertexAttribPointer(inPositionHandle, 2, GLES30.GL_FLOAT, false, 8,
+                screenRectangle);
 
         GLES30.glDrawArrays(GLES30.GL_TRIANGLE_FAN, 0, 4);
         GLES30.glDisableVertexAttribArray(inPositionHandle);

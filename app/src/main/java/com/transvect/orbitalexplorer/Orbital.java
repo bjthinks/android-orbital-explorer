@@ -35,6 +35,10 @@ public class Orbital {
         quadraturePoints = greaterDifficulty + lesserDifficulty / 2 + M / 3;
     }
 
+    double getMaximumRadius() {
+        return MAXIMUM_RADIUS;
+    }
+
     double getRadialExponent() {
         return waveFunction.getRadialFunction().exponentialConstant();
     }
@@ -57,7 +61,7 @@ public class Orbital {
         return waveFunction.getM();
     }
 
-    int getQuadraturePoints() {
+    int getNumQuadraturePoints() {
         return quadraturePoints;
     }
 

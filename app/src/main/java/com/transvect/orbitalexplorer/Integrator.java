@@ -4,15 +4,13 @@ import android.content.Context;
 import android.content.res.AssetManager;
 import android.opengl.GLES30;
 
-import java.nio.FloatBuffer;
-
 public class Integrator extends RenderStage {
+
     private static final String TAG = "Integrator";
 
     RenderPreferences renderPreferences;
 
     private int program;
-    private FloatBuffer vertexBuffer;
 
     Orbital orbital;
 
@@ -29,23 +27,12 @@ public class Integrator extends RenderStage {
     private Framebuffer framebuffer;
     private int width, height;
 
-    private final double MAXIMUM_RADIUS = 16.0;
-    private final int QUADRATURE_SIZE = 64;
-
     public Texture getTexture() {
         return outputTexture;
     }
 
     Integrator(Context context) {
         renderPreferences = new RenderPreferences(context);
-
-        float squareCoordinates[] = {
-                -1.0f, -1.0f,
-                -1.0f,  1.0f,
-                1.0f,  1.0f,
-                1.0f, -1.0f,
-        };
-        vertexBuffer = floatArrayToBuffer(squareCoordinates);
 
         orbital = new Orbital(8, 6, 4, 1);
     }
@@ -72,8 +59,10 @@ public class Integrator extends RenderStage {
 
         // Create quadrature texture
         quadratureTexture = new Texture(GLES30.GL_RGBA, GLES30.GL_FLOAT, GLES30.GL_RGBA32F);
+        float[] quadratureData = orbital.getQuadratureData();
+        quadratureDataSize = quadratureData.length / (4 * orbital.getNumQuadraturePoints());
         quadratureTexture.bindToTexture2DAndSetImage(
-                orbital.getQuadraturePoints(), QUADRATURE_SIZE, orbital.getQuadratureData());
+                orbital.getNumQuadraturePoints(), quadratureDataSize, quadratureData);
 
         // Floating point textures are not filterable
         setTexture2DMinMagFilters(GLES30.GL_NEAREST, GLES30.GL_NEAREST);
@@ -134,13 +123,13 @@ public class Integrator extends RenderStage {
         setUniformInt("quadrature", 2);
 
         setUniformInt("colorMode", renderPreferences.getColorMode());
-        setUniformInt("numQuadraturePoints", orbital.getQuadraturePoints());
+        setUniformInt("numQuadraturePoints", orbital.getNumQuadraturePoints());
 
         setUniformFloat("exponentialConstant", (float) (2.0 * orbital.getRadialExponent()));
-        setUniformFloat("maximumRadius", (float) MAXIMUM_RADIUS);
+        setUniformFloat("maximumRadius", (float) orbital.getMaximumRadius());
         setUniformFloat("numRadialSubdivisions", (float) (radialDataSize - 1));
         setUniformFloat("numAzimuthalSubdivisions", (float) (azimuthalDataSize - 1));
-        setUniformFloat("numQuadratureSubdivisions", (float) (QUADRATURE_SIZE - 1));
+        setUniformFloat("numQuadratureSubdivisions", (float) (quadratureDataSize - 1));
         setUniformFloat("M", (float) orbital.getM());
         // Multiply by 2 because the wave function is squared
         setUniformFloat("powerOfR", (float) (2 * orbital.getRadialPower()));
@@ -154,7 +143,7 @@ public class Integrator extends RenderStage {
 
         int inPositionHandle = GLES30.glGetAttribLocation(program, "inPosition");
         GLES30.glEnableVertexAttribArray(inPositionHandle);
-        GLES30.glVertexAttribPointer(inPositionHandle, 2, GLES30.GL_FLOAT, false, 8, vertexBuffer);
+        GLES30.glVertexAttribPointer(inPositionHandle, 2, GLES30.GL_FLOAT, false, 8, screenRectangle);
 
         final int zeroes[] = {0, 0, 0, 0};
         GLES30.glClearBufferiv(GLES30.GL_COLOR, 0, zeroes, 0);
