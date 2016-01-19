@@ -7,7 +7,7 @@ public class Orbital {
     private final int AZIMUTHAL_TEXTURE_SIZE = 256;
     private final int QUADRATURE_SIZE = 64;
 
-    final public int Z, N, L, M;
+    public final int Z, N, L, M;
     private WaveFunction waveFunction;
 
     private double exponentialConstant;
@@ -35,24 +35,24 @@ public class Orbital {
         quadraturePoints = greaterDifficulty + lesserDifficulty / 2 + M / 3;
     }
 
-    double getMaximumRadius() {
+    public double getMaximumRadius() {
         return MAXIMUM_RADIUS;
     }
 
-    double getRadialExponent() {
+    public double getRadialExponent() {
         return waveFunction.getRadialFunction().exponentialConstant();
     }
 
-    int getRadialPower() {
+    public int getRadialPower() {
         return waveFunction.getRadialFunction().powerOfR();
     }
 
-    float[] getRadialData() {
+    public float[] getRadialData() {
         return RenderStage.functionToBuffer2(waveFunction.getRadialFunction().oscillatingPart(),
                 0.0, MAXIMUM_RADIUS, RADIAL_TEXTURE_SIZE - 1);
     }
 
-    float[] getAzimuthalData() {
+    public float[] getAzimuthalData() {
         return RenderStage.functionToBuffer2(waveFunction.getAzimuthalFunction(),
                 0.0, Math.PI, AZIMUTHAL_TEXTURE_SIZE - 1);
     }
@@ -61,11 +61,11 @@ public class Orbital {
         return waveFunction.getM();
     }
 
-    int getNumQuadraturePoints() {
+    public int getNumQuadraturePoints() {
         return quadraturePoints;
     }
 
-    float[] getQuadratureData() {
+    public float[] getQuadratureData() {
         // Set up Gaussian Quadrature
         float[] quadratureWeights = new float[4 * quadraturePoints * QUADRATURE_SIZE];
         for (int i = 0; i < QUADRATURE_SIZE; ++i) {

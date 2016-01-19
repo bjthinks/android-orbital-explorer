@@ -37,8 +37,7 @@ public class Integrator extends RenderStage {
         orbital = new Orbital(8, 6, 4, 1);
     }
 
-    public void newContext(AssetManager assetManager) {
-
+    private void orbitalChanged() {
         // Create radial texture
         radialTexture = new Texture(GLES30.GL_RG, GLES30.GL_FLOAT, GLES30.GL_RG32F);
         float[] radialData = orbital.getRadialData();
@@ -66,6 +65,11 @@ public class Integrator extends RenderStage {
 
         // Floating point textures are not filterable
         setTexture2DMinMagFilters(GLES30.GL_NEAREST, GLES30.GL_NEAREST);
+    }
+
+    public void newContext(AssetManager assetManager) {
+
+        orbitalChanged();
 
         // Create a texture to render to.
         // The following parameters have to match a row of Table 3.2 in the
