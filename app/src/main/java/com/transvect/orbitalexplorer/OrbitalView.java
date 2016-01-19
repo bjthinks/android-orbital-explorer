@@ -106,7 +106,7 @@ public class OrbitalView extends GLSurfaceView implements OrbitalChangedListener
                 mFirstPointerID = e.getPointerId(0);
                 oneFingerEvent(e, false);
                 mCamera.stopFling();
-                setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
+                // setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
                 break;
 
             case MotionEvent.ACTION_POINTER_DOWN:
@@ -251,7 +251,7 @@ public class OrbitalView extends GLSurfaceView implements OrbitalChangedListener
     // Hence the need for "synchronized" all over the place
     public synchronized float[] getNextTransform(double aspectRatio) {
         if (!mCamera.continueFling())
-            setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
+            ; // setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
         return mCamera.computeShaderTransform(aspectRatio);
     }
 }
