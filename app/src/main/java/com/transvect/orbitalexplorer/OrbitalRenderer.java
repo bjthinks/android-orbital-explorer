@@ -10,7 +10,7 @@ import android.util.Log;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
-public class OrbitalRenderer implements GLSurfaceView.Renderer {
+public class OrbitalRenderer implements GLSurfaceView.Renderer, OrbitalChangedListener {
     private static final String TAG = "OrbitalRenderer";
 
     private int mDpi;
@@ -26,6 +26,12 @@ public class OrbitalRenderer implements GLSurfaceView.Renderer {
         mDpi = context.getResources().getDisplayMetrics().densityDpi;
         mIntegrator = new Integrator(context);
         mScreenDrawer = new ScreenDrawer();
+    }
+
+    // Main thread
+    @Override
+    public void onOrbitalChanged(Orbital o) {
+        Log.d(TAG, "Orbital changed, now (" + o.Z + "," + o.N + "," + o.L + "," + o.M + ")");
     }
 
     // Rendering thread

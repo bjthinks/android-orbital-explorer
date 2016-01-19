@@ -17,6 +17,7 @@ public class OrbitalView extends GLSurfaceView implements OrbitalChangedListener
 
     private Camera mCamera;
     private GestureDetector mFlingDetector;
+    private OrbitalRenderer orbitalRenderer;
 
     public OrbitalView(Context context) {
         super(context);
@@ -39,7 +40,8 @@ public class OrbitalView extends GLSurfaceView implements OrbitalChangedListener
         mFlingDetector = new GestureDetector(context, new FlingListener());
 
         // Start the rendering thread
-        setRenderer(new OrbitalRenderer(this, context));
+        orbitalRenderer = new OrbitalRenderer(this, context);
+        setRenderer(orbitalRenderer);
     }
 
     @Override
@@ -88,7 +90,7 @@ public class OrbitalView extends GLSurfaceView implements OrbitalChangedListener
 
     @Override
     public void onOrbitalChanged(Orbital o) {
-        Log.d(TAG, "Orbital changed, now (" + o.Z + "," + o.N + "," + o.L + "," + o.M + ")");
+        orbitalRenderer.onOrbitalChanged(o);
     }
 
     private int mFirstPointerID = MotionEvent.INVALID_POINTER_ID;
