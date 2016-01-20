@@ -3,6 +3,7 @@ package com.transvect.orbitalexplorer;
 import android.util.Log;
 
 public class SymmetricTridiagonalMatrix {
+
     private static final String TAG = "SymmetricTridiagonalMat";
 
     int N;

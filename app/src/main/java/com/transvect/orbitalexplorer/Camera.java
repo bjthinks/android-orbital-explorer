@@ -5,10 +5,10 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class Camera implements Parcelable {
+
     // private static final String TAG = "Camera";
 
-    public Camera() {
-    }
+    public Camera() {}
 
     public Camera(double cameraDistance_, Quaternion totalRotation_) {
         cameraDistance = cameraDistance_;

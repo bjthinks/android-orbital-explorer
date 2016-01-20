@@ -2,8 +2,6 @@ package com.transvect.orbitalexplorer;
 
 import android.opengl.GLES30;
 
-import java.nio.Buffer;
-
 public class Texture {
 
     private final int id;

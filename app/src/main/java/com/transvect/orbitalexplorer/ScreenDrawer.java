@@ -3,8 +3,6 @@ package com.transvect.orbitalexplorer;
 import android.content.res.AssetManager;
 import android.opengl.GLES30;
 
-import java.nio.FloatBuffer;
-
 public class ScreenDrawer extends RenderStage {
 
     private int program;

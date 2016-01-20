@@ -1,16 +1,15 @@
 package com.transvect.orbitalexplorer;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.opengl.GLSurfaceView;
-import android.util.DisplayMetrics;
 import android.util.Log;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 public class OrbitalRenderer implements GLSurfaceView.Renderer, OrbitalChangedListener {
+
     private static final String TAG = "OrbitalRenderer";
 
     private int dpi;

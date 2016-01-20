@@ -4,6 +4,8 @@ package com.transvect.orbitalexplorer;
  * Azimuthal part of the wave function of a one-electron atom.
  * Theta(theta) depends on constants L and M and is a polynomial in sin & cos of theta
  * This does NOT include the Condon-Shortley phase, which is not needed for this project.
+ * This function can always be written as a power of sin(theta) times a polynomial in
+ * cos(theta).
  */
 
 public class AzimuthalFunction implements Function {

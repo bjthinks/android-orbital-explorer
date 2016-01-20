@@ -1,7 +1,5 @@
 package com.transvect.orbitalexplorer;
 
-import android.util.Log;
-
 /**
  * Given a weight function W and a positive integer N, compute the nodes and weights for
  * an N-point Gaussian quadrature rule.

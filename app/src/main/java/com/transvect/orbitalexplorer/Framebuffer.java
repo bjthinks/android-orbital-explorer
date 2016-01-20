@@ -6,6 +6,7 @@ import android.opengl.GLES30;
 import android.util.Log;
 
 public class Framebuffer {
+
     private static final String TAG = "Framebuffer";
 
     private int framebufferId;

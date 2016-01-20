@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 public class Shader {
+
     private static final String TAG = "Shader";
 
     private int id;

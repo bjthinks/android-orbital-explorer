@@ -3,6 +3,7 @@ package com.transvect.orbitalexplorer;
 import android.util.Log;
 
 public class Polynomial implements Function {
+
     private static final String TAG = "Polynomial";
 
     // Invariant: c is not null, and leading coeff is not 0.

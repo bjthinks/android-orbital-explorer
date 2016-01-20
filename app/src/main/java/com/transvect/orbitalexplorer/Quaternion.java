@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class Quaternion implements Parcelable {
+
     // public static final String TAG = "Quaternion";
 
     @Override

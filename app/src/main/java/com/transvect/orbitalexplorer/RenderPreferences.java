@@ -2,8 +2,6 @@ package com.transvect.orbitalexplorer;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.preference.ListPreference;
-import android.preference.Preference;
 import android.preference.PreferenceManager;
 
 public class RenderPreferences
