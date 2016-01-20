@@ -7,24 +7,25 @@ package com.transvect.orbitalexplorer;
  */
 
 public class AzimuthalFunction implements Function {
-    private Polynomial mCosThetaPolynomial;
-    private int mSinThetaPower;
+
+    private Polynomial cosThetaPolynomial;
+    private int sinThetaPower;
 
     public AzimuthalFunction(int L, int M) {
         int absM = Math.abs(M);
-        mCosThetaPolynomial = MyMath.legendrePolynomial(L);
+        cosThetaPolynomial = MyMath.legendrePolynomial(L);
         for (int i = 0; i < absM; ++i)
-            mCosThetaPolynomial = mCosThetaPolynomial.derivative();
+            cosThetaPolynomial = cosThetaPolynomial.derivative();
         double constant = Math.sqrt((2.0 * L + 1) / 2.0);
         constant *= Math.sqrt(MyMath.factorial(L - absM) / MyMath.factorial(L + absM));
-        mCosThetaPolynomial = mCosThetaPolynomial.multiply(constant);
-        mSinThetaPower = absM;
+        cosThetaPolynomial = cosThetaPolynomial.multiply(constant);
+        sinThetaPower = absM;
     }
 
     // Note that theta is "colatitude", i.e. 0 along (0, 0, 1), pi/2 when z=0,
     // and pi along (0, 0, -1).
     public double eval(double theta) {
-        return mCosThetaPolynomial.eval(Math.cos(theta))
-                * Math.pow(Math.sin(theta), mSinThetaPower);
+        return cosThetaPolynomial.eval(Math.cos(theta))
+                * Math.pow(Math.sin(theta), sinThetaPower);
     }
 }

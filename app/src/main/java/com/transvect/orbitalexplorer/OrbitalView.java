@@ -15,8 +15,8 @@ import android.view.MotionEvent;
 public class OrbitalView extends GLSurfaceView implements OrbitalChangedListener {
     private static final String TAG = "OrbitalView";
 
-    private Camera mCamera;
-    private GestureDetector mFlingDetector;
+    private Camera camera;
+    private GestureDetector flingDetector;
     private OrbitalRenderer orbitalRenderer;
 
     public OrbitalView(Context context) {
@@ -36,8 +36,8 @@ public class OrbitalView extends GLSurfaceView implements OrbitalChangedListener
         // Try to preserve our context, if possible
         setPreserveEGLContextOnPause(true);
 
-        mCamera = new Camera();
-        mFlingDetector = new GestureDetector(context, new FlingListener());
+        camera = new Camera();
+        flingDetector = new GestureDetector(context, new FlingListener());
 
         // Start the rendering thread
         orbitalRenderer = new OrbitalRenderer(this, context);
@@ -48,7 +48,7 @@ public class OrbitalView extends GLSurfaceView implements OrbitalChangedListener
     protected synchronized Parcelable onSaveInstanceState() {
         Parcelable superState = super.onSaveInstanceState();
         SavedState ss = new SavedState(superState);
-        ss.camera = mCamera;
+        ss.camera = camera;
         return ss;
     }
 
@@ -56,7 +56,7 @@ public class OrbitalView extends GLSurfaceView implements OrbitalChangedListener
     protected synchronized void onRestoreInstanceState(Parcelable state) {
         SavedState ss = (SavedState) state;
         super.onRestoreInstanceState(ss.getSuperState());
-        mCamera = ss.camera;
+        camera = ss.camera;
     }
 
     private static class SavedState extends BaseSavedState {
@@ -93,28 +93,28 @@ public class OrbitalView extends GLSurfaceView implements OrbitalChangedListener
             orbitalRenderer.onOrbitalChanged(o);
     }
 
-    private int mFirstPointerID = MotionEvent.INVALID_POINTER_ID;
-    private int mSecondPointerID = MotionEvent.INVALID_POINTER_ID;
+    private int firstPointerID = MotionEvent.INVALID_POINTER_ID;
+    private int secondPointerID = MotionEvent.INVALID_POINTER_ID;
 
     @Override
     public synchronized boolean onTouchEvent(@NonNull MotionEvent e) {
 
-        mFlingDetector.onTouchEvent(e);
+        flingDetector.onTouchEvent(e);
 
         switch (e.getActionMasked()) {
 
             case MotionEvent.ACTION_DOWN:
                 // One bear in the bed
-                mFirstPointerID = e.getPointerId(0);
+                firstPointerID = e.getPointerId(0);
                 oneFingerEvent(e, false);
-                mCamera.stopFling();
+                camera.stopFling();
                 // setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
                 break;
 
             case MotionEvent.ACTION_POINTER_DOWN:
                 // Two or more bears in the bed
                 if (e.getPointerCount() == 2) {
-                    mSecondPointerID = e.getPointerId(e.getActionIndex());
+                    secondPointerID = e.getPointerId(e.getActionIndex());
                     twoFingerEvent(e, false);
                 }
                 break;
@@ -128,7 +128,7 @@ public class OrbitalView extends GLSurfaceView implements OrbitalChangedListener
 
             case MotionEvent.ACTION_UP:
                 // No bears in the bed
-                mFirstPointerID = MotionEvent.INVALID_POINTER_ID;
+                firstPointerID = MotionEvent.INVALID_POINTER_ID;
                 break;
 
             case MotionEvent.ACTION_POINTER_UP: {
@@ -140,16 +140,16 @@ public class OrbitalView extends GLSurfaceView implements OrbitalChangedListener
                     // So they all rolled over and one fell out
                     int remainingIndex = 0;
                     if (remainingIndex == goneIndex) remainingIndex++;
-                    mFirstPointerID = e.getPointerId(remainingIndex++);
+                    firstPointerID = e.getPointerId(remainingIndex++);
                     if (remainingIndex == goneIndex) remainingIndex++;
-                    mSecondPointerID = e.getPointerId(remainingIndex);
+                    secondPointerID = e.getPointerId(remainingIndex);
                     twoFingerEvent(e, false);
                 } else if (e.getPointerCount() == 2) {
                     // So they all rolled over and one fell out
                     int remainingIndex = 0;
                     if (remainingIndex == goneIndex) remainingIndex++;
-                    mFirstPointerID = e.getPointerId(remainingIndex);
-                    mSecondPointerID = MotionEvent.INVALID_POINTER_ID;
+                    firstPointerID = e.getPointerId(remainingIndex);
+                    secondPointerID = MotionEvent.INVALID_POINTER_ID;
                     oneFingerEvent(e, false);
                 }
 
@@ -160,8 +160,8 @@ public class OrbitalView extends GLSurfaceView implements OrbitalChangedListener
                 // They all fell out, maybe because someone broke into the
                 // bears' house and frightened them. They're hiding under
                 // the bed and will come back out later when it's safe.
-                mFirstPointerID = MotionEvent.INVALID_POINTER_ID;
-                mSecondPointerID = MotionEvent.INVALID_POINTER_ID;
+                firstPointerID = MotionEvent.INVALID_POINTER_ID;
+                secondPointerID = MotionEvent.INVALID_POINTER_ID;
                 break;
 
             default:
@@ -171,36 +171,36 @@ public class OrbitalView extends GLSurfaceView implements OrbitalChangedListener
         return true;
     }
 
-    private double mPreviousX;
-    private double mPreviousY;
+    private double previousX;
+    private double previousY;
 
     private synchronized void oneFingerEvent(MotionEvent e, boolean actionable) {
 
-        int pointerIndex = e.findPointerIndex(mFirstPointerID);
+        int pointerIndex = e.findPointerIndex(firstPointerID);
 
         double x = e.getX(pointerIndex);
         double y = e.getY(pointerIndex);
 
         if (actionable) {
-            double dx = x - mPreviousX;
-            double dy = y - mPreviousY;
+            double dx = x - previousX;
+            double dy = y - previousY;
             double meanSize = Math.sqrt(getWidth() * getHeight());
-            mCamera.drag(dx / meanSize, dy / meanSize);
+            camera.drag(dx / meanSize, dy / meanSize);
 
             requestRender();
         }
 
-        mPreviousX = x;
-        mPreviousY = y;
+        previousX = x;
+        previousY = y;
     }
 
-    private double mPreviousDistance;
-    private double mPreviousAngle;
+    private double previousDistance;
+    private double previousAngle;
 
     private synchronized void twoFingerEvent(MotionEvent e, boolean actionable) {
 
-        int firstPointerIndex  = e.findPointerIndex(mFirstPointerID);
-        int secondPointerIndex = e.findPointerIndex(mSecondPointerID);
+        int firstPointerIndex  = e.findPointerIndex(firstPointerID);
+        int secondPointerIndex = e.findPointerIndex(secondPointerID);
 
         double x1 = e.getX(firstPointerIndex);
         double y1 = e.getY(firstPointerIndex);
@@ -215,17 +215,17 @@ public class OrbitalView extends GLSurfaceView implements OrbitalChangedListener
 
         if (actionable) {
 
-            double angleDifference = angle - mPreviousAngle;
-            mCamera.twist(angleDifference);
+            double angleDifference = angle - previousAngle;
+            camera.twist(angleDifference);
 
-            double zoomFactor = distance / mPreviousDistance;
-            mCamera.zoom(zoomFactor);
+            double zoomFactor = distance / previousDistance;
+            camera.zoom(zoomFactor);
 
             requestRender();
         }
 
-        mPreviousAngle = angle;
-        mPreviousDistance = distance;
+        previousAngle = angle;
+        previousDistance = distance;
     }
 
     private class FlingListener extends GestureDetector.SimpleOnGestureListener {
@@ -241,7 +241,7 @@ public class OrbitalView extends GLSurfaceView implements OrbitalChangedListener
                                float velocityX, float velocityY) {
             synchronized (OrbitalView.this) {
                 double meanSize = Math.sqrt(getWidth() * getHeight());
-                mCamera.fling(velocityX / meanSize, velocityY / meanSize);
+                camera.fling(velocityX / meanSize, velocityY / meanSize);
                 setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
             }
 
@@ -252,8 +252,8 @@ public class OrbitalView extends GLSurfaceView implements OrbitalChangedListener
     // This function can be called by the rendering thread
     // Hence the need for "synchronized" all over the place
     public synchronized float[] getNextTransform(double aspectRatio) {
-        if (!mCamera.continueFling())
+        if (!camera.continueFling())
             ; // setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
-        return mCamera.computeShaderTransform(aspectRatio);
+        return camera.computeShaderTransform(aspectRatio);
     }
 }

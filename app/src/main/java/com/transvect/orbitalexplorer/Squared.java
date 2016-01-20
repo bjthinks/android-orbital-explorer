@@ -1,15 +1,16 @@
 package com.transvect.orbitalexplorer;
 
 public class Squared implements Function {
-    Function mF;
 
-    public Squared(Function f) {
-        mF = f;
+    Function f;
+
+    public Squared(Function f_) {
+        f = f_;
     }
 
     @Override
     public double eval(double x) {
-        double fx = mF.eval(x);
+        double fx = f.eval(x);
         return fx * fx;
     }
 }

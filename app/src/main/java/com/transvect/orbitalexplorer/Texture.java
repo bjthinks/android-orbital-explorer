@@ -6,36 +6,36 @@ import java.nio.Buffer;
 
 public class Texture {
 
-    private final int mId;
-    private final int mFormat, mType, mInternalFormat;
+    private final int id;
+    private final int format, type, internalFormat;
 
     public int getId() {
-        return mId;
+        return id;
     }
 
-    public Texture(int format, int type, int internalFormat) {
-        mFormat = format;
-        mType = type;
-        mInternalFormat = internalFormat;
+    public Texture(int format_, int type_, int internalFormat_) {
+        format = format_;
+        type = type_;
+        internalFormat = internalFormat_;
 
         int temp[] = new int[1];
         GLES30.glGenTextures(1, temp, 0);
-        mId = temp[0];
+        id = temp[0];
     }
 
     public void bindToTexture2D() {
-        GLES30.glBindTexture(GLES30.GL_TEXTURE_2D, mId);
+        GLES30.glBindTexture(GLES30.GL_TEXTURE_2D, id);
     }
 
     public void bindToTexture2DAndResize(int width, int height) {
         bindToTexture2D();
-        GLES30.glTexImage2D(GLES30.GL_TEXTURE_2D, 0, mInternalFormat,
-                width, height, 0, mFormat, mType, null);
+        GLES30.glTexImage2D(GLES30.GL_TEXTURE_2D, 0, internalFormat,
+                width, height, 0, format, type, null);
     }
 
     public void bindToTexture2DAndSetImage(int width, int height, float[] pixels) {
         bindToTexture2D();
-        GLES30.glTexImage2D(GLES30.GL_TEXTURE_2D, 0, mInternalFormat,
-                width, height, 0, mFormat, mType, RenderStage.floatArrayToBuffer(pixels));
+        GLES30.glTexImage2D(GLES30.GL_TEXTURE_2D, 0, internalFormat,
+                width, height, 0, format, type, RenderStage.floatArrayToBuffer(pixels));
     }
 }

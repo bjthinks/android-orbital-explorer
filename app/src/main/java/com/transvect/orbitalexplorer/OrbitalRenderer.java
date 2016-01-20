@@ -13,32 +13,32 @@ import javax.microedition.khronos.opengles.GL10;
 public class OrbitalRenderer implements GLSurfaceView.Renderer, OrbitalChangedListener {
     private static final String TAG = "OrbitalRenderer";
 
-    private int mDpi;
-    private OrbitalView mOrbitalView;
-    private AssetManager mAssetManager;
-    private Integrator mIntegrator;
-    private ScreenDrawer mScreenDrawer;
+    private int dpi;
+    private OrbitalView orbitalView;
+    private AssetManager assetManager;
+    private Integrator integrator;
+    private ScreenDrawer screenDrawer;
 
     // Main thread
-    public OrbitalRenderer(OrbitalView orbitalView, Context context) {
-        mOrbitalView = orbitalView;
-        mAssetManager = context.getAssets();
-        mDpi = context.getResources().getDisplayMetrics().densityDpi;
-        mIntegrator = new Integrator(context);
-        mScreenDrawer = new ScreenDrawer();
+    public OrbitalRenderer(OrbitalView orbitalView_, Context context) {
+        orbitalView = orbitalView_;
+        assetManager = context.getAssets();
+        dpi = context.getResources().getDisplayMetrics().densityDpi;
+        integrator = new Integrator(context);
+        screenDrawer = new ScreenDrawer();
     }
 
     // Main thread
     @Override
     public void onOrbitalChanged(Orbital o) {
-        mIntegrator.onOrbitalChanged(o);
+        integrator.onOrbitalChanged(o);
     }
 
     // Rendering thread
     @Override
     public void onSurfaceCreated(GL10 unused, EGLConfig config) {
-        mIntegrator.newContext(mAssetManager);
-        mScreenDrawer.newContext(mAssetManager);
+        integrator.newContext(assetManager);
+        screenDrawer.newContext(assetManager);
     }
 
     private int mWidth = 1;
@@ -56,11 +56,11 @@ public class OrbitalRenderer implements GLSurfaceView.Renderer, OrbitalChangedLi
     }
 
     private void resizeIntegration() {
-        double scaleDownFactor = performanceScalingFactor * 160.0 / Math.max(160.0, mDpi);
+        double scaleDownFactor = performanceScalingFactor * 160.0 / Math.max(160.0, dpi);
         int integrationWidth  = (int) (scaleDownFactor * mWidth);
         int integrationHeight = (int) (scaleDownFactor * mHeight);
-        mIntegrator.resize(integrationWidth, integrationHeight);
-        mScreenDrawer.resize(integrationWidth, integrationHeight, mWidth, mHeight);
+        integrator.resize(integrationWidth, integrationHeight);
+        screenDrawer.resize(integrationWidth, integrationHeight, mWidth, mHeight);
         Log.d(TAG, "Resize, screen " + mWidth + " x " + mHeight
                 + ", integration " + integrationWidth + " x " + integrationHeight);
     }
@@ -71,9 +71,9 @@ public class OrbitalRenderer implements GLSurfaceView.Renderer, OrbitalChangedLi
     // Rendering thread
     @Override
     public void onDrawFrame(GL10 unused) {
-        float[] shaderTransform = mOrbitalView.getNextTransform(mAspectRatio);
-        mIntegrator.render(shaderTransform);
-        mScreenDrawer.render(mIntegrator.getTexture());
+        float[] shaderTransform = orbitalView.getNextTransform(mAspectRatio);
+        integrator.render(shaderTransform);
+        screenDrawer.render(integrator.getTexture());
 
         long now = System.currentTimeMillis();
         int milliseconds = (int) (now - then);

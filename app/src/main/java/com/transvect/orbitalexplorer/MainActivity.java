@@ -22,7 +22,7 @@ import java.util.Random;
 public class MainActivity extends AppCompatActivity {
     // private static final String TAG = "MainActivity";
 
-    private OrbitalView mOrbitalView;
+    private OrbitalView orbitalView;
 
     @Override
     protected void onCreate(Bundle savedState) {
@@ -60,10 +60,10 @@ public class MainActivity extends AppCompatActivity {
 
         // Get references to the orbital selector and view
         OrbitalSelector orbitalSelector = (OrbitalSelector) findViewById(R.id.orbitalselector);
-        mOrbitalView = (OrbitalView) findViewById(R.id.orbitalview);
+        orbitalView = (OrbitalView) findViewById(R.id.orbitalview);
 
         // Find the orbital control
-        orbitalSelector.setOrbitalChangedListener(mOrbitalView);
+        orbitalSelector.setOrbitalChangedListener(orbitalView);
         orbitalSelector.setOrbital(6, 4, 1);
     }
 
@@ -98,14 +98,14 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        if (mOrbitalView != null)
-            mOrbitalView.onPause();
+        if (orbitalView != null)
+            orbitalView.onPause();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if (mOrbitalView != null)
-            mOrbitalView.onResume();
+        if (orbitalView != null)
+            orbitalView.onResume();
     }
 }

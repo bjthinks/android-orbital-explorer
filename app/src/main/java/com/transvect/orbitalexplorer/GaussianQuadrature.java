@@ -9,14 +9,14 @@ import android.util.Log;
 public class GaussianQuadrature {
     private static final String TAG = "GaussianQuadrature";
 
-    private double[] mNode, mWeight;
+    private double[] node, weight;
 
     public double getNode(int i) {
-        return mNode[i];
+        return node[i];
     }
 
     public double getWeight(int i) {
-        return mWeight[i];
+        return weight[i];
     }
 
     public GaussianQuadrature(Function W, int N) {
@@ -91,24 +91,24 @@ public class GaussianQuadrature {
          */
 
         J.QRReduce();
-        mNode = new double[N];
-        mWeight = new double[N];
+        node = new double[N];
+        weight = new double[N];
         for (int i = 0; i < N; ++i) {
-            mNode[i] = J.getDiagonal(i);
-            mWeight[i] = Math.pow(J.getComponent(i), 2.0) * moments[0];
+            node[i] = J.getDiagonal(i);
+            weight[i] = Math.pow(J.getComponent(i), 2.0) * moments[0];
         }
 
         // The nodes and weights will be nearly sorted, and there aren't very many of them,
         // so we pass them through an insertion sort.
         for (int i = 1; i < N; ++i) {
-            for (int j = i; j > 0 && mNode[j - 1] > mNode[j]; --j) {
-                double tempNode = mNode[j];
-                mNode[j] = mNode[j - 1];
-                mNode[j - 1] = tempNode;
+            for (int j = i; j > 0 && node[j - 1] > node[j]; --j) {
+                double tempNode = node[j];
+                node[j] = node[j - 1];
+                node[j - 1] = tempNode;
 
-                double tempWeight = mWeight[j];
-                mWeight[j] = mWeight[j - 1];
-                mWeight[j - 1] = tempWeight;
+                double tempWeight = weight[j];
+                weight[j] = weight[j - 1];
+                weight[j - 1] = tempWeight;
             }
         }
     }

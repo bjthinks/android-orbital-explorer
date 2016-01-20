@@ -22,8 +22,8 @@ public class Orbital {
 
         waveFunction = new WaveFunction(Z, N, L, M);
 
-        exponentialConstant = waveFunction.getRadialFunction().exponentialConstant();
-        powerOfR = waveFunction.getRadialFunction().powerOfR();
+        exponentialConstant = waveFunction.getRadialFunction().getExponentialConstant();
+        powerOfR = waveFunction.getRadialFunction().getPowerOfR();
 
         int difficulty1 = N - L;      // radial nodes make rendering hard
         int difficulty2 = L - M + 1;  // azimuthal nodes make rendering hard
@@ -40,15 +40,15 @@ public class Orbital {
     }
 
     public double getRadialExponent() {
-        return waveFunction.getRadialFunction().exponentialConstant();
+        return waveFunction.getRadialFunction().getExponentialConstant();
     }
 
     public int getRadialPower() {
-        return waveFunction.getRadialFunction().powerOfR();
+        return waveFunction.getRadialFunction().getPowerOfR();
     }
 
     public float[] getRadialData() {
-        return RenderStage.functionToBuffer2(waveFunction.getRadialFunction().oscillatingPart(),
+        return RenderStage.functionToBuffer2(waveFunction.getRadialFunction().getOscillatingPart(),
                 0.0, MAXIMUM_RADIUS, RADIAL_TEXTURE_SIZE - 1);
     }
 

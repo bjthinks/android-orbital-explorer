@@ -8,17 +8,17 @@ import android.util.Log;
 public class Framebuffer {
     private static final String TAG = "Framebuffer";
 
-    private int mFramebufferId;
+    private int framebufferId;
 
     public Framebuffer() {
         // Generate framebuffer
         int temp[] = new int[1];
         GLES30.glGenFramebuffers(1, temp, 0);
-        mFramebufferId = temp[0];
+        framebufferId = temp[0];
     }
 
     public void bindToAttachmentPoint() {
-        GLES30.glBindFramebuffer(GLES30.GL_FRAMEBUFFER, mFramebufferId);
+        GLES30.glBindFramebuffer(GLES30.GL_FRAMEBUFFER, framebufferId);
     }
 
     public void bindAndSetTexture(Texture texture) {

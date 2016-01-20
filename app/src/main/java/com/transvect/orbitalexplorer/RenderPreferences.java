@@ -9,21 +9,21 @@ import android.preference.PreferenceManager;
 public class RenderPreferences
         implements SharedPreferences.OnSharedPreferenceChangeListener {
 
-    int mColorMode;
+    int colorMode;
 
     RenderPreferences(Context context) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        mColorMode = Integer.parseInt(preferences.getString("prefColorMode", "0"));
+        colorMode = Integer.parseInt(preferences.getString("prefColorMode", "0"));
         preferences.registerOnSharedPreferenceChangeListener(this);
     }
 
     synchronized int getColorMode() {
-        return mColorMode;
+        return colorMode;
     }
 
     @Override
     synchronized public void onSharedPreferenceChanged(SharedPreferences preferences, String key) {
         if (key.equals("prefColorMode"))
-            mColorMode = Integer.parseInt(preferences.getString("prefColorMode", "0"));
+            colorMode = Integer.parseInt(preferences.getString("prefColorMode", "0"));
     }
 }

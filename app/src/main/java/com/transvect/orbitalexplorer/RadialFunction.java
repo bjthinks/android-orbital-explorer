@@ -15,9 +15,10 @@ package com.transvect.orbitalexplorer;
  */
 
 public class RadialFunction implements Function {
-    private double mExponentialConstant;
-    private int mPowerOfR;
-    private Polynomial mOscillatingPart;
+
+    private double exponentialConstant;
+    private int powerOfR;
+    private Polynomial oscillatingPart;
 
     public RadialFunction(int Z, int N, int L) {
         double dZ = (double) Z;
@@ -25,34 +26,34 @@ public class RadialFunction implements Function {
 
         double radialScaleFactor = 2.0 * dZ / dN;
 
-        mExponentialConstant = -radialScaleFactor / 2.0;
+        exponentialConstant = -radialScaleFactor / 2.0;
 
-        mPowerOfR = L;
+        powerOfR = L;
 
         double constantFactors = Math.pow(2.0 * dZ / dN, 1.5)
                 * Math.sqrt(MyMath.factorial(N - L - 1) / (2.0 * dN * MyMath.factorial(N + L)));
 
-        mOscillatingPart = MyMath.generalizedLaguerrePolynomial(N - L - 1, 2 * L + 1)
+        oscillatingPart = MyMath.generalizedLaguerrePolynomial(N - L - 1, 2 * L + 1)
                 .rescaleX(radialScaleFactor)
-                .multiply(Math.pow(radialScaleFactor, mPowerOfR))
+                .multiply(Math.pow(radialScaleFactor, powerOfR))
                 .multiply(constantFactors);
     }
 
-    public double exponentialConstant() {
-        return mExponentialConstant;
+    public double getExponentialConstant() {
+        return exponentialConstant;
     }
 
-    public int powerOfR() {
-        return mPowerOfR;
+    public int getPowerOfR() {
+        return powerOfR;
     }
 
-    public Polynomial oscillatingPart() {
-        return mOscillatingPart;
+    public Polynomial getOscillatingPart() {
+        return oscillatingPart;
     }
 
     public double eval(double r) {
-        return mOscillatingPart.eval(r)
-                * Math.pow(r, mPowerOfR)
-                * Math.exp(mExponentialConstant * r);
+        return oscillatingPart.eval(r)
+                * Math.pow(r, powerOfR)
+                * Math.exp(exponentialConstant * r);
     }
 }
