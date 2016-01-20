@@ -31,7 +31,7 @@ public class OrbitalRenderer implements GLSurfaceView.Renderer, OrbitalChangedLi
     // Main thread
     @Override
     public void onOrbitalChanged(Orbital o) {
-        Log.d(TAG, "Orbital changed, now (" + o.Z + "," + o.N + "," + o.L + "," + o.M + ")");
+        mIntegrator.onOrbitalChanged(o);
     }
 
     // Rendering thread

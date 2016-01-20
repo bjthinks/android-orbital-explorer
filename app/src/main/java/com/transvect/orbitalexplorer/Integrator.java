@@ -3,8 +3,9 @@ package com.transvect.orbitalexplorer;
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.opengl.GLES30;
+import android.util.Log;
 
-public class Integrator extends RenderStage {
+public class Integrator extends RenderStage implements OrbitalChangedListener {
 
     private static final String TAG = "Integrator";
 
@@ -12,7 +13,7 @@ public class Integrator extends RenderStage {
 
     private int program;
 
-    Orbital orbital;
+    Orbital orbital, newOrbital;
 
     private int radialDataSize;
     private Texture radialTexture;
@@ -33,8 +34,23 @@ public class Integrator extends RenderStage {
 
     Integrator(Context context) {
         renderPreferences = new RenderPreferences(context);
+    }
 
-        orbital = new Orbital(8, 6, 4, 1);
+    // Main thread
+    @Override
+    public synchronized void onOrbitalChanged(Orbital o) {
+        newOrbital = o;
+    }
+
+    // Rendering thread
+    private synchronized boolean checkForNewOrbital() {
+        if (newOrbital != null) {
+            orbital = newOrbital;
+            newOrbital = null;
+            return true;
+        } else {
+            return false;
+        }
     }
 
     private void orbitalChanged() {
@@ -68,8 +84,6 @@ public class Integrator extends RenderStage {
     }
 
     public void newContext(AssetManager assetManager) {
-
-        orbitalChanged();
 
         // Create a texture to render to.
         // The following parameters have to match a row of Table 3.2 in the
@@ -110,49 +124,58 @@ public class Integrator extends RenderStage {
 
     public void render(float[] shaderTransform) {
 
+        if (checkForNewOrbital())
+            orbitalChanged();
+
         framebuffer.bindToAttachmentPoint();
         GLES30.glViewport(0, 0, width, height);
-        GLES30.glUseProgram(program);
-
-        GLES30.glActiveTexture(GLES30.GL_TEXTURE0);
-        radialTexture.bindToTexture2D();
-        setUniformInt("radial", 0);
-
-        GLES30.glActiveTexture(GLES30.GL_TEXTURE1);
-        azimuthalTexture.bindToTexture2D();
-        setUniformInt("azimuthal", 1);
-
-        GLES30.glActiveTexture(GLES30.GL_TEXTURE2);
-        quadratureTexture.bindToTexture2D();
-        setUniformInt("quadrature", 2);
-
-        setUniformInt("colorMode", renderPreferences.getColorMode());
-        setUniformInt("numQuadraturePoints", orbital.getNumQuadraturePoints());
-
-        setUniformFloat("exponentialConstant", (float) (2.0 * orbital.getRadialExponent()));
-        setUniformFloat("maximumRadius", (float) orbital.getMaximumRadius());
-        setUniformFloat("numRadialSubdivisions", (float) (radialDataSize - 1));
-        setUniformFloat("numAzimuthalSubdivisions", (float) (azimuthalDataSize - 1));
-        setUniformFloat("numQuadratureSubdivisions", (float) (quadratureDataSize - 1));
-        setUniformFloat("M", (float) orbital.getM());
-        // Multiply by 2 because the wave function is squared
-        setUniformFloat("powerOfR", (float) (2 * orbital.getRadialPower()));
-
-        // For testing
-        setUniformFloat("zero", 0.0f);
-        setUniformFloat("one", 1.0f);
-
-        int mvpMatrixHandle = GLES30.glGetUniformLocation(program, "shaderTransform");
-        GLES30.glUniformMatrix4fv(mvpMatrixHandle, 1, false, shaderTransform, 0);
-
-        int inPositionHandle = GLES30.glGetAttribLocation(program, "inPosition");
-        GLES30.glEnableVertexAttribArray(inPositionHandle);
-        GLES30.glVertexAttribPointer(inPositionHandle, 2, GLES30.GL_FLOAT, false, 8, screenRectangle);
 
         final int zeroes[] = {0, 0, 0, 0};
         GLES30.glClearBufferiv(GLES30.GL_COLOR, 0, zeroes, 0);
-        GLES30.glDrawArrays(GLES30.GL_TRIANGLE_FAN, 0, 4);
-        GLES30.glDisableVertexAttribArray(inPositionHandle);
+
+        if (orbital != null) {
+            GLES30.glUseProgram(program);
+
+            GLES30.glActiveTexture(GLES30.GL_TEXTURE0);
+            radialTexture.bindToTexture2D();
+            setUniformInt("radial", 0);
+
+            GLES30.glActiveTexture(GLES30.GL_TEXTURE1);
+            azimuthalTexture.bindToTexture2D();
+            setUniformInt("azimuthal", 1);
+
+            GLES30.glActiveTexture(GLES30.GL_TEXTURE2);
+            quadratureTexture.bindToTexture2D();
+            setUniformInt("quadrature", 2);
+
+            setUniformInt("colorMode", renderPreferences.getColorMode());
+            setUniformInt("numQuadraturePoints", orbital.getNumQuadraturePoints());
+
+            setUniformFloat("exponentialConstant", (float) (2.0 * orbital.getRadialExponent()));
+            setUniformFloat("maximumRadius", (float) orbital.getMaximumRadius());
+            setUniformFloat("numRadialSubdivisions", (float) (radialDataSize - 1));
+            setUniformFloat("numAzimuthalSubdivisions", (float) (azimuthalDataSize - 1));
+            setUniformFloat("numQuadratureSubdivisions", (float) (quadratureDataSize - 1));
+            setUniformFloat("M", (float) orbital.getM());
+            // Multiply by 2 because the wave function is squared
+            setUniformFloat("powerOfR", (float) (2 * orbital.getRadialPower()));
+
+            // For testing
+            setUniformFloat("zero", 0.0f);
+            setUniformFloat("one", 1.0f);
+
+            int mvpMatrixHandle = GLES30.glGetUniformLocation(program, "shaderTransform");
+            GLES30.glUniformMatrix4fv(mvpMatrixHandle, 1, false, shaderTransform, 0);
+
+            int inPositionHandle = GLES30.glGetAttribLocation(program, "inPosition");
+            GLES30.glEnableVertexAttribArray(inPositionHandle);
+            GLES30.glVertexAttribPointer(inPositionHandle, 2, GLES30.GL_FLOAT, false, 8,
+                    screenRectangle);
+
+            GLES30.glDrawArrays(GLES30.GL_TRIANGLE_FAN, 0, 4);
+            GLES30.glDisableVertexAttribArray(inPositionHandle);
+        }
+
         getGLError();
     }
 

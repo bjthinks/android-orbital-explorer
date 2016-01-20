@@ -90,7 +90,7 @@ public class OrbitalView extends GLSurfaceView implements OrbitalChangedListener
 
     @Override
     public void onOrbitalChanged(Orbital o) {
-        orbitalRenderer.onOrbitalChanged(o);
+            orbitalRenderer.onOrbitalChanged(o);
     }
 
     private int mFirstPointerID = MotionEvent.INVALID_POINTER_ID;
