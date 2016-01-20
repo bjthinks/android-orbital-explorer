@@ -89,25 +89,6 @@ public class Quaternion implements Parcelable {
         return divide(norm());
     }
 
-    /* public Quaternion pow(double alpha) {
-        Quaternion normalized = normalize();
-        double normalizedRealPart = normalized.real();
-        Vector3 normalizedUnrealPart = normalized.unreal();
-        double c = normalizedRealPart;
-        double s = normalizedUnrealPart.norm();
-        double theta = Math.acos(c);
-        double alphaTheta = alpha * theta;
-        double ac = Math.cos(alphaTheta);
-        Quaternion normalizedExponential;
-        if (s > 0.001) {
-            double as = Math.sin(alphaTheta);
-            normalizedExponential = new Quaternion(ac, normalizedUnrealPart.multiply(as / s));
-        } else {
-            normalizedExponential = new Quaternion(ac, normalizedUnrealPart.multiply(alpha));
-        }
-        return normalizedExponential.normalize().multiply(Math.pow(norm(), alpha));
-    } */
-
     public static Quaternion rotation(double angle, Vector3 x) {
         x = x.normalize();
         double s = Math.sin(angle / 2);
