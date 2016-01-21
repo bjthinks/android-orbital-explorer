@@ -164,6 +164,7 @@ public class Integrator extends RenderStage implements OrbitalChangedListener {
             setUniformInt("quadrature", 2);
 
             setUniformInt("enableColor", renderPreferences.getEnableColor() ? 1 : 0);
+            setUniformInt("realOrbital", 0);
             setUniformInt("numQuadraturePoints", orbital.getNumQuadraturePoints());
 
             setUniformFloat("exponentialConstant", (float) (2.0 * orbital.getRadialExponent()));

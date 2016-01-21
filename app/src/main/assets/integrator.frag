@@ -20,6 +20,7 @@ uniform int numQuadraturePoints;
 uniform float M;
 uniform float powerOfR;
 uniform bool enableColor;
+uniform bool realOrbital;
 
 // For testing
 uniform float zero;
@@ -62,9 +63,19 @@ vec2 quadratureData(float distanceToOrigin, int point) {
 vec2 longitudinalPart(float phi) {
     // Normalization constant so that this function times its conjugate,
     // integrated from 0 to 2pi, yields 1
+    const float sqrt2 = sqrt(2.0);
     const float oneOverSqrt2PI = 1.0 / sqrt(2.0 * pi);
     float Mphi = M * phi;
-    return vec2(cos(Mphi), sin(Mphi)) * oneOverSqrt2PI;
+    vec2 result;
+    if (realOrbital) {
+        if (M >= 0.0)
+            result = vec2(sqrt2 * cos(Mphi), 0.0);
+        else
+            result = vec2(sqrt2 * sin(Mphi), 0.0);
+    } else {
+        result = vec2(cos(Mphi), sin(Mphi));
+    }
+    return result * oneOverSqrt2PI;
 }
 
 vec2 angularPart(vec3 x, float r) {
