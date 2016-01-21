@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">Orbital Explorer</string>
 
+    <string name="complexNumbers">\u2102</string>
+    <string name="realNumbers">\u211d</string>
+
     <string-array name="mainMenuItems">
         <item>Settings</item>
     </string-array>

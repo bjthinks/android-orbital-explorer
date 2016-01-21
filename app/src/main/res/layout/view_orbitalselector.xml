@@ -11,4 +11,9 @@
         android:id="@+id/mchanger"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
+    <Button
+        android:id="@+id/rcchanger"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/complexNumbers" />
 </merge>

@@ -5,6 +5,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 
 public class OrbitalSelector extends LinearLayout {
@@ -16,10 +17,12 @@ public class OrbitalSelector extends LinearLayout {
     private int N = 1;
     private int L = 0;
     private int M = 0;
+    private boolean realOrbital = false;
 
     private ValueChanger nChanger;
     private ValueChanger lChanger;
     private ValueChanger mChanger;
+    private Button rcChanger;
 
     private OrbitalChangedListener orbitalChangedListener;
 
@@ -52,10 +55,12 @@ public class OrbitalSelector extends LinearLayout {
         nChanger = (ValueChanger) findViewById(R.id.nchanger);
         lChanger = (ValueChanger) findViewById(R.id.lchanger);
         mChanger = (ValueChanger) findViewById(R.id.mchanger);
+        rcChanger = (Button) findViewById(R.id.rcchanger);
 
         nChanger.setInteger(N);
         lChanger.setInteger(L);
         mChanger.setInteger(M);
+        setRcChangerText();
 
         nChanger.setOnUpListener(  new OnClickListener() {
             public void onClick(View v) { increaseN(); orbitalChanged(); }
@@ -81,6 +86,21 @@ public class OrbitalSelector extends LinearLayout {
                 orbitalChanged();
             }
         });
+
+        rcChanger.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                realOrbital = !realOrbital;
+                setRcChangerText();
+            }
+        });
+    }
+
+    private void setRcChangerText() {
+        if (realOrbital)
+            rcChanger.setText(R.string.realNumbers);
+        else
+            rcChanger.setText(R.string.complexNumbers);
     }
 
     public void setOrbitalChangedListener(OrbitalChangedListener listener) {
