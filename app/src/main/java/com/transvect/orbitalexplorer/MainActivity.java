@@ -2,17 +2,21 @@ package com.transvect.orbitalexplorer;
 
 import android.app.ActivityManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ConfigurationInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 public class MainActivity extends AppCompatActivity {
 
-    // private static final String TAG = "MainActivity";
+    private static final String TAG = "MainActivity";
 
     private OrbitalView orbitalView;
 
@@ -29,12 +33,28 @@ public class MainActivity extends AppCompatActivity {
         // as the ContentView for this Activity.
         setContentView(R.layout.activity_main);
 
-        // Find the toolbar and menu
+        // Find stuff
+        final DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.maindrawer);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         ListView menu = (ListView) findViewById(R.id.main_menu);
 
         // Set toolbar properties
         toolbar.setTitle("Orbital Explorer");
+
+        // Make menu items "live"
+        menu.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                switch (position) {
+                    case 0:
+                        drawerLayout.closeDrawers();
+                        Intent startSettings
+                                = new Intent(MainActivity.this, SettingsActivity.class);
+                        startActivity(startSettings);
+                        break;
+                }
+            }
+        });
 
         // Can we use a translucent status bar?
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
