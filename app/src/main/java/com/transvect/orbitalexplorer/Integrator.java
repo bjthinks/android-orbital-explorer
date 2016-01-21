@@ -54,6 +54,16 @@ public class Integrator extends RenderStage implements OrbitalChangedListener {
     }
 
     private void orbitalChanged() {
+
+        // Old textures? Trash them. (Deleting in the reverse order of creation is better
+        // for the driver's digestion.)
+        if (quadratureTexture != null)
+            quadratureTexture.delete();
+        if (azimuthalTexture != null)
+            azimuthalTexture.delete();
+        if (radialTexture != null)
+            radialTexture.delete();
+
         // Create radial texture
         radialTexture = new Texture(GLES30.GL_RG, GLES30.GL_FLOAT, GLES30.GL_RG32F);
         float[] radialData = orbital.getRadialData();
@@ -84,6 +94,11 @@ public class Integrator extends RenderStage implements OrbitalChangedListener {
     }
 
     public void newContext(AssetManager assetManager) {
+
+        // Clear input textures, cuz whatever used to be there is gone now
+        radialTexture = null;
+        azimuthalTexture = null;
+        quadratureTexture = null;
 
         // Create a texture to render to.
         // The following parameters have to match a row of Table 3.2 in the

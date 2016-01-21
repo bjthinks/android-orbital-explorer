@@ -36,4 +36,10 @@ public class Texture {
         GLES30.glTexImage2D(GLES30.GL_TEXTURE_2D, 0, internalFormat,
                 width, height, 0, format, type, RenderStage.floatArrayToBuffer(pixels));
     }
+
+    public void delete() {
+        int temp[] = new int[1];
+        temp[0] = id;
+        GLES30.glDeleteTextures(1, temp, 0);
+    }
 }
