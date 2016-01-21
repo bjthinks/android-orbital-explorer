@@ -4,13 +4,13 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
-public class RenderPreferences
+public class AppPreferences
         implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     boolean enableColor;
     boolean cycleColors;
 
-    RenderPreferences(Context context) {
+    AppPreferences(Context context) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         enableColor = preferences.getBoolean("prefEnableColor", true);
         cycleColors = preferences.getBoolean("prefCycleColors", true);

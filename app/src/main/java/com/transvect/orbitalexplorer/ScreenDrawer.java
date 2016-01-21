@@ -6,12 +6,12 @@ import android.opengl.GLES30;
 
 public class ScreenDrawer extends RenderStage {
 
-    RenderPreferences renderPreferences;
+    AppPreferences appPreferences;
 
     private int program;
 
     public ScreenDrawer(Context context) {
-        renderPreferences = new RenderPreferences(context);
+        appPreferences = new AppPreferences(context);
     }
 
     public void newContext(AssetManager assetManager) {
@@ -51,7 +51,7 @@ public class ScreenDrawer extends RenderStage {
         int colorRotation = GLES30.glGetUniformLocation(program, "colorRotation");
         float[] rot = new float[4];
         double t;
-        if (renderPreferences.getCycleColors()) {
+        if (appPreferences.getCycleColors()) {
             long period = 10000; // ms
             t = 2 * Math.PI * (double) (System.currentTimeMillis() % period) / period;
         } else {

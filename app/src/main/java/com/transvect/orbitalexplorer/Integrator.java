@@ -9,7 +9,7 @@ public class Integrator extends RenderStage implements OrbitalChangedListener {
 
     private static final String TAG = "Integrator";
 
-    RenderPreferences renderPreferences;
+    AppPreferences appPreferences;
 
     private int program;
 
@@ -33,7 +33,7 @@ public class Integrator extends RenderStage implements OrbitalChangedListener {
     }
 
     Integrator(Context context) {
-        renderPreferences = new RenderPreferences(context);
+        appPreferences = new AppPreferences(context);
     }
 
     // Main thread
@@ -163,7 +163,7 @@ public class Integrator extends RenderStage implements OrbitalChangedListener {
             quadratureTexture.bindToTexture2D();
             setUniformInt("quadrature", 2);
 
-            setUniformInt("enableColor", renderPreferences.getEnableColor() ? 1 : 0);
+            setUniformInt("enableColor", appPreferences.getEnableColor() ? 1 : 0);
             setUniformInt("realOrbital", 0);
             setUniformInt("numQuadraturePoints", orbital.getNumQuadraturePoints());
 
