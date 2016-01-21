@@ -7,21 +7,29 @@ import android.preference.PreferenceManager;
 public class RenderPreferences
         implements SharedPreferences.OnSharedPreferenceChangeListener {
 
-    int colorMode;
+    boolean enableColor;
+    boolean cycleColors;
 
     RenderPreferences(Context context) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        colorMode = Integer.parseInt(preferences.getString("prefColorMode", "0"));
+        enableColor = preferences.getBoolean("prefEnableColor", true);
+        cycleColors = preferences.getBoolean("prefCycleColors", true);
         preferences.registerOnSharedPreferenceChangeListener(this);
     }
 
-    synchronized int getColorMode() {
-        return colorMode;
+    synchronized boolean getEnableColor() {
+        return enableColor;
+    }
+
+    synchronized boolean getCycleColors() {
+        return cycleColors;
     }
 
     @Override
     synchronized public void onSharedPreferenceChanged(SharedPreferences preferences, String key) {
-        if (key.equals("prefColorMode"))
-            colorMode = Integer.parseInt(preferences.getString("prefColorMode", "0"));
+        if (key.equals("prefEnableColor"))
+            enableColor = preferences.getBoolean("prefEnableColor", true);
+        if (key.equals("prefCycleColors"))
+            cycleColors = preferences.getBoolean("prefCycleColors", true);
     }
 }

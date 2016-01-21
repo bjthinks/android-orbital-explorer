@@ -19,7 +19,7 @@ uniform float numQuadratureSubdivisions;
 uniform int numQuadraturePoints;
 uniform float M;
 uniform float powerOfR;
-uniform int colorMode;
+uniform bool enableColor;
 
 // For testing
 uniform float zero;
@@ -120,14 +120,9 @@ void main() {
         // Increase brightness
         total *= 50.0;
 
-        // Handle greyscale and color blind mode
-        if (colorMode == 1)
+        // Handle greyscale mode
+        if (!enableColor)
             total.xy = vec2(0);
-        else if (colorMode == 2) {
-            float angle = pi * 4.0 / 9.0;
-            vec2 good = vec2(cos(angle), sin(angle));
-            total.xy = good * dot(total.xy, good);
-        }
 
         total.xy /= total.z;
         total.z = 1.0 - exp(-total.z);

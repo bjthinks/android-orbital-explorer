@@ -24,7 +24,7 @@ public class OrbitalRenderer implements GLSurfaceView.Renderer, OrbitalChangedLi
         assetManager = context.getAssets();
         dpi = context.getResources().getDisplayMetrics().densityDpi;
         integrator = new Integrator(context);
-        screenDrawer = new ScreenDrawer();
+        screenDrawer = new ScreenDrawer(context);
     }
 
     // Main thread

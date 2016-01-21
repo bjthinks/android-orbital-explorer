@@ -1,13 +1,18 @@
 package com.transvect.orbitalexplorer;
 
+import android.content.Context;
 import android.content.res.AssetManager;
 import android.opengl.GLES30;
 
 public class ScreenDrawer extends RenderStage {
 
+    RenderPreferences renderPreferences;
+
     private int program;
 
-    public ScreenDrawer() {}
+    public ScreenDrawer(Context context) {
+        renderPreferences = new RenderPreferences(context);
+    }
 
     public void newContext(AssetManager assetManager) {
         // Compile & link GLSL program
@@ -45,8 +50,13 @@ public class ScreenDrawer extends RenderStage {
 
         int colorRotation = GLES30.glGetUniformLocation(program, "colorRotation");
         float[] rot = new float[4];
-        int period = 10000; // ms
-        double t = 2 * Math.PI * (double) (System.currentTimeMillis() % period) / period;
+        double t;
+        if (renderPreferences.getCycleColors()) {
+            long period = 10000; // ms
+            t = 2 * Math.PI * (double) (System.currentTimeMillis() % period) / period;
+        } else {
+            t = 0.0;
+        }
         rot[0] = (float) Math.cos(t);  rot[2] = (float) -Math.sin(t);
         rot[1] = (float) Math.sin(t);  rot[3] = (float) Math.cos(t);
         GLES30.glUniformMatrix2fv(colorRotation, 1, false, rot, 0);

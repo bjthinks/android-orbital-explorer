@@ -3,19 +3,8 @@
 
     <string-array name="mainMenuItems">
         <item>Settings</item>
-        <item>Blarg</item>
     </string-array>
 
-    <string name="prefColorMode_Title">Color Mode</string>
-    <string-array name="prefColorMode_Entries">
-        <item>Normal</item>
-        <item>Grayscale</item>
-        <item>Red-green colorblind (experimental)</item>
-    </string-array>
-    <string-array name="prefColorMode_Values">
-        <item>0</item>
-        <item>1</item>
-        <item>2</item>
-    </string-array>
-    <string name="prefColorMode_Default">0</string>
+    <string name="prefEnableColor_Title">Enable color</string>
+    <string name="prefCycleColors_Title">Cycle colors</string>
 </resources>
