@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
         orbitalView = (OrbitalView) findViewById(R.id.orbitalview);
 
         // Find the orbital control
-        orbitalSelector.setOrbitalChangedListener(orbitalView);
+        orbitalSelector.setListener(orbitalView);
         orbitalSelector.setOrbital(6, 4, 1);
     }
 

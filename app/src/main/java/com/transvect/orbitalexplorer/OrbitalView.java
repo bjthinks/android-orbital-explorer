@@ -10,7 +10,7 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 
 // TODO review concurrency
-public class OrbitalView extends GLSurfaceView implements OrbitalChangedListener {
+public class OrbitalView extends GLSurfaceView {
     private static final String TAG = "OrbitalView";
 
     private Camera camera;
@@ -86,9 +86,12 @@ public class OrbitalView extends GLSurfaceView implements OrbitalChangedListener
         };
     }
 
-    @Override
-    public void onOrbitalChanged(Orbital o) {
-            orbitalRenderer.onOrbitalChanged(o);
+    public void orbitalChanged(Orbital newOrbital) {
+        orbitalRenderer.orbitalChanged(newOrbital);
+    }
+
+    public void realFlagChanged(boolean realOrbital) {
+        orbitalRenderer.realFlagChanged(realOrbital);
     }
 
     private int firstPointerID = MotionEvent.INVALID_POINTER_ID;

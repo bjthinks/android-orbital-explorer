@@ -3,13 +3,13 @@ package com.transvect.orbitalexplorer;
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.opengl.GLES30;
-import android.util.Log;
 
-public class Integrator extends RenderStage implements OrbitalChangedListener {
+public class Integrator extends RenderStage {
 
     private static final String TAG = "Integrator";
 
     AppPreferences appPreferences;
+    boolean realOrbital = false;
 
     private int program;
 
@@ -37,9 +37,12 @@ public class Integrator extends RenderStage implements OrbitalChangedListener {
     }
 
     // Main thread
-    @Override
-    public synchronized void onOrbitalChanged(Orbital o) {
-        newOrbital = o;
+    public synchronized void orbitalChanged(Orbital newOrbital_) {
+        newOrbital = newOrbital_;
+    }
+
+    public synchronized void realFlagChanged(boolean realOrbital_) {
+        realOrbital = realOrbital_;
     }
 
     // Rendering thread
@@ -53,7 +56,7 @@ public class Integrator extends RenderStage implements OrbitalChangedListener {
         }
     }
 
-    private void orbitalChanged() {
+    private void setupOrbitalTextures() {
 
         // Old textures? Trash them. (Deleting in the reverse order of creation is better
         // for the driver's digestion.)
@@ -140,7 +143,7 @@ public class Integrator extends RenderStage implements OrbitalChangedListener {
     public void render(float[] shaderTransform) {
 
         if (checkForNewOrbital())
-            orbitalChanged();
+            setupOrbitalTextures();
 
         framebuffer.bindToAttachmentPoint();
         GLES30.glViewport(0, 0, width, height);
@@ -164,7 +167,7 @@ public class Integrator extends RenderStage implements OrbitalChangedListener {
             setUniformInt("quadrature", 2);
 
             setUniformInt("enableColor", appPreferences.getEnableColor() ? 1 : 0);
-            setUniformInt("realOrbital", 0);
+            setUniformInt("realOrbital", realOrbital ? 1 : 0);
             setUniformInt("numQuadraturePoints", orbital.getNumQuadraturePoints());
 
             setUniformFloat("exponentialConstant", (float) (2.0 * orbital.getRadialExponent()));

@@ -8,7 +8,7 @@ import android.util.Log;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
-public class OrbitalRenderer implements GLSurfaceView.Renderer, OrbitalChangedListener {
+public class OrbitalRenderer implements GLSurfaceView.Renderer {
 
     private static final String TAG = "OrbitalRenderer";
 
@@ -28,9 +28,13 @@ public class OrbitalRenderer implements GLSurfaceView.Renderer, OrbitalChangedLi
     }
 
     // Main thread
-    @Override
-    public void onOrbitalChanged(Orbital o) {
-        integrator.onOrbitalChanged(o);
+    public void orbitalChanged(Orbital newOrbital) {
+        integrator.orbitalChanged(newOrbital);
+    }
+
+    // Main thread
+    public void realFlagChanged(boolean realOrbital) {
+        integrator.realFlagChanged(realOrbital);
     }
 
     // Rendering thread

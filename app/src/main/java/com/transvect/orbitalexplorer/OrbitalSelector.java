@@ -24,7 +24,7 @@ public class OrbitalSelector extends LinearLayout {
     private ValueChanger mChanger;
     private Button rcChanger;
 
-    private OrbitalChangedListener orbitalChangedListener;
+    private OrbitalView listener;
 
     public OrbitalSelector(Context context) {
         super(context);
@@ -60,56 +60,56 @@ public class OrbitalSelector extends LinearLayout {
         nChanger.setInteger(N);
         lChanger.setInteger(L);
         mChanger.setInteger(M);
-        setRcChangerText();
+        setRealOrbital(realOrbital);
 
-        nChanger.setOnUpListener(  new OnClickListener() {
-            public void onClick(View v) { increaseN(); orbitalChanged(); }
+        nChanger.setOnUpListener  (new OnClickListener() {
+            public void onClick(View v) {  increaseN(); orbitalChanged();
+            }
         });
         nChanger.setOnDownListener(new OnClickListener() {
-            public void onClick(View v) { decreaseN(); orbitalChanged(); }
+            public void onClick(View v) { decreaseN(); orbitalChanged();
+            }
         });
-        lChanger.setOnUpListener(  new OnClickListener() {
-            public void onClick(View v) { increaseL(); orbitalChanged(); }
+        lChanger.setOnUpListener  (new OnClickListener() {
+            public void onClick(View v) { increaseL(); orbitalChanged();
+            }
         });
         lChanger.setOnDownListener(new OnClickListener() {
-            public void onClick(View v) { decreaseL(); orbitalChanged(); }
+            public void onClick(View v) { decreaseL(); orbitalChanged();
+            }
         });
-        mChanger.setOnUpListener(new OnClickListener() {
-            public void onClick(View v) {
-                increaseM();
-                orbitalChanged();
+        mChanger.setOnUpListener  (new OnClickListener() {
+            public void onClick(View v) { increaseM(); orbitalChanged();
             }
         });
         mChanger.setOnDownListener(new OnClickListener() {
-            public void onClick(View v) {
-                decreaseM();
-                orbitalChanged();
+            public void onClick(View v) { decreaseM(); orbitalChanged();
             }
         });
 
         rcChanger.setOnClickListener(new OnClickListener() {
             @Override
-            public void onClick(View v) {
-                realOrbital = !realOrbital;
-                setRcChangerText();
-            }
+            public void onClick(View v) { setRealOrbital(!realOrbital); }
         });
     }
 
-    private void setRcChangerText() {
+    private void setRealOrbital(boolean realOrbital_) {
+        realOrbital = realOrbital_;
         if (realOrbital)
             rcChanger.setText(R.string.realNumbers);
         else
             rcChanger.setText(R.string.complexNumbers);
+        if (listener != null)
+            listener.realFlagChanged(realOrbital);
     }
 
-    public void setOrbitalChangedListener(OrbitalChangedListener listener) {
-        orbitalChangedListener = listener;
+    public void setListener(OrbitalView orbitalView) {
+        listener = orbitalView;
     }
 
     private void orbitalChanged() {
-        if (orbitalChangedListener != null)
-            orbitalChangedListener.onOrbitalChanged(new Orbital(N, N, L, M));
+        if (listener != null)
+            listener.orbitalChanged(new Orbital(N, N, L, M));
     }
 
     private void increaseN() {
