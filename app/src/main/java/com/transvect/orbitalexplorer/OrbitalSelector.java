@@ -167,7 +167,6 @@ public class OrbitalSelector extends LinearLayout {
     }
 
     public void setOrbital(int N_, int L_, int M_) {
-        Log.d(TAG, "SETTING ORBITAL TO " + N_ + " " + L_ + " " + M_);
         N = N_;
         L = L_;
         M = M_;
