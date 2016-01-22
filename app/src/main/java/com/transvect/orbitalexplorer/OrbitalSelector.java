@@ -1,6 +1,8 @@
 package com.transvect.orbitalexplorer;
 
 import android.content.Context;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -46,6 +48,71 @@ public class OrbitalSelector extends LinearLayout {
         LayoutInflater inflater
                 = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         inflater.inflate(R.layout.view_orbitalselector, this);
+    }
+
+    @Override
+    protected synchronized Parcelable onSaveInstanceState() {
+        Parcelable superState = super.onSaveInstanceState();
+        SavedState ss = new SavedState(superState);
+        ss.N = N;
+        ss.L = L;
+        ss.M = M;
+        ss.realOrbital = realOrbital;
+
+        return ss;
+    }
+
+    @Override
+    protected synchronized void onRestoreInstanceState(Parcelable state) {
+        SavedState ss = (SavedState) state;
+        super.onRestoreInstanceState(ss.getSuperState());
+        N = ss.N;
+        L = ss.L;
+        M = ss.M;
+        realOrbital = ss.realOrbital;
+
+        nChanger.setInteger(N);
+        lChanger.setInteger(L);
+        mChanger.setInteger(M);
+        setRealOrbital(realOrbital);
+
+        orbitalChanged();
+    }
+
+    private static class SavedState extends BaseSavedState {
+        int N, L, M;
+        boolean realOrbital;
+
+        SavedState(Parcelable superState) {
+            super(superState);
+        }
+
+        private SavedState(Parcel in) {
+            super(in);
+            N = in.readInt();
+            L = in.readInt();
+            M = in.readInt();
+            realOrbital = in.readInt() != 0 ? true : false;
+        }
+
+        @Override
+        public void writeToParcel(Parcel out, int flags) {
+            super.writeToParcel(out, flags);
+            out.writeInt(N);
+            out.writeInt(L);
+            out.writeInt(M);
+            out.writeInt(realOrbital ? 1 : 0);
+        }
+
+        public static final Parcelable.Creator<SavedState> CREATOR
+                = new Parcelable.Creator<SavedState>() {
+            public SavedState createFromParcel(Parcel in) {
+                return new SavedState(in);
+            }
+            public SavedState[] newArray(int size) {
+                return new SavedState[size];
+            }
+        };
     }
 
     @Override
