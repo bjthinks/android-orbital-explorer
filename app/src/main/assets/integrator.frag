@@ -61,20 +61,24 @@ vec2 quadratureData(float distanceToOrigin, int point) {
 }
 
 vec2 longitudinalPart(float phi) {
+    vec2 result;
+    if (M == 0.0) {
+        result = vec2(1.0, 0.0);
+    } else {
+        float Mphi = M * phi;
+        if (realOrbital) {
+            const float sqrt2 = sqrt(2.0);
+            if (M > 0.0)
+                result = vec2(sqrt2 * cos(Mphi), 0.0);
+            else // M < 0.0
+                result = vec2(sqrt2 * sin(Mphi), 0.0);
+        } else {
+            result = vec2(cos(Mphi), sin(Mphi));
+        }
+    }
     // Normalization constant so that this function times its conjugate,
     // integrated from 0 to 2pi, yields 1
-    const float sqrt2 = sqrt(2.0);
     const float oneOverSqrt2PI = 1.0 / sqrt(2.0 * pi);
-    float Mphi = M * phi;
-    vec2 result;
-    if (realOrbital) {
-        if (M >= 0.0)
-            result = vec2(sqrt2 * cos(Mphi), 0.0);
-        else
-            result = vec2(sqrt2 * sin(Mphi), 0.0);
-    } else {
-        result = vec2(cos(Mphi), sin(Mphi));
-    }
     return result * oneOverSqrt2PI;
 }
 
