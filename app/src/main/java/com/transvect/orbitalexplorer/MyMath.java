@@ -91,4 +91,17 @@ public final class MyMath {
         }
         return nextResult * stepSize;
     }
+
+    public static double ipow(double base, int exponent) {
+        double result = 1.0;
+
+        while (exponent > 0) {
+            if ((exponent & 1) != 0)
+                result *= base;
+            exponent >>= 1;
+            base *= base;
+        }
+
+        return result;
+    }
 }
