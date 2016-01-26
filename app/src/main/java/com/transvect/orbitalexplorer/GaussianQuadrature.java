@@ -25,8 +25,7 @@ public class GaussianQuadrature {
 
         double[] moments = new double[2 * N + 1];
         for (int i = 0; i < 2 * N + 1; ++i) {
-            Polynomial xToTheI = Polynomial.variableToThe(i);
-            Function integrand = new Product(xToTheI, W);
+            Function integrand = new Product(new Power(i), W);
             moments[i] = MyMath.rombergIntegrate(integrand);
         }
 
