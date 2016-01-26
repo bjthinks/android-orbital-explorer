@@ -11,7 +11,7 @@ public class Orbital {
     private WaveFunction waveFunction;
 
     private double exponentialConstant;
-    private double powerOfR;
+    private int powerOfR;
     private int quadraturePoints;
 
     public Orbital(int Z_, int N_, int L_, int M_) {
@@ -71,7 +71,7 @@ public class Orbital {
         for (int i = 0; i < QUADRATURE_SIZE; ++i) {
             double distanceFromOrigin = MAXIMUM_RADIUS * (double) i / (double) (QUADRATURE_SIZE - 1);
             WeightFunction weightFunction
-                    = new WeightFunction(distanceFromOrigin);
+                    = new WeightFunction(exponentialConstant, powerOfR, distanceFromOrigin);
             GaussianQuadrature GQ = new GaussianQuadrature(weightFunction, quadraturePoints);
 
             for (int j = 0; j < quadraturePoints; ++j) {
@@ -92,10 +92,16 @@ public class Orbital {
         return quadratureWeights;
     }
 
-    private class WeightFunction implements Function {
+    private static class WeightFunction implements Function {
+        private double exponentialConstant;
+        private int powerOfR;
         private double mDistanceFromOrigin;
 
-        public WeightFunction(double distanceFromOrigin) {
+        public WeightFunction(double exponentialConstant_,
+                              int powerOfR_,
+                              double distanceFromOrigin) {
+            exponentialConstant = exponentialConstant_;
+            powerOfR = powerOfR_;
             mDistanceFromOrigin = distanceFromOrigin;
         }
 
