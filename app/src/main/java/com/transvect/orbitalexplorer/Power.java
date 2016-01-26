@@ -2,7 +2,7 @@ package com.transvect.orbitalexplorer;
 
 public class Power implements Function {
 
-    private double p;
+    private int p;
 
     public Power(int p_) {
         p = p_;
@@ -10,6 +10,6 @@ public class Power implements Function {
 
     @Override
     public double eval(double x) {
-        return Math.pow(x, p);
+        return MyMath.ipow(x, p);
     }
 }
