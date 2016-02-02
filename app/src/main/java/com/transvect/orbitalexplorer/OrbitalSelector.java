@@ -96,7 +96,7 @@ public class OrbitalSelector extends LinearLayout {
             N = in.readInt();
             L = in.readInt();
             M = in.readInt();
-            realOrbital = in.readInt() != 0 ? true : false;
+            realOrbital = (in.readInt() != 0);
         }
 
         @Override
@@ -133,34 +133,48 @@ public class OrbitalSelector extends LinearLayout {
         mChanger.setInteger(M);
         setRealOrbital(realOrbital);
 
-        nChanger.setOnUpListener  (new OnClickListener() {
-            public void onClick(View v) {  increaseN(); orbitalChanged();
+        nChanger.setOnUpListener(new OnClickListener() {
+            public void onClick(View v) {
+                increaseN();
+                orbitalChanged();
             }
         });
         nChanger.setOnDownListener(new OnClickListener() {
-            public void onClick(View v) { decreaseN(); orbitalChanged();
+            public void onClick(View v) {
+                decreaseN();
+                orbitalChanged();
             }
         });
-        lChanger.setOnUpListener  (new OnClickListener() {
-            public void onClick(View v) { increaseL(); orbitalChanged();
+        lChanger.setOnUpListener(new OnClickListener() {
+            public void onClick(View v) {
+                increaseL();
+                orbitalChanged();
             }
         });
         lChanger.setOnDownListener(new OnClickListener() {
-            public void onClick(View v) { decreaseL(); orbitalChanged();
+            public void onClick(View v) {
+                decreaseL();
+                orbitalChanged();
             }
         });
-        mChanger.setOnUpListener  (new OnClickListener() {
-            public void onClick(View v) { increaseM(); orbitalChanged();
+        mChanger.setOnUpListener(new OnClickListener() {
+            public void onClick(View v) {
+                increaseM();
+                orbitalChanged();
             }
         });
         mChanger.setOnDownListener(new OnClickListener() {
-            public void onClick(View v) { decreaseM(); orbitalChanged();
+            public void onClick(View v) {
+                decreaseM();
+                orbitalChanged();
             }
         });
 
         rcChanger.setOnClickListener(new OnClickListener() {
             @Override
-            public void onClick(View v) { setRealOrbital(!realOrbital); }
+            public void onClick(View v) {
+                setRealOrbital(!realOrbital);
+            }
         });
     }
 
