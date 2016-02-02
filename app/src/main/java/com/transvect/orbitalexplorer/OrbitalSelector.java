@@ -263,7 +263,6 @@ public class OrbitalSelector extends LinearLayout {
 
     public void toggleVisibility() {
         visibility = !visibility;
-        Log.d(TAG, "Setting visibility to " + visibility);
         if (visibility)
             setVisibility(View.VISIBLE);
         else
