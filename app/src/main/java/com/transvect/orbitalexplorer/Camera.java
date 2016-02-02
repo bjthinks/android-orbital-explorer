@@ -110,9 +110,11 @@ public class Camera implements Parcelable {
         return stillFlinging;
     }
 
-    public void stopFling() {
+    public boolean stopFling() {
         flingVelocity = new Vector2(0.0, 0.0);
+        boolean r = stillFlinging;
         stillFlinging = false;
+        return r;
     }
 
     public float[] computeShaderTransform(double aspectRatio) {

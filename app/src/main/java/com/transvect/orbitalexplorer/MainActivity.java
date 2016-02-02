@@ -74,7 +74,8 @@ public class MainActivity extends AppCompatActivity {
         OrbitalSelector orbitalSelector = (OrbitalSelector) findViewById(R.id.orbitalselector);
         orbitalView = (OrbitalView) findViewById(R.id.orbitalview);
 
-        // Find the orbital control
+        // Connect things to other things
+        orbitalView.setOrbitalSelector(orbitalSelector);
         orbitalSelector.setListener(orbitalView);
         orbitalSelector.setOrbital(6, 4, 1);
     }

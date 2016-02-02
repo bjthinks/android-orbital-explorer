@@ -15,6 +15,7 @@ public class OrbitalView extends GLSurfaceView {
 
     private Camera camera;
     private GestureDetector flingDetector;
+    private OrbitalSelector orbitalSelector;
     private OrbitalRenderer orbitalRenderer;
 
     public OrbitalView(Context context) {
@@ -86,6 +87,10 @@ public class OrbitalView extends GLSurfaceView {
         };
     }
 
+    public void setOrbitalSelector(OrbitalSelector s) {
+        orbitalSelector = s;
+    }
+
     public void orbitalChanged(Orbital newOrbital) {
         orbitalRenderer.orbitalChanged(newOrbital);
     }
@@ -96,6 +101,7 @@ public class OrbitalView extends GLSurfaceView {
 
     private int firstPointerID = MotionEvent.INVALID_POINTER_ID;
     private int secondPointerID = MotionEvent.INVALID_POINTER_ID;
+    private boolean isTouchEventTrivial = false;
 
     @Override
     public synchronized boolean onTouchEvent(@NonNull MotionEvent e) {
@@ -108,7 +114,7 @@ public class OrbitalView extends GLSurfaceView {
                 // One bear in the bed
                 firstPointerID = e.getPointerId(0);
                 oneFingerEvent(e, false);
-                camera.stopFling();
+                isTouchEventTrivial = !camera.stopFling();
                 // setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
                 break;
 
@@ -118,6 +124,7 @@ public class OrbitalView extends GLSurfaceView {
                     secondPointerID = e.getPointerId(e.getActionIndex());
                     twoFingerEvent(e, false);
                 }
+                isTouchEventTrivial = false;
                 break;
 
             case MotionEvent.ACTION_MOVE:
@@ -125,11 +132,15 @@ public class OrbitalView extends GLSurfaceView {
                     oneFingerEvent(e, true);
                 else if (e.getPointerCount() == 2)
                     twoFingerEvent(e, true);
+                isTouchEventTrivial = false;
                 break;
 
             case MotionEvent.ACTION_UP:
                 // No bears in the bed
                 firstPointerID = MotionEvent.INVALID_POINTER_ID;
+                if (isTouchEventTrivial && orbitalSelector != null)
+                    orbitalSelector.toggleVisibility();
+                isTouchEventTrivial = false;
                 break;
 
             case MotionEvent.ACTION_POINTER_UP: {
@@ -153,6 +164,7 @@ public class OrbitalView extends GLSurfaceView {
                     secondPointerID = MotionEvent.INVALID_POINTER_ID;
                     oneFingerEvent(e, false);
                 }
+                isTouchEventTrivial = false;
 
                 break;
             }
@@ -163,6 +175,7 @@ public class OrbitalView extends GLSurfaceView {
                 // the bed and will come back out later when it's safe.
                 firstPointerID = MotionEvent.INVALID_POINTER_ID;
                 secondPointerID = MotionEvent.INVALID_POINTER_ID;
+                isTouchEventTrivial = false;
                 break;
 
             default:
