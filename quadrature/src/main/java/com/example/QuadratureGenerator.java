@@ -1,9 +1,23 @@
 package com.example;
 
+import java.io.IOException;
+
 public class QuadratureGenerator {
 
-    public static void main(String args[]) {
-        System.out.print("This is a standalone java program\n");
+    CodePrinter codePrinter;
+
+    public void go() throws IOException {
+        codePrinter = new CodePrinter();
+        codePrinter.printPreface();
+        codePrinter.printSuffix();
     }
 
+    public static void main(String args[]) {
+        QuadratureGenerator q = new QuadratureGenerator();
+        try {
+            q.go();
+        } catch (Exception e) {
+            System.err.print(e.getLocalizedMessage());
+        }
+    }
 }
