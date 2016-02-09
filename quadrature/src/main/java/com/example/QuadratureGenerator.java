@@ -4,9 +4,9 @@ import java.io.IOException;
 
 public class QuadratureGenerator {
 
-    CodePrinter codePrinter;
+    private CodePrinter codePrinter;
 
-    public void go() throws IOException {
+    private void go() throws IOException {
         codePrinter = new CodePrinter();
         codePrinter.printPreface();
         codePrinter.printSuffix();
