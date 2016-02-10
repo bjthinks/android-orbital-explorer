@@ -15,7 +15,7 @@ public class AzimuthalFunction implements Function {
 
     public AzimuthalFunction(int L, int M) {
         int absM = Math.abs(M);
-        cosThetaPolynomial = MyMath.legendrePolynomial(L);
+        cosThetaPolynomial = LegendrePolynomial.generate(L);
         for (int i = 0; i < absM; ++i)
             cosThetaPolynomial = cosThetaPolynomial.derivative();
         double constant = Math.sqrt((2.0 * L + 1) / 2.0);

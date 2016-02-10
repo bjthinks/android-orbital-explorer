@@ -33,7 +33,7 @@ public class RadialFunction implements Function {
         double constantFactors = Math.pow(2.0 * dZ / dN, 1.5)
                 * Math.sqrt(MyMath.factorial(N - L - 1) / (2.0 * dN * MyMath.factorial(N + L)));
 
-        oscillatingPart = MyMath.generalizedLaguerrePolynomial(N - L - 1, 2 * L + 1)
+        oscillatingPart = GeneralizedLaguerrePolynomial.generate(N - L - 1, 2 * L + 1)
                 .rescaleX(radialScaleFactor)
                 .multiply(Math.pow(radialScaleFactor, powerOfR))
                 .multiply(constantFactors);
