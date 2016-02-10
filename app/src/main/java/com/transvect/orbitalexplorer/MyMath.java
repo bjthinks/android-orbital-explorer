@@ -1,9 +1,6 @@
 package com.transvect.orbitalexplorer;
 
-import android.util.Log;
-
 public final class MyMath {
-    private static final String TAG = "MyMath";
 
     private MyMath() {}
 
@@ -42,7 +39,7 @@ public final class MyMath {
 
     public static double factorial(int n) {
         if (n < 0)
-            Log.w(TAG, "Factorial of negative number");
+            throw new IllegalArgumentException("Factorial of negative number");
         double result = 1;
         for (int i = 2; i <= n; ++i)
             result *= i;
