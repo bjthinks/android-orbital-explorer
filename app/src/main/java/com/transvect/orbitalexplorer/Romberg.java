@@ -1,10 +1,6 @@
 package com.transvect.orbitalexplorer;
 
-import android.util.Log;
-
 public final class Romberg {
-
-    private static final String TAG = "Romberg";
 
     private Romberg() {}
 
@@ -12,17 +8,20 @@ public final class Romberg {
         double[] lessAccurateEstimate;
         int n = 1;
         double[] moreAccurateEstimate = new double[n];
-        moreAccurateEstimate[0] = trapezoidalEstimate(f, 1.0);
+        double stepSize = 1.0;
+        moreAccurateEstimate[0] = trapezoidalEstimate(f, stepSize);
 
         do {
             ++n;
             lessAccurateEstimate = moreAccurateEstimate;
             moreAccurateEstimate = new double[n];
-            moreAccurateEstimate[0] = trapezoidalEstimate(f,
-                    Math.pow(0.5, (double) (n - 1)));
+            stepSize *= 0.5;
+            moreAccurateEstimate[0] = trapezoidalEstimate(f, stepSize);
+            double c = 1.0;
             for (int i = 1; i < n; ++i) {
-                double c = Math.pow(4.0, (double) i);
-                moreAccurateEstimate[i] = c / (c - 1.0) * moreAccurateEstimate[i - 1]
+                c *= 4.0;
+                moreAccurateEstimate[i]
+                        =  c  / (c - 1.0) * moreAccurateEstimate[i - 1]
                         - 1.0 / (c - 1.0) * lessAccurateEstimate[i - 1];
             }
         } while (moreAccurateEstimate[n - 1] != moreAccurateEstimate[n-2]);
@@ -30,25 +29,25 @@ public final class Romberg {
         return moreAccurateEstimate[n - 1];
     }
 
-    // Estimate the integral of f using trapezoids of width stepSize
-    public static double trapezoidalEstimate(Function f, double stepSize) {
-        double previousResult = f.eval(0.0);
-        double nextResult = previousResult;
-        int i = 1;
-        int stepsAtATime = 5;
-        int iMax = stepsAtATime;
-        for (; i <= iMax; ++i)
-            nextResult += f.eval(-stepSize * (double) i) + f.eval(stepSize * (double) i);
-        // TODO this check is not right
-        if (previousResult == nextResult && previousResult != 0.0)
-            Log.w(TAG, "Integration step size too large");
-        while (previousResult != nextResult) {
-            previousResult = nextResult;
-            iMax += stepsAtATime;
-            for (; i <= iMax; ++i)
-                nextResult += f.eval(-stepSize * (double) i) + f.eval(stepSize * (double) i);
-        }
+    // Estimate the integral of f from 0 to +infinity using trapezoids of width stepSize.
+    // Assumes f goes to zero at infinity, otherwise will not terminate.
+    // Heuristically guesses when to stop by noticing when the accumulated total
+    // doesn't change for multiple trapezoids in a row.
+    private static double trapezoidalEstimate(Function f, double stepSize) {
+        double priorResult;
+        double nextResult = 0.5 * f.eval(0.0);
+        int i = 0;
+        int numberOfConsecutiveIdenticalResults = 0;
+
+        do {
+            priorResult = nextResult;
+            nextResult += f.eval(stepSize * (double) ++i);
+            if (priorResult == nextResult)
+                ++numberOfConsecutiveIdenticalResults;
+            else
+                numberOfConsecutiveIdenticalResults = 0;
+        } while (numberOfConsecutiveIdenticalResults < 5);
+
         return nextResult * stepSize;
     }
-
 }

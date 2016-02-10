@@ -14,17 +14,14 @@ public class WeightFunction implements Function {
     }
 
     public double eval(double x) {
-        if (x < 0.0)
-            return 0.0;
 
         double r = Math.sqrt(mDistanceFromOrigin * mDistanceFromOrigin + x * x);
+
         // Multiply by 2 because the wave function is squared
         double value = Math.exp(2.0 * exponentialConstant * r);
+
         // Multiply by 2 because the wave function is squared
         value *= MyMath.ipow(r, twicePowerOfR);
-
-        if (x == 0.0)
-            value *= 0.5;
 
         return value;
     }
