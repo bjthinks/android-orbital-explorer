@@ -21,7 +21,7 @@ public class WeightFunction implements Function {
         double value = Math.exp(2.0 * exponentialConstant * r);
 
         // Multiply by 2 because the wave function is squared
-        value *= MyMath.ipow(r, twicePowerOfR);
+        value *= MyMath.fastpow(r, twicePowerOfR);
 
         return value;
     }

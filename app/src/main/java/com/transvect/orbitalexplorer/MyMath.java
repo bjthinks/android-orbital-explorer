@@ -11,13 +11,20 @@ public final class MyMath {
     public static double factorial(int n) {
         if (n < 0)
             throw new IllegalArgumentException("Factorial of negative number");
+
         double result = 1;
+
         for (int i = 2; i <= n; ++i)
             result *= i;
+
         return result;
     }
 
-    public static double ipow(double base, int exponent) {
+    // A faster version of Math.pow() when the exponent is a small positive integer
+    public static double fastpow(double base, int exponent) {
+        if (exponent < 0)
+            throw new IllegalArgumentException("fastpow with a negative exponent");
+
         double result = 1.0;
 
         while (exponent > 0) {

@@ -10,6 +10,6 @@ public class Power implements Function {
 
     @Override
     public double eval(double x) {
-        return MyMath.ipow(x, p);
+        return MyMath.fastpow(x, p);
     }
 }
