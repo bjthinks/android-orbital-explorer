@@ -1,10 +1,6 @@
 package com.transvect.orbitalexplorer;
 
-import android.util.Log;
-
 public class Polynomial implements Function {
-
-    private static final String TAG = "Polynomial";
 
     // Invariant: c is not null, and leading coeff is not 0.
     // The zero polynomial has c.length == 0 and degree -1.
@@ -61,7 +57,7 @@ public class Polynomial implements Function {
             needToDoAdditionUpTo = rhs.c.length;
         } else {
             int len = c.length;
-            while (len > 0 && c[len - 1] + rhs.c[len - 1] == 0)
+            while (len > 0 && c[len - 1] + rhs.c[len - 1] == 0.)
                 --len;
             result.c = new double[len];
             needToDoAdditionUpTo = len;
@@ -92,8 +88,6 @@ public class Polynomial implements Function {
         for (int i = 0; i < c.length; ++i)
             for (int j = 0; j < rhs.c.length; ++j)
                 result.c[i + j] += c[i] * rhs.c[j];
-        if (result.c[result.c.length - 1] == 0.)
-            Log.w(TAG, "Polynomial multiplication underflow");
         return result;
     }
 
@@ -144,12 +138,12 @@ public class Polynomial implements Function {
         return result;
     }
 
-    /* @Override
+    @Override
     public String toString() {
         String result = "";
         for (int d = c.length - 1; d >= 0; --d)
             if (c[d] != 0) {
-                if (result != "")
+                if (!result.equals(""))
                     result += " + ";
                 result += c[d];
                 if (d >= 2)
@@ -160,7 +154,7 @@ public class Polynomial implements Function {
         return result;
     }
 
-    public static void test() {
+    /* public static void test() {
         String TAG = "Polynomial";
         Log.d(TAG, "Testing");
         TAG += " FAIL";
