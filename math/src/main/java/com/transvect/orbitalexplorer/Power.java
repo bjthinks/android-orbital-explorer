@@ -4,8 +4,8 @@ public class Power implements Function {
 
     private int p;
 
-    public Power(int p_) {
-        p = p_;
+    public Power(int pp) {
+        p = pp;
     }
 
     @Override
