@@ -1,6 +1,6 @@
 package com.transvect.orbitalexplorer;
 
-public final class Vector2 {
+public class Vector2 {
 
     private final double x, y;
 
