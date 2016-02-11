@@ -1,22 +1,18 @@
 package com.transvect.orbitalexplorer;
 
-import android.util.Log;
-
 public class SymmetricTridiagonalMatrix {
-
-    private static final String TAG = "SymmetricTridiagonalMat";
 
     int N;
     double[] diagonal;
     double[] offDiagonal;
-    double[] component;
+    double[] eigenvectorFirstComponent;
 
     public SymmetricTridiagonalMatrix(int N_) {
         N = N_;
         diagonal = new double[N_];
         offDiagonal = new double[N_ - 1];
-        component = new double[N_];
-        component[0] = 1.0;
+        eigenvectorFirstComponent = new double[N_];
+        eigenvectorFirstComponent[0] = 1.0;
     }
 
     public double getDiagonal(int i) {
@@ -28,7 +24,7 @@ public class SymmetricTridiagonalMatrix {
     }
 
     public double getComponent(int i) {
-        return component[i];
+        return eigenvectorFirstComponent[i];
     }
 
     public void setDiagonal(int i, double x) {
@@ -110,19 +106,14 @@ public class SymmetricTridiagonalMatrix {
             diagonal[i + 1] = newNextDiagonal + lambda;
 
             // Also update the first components of the eigenvectors
-            double newComponent     = c * component[i] + s * component[i + 1];
-            double newNextComponent = s * component[i] - c * component[i + 1];
-            component[i] = newComponent;
-            component[i + 1] = newNextComponent;
+            double newComponent
+                    = c * eigenvectorFirstComponent[i]
+                    + s * eigenvectorFirstComponent[i + 1];
+            double newNextComponent
+                    = s * eigenvectorFirstComponent[i]
+                    - c * eigenvectorFirstComponent[i + 1];
+            eigenvectorFirstComponent[i] = newComponent;
+            eigenvectorFirstComponent[i + 1] = newNextComponent;
         }
-    }
-
-    public void print() {
-        for (int i = 0; i < N; ++i)
-            Log.d(TAG, "Diag " + i + ": " + diagonal[i]);
-        for (int i = 0; i < N - 1; ++i)
-            Log.d(TAG, "Off-diag " + i + ": " + offDiagonal[i]);
-        for (int i = 0; i < N; ++i)
-            Log.d(TAG, "EV 1st component " + i + ": " + component[i]);
     }
 }
