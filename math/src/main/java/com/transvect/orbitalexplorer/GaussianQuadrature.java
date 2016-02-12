@@ -5,7 +5,6 @@ package com.transvect.orbitalexplorer;
  * an N-point Gaussian quadrature rule.
  */
 public class GaussianQuadrature {
-    private static final String TAG = "GaussianQuadrature";
 
     private double[] node, weight;
 
