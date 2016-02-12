@@ -2,27 +2,23 @@ package com.transvect.orbitalexplorer;
 
 public class WeightFunction implements Function {
     private double exponentialConstant;
-    private int twicePowerOfR;
-    private double mDistanceFromOrigin;
+    private int powerOfR;
+    private double distanceFromOrigin;
 
     public WeightFunction(double exponentialConstant_,
                           int powerOfR_,
-                          double distanceFromOrigin) {
+                          double distanceFromOrigin_) {
         exponentialConstant = exponentialConstant_;
-        twicePowerOfR = 2 * powerOfR_;
-        mDistanceFromOrigin = distanceFromOrigin;
+        powerOfR = powerOfR_;
+        distanceFromOrigin = distanceFromOrigin_;
     }
 
     public double eval(double x) {
 
-        double r = Math.sqrt(mDistanceFromOrigin * mDistanceFromOrigin + x * x);
+        double r = Math.sqrt(distanceFromOrigin * distanceFromOrigin + x * x);
+        double value = Math.exp(exponentialConstant * r) * MyMath.fastpow(r, powerOfR);
 
-        // Multiply by 2 because the wave function is squared
-        double value = Math.exp(2.0 * exponentialConstant * r);
-
-        // Multiply by 2 because the wave function is squared
-        value *= MyMath.fastpow(r, twicePowerOfR);
-
-        return value;
+        // Wave function is squared
+        return value * value;
     }
 }
