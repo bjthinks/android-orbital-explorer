@@ -1,5 +1,7 @@
 package com.transvect.orbitalexplorer;
 
+import android.content.res.AssetManager;
+
 public class Orbital {
 
     private final double MAXIMUM_RADIUS = 16.0;
@@ -59,30 +61,7 @@ public class Orbital {
         return quadraturePoints;
     }
 
-    public float[] getQuadratureData() {
-        // Set up Gaussian Quadrature
-        float[] quadratureWeights = new float[4 * quadraturePoints * QUADRATURE_SIZE];
-        for (int i = 0; i < QUADRATURE_SIZE; ++i) {
-            double distanceFromOrigin = MAXIMUM_RADIUS * (double) i / (double) (QUADRATURE_SIZE - 1);
-            WeightFunction weightFunction
-                    = new WeightFunction(exponentialConstant, powerOfR, distanceFromOrigin);
-            GaussianQuadrature GQ = new GaussianQuadrature(weightFunction, quadraturePoints);
-
-            for (int j = 0; j < quadraturePoints; ++j) {
-                quadratureWeights[4 * quadraturePoints * i + 4 * j]
-                        = (float) GQ.getNode(j);
-                quadratureWeights[4 * quadraturePoints * i + 4 * j + 1]
-                        = (float) (GQ.getWeight(j) / weightFunction.eval(GQ.getNode(j)));
-
-                // Backfill previous
-                if (i > 0) {
-                    quadratureWeights[4 * quadraturePoints * (i - 1) + 4 * j + 2]
-                            = quadratureWeights[4 * quadraturePoints * i + 4 * j];
-                    quadratureWeights[4 * quadraturePoints * (i - 1) + 4 * j + 3]
-                            = quadratureWeights[4 * quadraturePoints * i + 4 * j + 1];
-                }
-            }
-        }
-        return quadratureWeights;
+    public float[] getQuadratureData(AssetManager assets) {
+        return QuadratureTables.getQuadratureTable(assets, N, L);
     }
 }

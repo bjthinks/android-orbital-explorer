@@ -8,6 +8,7 @@ public class Integrator extends RenderStage {
 
     private static final String TAG = "Integrator";
 
+    AssetManager assetManager;
     AppPreferences appPreferences;
     boolean realOrbital = false;
 
@@ -87,7 +88,7 @@ public class Integrator extends RenderStage {
 
         // Create quadrature texture
         quadratureTexture = new Texture(GLES30.GL_RGBA, GLES30.GL_FLOAT, GLES30.GL_RGBA32F);
-        float[] quadratureData = orbital.getQuadratureData();
+        float[] quadratureData = orbital.getQuadratureData(assetManager);
         quadratureDataSize = quadratureData.length / (4 * orbital.getNumQuadraturePoints());
         quadratureTexture.bindToTexture2DAndSetImage(
                 orbital.getNumQuadraturePoints(), quadratureDataSize, quadratureData);
@@ -96,7 +97,9 @@ public class Integrator extends RenderStage {
         setTexture2DMinMagFilters(GLES30.GL_NEAREST, GLES30.GL_NEAREST);
     }
 
-    public void newContext(AssetManager assetManager) {
+    public void newContext(AssetManager assetManager_) {
+
+        assetManager = assetManager_;
 
         // Clear input textures, cuz whatever used to be there is gone now
         radialTexture = null;

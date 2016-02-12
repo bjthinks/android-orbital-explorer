@@ -15,10 +15,11 @@ public class QuadratureGenerator {
     private final int QUADRATURE_SIZE = 64;
     private final double MAXIMUM_RADIUS = 16.0;
 
-    private void writeAsset(String filename, float data[])
-            throws FileNotFoundException, IOException {
+    private void writeAsset(String assetname, float data[])
+            throws IOException {
         DataOutputStream stream
-                = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(filename)));
+                = new DataOutputStream(new BufferedOutputStream(
+                new FileOutputStream("app/src/main/assets/" + assetname)));
         for (int i = 0; i < data.length; ++i)
             stream.writeFloat(data[i]);
         stream.close();
@@ -47,7 +48,7 @@ public class QuadratureGenerator {
                                 = (float) (GQ.getWeight(j) / weightFunction.eval(GQ.getNode(j)));
                     }
                 }
-                writeAsset("app/src/main/assets/data-" + N + "-" + L, quadratureWeights);
+                writeAsset("data-" + N + "-" + L, quadratureWeights);
             }
         }
     }
