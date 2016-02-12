@@ -1,23 +1,55 @@
 package com.example;
 
+import com.transvect.orbitalexplorer.GaussianQuadrature;
+import com.transvect.orbitalexplorer.RadialFunction;
+import com.transvect.orbitalexplorer.WeightFunction;
+
+import java.io.BufferedOutputStream;
+import java.io.DataOutputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 
 public class QuadratureGenerator {
 
-    private CodePrinter codePrinter;
+    private final int QUADRATURE_SIZE = 64;
+    private final double MAXIMUM_RADIUS = 16.0;
+
+    private void writeAsset(String filename, float data[])
+            throws FileNotFoundException, IOException {
+        DataOutputStream stream
+                = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(filename)));
+        for (int i = 0; i < data.length; ++i)
+            stream.writeFloat(data[i]);
+        stream.close();
+    }
 
     private void go() throws IOException {
-        codePrinter = new CodePrinter();
-        codePrinter.printPreface();
-        double data[] =
-                {
-                        0.5857864376269006, 0.8535533905932715,
-                        3.414213562373088, 0.14644660940672669
-                };
-        codePrinter.print(1, 0, data);
-        codePrinter.print(2, 0, data);
-        codePrinter.print(2, 1, data);
-        codePrinter.printSuffix();
+        for (int N = 1; N <= 8; ++N) {
+            for (int L = 0; L < N; ++L) {
+                int Z = N;
+                RadialFunction radialFunction = new RadialFunction(Z, N, L);
+                double exponentialConstant = radialFunction.getExponentialConstant();
+                int powerOfR = radialFunction.getPowerOfR();
+                int quadraturePoints = N;
+
+                float[] quadratureWeights = new float[2 * quadraturePoints * QUADRATURE_SIZE];
+                for (int i = 0; i < QUADRATURE_SIZE; ++i) {
+                    double distanceFromOrigin = MAXIMUM_RADIUS * (double) i / (double) (QUADRATURE_SIZE - 1);
+                    WeightFunction weightFunction
+                            = new WeightFunction(exponentialConstant, powerOfR, distanceFromOrigin);
+                    GaussianQuadrature GQ = new GaussianQuadrature(weightFunction, quadraturePoints);
+
+                    for (int j = 0; j < quadraturePoints; ++j) {
+                        quadratureWeights[2 * quadraturePoints * i + 2 * j]
+                                = (float) GQ.getNode(j);
+                        quadratureWeights[2 * quadraturePoints * i + 2 * j + 1]
+                                = (float) (GQ.getWeight(j) / weightFunction.eval(GQ.getNode(j)));
+                    }
+                }
+                writeAsset("app/src/main/assets/data-" + N + "-" + L, quadratureWeights);
+            }
+        }
     }
 
     public static void main(String args[]) {
@@ -26,6 +58,7 @@ public class QuadratureGenerator {
             q.go();
         } catch (Exception e) {
             System.err.print(e.getLocalizedMessage());
+            System.exit(1);
         }
     }
 }
