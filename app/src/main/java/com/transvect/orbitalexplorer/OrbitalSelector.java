@@ -19,11 +19,13 @@ public class OrbitalSelector extends LinearLayout {
     private int N = 1;
     private int L = 0;
     private int M = 0;
+    private int Q = 1;
     private boolean realOrbital = false;
 
     private ValueChanger nChanger;
     private ValueChanger lChanger;
     private ValueChanger mChanger;
+    private ValueChanger qChanger;
     private Button rcChanger;
 
     private OrbitalView listener;
@@ -61,6 +63,7 @@ public class OrbitalSelector extends LinearLayout {
         ss.N = N;
         ss.L = L;
         ss.M = M;
+        ss.Q = Q;
         ss.realOrbital = realOrbital;
 
         return ss;
@@ -73,19 +76,21 @@ public class OrbitalSelector extends LinearLayout {
         N = ss.N;
         L = ss.L;
         M = ss.M;
+        Q = ss.Q;
         realOrbital = ss.realOrbital;
 
         nChanger.setInteger(N);
         lChanger.setInteger(L);
         mChanger.setInteger(M);
+        qChanger.setInteger(Q);
         setRealOrbital(realOrbital);
 
         orbitalChanged();
     }
 
     private static class SavedState extends BaseSavedState {
-        int N, L, M;
-        boolean realOrbital;
+        private int N, L, M, Q;
+        private boolean realOrbital;
 
         SavedState(Parcelable superState) {
             super(superState);
@@ -108,11 +113,13 @@ public class OrbitalSelector extends LinearLayout {
             out.writeInt(realOrbital ? 1 : 0);
         }
 
-        public static final Parcelable.Creator<SavedState> CREATOR
+        private static final Parcelable.Creator<SavedState> CREATOR
                 = new Parcelable.Creator<SavedState>() {
+            @Override
             public SavedState createFromParcel(Parcel in) {
                 return new SavedState(in);
             }
+            @Override
             public SavedState[] newArray(int size) {
                 return new SavedState[size];
             }
@@ -126,11 +133,13 @@ public class OrbitalSelector extends LinearLayout {
         nChanger = (ValueChanger) findViewById(R.id.nchanger);
         lChanger = (ValueChanger) findViewById(R.id.lchanger);
         mChanger = (ValueChanger) findViewById(R.id.mchanger);
+        qChanger = (ValueChanger) findViewById(R.id.qchanger);
         rcChanger = (Button) findViewById(R.id.rcchanger);
 
         nChanger.setInteger(N);
         lChanger.setInteger(L);
         mChanger.setInteger(M);
+        qChanger.setInteger(Q);
         setRealOrbital(realOrbital);
 
         nChanger.setOnUpListener(new OnClickListener() {
@@ -169,6 +178,18 @@ public class OrbitalSelector extends LinearLayout {
                 orbitalChanged();
             }
         });
+        qChanger.setOnUpListener(new OnClickListener() {
+            public void onClick(View v) {
+                increaseQ();
+                orbitalChanged();
+            }
+        });
+        qChanger.setOnDownListener(new OnClickListener() {
+            public void onClick(View v) {
+                decreaseQ();
+                orbitalChanged();
+            }
+        });
 
         rcChanger.setOnClickListener(new OnClickListener() {
             @Override
@@ -193,8 +214,19 @@ public class OrbitalSelector extends LinearLayout {
     }
 
     private void orbitalChanged() {
-        if (listener != null)
-            listener.orbitalChanged(new Orbital(N, N, L, M));
+        if (listener != null) {
+            /* Old logic for determining Q:
+            int difficulty1 = N - L;      // radial nodes make rendering hard
+            int difficulty2 = L - M + 1;  // azimuthal nodes make rendering hard
+            int greaterDifficulty = Math.max(difficulty1, difficulty2);
+            int lesserDifficulty  = Math.min(difficulty1, difficulty2);
+
+            // The below formula comes from tons of experimentation and seems to give
+            // eye-accurate renderings of all complex orbitals.
+            int Q = greaterDifficulty + lesserDifficulty / 2 + M / 3; */
+
+            listener.orbitalChanged(new Orbital(N, N, L, M, Q));
+        }
     }
 
     private void increaseN() {
@@ -251,13 +283,29 @@ public class OrbitalSelector extends LinearLayout {
         }
     }
 
-    public void setOrbital(int N_, int L_, int M_) {
+    private void increaseQ() {
+        if (Q < maxN) {
+            ++Q;
+            qChanger.setInteger(Q);
+        }
+    }
+
+    private void decreaseQ() {
+        if (Q > 1) {
+            --Q;
+            qChanger.setInteger(Q);
+        }
+    }
+
+    public void setOrbital(int N_, int L_, int M_, int Q_) {
         N = N_;
         L = L_;
         M = M_;
+        Q = Q_;
         nChanger.setInteger(N);
         lChanger.setInteger(L);
         mChanger.setInteger(M);
+        qChanger.setInteger(Q);
         orbitalChanged();
     }
 
