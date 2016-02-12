@@ -25,14 +25,8 @@ public class Orbital {
         exponentialConstant = waveFunction.getRadialFunction().getExponentialConstant();
         powerOfR = waveFunction.getRadialFunction().getPowerOfR();
 
-        int difficulty1 = N - L;      // radial nodes make rendering hard
-        int difficulty2 = L - M + 1;  // azimuthal nodes make rendering hard
-        int greaterDifficulty = Math.max(difficulty1, difficulty2);
-        int lesserDifficulty  = Math.min(difficulty1, difficulty2);
-
-        // The below formula comes from tons of experimentation and seems to give
-        // eye-accurate renderings of all orbitals.
-        quadraturePoints = greaterDifficulty + lesserDifficulty / 2 + M / 3;
+        // This is pretty good, and limits visual artifacts to being rather subtle
+        quadraturePoints = N;
     }
 
     public double getMaximumRadius() {
