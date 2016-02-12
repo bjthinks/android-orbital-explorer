@@ -5,8 +5,6 @@ import android.os.Parcelable;
 
 public class Quaternion implements Parcelable {
 
-    // public static final String TAG = "Quaternion";
-
     @Override
     public int describeContents() {
         return 0;
@@ -34,15 +32,6 @@ public class Quaternion implements Parcelable {
     };
 
     private final double r, i, j, k;
-
-    /* public double real() { return r; }
-    public double imag() { return i; }
-    public double jmag() { return j; }
-    public double kmag() { return k; } */
-
-    /* public Vector3 unreal() {
-        return new Vector3(i, j, k);
-    } */
 
     public Quaternion(double real, double imaginary, double jmaginary, double kmaginary) {
         r = real;
@@ -73,12 +62,12 @@ public class Quaternion implements Parcelable {
                 r * y.k + i * y.j - j * y.i + k * y.r);
     }
 
-    /* public Quaternion multiply(double c) {
+    public Quaternion multiply(double c) {
         return new Quaternion(r * c, i * c, j * c, k * c);
-    } */
+    }
 
     public Quaternion divide(double c) {
-        return new Quaternion(r / c, i / c, j / c, k / c);
+        return multiply(1.0 / c);
     }
 
     public double norm() {
