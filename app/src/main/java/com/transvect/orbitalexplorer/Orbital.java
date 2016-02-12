@@ -62,6 +62,6 @@ public class Orbital {
     }
 
     public float[] getQuadratureData(AssetManager assets) {
-        return QuadratureTables.getQuadratureTable(assets, N, L);
+        return QuadratureTable.get(assets, N, L);
     }
 }

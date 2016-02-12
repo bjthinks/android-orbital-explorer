@@ -6,13 +6,13 @@ import java.io.BufferedInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
 
-public final class QuadratureTables {
+public final class QuadratureTable {
 
     private static final int QUADRATURE_SIZE = 64;
 
-    private QuadratureTables() {}
+    private QuadratureTable() {}
 
-    public static float[] getQuadratureTable(AssetManager assets, int N, int L) {
+    public static float[] get(AssetManager assets, int N, int L) {
         int quadraturePoints = N;
         float[] table = new float[4 * quadraturePoints * QUADRATURE_SIZE];
 
@@ -27,7 +27,7 @@ public final class QuadratureTables {
                 }
             }
         } catch (IOException e) {
-            throw new RuntimeException("Asset not found: " + filename);
+            throw new RuntimeException("Error reading asset: " + filename);
         }
 
         // Backfill

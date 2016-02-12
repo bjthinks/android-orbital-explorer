@@ -40,8 +40,8 @@ public class OrbitalRenderer implements GLSurfaceView.Renderer {
     // Rendering thread
     @Override
     public void onSurfaceCreated(GL10 unused, EGLConfig config) {
-        integrator.newContext(assetManager);
-        screenDrawer.newContext(assetManager);
+        integrator.newContext();
+        screenDrawer.newContext();
     }
 
     private int mWidth = 1;

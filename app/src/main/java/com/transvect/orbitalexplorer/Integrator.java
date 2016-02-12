@@ -35,6 +35,7 @@ public class Integrator extends RenderStage {
 
     Integrator(Context context) {
         appPreferences = new AppPreferences(context);
+        assetManager = context.getAssets();
     }
 
     // Main thread
@@ -97,9 +98,7 @@ public class Integrator extends RenderStage {
         setTexture2DMinMagFilters(GLES30.GL_NEAREST, GLES30.GL_NEAREST);
     }
 
-    public void newContext(AssetManager assetManager_) {
-
-        assetManager = assetManager_;
+    public void newContext() {
 
         // Clear input textures, cuz whatever used to be there is gone now
         radialTexture = null;

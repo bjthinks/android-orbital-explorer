@@ -7,14 +7,16 @@ import android.opengl.GLES30;
 public class ScreenDrawer extends RenderStage {
 
     AppPreferences appPreferences;
+    AssetManager assetManager;
 
     private int program;
 
     public ScreenDrawer(Context context) {
         appPreferences = new AppPreferences(context);
+        assetManager = context.getAssets();
     }
 
-    public void newContext(AssetManager assetManager) {
+    public void newContext() {
         // Compile & link GLSL program
         Shader vertexShader = new Shader(assetManager, "screendrawer.vert", GLES30.GL_VERTEX_SHADER);
         Shader fragmentShader = new Shader(assetManager, "screendrawer.frag", GLES30.GL_FRAGMENT_SHADER);
