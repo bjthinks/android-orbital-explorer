@@ -2,7 +2,7 @@ package com.transvect.orbitalexplorer;
 
 /**
  * Radial part of the wave function of a one-electron atom.
- * R(r) depends on constants Z, N, and L, and has the form of a polynomial times exp(-Zr/N).
+ * It depends on constants Z, N, and L, and has the form of a polynomial times exp(-Zr/N).
  * We take the radial coordinate r to be in units of a_mu, which is approximately the Bohr
  * radius a_0, but with a small adjustment to take into account the reduced mass of the
  * nucleus-electron system: a_mu = a_0 * (1 + m_electron / m_nucleus).
