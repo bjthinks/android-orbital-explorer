@@ -16,10 +16,10 @@ public class Integrator extends RenderStage {
 
     Orbital orbital, newOrbital;
 
-    private int radialDataSize;
+    private final int RADIAL_TEXTURE_SIZE = 256;
     private Texture radialTexture;
 
-    private int azimuthalDataSize;
+    private final int AZIMUTHAL_TEXTURE_SIZE = 256;
     private Texture azimuthalTexture;
 
     private int quadratureDataSize;
@@ -71,25 +71,27 @@ public class Integrator extends RenderStage {
 
         // Create radial texture
         radialTexture = new Texture(GLES30.GL_RG, GLES30.GL_FLOAT, GLES30.GL_RG32F);
-        float[] radialData = orbital.getRadialData();
-        radialDataSize = radialData.length / 2;
-        radialTexture.bindToTexture2DAndSetImage(radialDataSize, 1, radialData);
+        float[] radialData
+                = functionToBuffer2(orbital.waveFunction.getRadialFunction().getOscillatingPart(),
+                0.0, orbital.getMaximumRadius(), RADIAL_TEXTURE_SIZE - 1);
+        radialTexture.bindToTexture2DAndSetImage(RADIAL_TEXTURE_SIZE, 1, radialData);
 
         // Floating point textures are not filterable
         setTexture2DMinMagFilters(GLES30.GL_NEAREST, GLES30.GL_NEAREST);
 
         // Create azimuthal texture
         azimuthalTexture = new Texture(GLES30.GL_RG, GLES30.GL_FLOAT, GLES30.GL_RG32F);
-        float[] azimuthalData = orbital.getAzimuthalData();
-        azimuthalDataSize = azimuthalData.length / 2;
-        azimuthalTexture.bindToTexture2DAndSetImage(azimuthalDataSize, 1, azimuthalData);
+        float[] azimuthalData = functionToBuffer2(orbital.waveFunction.getAzimuthalFunction(),
+                0.0, Math.PI, AZIMUTHAL_TEXTURE_SIZE - 1);
+        azimuthalTexture.bindToTexture2DAndSetImage(AZIMUTHAL_TEXTURE_SIZE, 1, azimuthalData);
 
         // Floating point textures are not filterable
         setTexture2DMinMagFilters(GLES30.GL_NEAREST, GLES30.GL_NEAREST);
 
         // Create quadrature texture
         quadratureTexture = new Texture(GLES30.GL_RGBA, GLES30.GL_FLOAT, GLES30.GL_RGBA32F);
-        float[] quadratureData = QuadratureTable.get(assetManager, orbital.N, orbital.L);
+        float[] quadratureData = QuadratureTable.get(assetManager,
+                orbital.waveFunction.N, orbital.waveFunction.L);
         quadratureDataSize = quadratureData.length / (4 * orbital.getNumQuadraturePoints());
         quadratureTexture.bindToTexture2DAndSetImage(
                 orbital.getNumQuadraturePoints(), quadratureDataSize, quadratureData);
@@ -183,10 +185,10 @@ public class Integrator extends RenderStage {
             setUniformFloat("powerOfR", (float) radialPower);
 
             setUniformFloat("maximumRadius", (float) orbital.getMaximumRadius());
-            setUniformFloat("numRadialSubdivisions", (float) (radialDataSize - 1));
-            setUniformFloat("numAzimuthalSubdivisions", (float) (azimuthalDataSize - 1));
+            setUniformFloat("numRadialSubdivisions", (float) (RADIAL_TEXTURE_SIZE - 1));
+            setUniformFloat("numAzimuthalSubdivisions", (float) (AZIMUTHAL_TEXTURE_SIZE - 1));
             setUniformFloat("numQuadratureSubdivisions", (float) (quadratureDataSize - 1));
-            setUniformFloat("M", (float) orbital.M);
+            setUniformFloat("M", (float) orbital.waveFunction.M);
 
             // For testing
             setUniformFloat("zero", 0.0f);
