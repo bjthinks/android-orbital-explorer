@@ -1,0 +1,19 @@
+Orbital Explorer
+
+Design & Programming
+Brian Johnson
+
+Android Consultant
+Marissa Anderson
+
+OpenGL Consultants
+Paul Berry
+Chad Versace
+
+Numerical Integration
+Carl Friedrich Gauss
+Gene H Golub
+John H Welsch
+
+Quantum Mechanics
+Erwin Schr\u00f6dinger
