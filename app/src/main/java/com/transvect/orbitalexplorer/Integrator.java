@@ -89,7 +89,7 @@ public class Integrator extends RenderStage {
 
         // Create quadrature texture
         quadratureTexture = new Texture(GLES30.GL_RGBA, GLES30.GL_FLOAT, GLES30.GL_RGBA32F);
-        float[] quadratureData = orbital.getQuadratureData(assetManager);
+        float[] quadratureData = QuadratureTable.get(assetManager, orbital.N, orbital.L);
         quadratureDataSize = quadratureData.length / (4 * orbital.getNumQuadraturePoints());
         quadratureTexture.bindToTexture2DAndSetImage(
                 orbital.getNumQuadraturePoints(), quadratureDataSize, quadratureData);
@@ -172,14 +172,21 @@ public class Integrator extends RenderStage {
             setUniformInt("realOrbital", realOrbital ? 1 : 0);
             setUniformInt("numQuadraturePoints", orbital.getNumQuadraturePoints());
 
-            setUniformFloat("exponentialConstant", (float) (2.0 * orbital.getRadialExponent()));
+            RadialFunction radialFunction = orbital.waveFunction.getRadialFunction();
+
+            // Multiply by 2 because the wave function is squared
+            double exponentialConstant = 2.0 * radialFunction.getExponentialConstant();
+            setUniformFloat("exponentialConstant", (float) exponentialConstant);
+
+            // Multiply by 2 because the wave function is squared
+            int radialPower = 2 * radialFunction.getPowerOfR();
+            setUniformFloat("powerOfR", (float) radialPower);
+
             setUniformFloat("maximumRadius", (float) orbital.getMaximumRadius());
             setUniformFloat("numRadialSubdivisions", (float) (radialDataSize - 1));
             setUniformFloat("numAzimuthalSubdivisions", (float) (azimuthalDataSize - 1));
             setUniformFloat("numQuadratureSubdivisions", (float) (quadratureDataSize - 1));
-            setUniformFloat("M", (float) orbital.getM());
-            // Multiply by 2 because the wave function is squared
-            setUniformFloat("powerOfR", (float) (2 * orbital.getRadialPower()));
+            setUniformFloat("M", (float) orbital.M);
 
             // For testing
             setUniformFloat("zero", 0.0f);

@@ -7,14 +7,9 @@ public class Orbital {
     private final double MAXIMUM_RADIUS = 16.0;
     private final int RADIAL_TEXTURE_SIZE = 256;
     private final int AZIMUTHAL_TEXTURE_SIZE = 256;
-    private final int QUADRATURE_SIZE = 64;
 
     public final int Z, N, L, M;
-    private WaveFunction waveFunction;
-
-    private double exponentialConstant;
-    private int powerOfR;
-    private int quadraturePoints;
+    public final WaveFunction waveFunction;
 
     public Orbital(int Z_, int N_, int L_, int M_) {
         Z = Z_;
@@ -23,24 +18,10 @@ public class Orbital {
         M = M_;
 
         waveFunction = new WaveFunction(Z, N, L, M);
-
-        exponentialConstant = waveFunction.getRadialFunction().getExponentialConstant();
-        powerOfR = waveFunction.getRadialFunction().getPowerOfR();
-
-        // This is pretty good, and limits visual artifacts to being rather subtle
-        quadraturePoints = N;
     }
 
     public double getMaximumRadius() {
         return MAXIMUM_RADIUS;
-    }
-
-    public double getRadialExponent() {
-        return waveFunction.getRadialFunction().getExponentialConstant();
-    }
-
-    public int getRadialPower() {
-        return waveFunction.getRadialFunction().getPowerOfR();
     }
 
     public float[] getRadialData() {
@@ -53,15 +34,8 @@ public class Orbital {
                 0.0, Math.PI, AZIMUTHAL_TEXTURE_SIZE - 1);
     }
 
-    public int getM() {
-        return waveFunction.getM();
-    }
-
     public int getNumQuadraturePoints() {
-        return quadraturePoints;
-    }
-
-    public float[] getQuadratureData(AssetManager assets) {
-        return QuadratureTable.get(assets, N, L);
+        // This is pretty good, and limits visual artifacts to being rather subtle
+        return N;
     }
 }
