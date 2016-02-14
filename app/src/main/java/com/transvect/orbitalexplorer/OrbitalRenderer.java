@@ -32,11 +32,6 @@ public class OrbitalRenderer implements GLSurfaceView.Renderer {
         integrator.orbitalChanged(newOrbital);
     }
 
-    // Main thread
-    public void realFlagChanged(boolean realOrbital) {
-        integrator.realFlagChanged(realOrbital);
-    }
-
     // Rendering thread
     @Override
     public void onSurfaceCreated(GL10 unused, EGLConfig config) {

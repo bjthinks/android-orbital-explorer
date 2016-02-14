@@ -173,18 +173,9 @@ public class OrbitalSelector extends LinearLayout {
             @Override
             public void onClick(View v) {
                 setRealOrbital(!realOrbital);
+                orbitalChanged();
             }
         });
-    }
-
-    private void setRealOrbital(boolean realOrbital_) {
-        realOrbital = realOrbital_;
-        if (realOrbital)
-            rcChanger.setText(R.string.realNumbers);
-        else
-            rcChanger.setText(R.string.complexNumbers);
-        if (listener != null)
-            listener.realFlagChanged(realOrbital);
     }
 
     public void setListener(OrbitalView orbitalView) {
@@ -193,7 +184,7 @@ public class OrbitalSelector extends LinearLayout {
 
     private void orbitalChanged() {
         if (listener != null)
-            listener.orbitalChanged(new Orbital(N, N, L, M));
+            listener.orbitalChanged(new Orbital(N, N, L, M, realOrbital));
     }
 
     private void increaseN() {
@@ -250,10 +241,19 @@ public class OrbitalSelector extends LinearLayout {
         }
     }
 
-    public void setOrbital(int N_, int L_, int M_) {
+    private void setRealOrbital(boolean realOrbital_) {
+        realOrbital = realOrbital_;
+        if (realOrbital)
+            rcChanger.setText(R.string.realNumbers);
+        else
+            rcChanger.setText(R.string.complexNumbers);
+    }
+
+    public void setOrbital(int N_, int L_, int M_, boolean real_) {
         N = N_;
         L = L_;
         M = M_;
+        realOrbital = real_;
         nChanger.setInteger(N);
         lChanger.setInteger(L);
         mChanger.setInteger(M);

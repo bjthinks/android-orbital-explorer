@@ -95,10 +95,6 @@ public class OrbitalView extends GLSurfaceView {
         orbitalRenderer.orbitalChanged(newOrbital);
     }
 
-    public void realFlagChanged(boolean realOrbital) {
-        orbitalRenderer.realFlagChanged(realOrbital);
-    }
-
     private int firstPointerID = MotionEvent.INVALID_POINTER_ID;
     private int secondPointerID = MotionEvent.INVALID_POINTER_ID;
     private boolean isTouchEventTrivial = false;

@@ -6,11 +6,8 @@ import android.opengl.GLES30;
 
 public class Integrator extends RenderStage {
 
-    private static final String TAG = "Integrator";
-
     AssetManager assetManager;
     AppPreferences appPreferences;
-    boolean realOrbital = false;
 
     private int program;
 
@@ -41,10 +38,6 @@ public class Integrator extends RenderStage {
     // Main thread
     public synchronized void orbitalChanged(Orbital newOrbital_) {
         newOrbital = newOrbital_;
-    }
-
-    public synchronized void realFlagChanged(boolean realOrbital_) {
-        realOrbital = realOrbital_;
     }
 
     // Rendering thread
@@ -170,7 +163,7 @@ public class Integrator extends RenderStage {
             setUniformInt("quadrature", 2);
 
             setUniformInt("enableColor", appPreferences.getEnableColor() ? 1 : 0);
-            setUniformInt("realOrbital", realOrbital ? 1 : 0);
+            setUniformInt("realOrbital", orbital.real ? 1 : 0);
             setUniformInt("numQuadraturePoints", orbital.getQuadratureOrder());
 
             RadialFunction radialFunction = orbital.getRadialFunction();

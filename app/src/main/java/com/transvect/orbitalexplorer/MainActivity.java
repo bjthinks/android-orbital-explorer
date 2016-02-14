@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
         // Connect things to other things
         orbitalView.setOrbitalSelector(orbitalSelector);
         orbitalSelector.setListener(orbitalView);
-        orbitalSelector.setOrbital(6, 4, 1);
+        orbitalSelector.setOrbital(6, 4, 1, false);
     }
 
     private int getStatusBarHeight() {
