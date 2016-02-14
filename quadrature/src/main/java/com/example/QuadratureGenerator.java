@@ -1,13 +1,9 @@
 package com.example;
 
-import com.transvect.orbitalexplorer.GaussianQuadrature;
-import com.transvect.orbitalexplorer.Orbital;
 import com.transvect.orbitalexplorer.RadialFunction;
-import com.transvect.orbitalexplorer.WeightFunction;
 
 import java.io.BufferedOutputStream;
 import java.io.DataOutputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 

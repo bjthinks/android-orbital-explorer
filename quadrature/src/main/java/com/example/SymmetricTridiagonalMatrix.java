@@ -1,4 +1,4 @@
-package com.transvect.orbitalexplorer;
+package com.example;
 
 public class SymmetricTridiagonalMatrix {
 

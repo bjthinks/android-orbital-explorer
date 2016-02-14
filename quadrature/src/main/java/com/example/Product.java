@@ -1,4 +1,6 @@
-package com.transvect.orbitalexplorer;
+package com.example;
+
+import com.transvect.orbitalexplorer.Function;
 
 public class Product implements Function {
 

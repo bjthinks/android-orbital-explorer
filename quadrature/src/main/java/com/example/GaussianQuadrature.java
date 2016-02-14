@@ -1,4 +1,6 @@
-package com.transvect.orbitalexplorer;
+package com.example;
+
+import com.transvect.orbitalexplorer.Function;
 
 /**
  * Given a weight function W and a positive integer N, compute the nodes and weights for
