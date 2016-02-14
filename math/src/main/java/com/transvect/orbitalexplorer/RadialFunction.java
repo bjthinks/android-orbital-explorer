@@ -71,7 +71,16 @@ public class RadialFunction implements Function {
     }
 
     public double getMaximumRadius() {
-        return 16.0;
+        double r;
+        int consecutiveSmall = 0;
+        for (r = 5.0; consecutiveSmall < 5; r += 0.1) {
+            double f = eval(r);
+            if (Math.abs(r * f * f) < 1e-4)
+                ++consecutiveSmall;
+            else
+                consecutiveSmall = 0;
+        }
+        return r;
     }
 
     public int getQuadratureOrder() {
