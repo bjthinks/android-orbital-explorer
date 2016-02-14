@@ -4,3 +4,4 @@ build
 captures
 local.properties
 app/src/main/assets/data-*
+*.iml
