@@ -10,7 +10,6 @@ import java.io.IOException;
 public class QuadratureGenerator {
 
     private final int QUADRATURE_SIZE = 64;
-    private final double MAXIMUM_RADIUS = 16.0;
 
     private void writeAsset(String assetname, float data[])
             throws IOException {
@@ -33,7 +32,8 @@ public class QuadratureGenerator {
 
                 float[] quadratureWeights = new float[2 * quadraturePoints * QUADRATURE_SIZE];
                 for (int i = 0; i < QUADRATURE_SIZE; ++i) {
-                    double distanceFromOrigin = MAXIMUM_RADIUS * (double) i / (double) (QUADRATURE_SIZE - 1);
+                    double distanceFromOrigin = radialFunction.getMaximumRadius()
+                            * (double) i / (double) (QUADRATURE_SIZE - 1);
                     WeightFunction weightFunction
                             = new WeightFunction(exponentialConstant, powerOfR, distanceFromOrigin);
                     GaussianQuadrature GQ = new GaussianQuadrature(weightFunction, quadraturePoints);
