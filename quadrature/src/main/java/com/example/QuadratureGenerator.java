@@ -1,6 +1,7 @@
 package com.example;
 
 import com.transvect.orbitalexplorer.GaussianQuadrature;
+import com.transvect.orbitalexplorer.Orbital;
 import com.transvect.orbitalexplorer.RadialFunction;
 import com.transvect.orbitalexplorer.WeightFunction;
 
@@ -32,7 +33,7 @@ public class QuadratureGenerator {
                 RadialFunction radialFunction = new RadialFunction(Z, N, L);
                 double exponentialConstant = radialFunction.getExponentialConstant();
                 int powerOfR = radialFunction.getPowerOfR();
-                int quadraturePoints = N;
+                int quadraturePoints = radialFunction.getQuadratureOrder();
 
                 float[] quadratureWeights = new float[2 * quadraturePoints * QUADRATURE_SIZE];
                 for (int i = 0; i < QUADRATURE_SIZE; ++i) {

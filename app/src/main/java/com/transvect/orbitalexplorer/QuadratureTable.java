@@ -12,11 +12,11 @@ public final class QuadratureTable {
 
     private QuadratureTable() {}
 
-    public static float[] get(AssetManager assets, int N, int L) {
-        int quadraturePoints = N;
+    public static float[] get(AssetManager assets, Orbital orbital) {
+        int quadraturePoints = orbital.getRadialFunction().getQuadratureOrder();
         float[] table = new float[4 * quadraturePoints * QUADRATURE_SIZE];
 
-        String filename = "data-" + N + "-" + L;
+        String filename = "data-" + orbital.N + "-" + orbital.L;
         try {
             DataInputStream stream
                     = new DataInputStream(new BufferedInputStream(assets.open(filename)));

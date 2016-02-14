@@ -24,9 +24,4 @@ public class Orbital {
     public Function getAzimuthalFunction() {
         return azimuthalFunction;
     }
-
-    public int getQuadratureOrder() {
-        // This is pretty good, and limits visual artifacts to being rather subtle
-        return N;
-    }
 }

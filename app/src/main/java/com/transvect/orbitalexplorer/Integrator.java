@@ -83,10 +83,12 @@ public class Integrator extends RenderStage {
 
         // Create quadrature texture
         quadratureTexture = new Texture(GLES30.GL_RGBA, GLES30.GL_FLOAT, GLES30.GL_RGBA32F);
-        float[] quadratureData = QuadratureTable.get(assetManager, orbital.N, orbital.L);
-        quadratureDataSize = quadratureData.length / (4 * orbital.getQuadratureOrder());
+        float[] quadratureData = QuadratureTable.get(assetManager, orbital);
+        quadratureDataSize = quadratureData.length
+                / (4 * orbital.getRadialFunction().getQuadratureOrder());
         quadratureTexture.bindToTexture2DAndSetImage(
-                orbital.getQuadratureOrder(), quadratureDataSize, quadratureData);
+                orbital.getRadialFunction().getQuadratureOrder(),
+                quadratureDataSize, quadratureData);
 
         // Floating point textures are not filterable
         setTexture2DMinMagFilters(GLES30.GL_NEAREST, GLES30.GL_NEAREST);
@@ -164,7 +166,7 @@ public class Integrator extends RenderStage {
 
             setUniformInt("enableColor", appPreferences.getEnableColor() ? 1 : 0);
             setUniformInt("realOrbital", orbital.real ? 1 : 0);
-            setUniformInt("numQuadraturePoints", orbital.getQuadratureOrder());
+            setUniformInt("numQuadraturePoints", orbital.getRadialFunction().getQuadratureOrder());
 
             RadialFunction radialFunction = orbital.getRadialFunction();
 
