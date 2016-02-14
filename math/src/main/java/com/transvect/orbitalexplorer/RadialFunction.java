@@ -49,7 +49,7 @@ public class RadialFunction implements Function {
         //         visible without direct comparison to N + 2
         // N + 2 = essentially perfect, visually identical to all higher orders for all but
         //         a few very specific corner cases
-        quadratureOrder = N;
+        quadratureOrder = N + 1;
     }
 
     public double getExponentialConstant() {
