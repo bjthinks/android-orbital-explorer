@@ -1,12 +1,12 @@
 package com.transvect.orbitalexplorer;
 
-public class WaveFunction {
+public class Orbital {
 
     public final int Z, N, L, M;
     private RadialFunction radialFunction;
     private Function azimuthalFunction;
 
-    public WaveFunction(int Z_, int N_, int L_, int M_) {
+    public Orbital(int Z_, int N_, int L_, int M_) {
         Z = Z_;
         N = N_;
         L = L_;
@@ -21,5 +21,10 @@ public class WaveFunction {
 
     public Function getAzimuthalFunction() {
         return azimuthalFunction;
+    }
+
+    public int getQuadratureOrder() {
+        // This is pretty good, and limits visual artifacts to being rather subtle
+        return N;
     }
 }

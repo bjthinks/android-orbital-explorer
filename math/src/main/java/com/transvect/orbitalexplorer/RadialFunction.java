@@ -56,4 +56,8 @@ public class RadialFunction implements Function {
                 * Math.pow(r, powerOfR)
                 * Math.exp(exponentialConstant * r);
     }
+
+    public double getMaximumRadius() {
+        return 16.0;
+    }
 }

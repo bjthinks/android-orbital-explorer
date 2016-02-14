@@ -72,8 +72,8 @@ public class Integrator extends RenderStage {
         // Create radial texture
         radialTexture = new Texture(GLES30.GL_RG, GLES30.GL_FLOAT, GLES30.GL_RG32F);
         float[] radialData
-                = functionToBuffer2(orbital.waveFunction.getRadialFunction().getOscillatingPart(),
-                0.0, orbital.getMaximumRadius(), RADIAL_TEXTURE_SIZE - 1);
+                = functionToBuffer2(orbital.getRadialFunction().getOscillatingPart(),
+                0.0, orbital.getRadialFunction().getMaximumRadius(), RADIAL_TEXTURE_SIZE - 1);
         radialTexture.bindToTexture2DAndSetImage(RADIAL_TEXTURE_SIZE, 1, radialData);
 
         // Floating point textures are not filterable
@@ -81,7 +81,7 @@ public class Integrator extends RenderStage {
 
         // Create azimuthal texture
         azimuthalTexture = new Texture(GLES30.GL_RG, GLES30.GL_FLOAT, GLES30.GL_RG32F);
-        float[] azimuthalData = functionToBuffer2(orbital.waveFunction.getAzimuthalFunction(),
+        float[] azimuthalData = functionToBuffer2(orbital.getAzimuthalFunction(),
                 0.0, Math.PI, AZIMUTHAL_TEXTURE_SIZE - 1);
         azimuthalTexture.bindToTexture2DAndSetImage(AZIMUTHAL_TEXTURE_SIZE, 1, azimuthalData);
 
@@ -90,11 +90,10 @@ public class Integrator extends RenderStage {
 
         // Create quadrature texture
         quadratureTexture = new Texture(GLES30.GL_RGBA, GLES30.GL_FLOAT, GLES30.GL_RGBA32F);
-        float[] quadratureData = QuadratureTable.get(assetManager,
-                orbital.waveFunction.N, orbital.waveFunction.L);
-        quadratureDataSize = quadratureData.length / (4 * orbital.getNumQuadraturePoints());
+        float[] quadratureData = QuadratureTable.get(assetManager, orbital.N, orbital.L);
+        quadratureDataSize = quadratureData.length / (4 * orbital.getQuadratureOrder());
         quadratureTexture.bindToTexture2DAndSetImage(
-                orbital.getNumQuadraturePoints(), quadratureDataSize, quadratureData);
+                orbital.getQuadratureOrder(), quadratureDataSize, quadratureData);
 
         // Floating point textures are not filterable
         setTexture2DMinMagFilters(GLES30.GL_NEAREST, GLES30.GL_NEAREST);
@@ -172,9 +171,9 @@ public class Integrator extends RenderStage {
 
             setUniformInt("enableColor", appPreferences.getEnableColor() ? 1 : 0);
             setUniformInt("realOrbital", realOrbital ? 1 : 0);
-            setUniformInt("numQuadraturePoints", orbital.getNumQuadraturePoints());
+            setUniformInt("numQuadraturePoints", orbital.getQuadratureOrder());
 
-            RadialFunction radialFunction = orbital.waveFunction.getRadialFunction();
+            RadialFunction radialFunction = orbital.getRadialFunction();
 
             // Multiply by 2 because the wave function is squared
             double exponentialConstant = 2.0 * radialFunction.getExponentialConstant();
@@ -184,11 +183,12 @@ public class Integrator extends RenderStage {
             int radialPower = 2 * radialFunction.getPowerOfR();
             setUniformFloat("powerOfR", (float) radialPower);
 
-            setUniformFloat("maximumRadius", (float) orbital.getMaximumRadius());
+            setUniformFloat("maximumRadius",
+                    (float) orbital.getRadialFunction().getMaximumRadius());
             setUniformFloat("numRadialSubdivisions", (float) (RADIAL_TEXTURE_SIZE - 1));
             setUniformFloat("numAzimuthalSubdivisions", (float) (AZIMUTHAL_TEXTURE_SIZE - 1));
             setUniformFloat("numQuadratureSubdivisions", (float) (quadratureDataSize - 1));
-            setUniformFloat("M", (float) orbital.waveFunction.M);
+            setUniformFloat("M", (float) orbital.M);
 
             // For testing
             setUniformFloat("zero", 0.0f);
