@@ -37,9 +37,9 @@ public class Texture {
                 width, height, 0, format, type, RenderStage.floatArrayToBuffer(pixels));
     }
 
-    public void delete() {
+    /* public void delete() {
         int temp[] = new int[1];
         temp[0] = id;
         GLES30.glDeleteTextures(1, temp, 0);
-    }
+    } */
 }

@@ -57,36 +57,18 @@ public class Integrator extends RenderStage {
 
     private void setupOrbitalTextures() {
 
-        // Old textures? Trash them. (Deleting in the reverse order of creation is better
-        // for the driver's digestion.)
-        if (quadratureTexture != null)
-            quadratureTexture.delete();
-        if (azimuthalTexture != null)
-            azimuthalTexture.delete();
-        if (radialTexture != null)
-            radialTexture.delete();
-
-        // Create radial texture
-        radialTexture = new Texture(GLES30.GL_RG, GLES30.GL_FLOAT, GLES30.GL_RG32F);
+        // Load new radial texture
         float[] radialData
                 = functionToBuffer2(orbital.getRadialFunction().getOscillatingPart(),
                 0.0, orbital.getRadialFunction().getMaximumRadius(), RADIAL_TEXTURE_SIZE - 1);
         radialTexture.bindToTexture2DAndSetImage(RADIAL_TEXTURE_SIZE, 1, radialData);
 
-        // Floating point textures are not filterable
-        setTexture2DMinMagFilters(GLES30.GL_NEAREST, GLES30.GL_NEAREST);
-
-        // Create azimuthal texture
-        azimuthalTexture = new Texture(GLES30.GL_RG, GLES30.GL_FLOAT, GLES30.GL_RG32F);
+        // Load new azimuthal texture
         float[] azimuthalData = functionToBuffer2(orbital.getAzimuthalFunction(),
                 0.0, Math.PI, AZIMUTHAL_TEXTURE_SIZE - 1);
         azimuthalTexture.bindToTexture2DAndSetImage(AZIMUTHAL_TEXTURE_SIZE, 1, azimuthalData);
 
-        // Floating point textures are not filterable
-        setTexture2DMinMagFilters(GLES30.GL_NEAREST, GLES30.GL_NEAREST);
-
-        // Create quadrature texture
-        quadratureTexture = new Texture(GLES30.GL_RGBA, GLES30.GL_FLOAT, GLES30.GL_RGBA32F);
+        // Load new quadrature texture
         float[] quadratureData = QuadratureTable.get(assetManager, orbital);
         quadratureDataSize = quadratureData.length
                 / (4 * orbital.getRadialFunction().getQuadratureOrder());
@@ -100,10 +82,18 @@ public class Integrator extends RenderStage {
 
     public void newContext() {
 
-        // Clear input textures, cuz whatever used to be there is gone now
-        radialTexture = null;
-        azimuthalTexture = null;
-        quadratureTexture = null;
+        // Create input textures for storing the radial, azimuthal, and quadrature data.
+        radialTexture     = new Texture(GLES30.GL_RG,   GLES30.GL_FLOAT, GLES30.GL_RG32F);
+        azimuthalTexture  = new Texture(GLES30.GL_RG,   GLES30.GL_FLOAT, GLES30.GL_RG32F);
+        quadratureTexture = new Texture(GLES30.GL_RGBA, GLES30.GL_FLOAT, GLES30.GL_RGBA32F);
+
+        // Floating point textures are not filterable
+        radialTexture.bindToTexture2D();
+        setTexture2DMinMagFilters(GLES30.GL_NEAREST, GLES30.GL_NEAREST);
+        azimuthalTexture.bindToTexture2D();
+        setTexture2DMinMagFilters(GLES30.GL_NEAREST, GLES30.GL_NEAREST);
+        quadratureTexture.bindToTexture2D();
+        setTexture2DMinMagFilters(GLES30.GL_NEAREST, GLES30.GL_NEAREST);
 
         // Create a texture to render to.
         // The following parameters have to match a row of Table 3.2 in the
@@ -121,6 +111,7 @@ public class Integrator extends RenderStage {
         GLES30.glTexParameteri(GLES30.GL_TEXTURE_2D,
                 GLES30.GL_TEXTURE_WRAP_T, GLES30.GL_CLAMP_TO_EDGE);
 
+        // Create a framebuffer to render to
         framebuffer = new Framebuffer();
         framebuffer.bindAndSetTexture(outputTexture);
 
