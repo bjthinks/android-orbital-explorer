@@ -15,7 +15,7 @@ public class QuadratureGenerator {
             throws IOException {
         DataOutputStream stream
                 = new DataOutputStream(new BufferedOutputStream(
-                new FileOutputStream("app/src/main/assets/" + assetname)));
+                new FileOutputStream("app/src/main/assets/data/" + assetname)));
         for (int i = 0; i < data.length; ++i)
             stream.writeFloat(data[i]);
         stream.close();

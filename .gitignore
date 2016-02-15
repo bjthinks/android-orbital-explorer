@@ -3,5 +3,5 @@
 build
 captures
 local.properties
-app/src/main/assets/data-*
+app/src/main/assets/data/data-*
 *.iml
