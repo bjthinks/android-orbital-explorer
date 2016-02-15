@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.res.AssetManager;
 import android.opengl.GLES30;
 
+import java.util.Arrays;
+
 public class Integrator extends RenderStage {
 
     AssetManager assetManager;
@@ -25,6 +27,7 @@ public class Integrator extends RenderStage {
     private Texture outputTexture;
     private Framebuffer framebuffer;
     private int width, height;
+    private boolean needToRender;
 
     public Texture getTexture() {
         return outputTexture;
@@ -33,6 +36,7 @@ public class Integrator extends RenderStage {
     Integrator(Context context) {
         appPreferences = new AppPreferences(context);
         assetManager = context.getAssets();
+        needToRender = false;
     }
 
     // Main thread
@@ -136,20 +140,31 @@ public class Integrator extends RenderStage {
         width = w;
         height = h;
         outputTexture.bindToTexture2DAndResize(width, height);
+        needToRender = true;
     }
 
+    private float[] oldTransform;
     public void render(float[] shaderTransform) {
 
-        if (checkForNewOrbital())
+        if (checkForNewOrbital()) {
             setupOrbitalTextures();
+            needToRender = true;
+        }
 
-        framebuffer.bindToAttachmentPoint();
-        GLES30.glViewport(0, 0, width, height);
+        if (oldTransform == null || !Arrays.equals(oldTransform, shaderTransform)) {
+            oldTransform = shaderTransform;
+            needToRender = true;
+        }
 
-        final int zeroes[] = {0, 0, 0, 0};
-        GLES30.glClearBufferiv(GLES30.GL_COLOR, 0, zeroes, 0);
+        if (needToRender && orbital != null) {
+            needToRender = false;
 
-        if (orbital != null) {
+            framebuffer.bindToAttachmentPoint();
+            GLES30.glViewport(0, 0, width, height);
+
+            final int zeroes[] = {0, 0, 0, 0};
+            GLES30.glClearBufferiv(GLES30.GL_COLOR, 0, zeroes, 0);
+
             GLES30.glUseProgram(program);
 
             GLES30.glActiveTexture(GLES30.GL_TEXTURE0);
