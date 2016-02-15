@@ -20,6 +20,7 @@ public class RadialFunction implements Function {
     private int powerOfR;
     private Polynomial oscillatingPart;
     private int quadratureOrder;
+    private double maximumRadius;
 
     public RadialFunction(int Z, int N, int L) {
         double dZ = (double) Z;
@@ -50,6 +51,17 @@ public class RadialFunction implements Function {
         // N + 2 = essentially perfect, visually identical to all higher orders for all but
         //         a few very specific corner cases
         quadratureOrder = N + 1;
+
+        double r;
+        int consecutiveSmall = 0;
+        for (r = 5.0; consecutiveSmall < 5; r += 0.1) {
+            double f = eval(r);
+            if (Math.abs(r * f * f) < 1e-4)
+                ++consecutiveSmall;
+            else
+                consecutiveSmall = 0;
+        }
+        maximumRadius = r;
     }
 
     public double getExponentialConstant() {
@@ -71,16 +83,7 @@ public class RadialFunction implements Function {
     }
 
     public double getMaximumRadius() {
-        double r;
-        int consecutiveSmall = 0;
-        for (r = 5.0; consecutiveSmall < 5; r += 0.1) {
-            double f = eval(r);
-            if (Math.abs(r * f * f) < 1e-4)
-                ++consecutiveSmall;
-            else
-                consecutiveSmall = 0;
-        }
-        return r;
+        return maximumRadius;
     }
 
     public int getQuadratureOrder() {
