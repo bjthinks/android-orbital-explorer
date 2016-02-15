@@ -50,6 +50,9 @@ public class ScreenDrawer extends RenderStage {
         int texSizeHandle = GLES30.glGetUniformLocation(program, "texSize");
         GLES30.glUniform2f(texSizeHandle, (float) inputWidth, (float) inputHeight);
 
+        int upperClampHandle = GLES30.glGetUniformLocation(program, "upperClamp");
+        GLES30.glUniform2i(upperClampHandle, inputWidth - 1, inputHeight - 1);
+
         int colorRotation = GLES30.glGetUniformLocation(program, "colorRotation");
         float[] rot = new float[4];
         double t;

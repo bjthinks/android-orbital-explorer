@@ -2,9 +2,9 @@
 precision highp int;
 precision highp float;
 uniform isampler2D data;
-uniform vec2 texSize;
+uniform ivec2 upperClamp; // = ivec2(texSize) - ivec2(1)
 uniform mat2 colorRotation;
-in vec2 boxCoord;
+in vec2 texCoord;
 out vec3 color;
 
 vec3 srgb_gamma(vec3 linear) {
@@ -15,13 +15,12 @@ vec3 srgb_gamma(vec3 linear) {
 
 void main() {
     // This is what we want to do, but our texture is not filterable.
-    //total = vec3(texture(data, boxCoord).xyz);
+    //total = vec3(texture(data, texCoord).xyz);
 
-    vec2 texCoord = boxCoord * texSize - vec2(0.5);
     ivec2 leftBottom = ivec2(floor(texCoord));
     ivec2 rightTop = leftBottom + ivec2(1);
-    leftBottom = clamp(leftBottom, ivec2(0, 0), ivec2(texSize));
-    rightTop = clamp(rightTop, ivec2(0, 0), ivec2(texSize));
+    leftBottom = clamp(leftBottom, ivec2(0, 0), upperClamp);
+    rightTop = clamp(rightTop, ivec2(0, 0), upperClamp);
 
     vec3 lb = vec3(texelFetch(data, leftBottom, 0).xyz);
     vec3 lt = vec3(texelFetch(data, ivec2(leftBottom.x, rightTop.y), 0).xyz);
@@ -32,9 +31,7 @@ void main() {
     // needs to be divided by 32767.0
     vec3 total = mix(mix(lb, rb, interp.x), mix(lt, rt, interp.x), interp.y);
 
-    vec2 uv_prime = total.xy / 32767.0;
-    uv_prime = colorRotation * uv_prime;
-    uv_prime *= 0.06;
+    vec2 uv_prime = (0.06 / 32767.0) * (colorRotation * total.xy);
 
     uv_prime += vec2(0.19784, 0.46832); // white
 
