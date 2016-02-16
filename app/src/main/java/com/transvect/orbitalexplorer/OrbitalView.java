@@ -11,7 +11,6 @@ import android.view.MotionEvent;
 
 // TODO review concurrency
 public class OrbitalView extends GLSurfaceView {
-    private static final String TAG = "OrbitalView";
 
     private Camera camera;
     private GestureDetector flingDetector;
@@ -124,11 +123,13 @@ public class OrbitalView extends GLSurfaceView {
                 break;
 
             case MotionEvent.ACTION_MOVE:
-                if (e.getPointerCount() == 1)
-                    oneFingerEvent(e, true);
-                else if (e.getPointerCount() == 2)
+                if (e.getPointerCount() == 1) {
+                    if (oneFingerEvent(e, true)) // Might or might not be trivial
+                        isTouchEventTrivial = false;
+                } else if (e.getPointerCount() == 2) {
                     twoFingerEvent(e, true);
-                isTouchEventTrivial = false;
+                    isTouchEventTrivial = false;
+                }
                 break;
 
             case MotionEvent.ACTION_UP:
@@ -183,8 +184,9 @@ public class OrbitalView extends GLSurfaceView {
 
     private double previousX;
     private double previousY;
+    private double cumulativeMovement;
 
-    private synchronized void oneFingerEvent(MotionEvent e, boolean actionable) {
+    private synchronized boolean oneFingerEvent(MotionEvent e, boolean actionable) {
 
         int pointerIndex = e.findPointerIndex(firstPointerID);
 
@@ -192,16 +194,22 @@ public class OrbitalView extends GLSurfaceView {
         double y = e.getY(pointerIndex);
 
         if (actionable) {
-            double dx = x - previousX;
-            double dy = y - previousY;
             double meanSize = Math.sqrt(getWidth() * getHeight());
-            camera.drag(dx / meanSize, dy / meanSize);
+            double dx = (x - previousX) / meanSize;
+            double dy = (y - previousY) / meanSize;
+            camera.drag(dx, dy);
 
             requestRender();
+
+            cumulativeMovement += Math.abs(dx) + Math.abs(dy);
+        } else {
+            cumulativeMovement = 0.;
         }
 
         previousX = x;
         previousY = y;
+
+        return cumulativeMovement > 0.02;
     }
 
     private double previousDistance;
