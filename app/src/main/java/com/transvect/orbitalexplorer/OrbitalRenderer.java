@@ -14,17 +14,17 @@ public class OrbitalRenderer implements GLSurfaceView.Renderer {
 
     private int dpi;
     private OrbitalView orbitalView;
-    private AssetManager assetManager;
     private Integrator integrator;
     private ScreenDrawer screenDrawer;
+    private QuadratureCurves quadratureCurves;
 
     // Main thread
     public OrbitalRenderer(OrbitalView orbitalView_, Context context) {
         orbitalView = orbitalView_;
-        assetManager = context.getAssets();
         dpi = context.getResources().getDisplayMetrics().densityDpi;
         integrator = new Integrator(context);
         screenDrawer = new ScreenDrawer(context);
+        quadratureCurves = new QuadratureCurves(context);
     }
 
     // Main thread
@@ -37,6 +37,7 @@ public class OrbitalRenderer implements GLSurfaceView.Renderer {
     public void onSurfaceCreated(GL10 unused, EGLConfig config) {
         integrator.newContext();
         screenDrawer.newContext();
+        quadratureCurves.newContext();
     }
 
     private int mWidth = 1;
@@ -51,6 +52,7 @@ public class OrbitalRenderer implements GLSurfaceView.Renderer {
         mHeight = height;
         mAspectRatio = (float) width / (float) height;
         resizeIntegration();
+        quadratureCurves.resize(width, height);
     }
 
     private void resizeIntegration() {
@@ -72,6 +74,7 @@ public class OrbitalRenderer implements GLSurfaceView.Renderer {
         float[] shaderTransform = orbitalView.getNextTransform(mAspectRatio);
         integrator.render(shaderTransform);
         screenDrawer.render(integrator.getTexture());
+        quadratureCurves.render();
 
         long now = System.currentTimeMillis();
         int milliseconds = (int) (now - then);
