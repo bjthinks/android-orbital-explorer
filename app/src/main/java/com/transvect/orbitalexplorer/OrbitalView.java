@@ -274,4 +274,8 @@ public class OrbitalView extends GLSurfaceView {
             ; // setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
         return camera.computeShaderTransform(aspectRatio);
     }
+
+    public synchronized double getOrbitalDistance() {
+        return camera.getCameraDistance();
+    }
 }

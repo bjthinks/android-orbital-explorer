@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.res.AssetManager;
 import android.opengl.GLES30;
 
+import java.nio.FloatBuffer;
+
 public class QuadratureCurves extends RenderStage {
 
     private AssetManager assetManager;
@@ -14,6 +16,22 @@ public class QuadratureCurves extends RenderStage {
         assetManager = context.getAssets();
         width = 1;
         height = 1;
+    }
+
+    Orbital orbital, newOrbital;
+
+    public synchronized void quadratureChanged(Orbital n) {
+        newOrbital = n;
+    }
+
+    private synchronized boolean checkForNewOrbital() {
+        if (newOrbital != null) {
+            orbital = newOrbital;
+            newOrbital = null;
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public void newContext() {
@@ -32,6 +50,51 @@ public class QuadratureCurves extends RenderStage {
         height = height_;
     }
 
-    public void render() {
+    static final int QUADRATURE_SIZE = 64;
+    int quadratureOrder;
+    double orbitalRadius;
+    FloatBuffer quadratureBuffers[];
+    public void render(double cameraDistance) {
+
+        if (checkForNewOrbital()) {
+            float[] quadrature = QuadratureTable.get(assetManager, orbital);
+            float q[] = new float[128];
+            quadratureOrder = quadrature.length / 4 / QUADRATURE_SIZE;
+            orbitalRadius = orbital.getRadialFunction().getMaximumRadius();
+            quadratureBuffers = new FloatBuffer[quadratureOrder];
+            for (int node = 0; node < quadratureOrder; ++ node) {
+                for (int i = 0; i < 64; ++i) {
+                    q[2 * i] = (float) i * (float) orbitalRadius / (float) (QUADRATURE_SIZE - 1);
+                    q[2 * i + 1] = quadrature[4 * quadratureOrder * i + 4 * node];
+                }
+
+                quadratureBuffers[node] = floatArrayToBuffer(q);
+            }
+        }
+
+        if (quadratureBuffers != null) {
+            GLES30.glBindFramebuffer(GLES30.GL_FRAMEBUFFER, 0);
+            GLES30.glViewport(0, 0, width, height);
+            GLES30.glUseProgram(program);
+
+            int scaleHandle = GLES30.glGetUniformLocation(program, "scale");
+            float isotropicScale = 1.0f;
+            float aspect = (float) Math.sqrt((double) width / (double) height);
+            GLES30.glUniform2f(scaleHandle, isotropicScale / aspect / (float) cameraDistance,
+                    isotropicScale * aspect / (float) cameraDistance);
+
+            int positionHandle = GLES30.glGetAttribLocation(program, "position");
+            GLES30.glEnableVertexAttribArray(positionHandle);
+
+            for (int node = 0; node < quadratureOrder; ++node) {
+                GLES30.glVertexAttribPointer(positionHandle, 2, GLES30.GL_FLOAT, false, 0,
+                        quadratureBuffers[node]);
+                GLES30.glDrawArrays(GLES30.GL_LINE_STRIP, 0, 64);
+            }
+
+            GLES30.glDisableVertexAttribArray(positionHandle);
+        }
+
+        getGLError();
     }
 }

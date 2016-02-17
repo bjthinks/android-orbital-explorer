@@ -30,6 +30,7 @@ public class OrbitalRenderer implements GLSurfaceView.Renderer {
     // Main thread
     public void orbitalChanged(Orbital newOrbital) {
         integrator.orbitalChanged(newOrbital);
+        quadratureCurves.quadratureChanged(newOrbital);
     }
 
     // Rendering thread
@@ -74,7 +75,7 @@ public class OrbitalRenderer implements GLSurfaceView.Renderer {
         float[] shaderTransform = orbitalView.getNextTransform(mAspectRatio);
         integrator.render(shaderTransform);
         screenDrawer.render(integrator.getTexture());
-        quadratureCurves.render();
+        quadratureCurves.render(orbitalView.getOrbitalDistance());
 
         long now = System.currentTimeMillis();
         int milliseconds = (int) (now - then);
