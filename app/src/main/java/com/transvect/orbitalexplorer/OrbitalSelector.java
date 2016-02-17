@@ -11,8 +11,6 @@ import android.widget.LinearLayout;
 
 public class OrbitalSelector extends LinearLayout {
 
-    private static final String TAG = "OrbitalSelector";
-
     private static final int maxN = 8;
 
     private int N = 1;
@@ -25,7 +23,7 @@ public class OrbitalSelector extends LinearLayout {
     private ValueChanger mChanger;
     private Button rcChanger;
 
-    private Listener orbitalChangeListener;
+    private Listener orbitalChanger;
 
     public OrbitalSelector(Context context) {
         super(context);
@@ -186,13 +184,13 @@ public class OrbitalSelector extends LinearLayout {
         orbitalChanged();
     }
 
-    public void setOrbitalChangeListener(Listener listener) {
-        orbitalChangeListener = listener;
+    public void setOrbitalChanger(Listener listener) {
+        orbitalChanger = listener;
     }
 
     private void orbitalChanged() {
-        if (orbitalChangeListener != null)
-            orbitalChangeListener.event();
+        if (orbitalChanger != null)
+            orbitalChanger.event();
     }
 
     public Orbital getOrbital() {

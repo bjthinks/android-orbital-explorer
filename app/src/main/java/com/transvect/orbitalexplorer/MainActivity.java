@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
         } */
 
         orbitalView.setControlToggler(new VisibilityToggler());
-        orbitalSelector.setOrbitalChangeListener(new OrbitalChanger());
+        orbitalSelector.setOrbitalChanger(new OrbitalChanger());
         orbitalSelector.setOrbital(4, 2, 1, false);
     }
 
