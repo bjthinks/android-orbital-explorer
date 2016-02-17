@@ -29,13 +29,15 @@ public class QuadratureGenerator {
                 double exponentialConstant = radialFunction.getExponentialConstant();
                 int powerOfR = radialFunction.getPowerOfR();
                 int quadraturePoints = radialFunction.getQuadratureOrder();
+                double orbitalRadius = radialFunction.getMaximumRadius();
 
                 float[] quadratureWeights = new float[2 * quadraturePoints * QUADRATURE_SIZE];
                 for (int i = 0; i < QUADRATURE_SIZE; ++i) {
                     double distanceFromOrigin = radialFunction.getMaximumRadius()
                             * (double) i / (double) (QUADRATURE_SIZE - 1);
                     WeightFunction weightFunction
-                            = new WeightFunction(exponentialConstant, powerOfR, distanceFromOrigin);
+                            = new WeightFunction(exponentialConstant, powerOfR, distanceFromOrigin,
+                            orbitalRadius);
                     GaussianQuadrature GQ = new GaussianQuadrature(weightFunction, quadraturePoints);
 
                     for (int j = 0; j < quadraturePoints; ++j) {
