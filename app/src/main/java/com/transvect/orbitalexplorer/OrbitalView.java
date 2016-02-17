@@ -90,8 +90,8 @@ public class OrbitalView extends GLSurfaceView {
         controlToggler = s;
     }
 
-    public void orbitalChanged(Orbital newOrbital) {
-        orbitalRenderer.orbitalChanged(newOrbital);
+    public void setOrbital(Orbital orbital) {
+        orbitalRenderer.orbitalChanged(orbital);
     }
 
     private int firstPointerID = MotionEvent.INVALID_POINTER_ID;

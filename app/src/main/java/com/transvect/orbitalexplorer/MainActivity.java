@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
         } */
 
         orbitalView.setControlToggler(new VisibilityToggler());
-        orbitalSelector.setListener(orbitalView);
+        orbitalSelector.setOrbitalChangeListener(new OrbitalChanger());
         orbitalSelector.setOrbital(6, 4, 1, false);
     }
 
@@ -129,6 +129,12 @@ public class MainActivity extends AppCompatActivity {
                 toolbar.setVisibility(View.INVISIBLE);
                 orbitalSelector.setVisibility(View.INVISIBLE);
             }
+        }
+    }
+
+    private class OrbitalChanger implements Listener {
+        public void event() {
+            orbitalView.setOrbital(orbitalSelector.getOrbital());
         }
     }
 }

@@ -18,14 +18,14 @@ public class OrbitalSelector extends LinearLayout {
     private int N = 1;
     private int L = 0;
     private int M = 0;
-    private boolean realOrbital = false;
+    private boolean real = false;
 
     private ValueChanger nChanger;
     private ValueChanger lChanger;
     private ValueChanger mChanger;
     private Button rcChanger;
 
-    private OrbitalView listener;
+    private Listener orbitalChangeListener;
 
     public OrbitalSelector(Context context) {
         super(context);
@@ -57,7 +57,7 @@ public class OrbitalSelector extends LinearLayout {
         ss.N = N;
         ss.L = L;
         ss.M = M;
-        ss.realOrbital = realOrbital;
+        ss.real = real;
 
         return ss;
     }
@@ -69,19 +69,19 @@ public class OrbitalSelector extends LinearLayout {
         N = ss.N;
         L = ss.L;
         M = ss.M;
-        realOrbital = ss.realOrbital;
+        real = ss.real;
 
         nChanger.setInteger(N);
         lChanger.setInteger(L);
         mChanger.setInteger(M);
-        setRealOrbital(realOrbital);
+        setReal(real);
 
         orbitalChanged();
     }
 
     private static class SavedState extends BaseSavedState {
         int N, L, M;
-        boolean realOrbital;
+        boolean real;
 
         SavedState(Parcelable superState) {
             super(superState);
@@ -92,7 +92,7 @@ public class OrbitalSelector extends LinearLayout {
             N = in.readInt();
             L = in.readInt();
             M = in.readInt();
-            realOrbital = (in.readInt() != 0);
+            real = (in.readInt() != 0);
         }
 
         @Override
@@ -101,7 +101,7 @@ public class OrbitalSelector extends LinearLayout {
             out.writeInt(N);
             out.writeInt(L);
             out.writeInt(M);
-            out.writeInt(realOrbital ? 1 : 0);
+            out.writeInt(real ? 1 : 0);
         }
 
         public static final Parcelable.Creator<SavedState> CREATOR
@@ -127,7 +127,7 @@ public class OrbitalSelector extends LinearLayout {
         nChanger.setInteger(N);
         lChanger.setInteger(L);
         mChanger.setInteger(M);
-        setRealOrbital(realOrbital);
+        setReal(real);
 
         nChanger.setOnUpListener(new OnClickListener() {
             public void onClick(View v) {
@@ -169,19 +169,34 @@ public class OrbitalSelector extends LinearLayout {
         rcChanger.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                setRealOrbital(!realOrbital);
+                setReal(!real);
                 orbitalChanged();
             }
         });
     }
 
-    public void setListener(OrbitalView orbitalView) {
-        listener = orbitalView;
+    public void setOrbital(int N_, int L_, int M_, boolean real_) {
+        N = N_;
+        L = L_;
+        M = M_;
+        nChanger.setInteger(N);
+        lChanger.setInteger(L);
+        mChanger.setInteger(M);
+        setReal(real_);
+        orbitalChanged();
+    }
+
+    public void setOrbitalChangeListener(Listener listener) {
+        orbitalChangeListener = listener;
     }
 
     private void orbitalChanged() {
-        if (listener != null)
-            listener.orbitalChanged(new Orbital(N, N, L, M, realOrbital));
+        if (orbitalChangeListener != null)
+            orbitalChangeListener.event();
+    }
+
+    public Orbital getOrbital() {
+        return new Orbital(N, N, L, M, real);
     }
 
     private void increaseN() {
@@ -238,22 +253,11 @@ public class OrbitalSelector extends LinearLayout {
         }
     }
 
-    private void setRealOrbital(boolean realOrbital_) {
-        realOrbital = realOrbital_;
-        if (realOrbital)
+    private void setReal(boolean realOrbital_) {
+        real = realOrbital_;
+        if (real)
             rcChanger.setText(R.string.realNumbers);
         else
             rcChanger.setText(R.string.complexNumbers);
-    }
-
-    public void setOrbital(int N_, int L_, int M_, boolean real_) {
-        N = N_;
-        L = L_;
-        M = M_;
-        realOrbital = real_;
-        nChanger.setInteger(N);
-        lChanger.setInteger(L);
-        mChanger.setInteger(M);
-        orbitalChanged();
     }
 }
