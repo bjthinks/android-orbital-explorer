@@ -1,9 +1,9 @@
 <resources>
 
-    <style name="TransparentTheme" parent="Theme.AppCompat.NoActionBar">
+    <style name="MainTheme" parent="Theme.AppCompat.NoActionBar">
     </style>
 
-    <style name="OpaqueTheme" parent="Theme.AppCompat">
+    <style name="SubTheme" parent="Theme.AppCompat">
     </style>
 
 </resources>
