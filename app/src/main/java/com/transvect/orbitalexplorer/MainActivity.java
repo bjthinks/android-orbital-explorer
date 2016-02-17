@@ -4,22 +4,20 @@ import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ConfigurationInfo;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ListView;
 
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
 
+    private Toolbar toolbar;
+    private OrbitalSelector orbitalSelector;
     private OrbitalView orbitalView;
 
     @Override
@@ -31,11 +29,11 @@ public class MainActivity extends AppCompatActivity {
             throw new UnsupportedOperationException();
         }
 
-        // Inflate stuff and set as the ContentView for this Activity.
         setContentView(R.layout.activity_main);
+        toolbar         = (Toolbar)         findViewById(R.id.toolbar);
+        orbitalSelector = (OrbitalSelector) findViewById(R.id.orbitalselector);
+        orbitalView     = (OrbitalView)     findViewById(R.id.orbitalview);
 
-        // Set up Toolbar
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("Orbital Explorer");
         setSupportActionBar(toolbar);
 
@@ -50,10 +48,7 @@ public class MainActivity extends AppCompatActivity {
             menu.setPadding(0, getStatusBarHeight(), 0, 0);
         } */
 
-        // Connect things to other things
-        OrbitalSelector orbitalSelector = (OrbitalSelector) findViewById(R.id.orbitalselector);
-        orbitalView = (OrbitalView) findViewById(R.id.orbitalview);
-        orbitalView.setOrbitalSelector(orbitalSelector);
+        orbitalView.setControlToggler(new VisibilityToggler());
         orbitalSelector.setListener(orbitalView);
         orbitalSelector.setOrbital(6, 4, 1, false);
     }
@@ -120,5 +115,21 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private class VisibilityToggler implements Listener {
+        private boolean controlVisibility = true;
+
+        public void event() {
+            controlVisibility = !controlVisibility;
+
+            if (controlVisibility) {
+                toolbar.setVisibility(View.VISIBLE);
+                orbitalSelector.setVisibility(View.VISIBLE);
+            } else {
+                toolbar.setVisibility(View.INVISIBLE);
+                orbitalSelector.setVisibility(View.INVISIBLE);
+            }
+        }
     }
 }

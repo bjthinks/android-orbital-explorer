@@ -27,8 +27,6 @@ public class OrbitalSelector extends LinearLayout {
 
     private OrbitalView listener;
 
-    private boolean visibility = false;
-
     public OrbitalSelector(Context context) {
         super(context);
         constructorSetup(context);
@@ -49,7 +47,6 @@ public class OrbitalSelector extends LinearLayout {
         LayoutInflater inflater
                 = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         inflater.inflate(R.layout.view_orbitalselector, this);
-        setVisibility(View.INVISIBLE);
         requestLayout();
     }
 
@@ -258,14 +255,5 @@ public class OrbitalSelector extends LinearLayout {
         lChanger.setInteger(L);
         mChanger.setInteger(M);
         orbitalChanged();
-    }
-
-    public void toggleVisibility() {
-        visibility = !visibility;
-        if (visibility)
-            setVisibility(View.VISIBLE);
-        else
-            setVisibility(View.INVISIBLE);
-        requestLayout();
     }
 }

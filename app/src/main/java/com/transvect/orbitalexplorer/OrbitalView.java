@@ -14,7 +14,7 @@ public class OrbitalView extends GLSurfaceView {
 
     private Camera camera;
     private GestureDetector flingDetector;
-    private OrbitalSelector orbitalSelector;
+    private Listener controlToggler;
     private OrbitalRenderer orbitalRenderer;
 
     public OrbitalView(Context context) {
@@ -86,8 +86,8 @@ public class OrbitalView extends GLSurfaceView {
         };
     }
 
-    public void setOrbitalSelector(OrbitalSelector s) {
-        orbitalSelector = s;
+    public void setControlToggler(Listener s) {
+        controlToggler = s;
     }
 
     public void orbitalChanged(Orbital newOrbital) {
@@ -135,8 +135,8 @@ public class OrbitalView extends GLSurfaceView {
             case MotionEvent.ACTION_UP:
                 // No bears in the bed
                 firstPointerID = MotionEvent.INVALID_POINTER_ID;
-                if (isTouchEventTrivial && orbitalSelector != null)
-                    orbitalSelector.toggleVisibility();
+                if (isTouchEventTrivial && controlToggler != null)
+                    controlToggler.event();
                 isTouchEventTrivial = false;
                 break;
 
