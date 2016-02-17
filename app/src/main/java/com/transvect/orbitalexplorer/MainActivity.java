@@ -29,8 +29,7 @@ public class MainActivity extends AppCompatActivity {
             throw new UnsupportedOperationException();
         }
 
-        // Inflate a GLSurfaceView instance and set it
-        // as the ContentView for this Activity.
+        // Inflate stuff and set as the ContentView for this Activity.
         setContentView(R.layout.activity_main);
 
         // Find stuff
