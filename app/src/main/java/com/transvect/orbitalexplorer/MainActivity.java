@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // Can we use a translucent status bar?
+        /* // Can we use a translucent status bar?
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             // API 19+, yay!
 
@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
 
             // Adjust menu as well
             menu.setPadding(0, getStatusBarHeight(), 0, 0);
-        }
+        } */
 
         // Set the toolbar as the ActionBar for this Activity
         setSupportActionBar(toolbar);

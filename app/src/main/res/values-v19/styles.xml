@@ -1,8 +1,8 @@
 <resources>
 
     <style name="MainTheme" parent="Theme.AppCompat.NoActionBar">
-        <item name="android:windowTranslucentStatus">true</item>
-        <item name="android:windowTranslucentNavigation">true</item>
+        <!-- <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentNavigation">true</item> -->
     </style>
 
     <style name="SubTheme" parent="Theme.AppCompat">
