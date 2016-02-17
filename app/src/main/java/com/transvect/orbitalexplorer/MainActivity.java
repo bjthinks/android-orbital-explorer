@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
 
         orbitalView.setControlToggler(new VisibilityToggler());
         orbitalSelector.setOrbitalChangeListener(new OrbitalChanger());
-        orbitalSelector.setOrbital(6, 4, 1, false);
+        orbitalSelector.setOrbital(4, 2, 1, false);
     }
 
     /* private int getStatusBarHeight() {
