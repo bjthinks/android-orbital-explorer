@@ -34,7 +34,6 @@ public class MainActivity extends AppCompatActivity {
         orbitalSelector = (OrbitalSelector) findViewById(R.id.orbitalselector);
         orbitalView     = (OrbitalView)     findViewById(R.id.orbitalview);
 
-        toolbar.setTitle("Orbital Explorer");
         setSupportActionBar(toolbar);
 
         /* // Can we use a translucent status bar?
