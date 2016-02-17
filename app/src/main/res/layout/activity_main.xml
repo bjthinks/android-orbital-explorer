@@ -1,56 +1,37 @@
-<android.support.v4.widget.DrawerLayout
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/maindrawer"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="match_parent">
 
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".MainActivity">
-
-    <FrameLayout
+    <com.transvect.orbitalexplorer.OrbitalView
+        android:id="@+id/orbitalview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent" />
 
-        <com.transvect.orbitalexplorer.OrbitalView
-            android:id="@+id/orbitalview"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+    <android.support.v7.widget.Toolbar
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
-        <android.support.v7.widget.Toolbar
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <!-- Consume the top half of the screen -->
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight=".5" />
-
-            <com.transvect.orbitalexplorer.OrbitalSelector
-                android:id="@+id/orbitalselector"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight=".5"
-                android:gravity="center" />
-
-        </LinearLayout>
-
-    </FrameLayout>
-
-    <ListView
-        android:id="@+id/main_menu"
-        android:layout_width="240dp"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_gravity="start"
-        android:choiceMode="singleChoice"
-        android:background="#000"
-        android:entries="@array/mainMenuItems" />
+        android:orientation="vertical">
 
-</android.support.v4.widget.DrawerLayout>
+        <!-- Consume the top half of the screen -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight=".5" />
+
+        <com.transvect.orbitalexplorer.OrbitalSelector
+            android:id="@+id/orbitalselector"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight=".5"
+            android:gravity="center" />
+
+    </LinearLayout>
+
+</FrameLayout>

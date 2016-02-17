@@ -1,15 +1,11 @@
 <resources>
     <string name="appName">Orbital Explorer</string>
 
-    <string name="menuSettings">New Settings</string>
-    <string name="menuHelp">New Help</string>
+    <string name="menuSettings">Settings</string>
+    <string name="menuHelp">Help</string>
 
     <string name="complexNumbers">\u2102</string>
     <string name="realNumbers">\u211d</string>
-
-    <string-array name="mainMenuItems">
-        <item>Settings</item>
-    </string-array>
 
     <string name="prefEnableColor_Title">Enable color</string>
     <string name="prefCycleColors_Title">Cycle colors</string>

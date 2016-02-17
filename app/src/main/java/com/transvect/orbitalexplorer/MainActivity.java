@@ -33,28 +33,10 @@ public class MainActivity extends AppCompatActivity {
         // Inflate stuff and set as the ContentView for this Activity.
         setContentView(R.layout.activity_main);
 
-        // Find stuff
-        final DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.maindrawer);
+        // Set up Toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        ListView menu = (ListView) findViewById(R.id.main_menu);
-
-        // Set toolbar properties
         toolbar.setTitle("Orbital Explorer");
-
-        // Make menu items "live"
-        menu.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                switch (position) {
-                    case 0:
-                        drawerLayout.closeDrawers();
-                        Intent startSettings
-                                = new Intent(MainActivity.this, SettingsActivity.class);
-                        startActivity(startSettings);
-                        break;
-                }
-            }
-        });
+        setSupportActionBar(toolbar);
 
         /* // Can we use a translucent status bar?
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
@@ -67,26 +49,21 @@ public class MainActivity extends AppCompatActivity {
             menu.setPadding(0, getStatusBarHeight(), 0, 0);
         } */
 
-        // Set the toolbar as the ActionBar for this Activity
-        setSupportActionBar(toolbar);
-
-        // Get references to the orbital selector and view
+        // Connect things to other things
         OrbitalSelector orbitalSelector = (OrbitalSelector) findViewById(R.id.orbitalselector);
         orbitalView = (OrbitalView) findViewById(R.id.orbitalview);
-
-        // Connect things to other things
         orbitalView.setOrbitalSelector(orbitalSelector);
         orbitalSelector.setListener(orbitalView);
         orbitalSelector.setOrbital(6, 4, 1, false);
     }
 
-    private int getStatusBarHeight() {
+    /* private int getStatusBarHeight() {
         int result = 0;
         int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
         if (resourceId > 0)
             result = getResources().getDimensionPixelSize(resourceId);
         return result;
-    }
+    } */
 
     private boolean hasGLES30() {
         ActivityManager manager =
