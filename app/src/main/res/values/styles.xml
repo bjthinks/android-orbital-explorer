@@ -1,6 +1,8 @@
 <resources>
 
     <style name="MainTheme" parent="Theme.AppCompat.NoActionBar">
+        <!-- Background of almost every View element, including containers -->
+        <item name="android:background">#0000</item>
     </style>
 
     <style name="SubTheme" parent="Theme.AppCompat">
