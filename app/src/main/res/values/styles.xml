@@ -1,11 +1,39 @@
 <resources>
 
     <style name="MainTheme" parent="Theme.AppCompat.NoActionBar">
-        <!-- Background of almost every View element, including containers -->
-        <item name="android:background">#0000</item>
+        <!-- App Bar background color -->
+        <!-- Also intended as Toolbar background color, but for that to work,
+             Toolbar needs the attribute android:background="?attr/colorPrimary" -->
+        <item name="colorPrimary">#800</item>
+        <!-- Status bar background color and "contextual app bars". To set just the
+             status bar, use statusBarColor. -->
+        <item name="colorPrimaryDark">#080</item>
+        <!-- Check boxes, switches, "text fields", etc -->
+        <item name="colorAccent">#88f</item>
+        <!-- Colors the action bar overflow icon -->
+        <item name="colorControlNormal">#f8f</item>
+        <!-- Dunno -->
+        <item name="colorControlActivated">#f0f</item>
+        <!-- Highlight color to flash when a clickable control is pressed -->
+        <item name="colorControlHighlight">#f00</item>
+        <!-- Dunno -->
+        <item name="colorSwitchThumbNormal">#f0f</item>
+        <!-- Preferences screen and probably most other lists -->
+        <item name="android:listViewStyle">@style/ListStyle</item>
+        <!-- Action bar overflow menu -->
+        <item name="dropDownListViewStyle">@style/ListStyle</item>
+        <!-- Toolbar title, text buttons, and text in lists -->
+        <item name="android:textColorPrimary">#8f0</item>
+        <!-- Dunno -->
+        <item name="android:textColorSecondary">#f0f</item>
+        <!-- Plain TextViews get this -->
+        <item name="android:textColorTertiary">#f80</item>
     </style>
 
-    <style name="SubTheme" parent="Theme.AppCompat">
+    <style name="ListStyle" parent="Widget.AppCompat.ListView">
+        <item name="android:background">#004</item>
+        <item name="android:divider">#777</item>
+        <item name="android:dividerHeight">1dp</item>
     </style>
 
 </resources>
