@@ -13,7 +13,7 @@
         android:layout_height="wrap_content" />
     <Button
         android:id="@+id/rcchanger"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/buttonSize"
+        android:layout_height="@dimen/buttonSize"
         android:text="@string/complexNumbers" />
 </merge>
