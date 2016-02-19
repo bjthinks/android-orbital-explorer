@@ -3,7 +3,8 @@
         android:id="@+id/integerchanger_uparrow"
         android:layout_width="@dimen/buttonSize"
         android:layout_height="@dimen/buttonSize"
-        android:src="@drawable/ic_keyboard_arrow_up_white_24dp" />
+        android:src="@drawable/ic_keyboard_arrow_up_white_24dp"
+        style="@style/ButtonStyle" />
     <TextView
         android:id="@+id/integerchanger_value"
         android:layout_width="match_parent"
@@ -13,5 +14,6 @@
         android:id="@+id/integerchanger_downarrow"
         android:layout_width="@dimen/buttonSize"
         android:layout_height="@dimen/buttonSize"
-        android:src="@drawable/ic_keyboard_arrow_down_white_24dp" />
+        android:src="@drawable/ic_keyboard_arrow_down_white_24dp"
+        style="@style/ButtonStyle" />
 </merge>

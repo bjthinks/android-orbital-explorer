@@ -15,5 +15,6 @@
         android:id="@+id/rcchanger"
         android:layout_width="@dimen/buttonSize"
         android:layout_height="@dimen/buttonSize"
-        android:text="@string/complexNumbers" />
+        android:text="@string/complexNumbers"
+        style="@style/ButtonStyle" />
 </merge>

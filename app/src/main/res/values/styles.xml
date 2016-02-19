@@ -40,4 +40,8 @@
         <!-- <item name="android:dividerHeight">1dp</item> -->
     </style>
 
+    <style name="ButtonStyle" parent="MainTheme">
+        <item name="android:background">@drawable/button_trans</item>
+    </style>
+
 </resources>
