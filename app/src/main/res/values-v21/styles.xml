@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="ButtonStyle" parent="MainTheme">
+        <item name="android:backgroundTint">#8444</item>
+        <item name="android:backgroundTintMode">src_in</item>
+    </style>
+</resources>
