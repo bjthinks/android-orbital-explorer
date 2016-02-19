@@ -23,7 +23,7 @@
         <activity
             android:name=".SettingsActivity"
             android:label="Settings"
-            android:theme="@style/MainTheme" >
+            android:theme="@style/PrefTheme" >
         </activity>
     </application>
 
