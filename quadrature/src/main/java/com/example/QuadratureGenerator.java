@@ -16,16 +16,15 @@ public class QuadratureGenerator {
         DataOutputStream stream
                 = new DataOutputStream(new BufferedOutputStream(
                 new FileOutputStream("app/src/main/assets/data/" + assetname)));
-        for (int i = 0; i < data.length; ++i)
-            stream.writeFloat(data[i]);
+        for (float d : data)
+            stream.writeFloat(d);
         stream.close();
     }
 
     private void go() throws IOException {
         for (int N = 1; N <= 8; ++N) {
             for (int L = 0; L < N; ++L) {
-                int Z = N;
-                RadialFunction radialFunction = new RadialFunction(Z, N, L);
+                RadialFunction radialFunction = new RadialFunction(N, N, L);
                 double exponentialConstant = radialFunction.getExponentialConstant();
                 int powerOfR = radialFunction.getPowerOfR();
                 int quadraturePoints = radialFunction.getQuadratureOrder();

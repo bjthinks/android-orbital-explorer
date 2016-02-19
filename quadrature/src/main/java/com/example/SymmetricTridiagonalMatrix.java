@@ -19,10 +19,6 @@ public class SymmetricTridiagonalMatrix {
         return diagonal[i];
     }
 
-    public double getOffDiagonal(int i) {
-        return offDiagonal[i];
-    }
-
     public double getComponent(int i) {
         return eigenvectorFirstComponent[i];
     }

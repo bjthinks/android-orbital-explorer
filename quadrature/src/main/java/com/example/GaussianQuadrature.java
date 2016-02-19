@@ -42,8 +42,9 @@ public class GaussianQuadrature {
         double a[] = new double[N];
         double b[] = new double[N];
         double C[][] = new double[N + 1][2 * N + 1];
-        for (int j = 0; j < 2 * N + 1; ++j)
-            C[0][j] = moments[j];
+        System.arraycopy(moments, 0, C[0], 0, 2 * N + 1);
+        //for (int j = 0; j < 2 * N + 1; ++j)
+            //C[0][j] = moments[j];
         a[0] = C[0][1] / C[0][0];
         b[0] = 0.0;
         for (int i = 1; i < N + 1; ++i) {
