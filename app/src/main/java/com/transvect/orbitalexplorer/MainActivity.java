@@ -107,19 +107,27 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        Intent intent = null;
         switch (item.getItemId()) {
 
+            case R.id.menuAbout:
+                intent = new Intent(this, HelpActivity.class);
+                intent.putExtra("url", "file:///android_asset/about.html");
+                intent.putExtra("title", "About");
+                break;
+
             case R.id.menuSettings:
-                startActivity(new Intent(this, SettingsActivity.class));
+                intent = new Intent(this, SettingsActivity.class);
                 break;
 
             case R.id.menuHelp:
-                Intent intent = new Intent(this, HelpActivity.class);
+                intent = new Intent(this, HelpActivity.class);
                 intent.putExtra("url", "file:///android_asset/help.html");
                 intent.putExtra("title", "Help");
-                startActivity(intent);
                 break;
         }
+        if (intent != null)
+            startActivity(intent);
 
         return super.onOptionsItemSelected(item);
     }
