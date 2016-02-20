@@ -21,12 +21,16 @@ public class HelpActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedState) {
         super.onCreate(savedState);
 
+        Bundle extras = getIntent().getExtras();
+
         setContentView(R.layout.activity_help);
 
-        setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle(extras.getString("title"));
+        setSupportActionBar(toolbar);
 
         webview = (WebView) findViewById(R.id.helpview);
-        String data = loadAsset(getAssets(), "help.html");
+        String data = loadAsset(getAssets(), extras.getString("filename"));
         webview.loadData(data, "text/html", null);
     }
 
