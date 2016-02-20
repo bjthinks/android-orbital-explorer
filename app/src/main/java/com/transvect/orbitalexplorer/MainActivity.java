@@ -115,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
 
             case R.id.menuHelp:
                 Intent intent = new Intent(this, HelpActivity.class);
-                intent.putExtra("filename", "help.html");
+                intent.putExtra("url", "file:///android_asset/help.html");
                 intent.putExtra("title", "Help");
                 startActivity(intent);
                 break;
