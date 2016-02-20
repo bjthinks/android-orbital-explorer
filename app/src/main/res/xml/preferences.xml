@@ -5,10 +5,5 @@
         android:key="prefEnableColor"
         android:title="@string/prefEnableColor_Title"
         android:defaultValue="true" />
-    <SwitchPreference
-        android:key="prefCycleColors"
-        android:title="@string/prefCycleColors_Title"
-        android:defaultValue="true"
-        android:dependency="prefEnableColor" />
 
 </PreferenceScreen>

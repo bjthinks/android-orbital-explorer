@@ -55,13 +55,8 @@ public class ScreenDrawer extends RenderStage {
 
         int colorRotation = GLES30.glGetUniformLocation(program, "colorRotation");
         float[] rot = new float[4];
-        double t;
-        if (appPreferences.getCycleColors()) {
-            long period = 10000; // ms
-            t = 2 * Math.PI * (double) (System.currentTimeMillis() % period) / period;
-        } else {
-            t = 0.0;
-        }
+        long period = 10000; // ms
+        double t = 2. * Math.PI * (double) (System.currentTimeMillis() % period) / (double) period;
         rot[0] = (float) Math.cos(t);  rot[2] = (float) -Math.sin(t);
         rot[1] = (float) Math.sin(t);  rot[3] = (float) Math.cos(t);
         GLES30.glUniformMatrix2fv(colorRotation, 1, false, rot, 0);
