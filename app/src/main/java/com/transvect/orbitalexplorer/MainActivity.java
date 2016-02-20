@@ -110,11 +110,11 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
 
             case R.id.menuSettings:
-                Intent intent = new Intent(this, SettingsActivity.class);
-                startActivity(intent);
+                startActivity(new Intent(this, SettingsActivity.class));
                 break;
 
             case R.id.menuHelp:
+                startActivity(new Intent(this, HelpActivity.class));
                 break;
         }
 

@@ -30,7 +30,9 @@
         <item name="android:textColorTertiary">@color/white</item>
     </style>
 
-    <style name="PrefTheme" parent="Theme.AppCompat">
+    <style name="AuxTheme" parent="Theme.AppCompat.NoActionBar">
+        <item name="colorPrimary">@color/dark</item>
+        <!-- Darken the Settings activity, which contains a ListView -->
         <item name="android:listViewStyle">@style/ListStyle</item>
     </style>
 

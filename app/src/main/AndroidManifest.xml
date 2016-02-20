@@ -23,7 +23,12 @@
         <activity
             android:name=".SettingsActivity"
             android:label="Settings"
-            android:theme="@style/PrefTheme" >
+            android:theme="@style/AuxTheme" >
+        </activity>
+        <activity
+            android:name=".HelpActivity"
+            android:label="Help"
+            android:theme="@style/AuxTheme" >
         </activity>
     </application>
 
