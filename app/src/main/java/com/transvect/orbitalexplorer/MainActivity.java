@@ -68,16 +68,21 @@ public class MainActivity extends AppCompatActivity {
         return majorVersion >= 3;
     }
 
+    private static final String CONTROL_VISIBILITY_KEY = "controlVisibility";
+
     // This might happen before or after onPause(), but if it needs to be called,
     // it will always be called before onStop().
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
+        outState.putBoolean(CONTROL_VISIBILITY_KEY, controlVisibility);
         super.onSaveInstanceState(outState);
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle inState) {
+        controlVisibility = inState.getBoolean(CONTROL_VISIBILITY_KEY);
         super.onRestoreInstanceState(inState);
+        applyControlVisibility();
     }
 
     @Override
@@ -116,19 +121,22 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    private boolean controlVisibility = true;
     private class VisibilityToggler implements Listener {
-        private boolean controlVisibility = true;
 
         public void event() {
             controlVisibility = !controlVisibility;
+            applyControlVisibility();
+        }
+    }
 
-            if (controlVisibility) {
-                toolbar.setVisibility(View.VISIBLE);
-                orbitalSelector.setVisibility(View.VISIBLE);
-            } else {
-                toolbar.setVisibility(View.INVISIBLE);
-                orbitalSelector.setVisibility(View.INVISIBLE);
-            }
+    private void applyControlVisibility() {
+        if (controlVisibility) {
+            toolbar.setVisibility(View.VISIBLE);
+            orbitalSelector.setVisibility(View.VISIBLE);
+        } else {
+            toolbar.setVisibility(View.INVISIBLE);
+            orbitalSelector.setVisibility(View.INVISIBLE);
         }
     }
 
