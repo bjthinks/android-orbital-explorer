@@ -16,9 +16,9 @@ public class Vector3 {
 
     // Primitive operations
 
-    public Vector3 add(Vector3 rhs) {
+    /* public Vector3 add(Vector3 rhs) {
         return new Vector3(x + rhs.x, y + rhs.y, z + rhs.z);
-    }
+    } */
 
     public Vector3 multiply(double c) {
         return new Vector3(x * c, y * c, z * c);
@@ -30,13 +30,13 @@ public class Vector3 {
 
     // Composite operations
 
-    public Vector3 negate() {
+    /* public Vector3 negate() {
         return multiply(-1.0);
-    }
+    } */
 
-    public Vector3 subtract(Vector3 rhs) {
+    /* public Vector3 subtract(Vector3 rhs) {
         return add(rhs.negate());
-    }
+    } */
 
     public Vector3 divide(double c) {
         return multiply(1.0 / c);

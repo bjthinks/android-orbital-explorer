@@ -30,9 +30,9 @@ public class Polynomial implements Function {
         return x;
     }
 
-    public static Polynomial variable() {
+    /* public static Polynomial variable() {
         return variableToThe(1);
-    }
+    } */
 
     public double eval(double x) {
         double result = 0.;
@@ -67,18 +67,18 @@ public class Polynomial implements Function {
         return result;
     }
 
-    public Polynomial negate() {
+    /* public Polynomial negate() {
         Polynomial result = new Polynomial();
         result.c = new double[c.length];
         for (int i = 0; i < c.length; ++i) {
             result.c[i] = -c[i];
         }
         return result;
-    }
+    } */
 
-    public Polynomial subtract(Polynomial rhs) {
+    /* public Polynomial subtract(Polynomial rhs) {
         return add(rhs.negate());
-    }
+    } */
 
     public Polynomial multiply(Polynomial rhs) {
         Polynomial result = new Polynomial();
@@ -123,9 +123,9 @@ public class Polynomial implements Function {
         return result;
     }
 
-    public double coefficient(int i) {
+    /* public double coefficient(int i) {
         return c[i];
-    }
+    } */
 
     // From p(x) and k, compute p(k * x)
     public Polynomial rescaleX(double k) {

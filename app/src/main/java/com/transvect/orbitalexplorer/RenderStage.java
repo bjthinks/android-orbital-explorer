@@ -31,14 +31,14 @@ public class RenderStage {
         return fb;
     }
 
-    protected static float[] functionToBuffer(Function f, double start, double end, int steps) {
+    /* protected static float[] functionToBuffer(Function f, double start, double end, int steps) {
         float data[] = new float[steps + 1];
         for (int i = 0; i <= steps; ++i) {
             double x = start + (end - start) * (double) i / steps;
             data[i] = (float) f.eval(x);
         }
         return data;
-    }
+    } */
 
     protected static float[] functionToBuffer2(Function f, double start, double end, int steps) {
         float data[] = new float[2 * (steps + 1)];

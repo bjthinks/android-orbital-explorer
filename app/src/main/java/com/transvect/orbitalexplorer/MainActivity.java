@@ -14,8 +14,6 @@ import android.view.View;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String TAG = "MainActivity";
-
     private Toolbar toolbar;
     private OrbitalSelector orbitalSelector;
     private OrbitalView orbitalView;

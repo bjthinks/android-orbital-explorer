@@ -20,7 +20,8 @@ public class Camera implements Parcelable {
         return 0;
     }
 
-    @Override public void writeToParcel(Parcel out, int flags) {
+    @Override
+    public void writeToParcel(Parcel out, int flags) {
         out.writeDouble(cameraDistance);
         out.writeParcelable(totalRotation, flags);
     }

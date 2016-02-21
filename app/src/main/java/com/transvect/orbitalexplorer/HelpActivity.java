@@ -7,7 +7,6 @@ import android.support.v7.widget.Toolbar;
 import android.webkit.WebView;
 
 public class HelpActivity extends AppCompatActivity {
-    private static final String TAG = "HelpActivity";
 
     @Override
     protected void onCreate(Bundle savedState) {

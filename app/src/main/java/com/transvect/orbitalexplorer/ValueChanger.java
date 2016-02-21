@@ -9,8 +9,6 @@ import android.widget.TextView;
 
 public class ValueChanger extends LinearLayout {
 
-    private static final String TAG = "ValueChanger";
-
     private TextView text;
     private ImageButton upArrow;
     private ImageButton downArrow;
@@ -46,9 +44,9 @@ public class ValueChanger extends LinearLayout {
         text = (TextView) findViewById(R.id.integerchanger_value);
     }
 
-    public void setText(String t) {
+    /* public void setText(String t) {
         text.setText(t);
-    }
+    } */
 
     public void setInteger(int i) {
         text.setText(String.format("%d", i));

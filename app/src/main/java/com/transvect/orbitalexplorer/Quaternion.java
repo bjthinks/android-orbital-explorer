@@ -47,12 +47,12 @@ public class Quaternion implements Parcelable {
         k = unreal.getZ();
     }
 
-    public Quaternion(double real) {
+    /* public Quaternion(double real) {
         r = real;
         i = 0;
         j = 0;
         k = 0;
-    }
+    } */
 
     public Quaternion multiply(Quaternion y) {
         return new Quaternion(
@@ -78,11 +78,11 @@ public class Quaternion implements Parcelable {
         return divide(norm());
     }
 
-    public static Quaternion rotation(double angle, Vector3 x) {
-        x = x.normalize();
+    public static Quaternion rotation(double angle, Vector3 v) {
+        v = v.normalize();
         double s = Math.sin(angle / 2);
         double c = Math.cos(angle / 2);
-        return new Quaternion(c, x.multiply(s));
+        return new Quaternion(c, v.multiply(s));
     }
 
     public float[] asRotationMatrix() {

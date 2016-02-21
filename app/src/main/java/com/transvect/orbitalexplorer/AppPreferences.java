@@ -9,18 +9,18 @@ public class AppPreferences
 
     boolean enableColor;
 
-    AppPreferences(Context context) {
+    public AppPreferences(Context context) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         enableColor = preferences.getBoolean("prefEnableColor", true);
         preferences.registerOnSharedPreferenceChangeListener(this);
     }
 
-    synchronized boolean getEnableColor() {
+    public synchronized boolean getEnableColor() {
         return enableColor;
     }
 
     @Override
-    synchronized public void onSharedPreferenceChanged(SharedPreferences preferences, String key) {
+    public synchronized void onSharedPreferenceChanged(SharedPreferences preferences, String key) {
         if (key.equals("prefEnableColor"))
             enableColor = preferences.getBoolean("prefEnableColor", true);
     }

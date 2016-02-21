@@ -1,7 +1,6 @@
 package com.transvect.orbitalexplorer;
 
 import android.content.Context;
-import android.content.res.AssetManager;
 import android.opengl.GLSurfaceView;
 import android.util.Log;
 
@@ -14,14 +13,12 @@ public class OrbitalRenderer implements GLSurfaceView.Renderer {
 
     private int dpi;
     private OrbitalView orbitalView;
-    private AssetManager assetManager;
     private Integrator integrator;
     private ScreenDrawer screenDrawer;
 
     // Main thread
     public OrbitalRenderer(OrbitalView orbitalView_, Context context) {
         orbitalView = orbitalView_;
-        assetManager = context.getAssets();
         dpi = context.getResources().getDisplayMetrics().densityDpi;
         integrator = new Integrator(context);
         screenDrawer = new ScreenDrawer(context);
