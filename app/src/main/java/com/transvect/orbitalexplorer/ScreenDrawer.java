@@ -8,20 +8,28 @@ public class ScreenDrawer extends RenderStage {
 
     AssetManager assetManager;
 
-    private int program;
+    private int programColor, programGrey;
 
     public ScreenDrawer(Context context) {
         assetManager = context.getAssets();
     }
 
     public void newContext() {
-        // Compile & link GLSL program
-        Shader vertexShader = new Shader(assetManager, "screendrawer_color.vert", GLES30.GL_VERTEX_SHADER);
-        Shader fragmentShader = new Shader(assetManager, "screendrawer_color.frag", GLES30.GL_FRAGMENT_SHADER);
-        program = GLES30.glCreateProgram();
-        GLES30.glAttachShader(program, vertexShader.getId());
-        GLES30.glAttachShader(program, fragmentShader.getId());
-        GLES30.glLinkProgram(program);
+        // Compile & link GLSL programs
+        Shader vertexShaderColor = new Shader(assetManager, "screendrawer_color.vert", GLES30.GL_VERTEX_SHADER);
+        Shader fragmentShaderColor = new Shader(assetManager, "screendrawer_color.frag", GLES30.GL_FRAGMENT_SHADER);
+        programColor = GLES30.glCreateProgram();
+        GLES30.glAttachShader(programColor, vertexShaderColor.getId());
+        GLES30.glAttachShader(programColor, fragmentShaderColor.getId());
+        GLES30.glLinkProgram(programColor);
+        getGLError();
+
+        Shader vertexShaderGrey = new Shader(assetManager, "screendrawer_grey.vert", GLES30.GL_VERTEX_SHADER);
+        Shader fragmentShaderGrey = new Shader(assetManager, "screendrawer_grey.frag", GLES30.GL_FRAGMENT_SHADER);
+        programGrey = GLES30.glCreateProgram();
+        GLES30.glAttachShader(programGrey, vertexShaderGrey.getId());
+        GLES30.glAttachShader(programGrey, fragmentShaderGrey.getId());
+        GLES30.glLinkProgram(programGrey);
         getGLError();
     }
 
@@ -35,23 +43,27 @@ public class ScreenDrawer extends RenderStage {
         height = newHeight;
     }
 
+    boolean color = true;
     public void render(Texture texture) {
         GLES30.glBindFramebuffer(GLES30.GL_FRAMEBUFFER, 0);
         GLES30.glViewport(0, 0, width, height);
-        GLES30.glUseProgram(program);
+        if (color)
+            GLES30.glUseProgram(programColor);
+        else
+            GLES30.glUseProgram(programGrey);
 
         GLES30.glActiveTexture(GLES30.GL_TEXTURE0);
         texture.bindToTexture2D();
-        int dataHandle = GLES30.glGetUniformLocation(program, "data");
+        int dataHandle = getUniformHandle("data");
         GLES30.glUniform1i(dataHandle, 0);
 
-        int texSizeHandle = GLES30.glGetUniformLocation(program, "texSize");
+        int texSizeHandle = getUniformHandle("texSize");
         GLES30.glUniform2f(texSizeHandle, (float) inputWidth, (float) inputHeight);
 
-        int upperClampHandle = GLES30.glGetUniformLocation(program, "upperClamp");
+        int upperClampHandle = getUniformHandle("upperClamp");
         GLES30.glUniform2i(upperClampHandle, inputWidth - 1, inputHeight - 1);
 
-        int colorRotation = GLES30.glGetUniformLocation(program, "colorRotation");
+        int colorRotation = getUniformHandle("colorRotation");
         float[] rot = new float[4];
         long period = 9124; // ms
         double t = 2. * Math.PI * (double) (System.currentTimeMillis() % period) / (double) period;
@@ -59,7 +71,11 @@ public class ScreenDrawer extends RenderStage {
         rot[1] = (float) Math.sin(t);  rot[3] = (float) Math.cos(t);
         GLES30.glUniformMatrix2fv(colorRotation, 1, false, rot, 0);
 
-        int inPositionHandle = GLES30.glGetAttribLocation(program, "inPosition");
+        int inPositionHandle;
+        if (color)
+            inPositionHandle = GLES30.glGetAttribLocation(programColor, "inPosition");
+        else
+            inPositionHandle = GLES30.glGetAttribLocation(programGrey, "inPosition");
         GLES30.glEnableVertexAttribArray(inPositionHandle);
         GLES30.glVertexAttribPointer(inPositionHandle, 2, GLES30.GL_FLOAT, false, 8,
                 screenRectangle);
@@ -67,5 +83,22 @@ public class ScreenDrawer extends RenderStage {
         GLES30.glDrawArrays(GLES30.GL_TRIANGLE_FAN, 0, 4);
         GLES30.glDisableVertexAttribArray(inPositionHandle);
         getGLError();
+    }
+
+    int getUniformHandle(String name) {
+        int handle;
+        if (color)
+            handle = GLES30.glGetUniformLocation(programColor, name);
+        else
+            handle = GLES30.glGetUniformLocation(programGrey, name);
+        return handle;
+    }
+
+    void setUniformInt(String name, int value) {
+        GLES30.glUniform1i(getUniformHandle(name), value);
+    }
+
+    void setUniformFloat(String name, float value) {
+        GLES30.glUniform1f(getUniformHandle(name), value);
     }
 }
