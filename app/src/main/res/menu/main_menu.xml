@@ -7,6 +7,7 @@
         android:icon="@drawable/ic_palette_white_24dp"
         android:title="@string/menuColor"
         app:showAsAction="ifRoom" />
+
     <item
         android:id="@+id/menuAbout"
         android:title="@string/menuAbout"
