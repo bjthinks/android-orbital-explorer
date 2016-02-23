@@ -16,8 +16,8 @@ public class ScreenDrawer extends RenderStage {
 
     public void newContext() {
         // Compile & link GLSL program
-        Shader vertexShader = new Shader(assetManager, "screendrawer.vert", GLES30.GL_VERTEX_SHADER);
-        Shader fragmentShader = new Shader(assetManager, "screendrawer.frag", GLES30.GL_FRAGMENT_SHADER);
+        Shader vertexShader = new Shader(assetManager, "screendrawer_color.vert", GLES30.GL_VERTEX_SHADER);
+        Shader fragmentShader = new Shader(assetManager, "screendrawer_color.frag", GLES30.GL_FRAGMENT_SHADER);
         program = GLES30.glCreateProgram();
         GLES30.glAttachShader(program, vertexShader.getId());
         GLES30.glAttachShader(program, fragmentShader.getId());
