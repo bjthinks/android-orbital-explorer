@@ -19,7 +19,6 @@ uniform float numQuadratureSubdivisions;
 uniform int numQuadraturePoints;
 uniform float M;
 uniform float powerOfR;
-uniform bool enableColor;
 uniform bool realOrbital;
 
 // For testing
@@ -134,10 +133,6 @@ void main() {
     if (total.z > 0.0) {
         // Increase brightness
         total *= 50.0;
-
-        // Handle greyscale mode
-        if (!enableColor)
-            total.xy = vec2(0);
 
         total.xy /= total.z;
         total.z = 1.0 - exp(-total.z);

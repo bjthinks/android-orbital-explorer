@@ -29,6 +29,11 @@ public class OrbitalRenderer implements GLSurfaceView.Renderer {
         integrator.orbitalChanged(newOrbital);
     }
 
+    // Main thread
+    public void colorChanged(boolean c) {
+        integrator.setColor(c);
+    }
+
     // Rendering thread
     @Override
     public void onSurfaceCreated(GL10 unused, EGLConfig config) {

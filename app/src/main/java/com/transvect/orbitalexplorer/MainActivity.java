@@ -104,6 +104,7 @@ public class MainActivity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
+    private boolean color = true;
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         Intent intent = null;
@@ -111,6 +112,8 @@ public class MainActivity extends AppCompatActivity {
 
             case R.id.menuColor:
                 Log.d("MainActivity", "Color toggled");
+                color = !color;
+                orbitalView.setColor(color);
                 break;
 
             case R.id.menuAbout:

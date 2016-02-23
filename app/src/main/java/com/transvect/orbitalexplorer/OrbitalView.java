@@ -94,6 +94,10 @@ public class OrbitalView extends GLSurfaceView {
         orbitalRenderer.orbitalChanged(orbital);
     }
 
+    public void setColor(boolean c) {
+        orbitalRenderer.colorChanged(c);
+    }
+
     private int firstPointerID = MotionEvent.INVALID_POINTER_ID;
     private int secondPointerID = MotionEvent.INVALID_POINTER_ID;
     private boolean isTouchEventTrivial = false;
