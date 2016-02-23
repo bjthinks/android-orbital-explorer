@@ -59,20 +59,20 @@ vec2 quadratureData(float distanceToOrigin, int point) {
     return mix(textureValue.xy, textureValue.zw, interpolationValue);
 }
 
-vec2 longitudinalPart(float phi) {
-    vec2 result;
+float longitudinalPart(float phi) {
+    float result;
     if (M == 0.0) {
-        result = vec2(1.0, 0.0);
+        result = 1.0;
     } else {
         float Mphi = M * phi;
         if (realOrbital) {
             const float sqrt2 = sqrt(2.0);
             if (M > 0.0)
-                result = vec2(sqrt2 * cos(Mphi), 0.0);
+                result = sqrt2 * cos(Mphi);
             else // M < 0.0
-                result = vec2(sqrt2 * sin(Mphi), 0.0);
+                result = sqrt2 * sin(Mphi);
         } else {
-            result = vec2(1, 0);
+            result = 1.0;
         }
     }
     // Normalization constant so that this function times its conjugate,
@@ -81,29 +81,27 @@ vec2 longitudinalPart(float phi) {
     return result * oneOverSqrt2PI;
 }
 
-vec2 angularPart(vec3 x, float r) {
+float angularPart(vec3 x, float r) {
     float theta = acos(x.z / r); // 0 to pi
     float phi = atan(x.y, x.x); // -pi to pi (always numerically safe)
     return azimuthalPart(theta) * longitudinalPart(phi);
 }
 
-vec3 integrand_pair(vec3 center, vec3 offset) {
+float integrand_pair(vec3 center, vec3 offset) {
     vec3 x = center - offset;
     float r = length(x);
     float radialValue = radialPart(r);
 
-    vec2 result = angularPart(x, r);
-    float len = length(result);
-    float total = len * len;
+    float result = angularPart(x, r);
+    float total = result * result;
 
     x = center + offset;
 
     result = angularPart(x, r);
-    len = length(result);
-    total += len * len;
+    total += result * result;
 
     total *= pow(r, powerOfR) * exp(exponentialConstant * r) * radialValue * radialValue;
-    return vec3(0, 0, total);
+    return total;
 }
 
 void main() {
@@ -122,22 +120,19 @@ void main() {
     vec3 center = near - dot(near, ray) * ray;
     float distanceToOrigin = length(center);
 
-    vec3 total = vec3(0);
+    float total = 0.0;
     vec2 q;
     for (int i = 0; i < numQuadraturePoints; ++i) {
         q = quadratureData(distanceToOrigin, i);
         total += q.y * integrand_pair(center, q.x * ray);
     }
 
-    if (total.z > 0.0) {
+    if (total > 0.0) {
         // Increase brightness
         total *= 50.0;
 
-        // Handle greyscale mode
-        total.xy = vec2(0);
-
-        total.z = 1.0 - exp(-total.z);
-        color = ivec3(total * 32767.0);
+        total = 1.0 - exp(-total);
+        color = ivec3(0, 0, total * 32767.0);
     } else {
         color = ivec3(0);
     }
