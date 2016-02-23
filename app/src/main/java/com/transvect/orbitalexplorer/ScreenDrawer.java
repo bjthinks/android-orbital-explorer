@@ -6,13 +6,11 @@ import android.opengl.GLES30;
 
 public class ScreenDrawer extends RenderStage {
 
-    AppPreferences appPreferences;
     AssetManager assetManager;
 
     private int program;
 
     public ScreenDrawer(Context context) {
-        appPreferences = new AppPreferences(context);
         assetManager = context.getAssets();
     }
 

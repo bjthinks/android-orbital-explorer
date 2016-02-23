@@ -119,10 +119,6 @@ public class MainActivity extends AppCompatActivity {
                 intent.putExtra("title", "About");
                 break;
 
-            case R.id.menuSettings:
-                intent = new Intent(this, SettingsActivity.class);
-                break;
-
             case R.id.menuHelp:
                 intent = new Intent(this, HelpActivity.class);
                 intent.putExtra("url", "file:///android_asset/help.html");

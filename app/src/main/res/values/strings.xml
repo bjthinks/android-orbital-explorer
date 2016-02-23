@@ -3,12 +3,8 @@
 
     <string name="menuColor">Color</string>
     <string name="menuAbout">About</string>
-    <string name="menuSettings">Settings</string>
     <string name="menuHelp">Help</string>
 
     <string name="complexNumbers">\u2102</string>
     <string name="realNumbers">\u211d</string>
-
-    <string name="prefEnableColor_Title">Enable color</string>
-    <string name="prefCycleColors_Title">Cycle colors</string>
 </resources>

@@ -9,7 +9,6 @@ import java.util.Arrays;
 public class Integrator extends RenderStage {
 
     AssetManager assetManager;
-    AppPreferences appPreferences;
 
     private int program;
 
@@ -34,7 +33,6 @@ public class Integrator extends RenderStage {
     }
 
     Integrator(Context context) {
-        appPreferences = new AppPreferences(context);
         assetManager = context.getAssets();
         needToRender = false;
     }
@@ -170,7 +168,7 @@ public class Integrator extends RenderStage {
             quadratureTexture.bindToTexture2D();
             setUniformInt("quadrature", 2);
 
-            setUniformInt("enableColor", appPreferences.getEnableColor() ? 1 : 0);
+            setUniformInt("enableColor", 1);
             setUniformInt("realOrbital", orbital.real ? 1 : 0);
             setUniformInt("numQuadraturePoints", orbital.getRadialFunction().getQuadratureOrder());
 
