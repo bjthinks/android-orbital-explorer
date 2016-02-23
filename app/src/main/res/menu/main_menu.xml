@@ -3,6 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/menuColor"
+        android:icon="@drawable/ic_palette_white_24dp"
+        android:title="@string/menuColor"
+        app:showAsAction="ifRoom" />
+    <item
         android:id="@+id/menuAbout"
         android:title="@string/menuAbout"
         app:showAsAction="never" />
