@@ -43,8 +43,9 @@ public class ScreenDrawer extends RenderStage {
         height = newHeight;
     }
 
-    boolean color = true;
-    public void render(Texture texture) {
+    boolean color;
+    public void render(Texture texture, boolean c) {
+        color = c;
         GLES30.glBindFramebuffer(GLES30.GL_FRAMEBUFFER, 0);
         GLES30.glViewport(0, 0, width, height);
         if (color)

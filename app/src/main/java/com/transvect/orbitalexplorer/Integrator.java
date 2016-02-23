@@ -161,7 +161,7 @@ public class Integrator extends RenderStage {
     }
 
     private float[] oldTransform;
-    public void render(float[] shaderTransform) {
+    public boolean render(float[] shaderTransform) {
 
         if (checkForNewOrbital()) {
             setupOrbitalTextures();
@@ -244,6 +244,8 @@ public class Integrator extends RenderStage {
         }
 
         getGLError();
+
+        return color;
     }
 
     int getUniformHandle(String name) {

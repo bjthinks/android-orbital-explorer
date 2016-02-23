@@ -72,8 +72,8 @@ public class OrbitalRenderer implements GLSurfaceView.Renderer {
     @Override
     public void onDrawFrame(GL10 unused) {
         float[] shaderTransform = orbitalView.getNextTransform(mAspectRatio);
-        integrator.render(shaderTransform);
-        screenDrawer.render(integrator.getTexture());
+        boolean color = integrator.render(shaderTransform);
+        screenDrawer.render(integrator.getTexture(), color);
 
         long now = System.currentTimeMillis();
         int milliseconds = (int) (now - then);

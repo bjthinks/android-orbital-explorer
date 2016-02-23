@@ -31,24 +31,15 @@ void main() {
     // needs to be divided by 32767.0
     vec3 total = mix(mix(lb, rb, interp.x), mix(lt, rt, interp.x), interp.y);
 
-    vec2 uv_prime = vec2(0.19784, 0.46832); // white
-
-    // Convert CIE (u',v') color coordinates (as per CIELUV) to (x,y)
-    vec2 xy = vec2(9.0, 4.0) * uv_prime;
-    xy /= dot(vec3(6.0, -16.0, 12.0), vec3(uv_prime, 1.0));
-
-    // Add z, defined as 1 - x - y
-    vec3 xyz = vec3(xy, 1.0 - xy.x - xy.y);
-
-    // Convert xyz to XYZ
-    float Y = total.z * (0.5 / 32767.0);
-    vec3 XYZ = (Y / xyz.y) * xyz;
+    vec3 XYZ = vec3(0.95050395, 1.0, 1.08904170);
 
     // Convert XYZ to linear (i.e. pre-gamma) RGB values
     mat3 XYZ_to_linear_RGB = mat3( 3.2406, -0.9689,  0.0557,
                                   -1.5372,  1.8758, -0.2040,
                                   -0.4986,  0.0415,  1.0570);
-    vec3 linear_RGB = XYZ_to_linear_RGB * XYZ;
+
+    float Y = total.z * (0.5 / 32767.0);
+    vec3 linear_RGB = Y * XYZ_to_linear_RGB * XYZ;
 
     if (any(greaterThan(linear_RGB, vec3(1))) || any(lessThan(linear_RGB, vec3(0))))
         linear_RGB = vec3(1, 0, 1);
