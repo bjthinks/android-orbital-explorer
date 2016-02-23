@@ -31,9 +31,7 @@ void main() {
     // needs to be divided by 32767.0
     vec3 total = mix(mix(lb, rb, interp.x), mix(lt, rt, interp.x), interp.y);
 
-    vec2 uv_prime = (0.06 / 32767.0) * (colorRotation * total.xy);
-
-    uv_prime += vec2(0.19784, 0.46832); // white
+    vec2 uv_prime = vec2(0.19784, 0.46832); // white
 
     // Convert CIE (u',v') color coordinates (as per CIELUV) to (x,y)
     vec2 xy = vec2(9.0, 4.0) * uv_prime;

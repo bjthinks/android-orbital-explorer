@@ -72,7 +72,7 @@ vec2 longitudinalPart(float phi) {
             else // M < 0.0
                 result = vec2(sqrt2 * sin(Mphi), 0.0);
         } else {
-            result = vec2(cos(Mphi), sin(Mphi));
+            result = vec2(1, 0);
         }
     }
     // Normalization constant so that this function times its conjugate,
@@ -91,20 +91,19 @@ vec3 integrand_pair(vec3 center, vec3 offset) {
     vec3 x = center - offset;
     float r = length(x);
     float radialValue = radialPart(r);
-    float radialSign = sign(radialValue);
 
     vec2 result = angularPart(x, r);
     float len = length(result);
-    vec3 total = len * vec3(radialSign * result, len);
+    float total = len * len;
 
     x = center + offset;
 
     result = angularPart(x, r);
     len = length(result);
-    total += len * vec3(radialSign * result, len);
+    total += len * len;
 
     total *= pow(r, powerOfR) * exp(exponentialConstant * r) * radialValue * radialValue;
-    return total;
+    return vec3(0, 0, total);
 }
 
 void main() {
