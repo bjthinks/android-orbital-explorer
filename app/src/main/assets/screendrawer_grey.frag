@@ -7,10 +7,13 @@ uniform mat2 colorRotation;
 in vec2 texCoord;
 out vec3 color;
 
-vec3 srgb_gamma(vec3 linear) {
-    return mix(linear * 12.92,
-               1.055 * pow(linear, vec3(1.0 / 2.4)) - vec3(0.055),
-               greaterThan(linear, vec3(0.0031308)));
+float srgb_gamma(float linear) {
+    float result;
+    if (linear > 0.0031308)
+        result = 1.055 * pow(linear, 1.0 / 2.4) - 0.055;
+    else
+        result = linear * 12.92;
+    return result;
 }
 
 void main() {
@@ -31,19 +34,12 @@ void main() {
     // needs to be divided by 32767.0
     vec3 total = mix(mix(lb, rb, interp.x), mix(lt, rt, interp.x), interp.y);
 
-    vec3 XYZ = vec3(0.95050395, 1.0, 1.08904170);
+    float linear_brightness = total.z * (0.5 / 32767.0);
 
-    // Convert XYZ to linear (i.e. pre-gamma) RGB values
-    mat3 XYZ_to_linear_RGB = mat3( 3.2406, -0.9689,  0.0557,
-                                  -1.5372,  1.8758, -0.2040,
-                                  -0.4986,  0.0415,  1.0570);
-
-    float Y = total.z * (0.5 / 32767.0);
-    vec3 linear_RGB = Y * XYZ_to_linear_RGB * XYZ;
-
-    if (any(greaterThan(linear_RGB, vec3(1))) || any(lessThan(linear_RGB, vec3(0))))
-        linear_RGB = vec3(1, 0, 1);
-
-    // Need EGL 1.5 or EGL_KHR_gl_colorspace for automatic gamma
-    color = srgb_gamma(linear_RGB);
+    vec3 result;
+    if (linear_brightness > 1.0 || linear_brightness < 0.0)
+        result = vec3(1, 0, 1);
+    else
+        result = vec3(srgb_gamma(linear_brightness));
+    color = result;
 }
