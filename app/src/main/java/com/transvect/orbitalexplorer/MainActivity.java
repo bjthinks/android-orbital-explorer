@@ -107,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
     private boolean color = true;
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        Intent intent = null;
+        Intent intent;
         switch (item.getItemId()) {
 
             case R.id.menuColor:
@@ -118,17 +118,17 @@ public class MainActivity extends AppCompatActivity {
             case R.id.menuAbout:
                 intent = new Intent(this, HelpActivity.class);
                 intent.putExtra("url", "file:///android_asset/docs/about.html");
-                intent.putExtra("title", R.string.menuAbout);
+                intent.putExtra("title", getString(R.string.menuAbout));
+                startActivity(intent);
                 break;
 
             case R.id.menuHelp:
                 intent = new Intent(this, HelpActivity.class);
                 intent.putExtra("url", "file:///android_asset/docs/help.html");
-                intent.putExtra("title", R.string.menuHelp);
+                intent.putExtra("title", getString(R.string.menuHelp));
+                startActivity(intent);
                 break;
         }
-        if (intent != null)
-            startActivity(intent);
 
         return super.onOptionsItemSelected(item);
     }
