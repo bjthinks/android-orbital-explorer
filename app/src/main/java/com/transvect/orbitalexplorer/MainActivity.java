@@ -111,7 +111,6 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
 
             case R.id.menuColor:
-                Log.d("MainActivity", "Color toggled");
                 color = !color;
                 orbitalView.setColor(color);
                 break;
