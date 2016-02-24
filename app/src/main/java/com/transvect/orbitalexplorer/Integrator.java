@@ -21,13 +21,16 @@ public class Integrator extends RenderStage {
     private int quadratureDataSize;
     private Texture quadratureTexture;
 
-    private Texture outputTexture;
-    private Framebuffer framebuffer;
+    private Texture outputTextureColor, outputTextureGrey;
+    private Framebuffer framebufferColor, framebufferGrey;
     private int width, height;
     private boolean needToRender;
 
     public Texture getTexture() {
-        return outputTexture;
+        if (color)
+            return outputTextureColor;
+        else
+            return outputTextureGrey;
     }
 
     Integrator(Context context) {
@@ -109,13 +112,13 @@ public class Integrator extends RenderStage {
         quadratureTexture.bindToTexture2D();
         setTexture2DMinMagFilters(GLES30.GL_NEAREST, GLES30.GL_NEAREST);
 
-        // Create a texture to render to.
+        // Create textures to render to.
         // The following parameters have to match a row of Table 3.2 in the
         // OpenGL ES 3.0 specification, or we will get an OpenGL error. We also
         // need to choose a sized internal format which is color-renderable
         // according to Table 3.13 (in the absence of extensions).
-        outputTexture = new Texture(GLES30.GL_RGBA_INTEGER, GLES30.GL_SHORT, GLES30.GL_RGBA16I);
-        outputTexture.bindToTexture2DAndResize(1, 1);
+        outputTextureColor = new Texture(GLES30.GL_RGBA_INTEGER, GLES30.GL_SHORT, GLES30.GL_RGBA16I);
+        outputTextureColor.bindToTexture2DAndResize(1, 1);
 
         // Set the filters for sampling the bound texture, when sampling at
         // a different resolution than native.
@@ -125,9 +128,21 @@ public class Integrator extends RenderStage {
         GLES30.glTexParameteri(GLES30.GL_TEXTURE_2D,
                 GLES30.GL_TEXTURE_WRAP_T, GLES30.GL_CLAMP_TO_EDGE);
 
-        // Create a framebuffer to render to
-        framebuffer = new Framebuffer();
-        framebuffer.bindAndSetTexture(outputTexture);
+        outputTextureGrey = new Texture(GLES30.GL_RED_INTEGER, GLES30.GL_SHORT, GLES30.GL_R16I);
+        outputTextureGrey.bindToTexture2DAndResize(1, 1);
+
+        setTexture2DMinMagFilters(GLES30.GL_NEAREST, GLES30.GL_NEAREST);
+        GLES30.glTexParameteri(GLES30.GL_TEXTURE_2D,
+                GLES30.GL_TEXTURE_WRAP_S, GLES30.GL_CLAMP_TO_EDGE);
+        GLES30.glTexParameteri(GLES30.GL_TEXTURE_2D,
+                GLES30.GL_TEXTURE_WRAP_T, GLES30.GL_CLAMP_TO_EDGE);
+
+        // Create framebuffers to render to
+        framebufferColor = new Framebuffer();
+        framebufferColor.bindAndSetTexture(outputTextureColor);
+
+        framebufferGrey = new Framebuffer();
+        framebufferGrey.bindAndSetTexture(outputTextureGrey);
 
         getGLError();
 
@@ -156,7 +171,8 @@ public class Integrator extends RenderStage {
     public void resize(int w, int h) {
         width = w;
         height = h;
-        outputTexture.bindToTexture2DAndResize(width, height);
+        outputTextureColor.bindToTexture2DAndResize(width, height);
+        outputTextureGrey.bindToTexture2DAndResize(width, height);
         needToRender = true;
     }
 
@@ -179,7 +195,10 @@ public class Integrator extends RenderStage {
         if (needToRender && orbital != null) {
             needToRender = false;
 
-            framebuffer.bindToAttachmentPoint();
+            if (color)
+                framebufferColor.bindToAttachmentPoint();
+            else
+                framebufferGrey.bindToAttachmentPoint();
             GLES30.glViewport(0, 0, width, height);
 
             final int zeroes[] = {0, 0, 0, 0};

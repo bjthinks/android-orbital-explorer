@@ -3,7 +3,6 @@ precision highp int;
 precision highp float;
 uniform isampler2D data;
 uniform ivec2 upperClamp; // = ivec2(texSize) - ivec2(1)
-uniform mat2 colorRotation;
 in vec2 texCoord;
 out vec3 color;
 
