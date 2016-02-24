@@ -242,10 +242,6 @@ public class Integrator extends RenderStage {
             setUniformFloat("numQuadratureSubdivisions", (float) (quadratureDataSize - 1));
             setUniformFloat("M", (float) orbital.M);
 
-            // For testing
-            setUniformFloat("zero", 0.0f);
-            setUniformFloat("one", 1.0f);
-
             int mvpMatrixHandle = getUniformHandle("shaderTransform");
             GLES30.glUniformMatrix4fv(mvpMatrixHandle, 1, false, shaderTransform, 0);
 

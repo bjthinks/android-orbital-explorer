@@ -21,10 +21,6 @@ uniform float M;
 uniform float powerOfR;
 uniform bool realOrbital;
 
-// For testing
-uniform float zero;
-uniform float one;
-
 float radialPart(float r) {
     float positionInTexture = r / maximumRadius * numRadialSubdivisions;
     if (positionInTexture >= numRadialSubdivisions)
