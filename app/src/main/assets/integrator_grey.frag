@@ -5,7 +5,7 @@ precision highp float;
 const float pi = 3.14159265358979;
 
 in vec3 near, far;
-out ivec3 color;
+out int color;
 
 // Orbital
 uniform sampler2D radial;
@@ -60,25 +60,18 @@ vec2 quadratureData(float distanceToOrigin, int point) {
 }
 
 float longitudinalPart(float phi) {
-    float result;
-    if (M == 0.0) {
-        result = 1.0;
-    } else {
-        float Mphi = M * phi;
-        if (realOrbital) {
-            const float sqrt2 = sqrt(2.0);
-            if (M > 0.0)
-                result = sqrt2 * cos(Mphi);
-            else // M < 0.0
-                result = sqrt2 * sin(Mphi);
-        } else {
-            result = 1.0;
-        }
-    }
     // Normalization constant so that this function times its conjugate,
     // integrated from 0 to 2pi, yields 1
-    const float oneOverSqrt2PI = 1.0 / sqrt(2.0 * pi);
-    return result * oneOverSqrt2PI;
+    float result = 1.0 / sqrt(2.0 * pi);
+    if (realOrbital && M != 0.0) {
+        float Mphi = M * phi;
+        const float sqrt2 = sqrt(2.0);
+        if (M > 0.0)
+            result *= sqrt2 * cos(Mphi);
+        else // M < 0.0
+            result *= sqrt2 * sin(Mphi);
+    }
+    return result;
 }
 
 float angularPart(vec3 x, float r) {
@@ -132,8 +125,8 @@ void main() {
         total *= 50.0;
 
         total = 1.0 - exp(-total);
-        color = ivec3(0, 0, total * 32767.0);
+        color = int(total * 32767.0);
     } else {
-        color = ivec3(0);
+        color = 0;
     }
 }

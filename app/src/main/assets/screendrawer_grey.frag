@@ -25,16 +25,16 @@ void main() {
     leftBottom = clamp(leftBottom, ivec2(0, 0), upperClamp);
     rightTop = clamp(rightTop, ivec2(0, 0), upperClamp);
 
-    vec3 lb = vec3(texelFetch(data, leftBottom, 0).xyz);
-    vec3 lt = vec3(texelFetch(data, ivec2(leftBottom.x, rightTop.y), 0).xyz);
-    vec3 rb = vec3(texelFetch(data, ivec2(rightTop.x, leftBottom.y), 0).xyz);
-    vec3 rt = vec3(texelFetch(data, rightTop, 0).xyz);
+    float lb = float(texelFetch(data, leftBottom, 0).x);
+    float lt = float(texelFetch(data, ivec2(leftBottom.x, rightTop.y), 0).x);
+    float rb = float(texelFetch(data, ivec2(rightTop.x, leftBottom.y), 0).x);
+    float rt = float(texelFetch(data, rightTop, 0).x);
 
     vec2 interp = fract(texCoord);
     // needs to be divided by 32767.0
-    vec3 total = mix(mix(lb, rb, interp.x), mix(lt, rt, interp.x), interp.y);
+    float total = mix(mix(lb, rb, interp.x), mix(lt, rt, interp.x), interp.y);
 
-    float linear_brightness = total.z * (0.5 / 32767.0);
+    float linear_brightness = total * (0.5 / 32767.0);
 
     vec3 result;
     if (linear_brightness > 1.0 || linear_brightness < 0.0)
