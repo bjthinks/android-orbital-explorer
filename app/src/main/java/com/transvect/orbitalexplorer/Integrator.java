@@ -102,33 +102,6 @@ public class Integrator extends RenderStage {
         getGLError();
     }
 
-    private Orbital orbital;
-
-    private void setupOrbitalTextures() {
-
-        // Load new radial texture
-        float[] radialData
-                = functionToBuffer2(orbital.getRadialFunction().getOscillatingPart(),
-                0.0, orbital.getRadialFunction().getMaximumRadius(), RADIAL_TEXTURE_SIZE - 1);
-        radialTexture.bindToTexture2DAndSetImage(RADIAL_TEXTURE_SIZE, 1, radialData);
-
-        // Load new azimuthal texture
-        float[] azimuthalData = functionToBuffer2(orbital.getAzimuthalFunction(),
-                0.0, Math.PI, AZIMUTHAL_TEXTURE_SIZE - 1);
-        azimuthalTexture.bindToTexture2DAndSetImage(AZIMUTHAL_TEXTURE_SIZE, 1, azimuthalData);
-
-        // Load new quadrature texture
-        float[] quadratureData = QuadratureTable.get(assetManager, orbital);
-        quadratureDataSize = quadratureData.length
-                / (4 * orbital.getRadialFunction().getQuadratureOrder());
-        quadratureTexture.bindToTexture2DAndSetImage(
-                orbital.getRadialFunction().getQuadratureOrder(),
-                quadratureDataSize, quadratureData);
-
-        // Floating point textures are not filterable
-        setTexture2DMinMagFilters(GLES30.GL_NEAREST, GLES30.GL_NEAREST);
-    }
-
     public void resize(int w, int h) {
         width = w;
         height = h;
@@ -142,10 +115,31 @@ public class Integrator extends RenderStage {
     public Texture render(float[] shaderTransform, RenderState.FrozenState frozenState) {
 
         color = frozenState.color;
-        orbital = frozenState.orbital;
+        Orbital orbital = frozenState.orbital;
 
-        if (frozenState.orbitalChanged)
-            setupOrbitalTextures();
+        if (frozenState.orbitalChanged) {
+            // Load new radial texture
+            float[] radialData
+                    = functionToBuffer2(orbital.getRadialFunction().getOscillatingPart(),
+                    0.0, orbital.getRadialFunction().getMaximumRadius(), RADIAL_TEXTURE_SIZE - 1);
+            radialTexture.bindToTexture2DAndSetImage(RADIAL_TEXTURE_SIZE, 1, radialData);
+
+            // Load new azimuthal texture
+            float[] azimuthalData = functionToBuffer2(orbital.getAzimuthalFunction(),
+                    0.0, Math.PI, AZIMUTHAL_TEXTURE_SIZE - 1);
+            azimuthalTexture.bindToTexture2DAndSetImage(AZIMUTHAL_TEXTURE_SIZE, 1, azimuthalData);
+
+            // Load new quadrature texture
+            float[] quadratureData = QuadratureTable.get(assetManager, orbital);
+            quadratureDataSize = quadratureData.length
+                    / (4 * orbital.getRadialFunction().getQuadratureOrder());
+            quadratureTexture.bindToTexture2DAndSetImage(
+                    orbital.getRadialFunction().getQuadratureOrder(),
+                    quadratureDataSize, quadratureData);
+
+            // Floating point textures are not filterable
+            // setTexture2DMinMagFilters(GLES30.GL_NEAREST, GLES30.GL_NEAREST);
+        }
 
         if (oldTransform == null || !Arrays.equals(oldTransform, shaderTransform)) {
             oldTransform = shaderTransform;
