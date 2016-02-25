@@ -26,13 +26,6 @@ public class Integrator extends RenderStage {
     private int width, height;
     private boolean needToRender;
 
-    public Texture getTexture() {
-        if (color)
-            return outputTextureColor;
-        else
-            return outputTextureGrey;
-    }
-
     Integrator(Context context) {
         assetManager = context.getAssets();
         needToRender = false;
@@ -162,7 +155,7 @@ public class Integrator extends RenderStage {
 
     private float[] oldTransform;
     private boolean color;
-    public boolean render(float[] shaderTransform, RenderState.FrozenState frozenState) {
+    public Texture render(float[] shaderTransform, RenderState.FrozenState frozenState) {
 
         color = frozenState.color;
 
@@ -247,7 +240,10 @@ public class Integrator extends RenderStage {
 
         getGLError();
 
-        return color;
+        if (color)
+            return outputTextureColor;
+        else
+            return outputTextureGrey;
     }
 
     int getUniformHandle(String name) {

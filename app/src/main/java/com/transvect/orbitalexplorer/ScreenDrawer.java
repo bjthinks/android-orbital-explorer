@@ -44,7 +44,7 @@ public class ScreenDrawer extends RenderStage {
     }
 
     boolean color;
-    public void render(Texture texture, boolean c, RenderState.FrozenState frozenState) {
+    public void render(Texture texture, RenderState.FrozenState frozenState) {
         color = frozenState.color;
 
         GLES30.glBindFramebuffer(GLES30.GL_FRAMEBUFFER, 0);
