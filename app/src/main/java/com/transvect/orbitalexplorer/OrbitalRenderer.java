@@ -15,11 +15,13 @@ public class OrbitalRenderer implements GLSurfaceView.Renderer {
     private OrbitalView orbitalView;
     private Integrator integrator;
     private ScreenDrawer screenDrawer;
+    private RenderState renderState;
 
     // Main thread
-    public OrbitalRenderer(OrbitalView orbitalView_, Context context) {
+    public OrbitalRenderer(OrbitalView orbitalView_, Context context, RenderState renderState_) {
         orbitalView = orbitalView_;
         dpi = context.getResources().getDisplayMetrics().densityDpi;
+        renderState = renderState_;
         integrator = new Integrator(context);
         screenDrawer = new ScreenDrawer(context);
     }
@@ -71,9 +73,11 @@ public class OrbitalRenderer implements GLSurfaceView.Renderer {
     // Rendering thread
     @Override
     public void onDrawFrame(GL10 unused) {
+        RenderState.FrozenState frozenState = renderState.freeze();
+
         float[] shaderTransform = orbitalView.getNextTransform(mAspectRatio);
-        boolean color = integrator.render(shaderTransform);
-        screenDrawer.render(integrator.getTexture(), color);
+        boolean color = integrator.render(shaderTransform, frozenState);
+        screenDrawer.render(integrator.getTexture(), color, frozenState);
 
         long now = System.currentTimeMillis();
         int milliseconds = (int) (now - then);

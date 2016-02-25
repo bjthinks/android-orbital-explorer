@@ -16,6 +16,7 @@ public class OrbitalView extends GLSurfaceView {
     private GestureDetector flingDetector;
     private Listener controlToggler;
     private OrbitalRenderer orbitalRenderer;
+    private RenderState renderState;
 
     public OrbitalView(Context context) {
         super(context);
@@ -36,9 +37,10 @@ public class OrbitalView extends GLSurfaceView {
 
         camera = new Camera();
         flingDetector = new GestureDetector(context, new FlingListener());
+        renderState = new RenderState();
 
         // Start the rendering thread
-        orbitalRenderer = new OrbitalRenderer(this, context);
+        orbitalRenderer = new OrbitalRenderer(this, context, renderState);
         setRenderer(orbitalRenderer);
     }
 

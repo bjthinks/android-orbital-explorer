@@ -177,7 +177,7 @@ public class Integrator extends RenderStage {
     }
 
     private float[] oldTransform;
-    public boolean render(float[] shaderTransform) {
+    public boolean render(float[] shaderTransform, RenderState.FrozenState frozenState) {
 
         if (checkForNewOrbital()) {
             setupOrbitalTextures();
