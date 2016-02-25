@@ -33,7 +33,7 @@ public class OrbitalRenderer implements GLSurfaceView.Renderer {
 
     // Main thread
     public void colorChanged(boolean c) {
-        integrator.setColor(c);
+        renderState.setColor(c);
     }
 
     // Rendering thread

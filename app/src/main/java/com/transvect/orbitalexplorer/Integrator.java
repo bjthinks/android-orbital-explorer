@@ -56,22 +56,6 @@ public class Integrator extends RenderStage {
         }
     }
 
-    boolean color = true, newColor = true;
-
-    // Main thread
-    public synchronized void setColor(boolean c) {
-        newColor = c;
-    }
-
-    // Rendering thread
-    public synchronized boolean checkForNewColor() {
-        if (newColor != color) {
-            color = newColor;
-            return true;
-        } else
-            return false;
-    }
-
     private void setupOrbitalTextures() {
 
         // Load new radial texture
@@ -177,7 +161,10 @@ public class Integrator extends RenderStage {
     }
 
     private float[] oldTransform;
+    private boolean color;
     public boolean render(float[] shaderTransform, RenderState.FrozenState frozenState) {
+
+        color = frozenState.color;
 
         if (checkForNewOrbital()) {
             setupOrbitalTextures();
@@ -189,7 +176,7 @@ public class Integrator extends RenderStage {
             needToRender = true;
         }
 
-        if (checkForNewColor())
+        if (frozenState.needToRender)
             needToRender = true;
 
         if (needToRender && orbital != null) {
