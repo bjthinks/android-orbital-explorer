@@ -28,7 +28,7 @@ public class OrbitalRenderer implements GLSurfaceView.Renderer {
 
     // Main thread
     public void orbitalChanged(Orbital newOrbital) {
-        integrator.orbitalChanged(newOrbital);
+        renderState.setOrbital(newOrbital);
     }
 
     // Main thread
