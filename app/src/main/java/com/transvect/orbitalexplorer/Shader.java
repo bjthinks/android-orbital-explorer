@@ -21,7 +21,8 @@ public class Shader {
         BufferedReader reader = null;
         String shaderSource = "";
         try {
-            reader = new BufferedReader(new InputStreamReader(assetManager.open(filename)));
+            reader = new BufferedReader(new InputStreamReader(
+                    assetManager.open("shaders/" + filename)));
             String line = reader.readLine();
             while (line != null) {
                 shaderSource += line + "\n";
