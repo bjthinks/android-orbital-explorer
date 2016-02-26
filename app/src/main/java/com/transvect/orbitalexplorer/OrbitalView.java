@@ -15,7 +15,6 @@ public class OrbitalView extends GLSurfaceView {
     private Camera camera;
     private GestureDetector flingDetector;
     private Listener controlToggler;
-    private OrbitalRenderer orbitalRenderer;
     private RenderState renderState;
 
     public OrbitalView(Context context) {
@@ -40,8 +39,7 @@ public class OrbitalView extends GLSurfaceView {
         renderState = new RenderState();
 
         // Start the rendering thread
-        orbitalRenderer = new OrbitalRenderer(this, context, renderState);
-        setRenderer(orbitalRenderer);
+        setRenderer(new OrbitalRenderer(this, context, renderState));
     }
 
     @Override
@@ -93,11 +91,11 @@ public class OrbitalView extends GLSurfaceView {
     }
 
     public void setOrbital(Orbital orbital) {
-        orbitalRenderer.orbitalChanged(orbital);
+        renderState.setOrbital(orbital);
     }
 
     public void setColor(boolean c) {
-        orbitalRenderer.colorChanged(c);
+        renderState.setColor(c);
     }
 
     private int firstPointerID = MotionEvent.INVALID_POINTER_ID;

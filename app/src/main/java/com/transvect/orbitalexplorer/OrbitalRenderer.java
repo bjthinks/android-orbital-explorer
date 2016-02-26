@@ -26,16 +26,6 @@ public class OrbitalRenderer implements GLSurfaceView.Renderer {
         screenDrawer = new ScreenDrawer(context);
     }
 
-    // Main thread
-    public void orbitalChanged(Orbital newOrbital) {
-        renderState.setOrbital(newOrbital);
-    }
-
-    // Main thread
-    public void colorChanged(boolean c) {
-        renderState.setColor(c);
-    }
-
     // Rendering thread
     @Override
     public void onSurfaceCreated(GL10 unused, EGLConfig config) {
