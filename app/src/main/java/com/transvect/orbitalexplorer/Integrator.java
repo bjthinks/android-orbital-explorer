@@ -146,7 +146,7 @@ public class Integrator extends RenderStage {
             needToRender = true;
         }
 
-        if (frozenState.needToRender)
+        if (frozenState.orbitalChanged || frozenState.colorChanged)
             needToRender = true;
 
         if (needToRender && orbital != null) {
