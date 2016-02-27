@@ -5,44 +5,52 @@ public class RenderState {
     private Orbital orbital;
     private boolean orbitalChanged;
     private boolean color;
+    private boolean colorChanged;
     private boolean needToRender;
 
     public RenderState() {
         orbital = new Orbital(1, 1, 0, 0, false);
         orbitalChanged = true;
         color = true;
+        colorChanged = true;
         needToRender = true;
     }
 
-    public void setOrbital(Orbital o) {
+    // Main thread setters
+    public synchronized void setOrbital(Orbital o) {
         orbital = o;
         orbitalChanged = true;
         needToRender = true;
     }
 
-    public void setColor(boolean c) {
+    public synchronized void setColor(boolean c) {
         color = c;
+        colorChanged = true;
         needToRender = true;
     }
 
-    public FrozenState freeze() {
-        return new FrozenState(this);
+    // Render thread getter
+    public synchronized FrozenState freeze() {
+        FrozenState fs = new FrozenState();
+
+        fs.orbital = orbital;
+        fs.orbitalChanged = orbitalChanged;
+        fs.color = color;
+        fs.colorChanged = colorChanged;
+        fs.needToRender = needToRender;
+
+        orbitalChanged = false;
+        colorChanged = false;
+        needToRender = false;
+
+        return fs;
     }
 
     static public class FrozenState {
         public Orbital orbital;
         public boolean orbitalChanged;
         public boolean color;
+        public boolean colorChanged;
         public boolean needToRender;
-
-        public FrozenState(RenderState rs) {
-            orbital = rs.orbital;
-            orbitalChanged = rs.orbitalChanged;
-            color = rs.color;
-            needToRender = rs.needToRender;
-
-            rs.orbitalChanged = false;
-            rs.needToRender = false;
-        }
     }
 }
