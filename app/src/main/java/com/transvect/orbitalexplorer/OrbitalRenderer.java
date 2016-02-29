@@ -19,14 +19,14 @@ public class OrbitalRenderer implements GLSurfaceView.Renderer {
 
     // Main thread
     public OrbitalRenderer(OrbitalView orbitalView_, Context context) {
-        orbitalView = orbitalView_;
-        dpi = context.getResources().getDisplayMetrics().densityDpi;
         try {
             renderState = ((RenderStateProvider) context).provideRenderState();
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString()
                     + " must implement RenderStateProvider");
         }
+        orbitalView = orbitalView_;
+        dpi = context.getResources().getDisplayMetrics().densityDpi;
         integrator = new Integrator(context);
         screenDrawer = new ScreenDrawer(context);
     }
