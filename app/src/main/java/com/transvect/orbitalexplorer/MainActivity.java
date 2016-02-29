@@ -13,8 +13,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements RenderStateProvider {
 
+    private RenderState renderState;
     private Toolbar toolbar;
     private OrbitalSelector orbitalSelector;
     private OrbitalView orbitalView;
@@ -27,6 +28,8 @@ public class MainActivity extends AppCompatActivity {
             // TODO show a helpful message
             throw new UnsupportedOperationException();
         }
+
+        renderState = new RenderState();
 
         setContentView(R.layout.activity_main);
         toolbar         = (Toolbar)         findViewById(R.id.toolbar);
@@ -65,6 +68,11 @@ public class MainActivity extends AppCompatActivity {
         ConfigurationInfo info = manager.getDeviceConfigurationInfo();
         int majorVersion = info.reqGlEsVersion >> 16;
         return majorVersion >= 3;
+    }
+
+    @Override
+    public RenderState provideRenderState() {
+        return renderState;
     }
 
     private static final String CONTROL_VISIBILITY_KEY = "controlVisibility";
