@@ -45,7 +45,7 @@ public class OrbitalView extends GLSurfaceView {
         }
 
         // Start the rendering thread
-        setRenderer(new OrbitalRenderer(this, context, renderState));
+        setRenderer(new OrbitalRenderer(this, context));
     }
 
     @Override
