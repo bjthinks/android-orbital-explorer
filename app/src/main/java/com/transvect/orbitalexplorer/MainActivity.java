@@ -50,7 +50,6 @@ public class MainActivity extends AppCompatActivity implements RenderStateProvid
         } */
 
         orbitalView.setControlToggler(new VisibilityToggler());
-        orbitalSelector.setOrbitalChanger(new OrbitalChanger());
         orbitalSelector.setOrbital(4, 2, 1, false);
     }
 
@@ -141,7 +140,6 @@ public class MainActivity extends AppCompatActivity implements RenderStateProvid
 
     private boolean controlVisibility = true;
     private class VisibilityToggler implements Listener {
-
         public void event() {
             controlVisibility = !controlVisibility;
             applyControlVisibility();
@@ -155,12 +153,6 @@ public class MainActivity extends AppCompatActivity implements RenderStateProvid
         } else {
             toolbar.setVisibility(View.INVISIBLE);
             orbitalSelector.setVisibility(View.INVISIBLE);
-        }
-    }
-
-    private class OrbitalChanger implements Listener {
-        public void event() {
-            renderState.setOrbital(orbitalSelector.getOrbital());
         }
     }
 }

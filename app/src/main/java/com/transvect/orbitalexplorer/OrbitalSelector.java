@@ -13,6 +13,8 @@ public class OrbitalSelector extends LinearLayout {
 
     private static final int maxN = 8;
 
+    RenderState renderState;
+
     private int N = 1;
     private int L = 0;
     private int M = 0;
@@ -22,8 +24,6 @@ public class OrbitalSelector extends LinearLayout {
     private ValueChanger lChanger;
     private ValueChanger mChanger;
     private Button rcChanger;
-
-    private Listener orbitalChanger;
 
     public OrbitalSelector(Context context) {
         super(context);
@@ -41,6 +41,13 @@ public class OrbitalSelector extends LinearLayout {
     }
 
     private void constructorSetup(Context context) {
+        try {
+            renderState = ((RenderStateProvider) context).provideRenderState();
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString()
+                    + " must implement RenderStateProvider");
+        }
+
         setOrientation(HORIZONTAL);
         LayoutInflater inflater
                 = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -184,17 +191,8 @@ public class OrbitalSelector extends LinearLayout {
         orbitalChanged();
     }
 
-    public void setOrbitalChanger(Listener listener) {
-        orbitalChanger = listener;
-    }
-
     private void orbitalChanged() {
-        if (orbitalChanger != null)
-            orbitalChanger.event();
-    }
-
-    public Orbital getOrbital() {
-        return new Orbital(N, N, L, M, real);
+        renderState.setOrbital(new Orbital(N, N, L, M, real));
     }
 
     private void increaseN() {
