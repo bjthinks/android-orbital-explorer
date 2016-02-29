@@ -44,9 +44,9 @@ public class OrbitalView extends GLSurfaceView {
 
     @Override
     protected synchronized Parcelable onSaveInstanceState() {
-        Parcelable superState = super.onSaveInstanceState();
-        SavedState ss = new SavedState(superState);
+        SavedState ss = new SavedState(super.onSaveInstanceState());
         ss.camera = camera;
+        ss.renderState = renderState;
         return ss;
     }
 
@@ -55,24 +55,28 @@ public class OrbitalView extends GLSurfaceView {
         SavedState ss = (SavedState) state;
         super.onRestoreInstanceState(ss.getSuperState());
         camera = ss.camera;
+        renderState.copyStateFrom(ss.renderState);
     }
 
     private static class SavedState extends BaseSavedState {
-        Camera camera;
+        public Camera camera;
+        public RenderState renderState;
 
-        SavedState(Parcelable superState) {
+        public SavedState(Parcelable superState) {
             super(superState);
         }
 
         private SavedState(Parcel in) {
             super(in);
             camera = in.readParcelable(Camera.class.getClassLoader());
+            renderState = in.readParcelable(RenderState.class.getClassLoader());
         }
 
         @Override
         public void writeToParcel(Parcel out, int flags) {
             super.writeToParcel(out, flags);
             out.writeParcelable(camera, flags);
+            out.writeParcelable(renderState, flags);
         }
 
         public static final Parcelable.Creator<SavedState> CREATOR
@@ -94,8 +98,8 @@ public class OrbitalView extends GLSurfaceView {
         renderState.setOrbital(orbital);
     }
 
-    public void setColor(boolean c) {
-        renderState.setColor(c);
+    public void toggleColor() {
+        renderState.toggleColor();
     }
 
     private int firstPointerID = MotionEvent.INVALID_POINTER_ID;

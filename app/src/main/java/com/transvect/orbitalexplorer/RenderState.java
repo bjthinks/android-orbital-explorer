@@ -1,6 +1,9 @@
 package com.transvect.orbitalexplorer;
 
-public class RenderState {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class RenderState implements Parcelable {
 
     private Orbital orbital;
     private boolean orbitalChanged;
@@ -14,14 +17,51 @@ public class RenderState {
         colorChanged = true;
     }
 
+    // Parcelable stuff
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel out, int flags) {
+        //out.writeParcelable(orbital, flags);
+        out.writeInt(color ? 1 : 0);
+    }
+
+    public static final Parcelable.Creator<RenderState> CREATOR
+            = new Parcelable.Creator<RenderState>() {
+        @Override
+        public RenderState createFromParcel(Parcel in) {
+            RenderState result = new RenderState();
+            //result.orbital = in.readParcelable(Orbital.class.getClassLoader());
+            result.color = (in.readInt() != 0);
+            return result;
+        }
+        @Override
+        public RenderState[] newArray(int size) {
+            return new RenderState[size];
+        }
+    };
+
+    // Deep copy an old RenderState into a new one. We can't just overwrite the new
+    // one in the caller, because a reference to it has already been given to the
+    // rendering thread.
+    public synchronized void copyStateFrom(RenderState old) {
+        orbital = old.orbital;
+        orbitalChanged = true;
+        color = old.color;
+        colorChanged = true;
+    }
+
     // Main thread setters
     public synchronized void setOrbital(Orbital o) {
         orbital = o;
         orbitalChanged = true;
     }
 
-    public synchronized void setColor(boolean c) {
-        color = c;
+    public synchronized void toggleColor() {
+        color = !color;
         colorChanged = true;
     }
 

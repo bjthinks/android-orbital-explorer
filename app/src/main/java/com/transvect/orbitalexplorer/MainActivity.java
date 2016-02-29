@@ -104,15 +104,13 @@ public class MainActivity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
-    private boolean color = true;
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         Intent intent;
         switch (item.getItemId()) {
 
             case R.id.menuColor:
-                color = !color;
-                orbitalView.setColor(color);
+                orbitalView.toggleColor();
                 break;
 
             case R.id.menuAbout:
