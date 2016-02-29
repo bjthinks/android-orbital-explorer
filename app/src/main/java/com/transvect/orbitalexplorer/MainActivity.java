@@ -160,7 +160,7 @@ public class MainActivity extends AppCompatActivity implements RenderStateProvid
 
     private class OrbitalChanger implements Listener {
         public void event() {
-            orbitalView.setOrbital(orbitalSelector.getOrbital());
+            renderState.setOrbital(orbitalSelector.getOrbital());
         }
     }
 }

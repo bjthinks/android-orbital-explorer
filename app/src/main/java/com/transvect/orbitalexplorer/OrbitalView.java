@@ -100,10 +100,6 @@ public class OrbitalView extends GLSurfaceView {
         controlToggler = s;
     }
 
-    public void setOrbital(Orbital orbital) {
-        renderState.setOrbital(orbital);
-    }
-
     public void toggleColor() {
         renderState.toggleColor();
     }
