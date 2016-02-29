@@ -75,18 +75,22 @@ public class MainActivity extends AppCompatActivity implements RenderStateProvid
     }
 
     private static final String CONTROL_VISIBILITY_KEY = "controlVisibility";
+    private static final String RENDER_STATE_KEY = "renderState";
 
     // This might happen before or after onPause(), but if it needs to be called,
     // it will always be called before onStop().
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         outState.putBoolean(CONTROL_VISIBILITY_KEY, controlVisibility);
+        outState.putParcelable(RENDER_STATE_KEY, renderState);
         super.onSaveInstanceState(outState);
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle inState) {
         controlVisibility = inState.getBoolean(CONTROL_VISIBILITY_KEY);
+        RenderState savedRenderState = inState.getParcelable(RENDER_STATE_KEY);
+        renderState.copyStateFrom(savedRenderState);
         super.onRestoreInstanceState(inState);
         applyControlVisibility();
     }

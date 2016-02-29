@@ -52,7 +52,6 @@ public class OrbitalView extends GLSurfaceView {
     protected synchronized Parcelable onSaveInstanceState() {
         SavedState ss = new SavedState(super.onSaveInstanceState());
         ss.camera = camera;
-        ss.renderState = renderState;
         return ss;
     }
 
@@ -61,12 +60,10 @@ public class OrbitalView extends GLSurfaceView {
         SavedState ss = (SavedState) state;
         super.onRestoreInstanceState(ss.getSuperState());
         camera = ss.camera;
-        renderState.copyStateFrom(ss.renderState);
     }
 
     private static class SavedState extends BaseSavedState {
         public Camera camera;
-        public RenderState renderState;
 
         public SavedState(Parcelable superState) {
             super(superState);
@@ -75,14 +72,12 @@ public class OrbitalView extends GLSurfaceView {
         private SavedState(Parcel in) {
             super(in);
             camera = in.readParcelable(Camera.class.getClassLoader());
-            renderState = in.readParcelable(RenderState.class.getClassLoader());
         }
 
         @Override
         public void writeToParcel(Parcel out, int flags) {
             super.writeToParcel(out, flags);
             out.writeParcelable(camera, flags);
-            out.writeParcelable(renderState, flags);
         }
 
         public static final Parcelable.Creator<SavedState> CREATOR
