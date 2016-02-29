@@ -15,10 +15,10 @@ public class OrbitalSelector extends LinearLayout {
 
     RenderState renderState;
 
-    private int N = 1;
-    private int L = 0;
-    private int M = 0;
-    private boolean real = false;
+    private int N;
+    private int L;
+    private int M;
+    private boolean real;
 
     private ValueChanger nChanger;
     private ValueChanger lChanger;
@@ -47,77 +47,17 @@ public class OrbitalSelector extends LinearLayout {
             throw new ClassCastException(context.toString()
                     + " must implement RenderStateProvider");
         }
+        Orbital previouslyDisplayedOrbital = renderState.getOrbital();
+        N = previouslyDisplayedOrbital.N;
+        L = previouslyDisplayedOrbital.L;
+        M = previouslyDisplayedOrbital.M;
+        real = previouslyDisplayedOrbital.real;
 
         setOrientation(HORIZONTAL);
         LayoutInflater inflater
                 = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         inflater.inflate(R.layout.view_orbitalselector, this);
         requestLayout();
-    }
-
-    @Override
-    protected synchronized Parcelable onSaveInstanceState() {
-        Parcelable superState = super.onSaveInstanceState();
-        SavedState ss = new SavedState(superState);
-        ss.N = N;
-        ss.L = L;
-        ss.M = M;
-        ss.real = real;
-
-        return ss;
-    }
-
-    @Override
-    protected synchronized void onRestoreInstanceState(Parcelable state) {
-        SavedState ss = (SavedState) state;
-        super.onRestoreInstanceState(ss.getSuperState());
-        N = ss.N;
-        L = ss.L;
-        M = ss.M;
-        real = ss.real;
-
-        nChanger.setInteger(N);
-        lChanger.setInteger(L);
-        mChanger.setInteger(M);
-        setReal(real);
-
-        orbitalChanged();
-    }
-
-    private static class SavedState extends BaseSavedState {
-        int N, L, M;
-        boolean real;
-
-        SavedState(Parcelable superState) {
-            super(superState);
-        }
-
-        private SavedState(Parcel in) {
-            super(in);
-            N = in.readInt();
-            L = in.readInt();
-            M = in.readInt();
-            real = (in.readInt() != 0);
-        }
-
-        @Override
-        public void writeToParcel(Parcel out, int flags) {
-            super.writeToParcel(out, flags);
-            out.writeInt(N);
-            out.writeInt(L);
-            out.writeInt(M);
-            out.writeInt(real ? 1 : 0);
-        }
-
-        public static final Parcelable.Creator<SavedState> CREATOR
-                = new Parcelable.Creator<SavedState>() {
-            public SavedState createFromParcel(Parcel in) {
-                return new SavedState(in);
-            }
-            public SavedState[] newArray(int size) {
-                return new SavedState[size];
-            }
-        };
     }
 
     @Override

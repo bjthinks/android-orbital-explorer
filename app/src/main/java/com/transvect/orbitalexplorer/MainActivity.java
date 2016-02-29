@@ -29,7 +29,12 @@ public class MainActivity extends AppCompatActivity implements RenderStateProvid
             throw new UnsupportedOperationException();
         }
 
-        renderState = new RenderState();
+        if (savedState != null) {
+            controlVisibility = savedState.getBoolean(CONTROL_VISIBILITY_KEY);
+            renderState = savedState.getParcelable(RENDER_STATE_KEY);
+        } else {
+            renderState = new RenderState();
+        }
 
         setContentView(R.layout.activity_main);
         toolbar         = (Toolbar)         findViewById(R.id.toolbar);
@@ -50,7 +55,9 @@ public class MainActivity extends AppCompatActivity implements RenderStateProvid
         } */
 
         orbitalView.setControlToggler(new VisibilityToggler());
-        orbitalSelector.setOrbital(4, 2, 1, false);
+
+        if (savedState != null)
+            applyControlVisibility();
     }
 
     /* private int getStatusBarHeight() {
@@ -84,15 +91,6 @@ public class MainActivity extends AppCompatActivity implements RenderStateProvid
         outState.putBoolean(CONTROL_VISIBILITY_KEY, controlVisibility);
         outState.putParcelable(RENDER_STATE_KEY, renderState);
         super.onSaveInstanceState(outState);
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Bundle inState) {
-        controlVisibility = inState.getBoolean(CONTROL_VISIBILITY_KEY);
-        RenderState savedRenderState = inState.getParcelable(RENDER_STATE_KEY);
-        renderState.copyStateFrom(savedRenderState);
-        super.onRestoreInstanceState(inState);
-        applyControlVisibility();
     }
 
     @Override

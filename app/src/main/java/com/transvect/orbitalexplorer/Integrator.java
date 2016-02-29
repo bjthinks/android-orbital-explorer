@@ -24,11 +24,12 @@ public class Integrator extends RenderStage {
     private Texture outputTextureColor, outputTextureGrey;
     private Framebuffer framebufferColor, framebufferGrey;
     private int width, height;
-    private boolean needToRender;
+    private boolean newRenderer, needToRender;
 
     Integrator(Context context) {
         assetManager = context.getAssets();
-        needToRender = false;
+        newRenderer = true;
+        needToRender = true;
     }
 
     public void newContext() {
@@ -117,7 +118,9 @@ public class Integrator extends RenderStage {
         color = frozenState.color;
         Orbital orbital = frozenState.orbital;
 
-        if (frozenState.orbitalChanged) {
+        if (frozenState.orbitalChanged || newRenderer) {
+            newRenderer = false;
+
             // Load new radial texture
             float[] radialData
                     = functionToBuffer2(orbital.getRadialFunction().getOscillatingPart(),

@@ -24,8 +24,12 @@ public class RenderState implements Parcelable {
     }
 
     @Override
-    public void writeToParcel(Parcel out, int flags) {
-        //out.writeParcelable(orbital, flags);
+    public synchronized void writeToParcel(Parcel out, int flags) {
+        out.writeInt(orbital.Z);
+        out.writeInt(orbital.N);
+        out.writeInt(orbital.L);
+        out.writeInt(orbital.M);
+        out.writeInt(orbital.real ? 1 : 0);
         out.writeInt(color ? 1 : 0);
     }
 
@@ -34,8 +38,15 @@ public class RenderState implements Parcelable {
         @Override
         public RenderState createFromParcel(Parcel in) {
             RenderState result = new RenderState();
-            //result.orbital = in.readParcelable(Orbital.class.getClassLoader());
+            int Z = in.readInt();
+            int N = in.readInt();
+            int L = in.readInt();
+            int M = in.readInt();
+            boolean real = (in.readInt() != 0);
+            result.orbital = new Orbital(Z, N, L, M, real);
+            result.orbitalChanged = true;
             result.color = (in.readInt() != 0);
+            result.colorChanged = true;
             return result;
         }
         @Override
@@ -54,7 +65,11 @@ public class RenderState implements Parcelable {
         colorChanged = true;
     }
 
-    // Main thread setters
+    // Main thread getters and setters
+    public synchronized Orbital getOrbital() {
+        return orbital;
+    }
+
     public synchronized void setOrbital(Orbital o) {
         orbital = o;
         orbitalChanged = true;
