@@ -11,7 +11,7 @@ public class RenderState implements Parcelable {
     private boolean colorChanged;
 
     public RenderState() {
-        orbital = new Orbital(1, 1, 0, 0, false);
+        orbital = new Orbital(4, 4, 2, 1, false);
         orbitalChanged = true;
         color = true;
         colorChanged = true;
