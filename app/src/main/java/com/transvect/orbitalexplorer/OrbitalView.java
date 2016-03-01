@@ -12,7 +12,6 @@ import android.view.MotionEvent;
 // TODO review concurrency
 public class OrbitalView extends GLSurfaceView {
 
-    private Camera camera;
     private GestureDetector flingDetector;
     private Listener controlToggler;
     private RenderState renderState;
@@ -34,7 +33,6 @@ public class OrbitalView extends GLSurfaceView {
         // Try to preserve our context, if possible
         setPreserveEGLContextOnPause(true);
 
-        camera = new Camera();
         flingDetector = new GestureDetector(context, new FlingListener());
 
         try {
@@ -67,7 +65,7 @@ public class OrbitalView extends GLSurfaceView {
                 // One bear in the bed
                 firstPointerID = e.getPointerId(0);
                 oneFingerEvent(e, false);
-                isTouchEventTrivial = !camera.stopFling();
+                isTouchEventTrivial = !renderState.cameraStopFling();
                 // setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
                 break;
 
@@ -155,7 +153,7 @@ public class OrbitalView extends GLSurfaceView {
             double meanSize = Math.sqrt(getWidth() * getHeight());
             double dx = (x - previousX) / meanSize;
             double dy = (y - previousY) / meanSize;
-            camera.drag(dx, dy);
+            renderState.cameraDrag(dx, dy);
 
             requestRender();
 
@@ -192,10 +190,10 @@ public class OrbitalView extends GLSurfaceView {
         if (actionable) {
 
             double angleDifference = angle - previousAngle;
-            camera.twist(angleDifference);
+            renderState.cameraTwist(angleDifference);
 
             double zoomFactor = distance / previousDistance;
-            camera.zoom(zoomFactor);
+            renderState.cameraZoom(zoomFactor);
 
             requestRender();
         }
@@ -217,7 +215,7 @@ public class OrbitalView extends GLSurfaceView {
                                float velocityX, float velocityY) {
             synchronized (OrbitalView.this) {
                 double meanSize = Math.sqrt(getWidth() * getHeight());
-                camera.fling(velocityX / meanSize, velocityY / meanSize);
+                renderState.cameraFling(velocityX / meanSize, velocityY / meanSize);
                 setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
             }
 
@@ -228,9 +226,9 @@ public class OrbitalView extends GLSurfaceView {
     // This function can be called by the rendering thread
     // Hence the need for "synchronized" all over the place
     public synchronized float[] getNextTransform(double aspectRatio) {
-        /* bool stillFlinging = */ camera.continueFling();
+        /* bool stillFlinging = */ renderState.cameraContinueFling();
         /* if (!stillFlinging)
             setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY); */
-        return camera.computeShaderTransform(aspectRatio);
+        return renderState.cameraComputeShaderTransform(aspectRatio);
     }
 }

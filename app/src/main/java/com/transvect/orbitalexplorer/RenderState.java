@@ -5,12 +5,14 @@ import android.os.Parcelable;
 
 public class RenderState implements Parcelable {
 
+    private Camera camera;
     private Orbital orbital;
     private boolean orbitalChanged;
     private boolean color;
     private boolean colorChanged;
 
     public RenderState() {
+        camera = new Camera();
         orbital = new Orbital(4, 4, 2, 1, false);
         orbitalChanged = true;
         color = true;
@@ -25,6 +27,7 @@ public class RenderState implements Parcelable {
 
     @Override
     public synchronized void writeToParcel(Parcel out, int flags) {
+        out.writeParcelable(camera, flags);
         out.writeInt(orbital.Z);
         out.writeInt(orbital.N);
         out.writeInt(orbital.L);
@@ -38,6 +41,7 @@ public class RenderState implements Parcelable {
         @Override
         public RenderState createFromParcel(Parcel in) {
             RenderState result = new RenderState();
+            result.camera = in.readParcelable(Camera.class.getClassLoader());
             int Z = in.readInt();
             int N = in.readInt();
             int L = in.readInt();
@@ -65,7 +69,7 @@ public class RenderState implements Parcelable {
         colorChanged = true;
     }
 
-    // Main thread getters and setters
+    // Main thread interface
     public synchronized Orbital getOrbital() {
         return orbital;
     }
@@ -78,6 +82,34 @@ public class RenderState implements Parcelable {
     public synchronized void toggleColor() {
         color = !color;
         colorChanged = true;
+    }
+
+    public synchronized boolean cameraStopFling() {
+        return camera.stopFling();
+    }
+
+    public synchronized void cameraDrag(double dx, double dy) {
+        camera.drag(dx, dy);
+    }
+
+    public synchronized void cameraTwist(double angle) {
+        camera.twist(angle);
+    }
+
+    public synchronized void cameraZoom(double factor) {
+        camera.zoom(factor);
+    }
+
+    public synchronized void cameraFling(double vx, double vy) {
+        camera.fling(vx, vy);
+    }
+
+    public synchronized boolean cameraContinueFling() {
+        return camera.continueFling();
+    }
+
+    public synchronized float[] cameraComputeShaderTransform(double aspectRatio) {
+        return camera.computeShaderTransform(aspectRatio);
     }
 
     // Render thread getter
