@@ -95,7 +95,14 @@ public class Camera implements Parcelable {
         stillFlinging = true;
     }
 
-    public boolean continueFling() {
+    public boolean stopFling() {
+        flingVelocity = new Vector2(0.0, 0.0);
+        boolean r = stillFlinging;
+        stillFlinging = false;
+        return r;
+    }
+
+    public float[] computeShaderTransform(double aspectRatio) {
         if (stillFlinging) {
             // TODO use actual FPS
             drag(flingVelocity.getX() / 60.0, flingVelocity.getY() / 60.0);
@@ -108,17 +115,7 @@ public class Camera implements Parcelable {
                 flingVelocity = flingVelocity.subtract(velocityReduction);
             }
         }
-        return stillFlinging;
-    }
 
-    public boolean stopFling() {
-        flingVelocity = new Vector2(0.0, 0.0);
-        boolean r = stillFlinging;
-        stillFlinging = false;
-        return r;
-    }
-
-    public float[] computeShaderTransform(double aspectRatio) {
         float ratio = (float) Math.sqrt(aspectRatio);
         float near = (float) cameraDistance;
         float far = (float) (cameraDistance + 1.0);

@@ -226,9 +226,6 @@ public class OrbitalView extends GLSurfaceView {
     // This function can be called by the rendering thread
     // Hence the need for "synchronized" all over the place
     public synchronized float[] getNextTransform(double aspectRatio) {
-        /* bool stillFlinging = */ renderState.cameraContinueFling();
-        /* if (!stillFlinging)
-            setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY); */
         return renderState.cameraComputeShaderTransform(aspectRatio);
     }
 }

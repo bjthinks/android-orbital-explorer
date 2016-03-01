@@ -104,10 +104,6 @@ public class RenderState implements Parcelable {
         camera.fling(vx, vy);
     }
 
-    public synchronized boolean cameraContinueFling() {
-        return camera.continueFling();
-    }
-
     public synchronized float[] cameraComputeShaderTransform(double aspectRatio) {
         return camera.computeShaderTransform(aspectRatio);
     }
