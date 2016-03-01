@@ -95,10 +95,6 @@ public class OrbitalView extends GLSurfaceView {
         controlToggler = s;
     }
 
-    public void toggleColor() {
-        renderState.toggleColor();
-    }
-
     private int firstPointerID = MotionEvent.INVALID_POINTER_ID;
     private int secondPointerID = MotionEvent.INVALID_POINTER_ID;
     private boolean isTouchEventTrivial = false;

@@ -119,7 +119,7 @@ public class MainActivity extends AppCompatActivity implements RenderStateProvid
         switch (item.getItemId()) {
 
             case R.id.menuColor:
-                orbitalView.toggleColor();
+                renderState.toggleColor();
                 break;
 
             case R.id.menuAbout:
