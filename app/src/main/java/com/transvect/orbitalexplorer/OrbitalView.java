@@ -55,7 +55,7 @@ public class OrbitalView extends GLSurfaceView {
     private boolean isTouchEventTrivial = false;
 
     @Override
-    public synchronized boolean onTouchEvent(@NonNull MotionEvent e) {
+    public boolean onTouchEvent(@NonNull MotionEvent e) {
 
         flingDetector.onTouchEvent(e);
 
@@ -142,7 +142,7 @@ public class OrbitalView extends GLSurfaceView {
     private double previousY;
     private double cumulativeMovement;
 
-    private synchronized boolean oneFingerEvent(MotionEvent e, boolean actionable) {
+    private boolean oneFingerEvent(MotionEvent e, boolean actionable) {
 
         int pointerIndex = e.findPointerIndex(firstPointerID);
 
@@ -171,7 +171,7 @@ public class OrbitalView extends GLSurfaceView {
     private double previousDistance;
     private double previousAngle;
 
-    private synchronized void twoFingerEvent(MotionEvent e, boolean actionable) {
+    private void twoFingerEvent(MotionEvent e, boolean actionable) {
 
         int firstPointerIndex  = e.findPointerIndex(firstPointerID);
         int secondPointerIndex = e.findPointerIndex(secondPointerID);
@@ -213,19 +213,11 @@ public class OrbitalView extends GLSurfaceView {
         @Override
         public boolean onFling(MotionEvent event1, MotionEvent event2,
                                float velocityX, float velocityY) {
-            synchronized (OrbitalView.this) {
-                double meanSize = Math.sqrt(getWidth() * getHeight());
-                renderState.cameraFling(velocityX / meanSize, velocityY / meanSize);
-                setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
-            }
+            double meanSize = Math.sqrt(getWidth() * getHeight());
+            renderState.cameraFling(velocityX / meanSize, velocityY / meanSize);
+            setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
 
             return true;
         }
-    }
-
-    // This function can be called by the rendering thread
-    // Hence the need for "synchronized" all over the place
-    public synchronized float[] getNextTransform(double aspectRatio) {
-        return renderState.cameraComputeShaderTransform(aspectRatio);
     }
 }
