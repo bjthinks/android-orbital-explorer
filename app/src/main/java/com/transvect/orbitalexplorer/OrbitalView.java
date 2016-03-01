@@ -48,49 +48,6 @@ public class OrbitalView extends GLSurfaceView {
         setRenderer(new OrbitalRenderer(this, context));
     }
 
-    @Override
-    protected synchronized Parcelable onSaveInstanceState() {
-        SavedState ss = new SavedState(super.onSaveInstanceState());
-        ss.camera = camera;
-        return ss;
-    }
-
-    @Override
-    protected synchronized void onRestoreInstanceState(Parcelable state) {
-        SavedState ss = (SavedState) state;
-        super.onRestoreInstanceState(ss.getSuperState());
-        camera = ss.camera;
-    }
-
-    private static class SavedState extends BaseSavedState {
-        public Camera camera;
-
-        public SavedState(Parcelable superState) {
-            super(superState);
-        }
-
-        private SavedState(Parcel in) {
-            super(in);
-            camera = in.readParcelable(Camera.class.getClassLoader());
-        }
-
-        @Override
-        public void writeToParcel(Parcel out, int flags) {
-            super.writeToParcel(out, flags);
-            out.writeParcelable(camera, flags);
-        }
-
-        public static final Parcelable.Creator<SavedState> CREATOR
-                = new Parcelable.Creator<SavedState>() {
-            public SavedState createFromParcel(Parcel in) {
-                return new SavedState(in);
-            }
-            public SavedState[] newArray(int size) {
-                return new SavedState[size];
-            }
-        };
-    }
-
     public void setControlToggler(Listener s) {
         controlToggler = s;
     }
