@@ -2,30 +2,25 @@ package com.transvect.orbitalexplorer;
 
 import android.content.Context;
 import android.opengl.GLSurfaceView;
-import android.util.Log;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 public class OrbitalRenderer implements GLSurfaceView.Renderer {
 
-    private static final String TAG = "OrbitalRenderer";
-
     private int dpi;
-    private OrbitalView orbitalView;
     private Integrator integrator;
     private ScreenDrawer screenDrawer;
     private RenderState renderState;
 
     // Main thread
-    public OrbitalRenderer(OrbitalView orbitalView_, Context context) {
+    public OrbitalRenderer(Context context) {
         try {
             renderState = ((RenderStateProvider) context).provideRenderState();
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString()
                     + " must implement RenderStateProvider");
         }
-        orbitalView = orbitalView_;
         dpi = context.getResources().getDisplayMetrics().densityDpi;
         integrator = new Integrator(context);
         screenDrawer = new ScreenDrawer(context);
@@ -58,8 +53,6 @@ public class OrbitalRenderer implements GLSurfaceView.Renderer {
         int integrationHeight = (int) (scaleDownFactor * mHeight);
         integrator.resize(integrationWidth, integrationHeight);
         screenDrawer.resize(integrationWidth, integrationHeight, mWidth, mHeight);
-        Log.d(TAG, "Resize, screen " + mWidth + " x " + mHeight
-                + ", integration " + integrationWidth + " x " + integrationHeight);
     }
 
     private long then = 0;

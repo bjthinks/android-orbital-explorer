@@ -43,7 +43,7 @@ public class OrbitalView extends GLSurfaceView {
         }
 
         // Start the rendering thread
-        setRenderer(new OrbitalRenderer(this, context));
+        setRenderer(new OrbitalRenderer(context));
     }
 
     public void setControlToggler(Listener s) {
@@ -203,7 +203,6 @@ public class OrbitalView extends GLSurfaceView {
     }
 
     private class FlingListener extends GestureDetector.SimpleOnGestureListener {
-        // private static final String TAG = "FlingListener";
 
         @Override
         public boolean onDown(MotionEvent event) {
