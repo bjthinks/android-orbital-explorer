@@ -92,7 +92,7 @@ public class OrbitalView extends GLSurfaceView {
                 // No bears in the bed
                 firstPointerID = MotionEvent.INVALID_POINTER_ID;
                 if (isTouchEventTrivial && controlToggler != null)
-                    controlToggler.event();
+                    ;
                 isTouchEventTrivial = false;
                 break;
 
@@ -206,6 +206,13 @@ public class OrbitalView extends GLSurfaceView {
 
         @Override
         public boolean onDown(MotionEvent event) {
+            return true;
+        }
+
+        @Override
+        public boolean onSingleTapUp(MotionEvent event) {
+            if (controlToggler != null)
+                controlToggler.event();
             return true;
         }
 
