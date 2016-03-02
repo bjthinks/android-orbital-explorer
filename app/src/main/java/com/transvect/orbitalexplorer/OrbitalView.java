@@ -2,8 +2,6 @@ package com.transvect.orbitalexplorer;
 
 import android.content.Context;
 import android.opengl.GLSurfaceView;
-import android.os.Parcel;
-import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.view.GestureDetector;
@@ -52,7 +50,6 @@ public class OrbitalView extends GLSurfaceView {
 
     private int firstPointerID = MotionEvent.INVALID_POINTER_ID;
     private int secondPointerID = MotionEvent.INVALID_POINTER_ID;
-    private boolean isTouchEventTrivial = false;
 
     @Override
     public boolean onTouchEvent(@NonNull MotionEvent e) {
@@ -65,7 +62,7 @@ public class OrbitalView extends GLSurfaceView {
                 // One bear in the bed
                 firstPointerID = e.getPointerId(0);
                 oneFingerEvent(e, false);
-                isTouchEventTrivial = !renderState.cameraStopFling();
+                renderState.cameraStopFling();
                 // setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
                 break;
 
@@ -75,25 +72,18 @@ public class OrbitalView extends GLSurfaceView {
                     secondPointerID = e.getPointerId(e.getActionIndex());
                     twoFingerEvent(e, false);
                 }
-                isTouchEventTrivial = false;
                 break;
 
             case MotionEvent.ACTION_MOVE:
-                if (e.getPointerCount() == 1) {
-                    if (oneFingerEvent(e, true)) // Might or might not be trivial
-                        isTouchEventTrivial = false;
-                } else if (e.getPointerCount() == 2) {
+                if (e.getPointerCount() == 1)
+                    oneFingerEvent(e, true);
+                else if (e.getPointerCount() == 2)
                     twoFingerEvent(e, true);
-                    isTouchEventTrivial = false;
-                }
                 break;
 
             case MotionEvent.ACTION_UP:
                 // No bears in the bed
                 firstPointerID = MotionEvent.INVALID_POINTER_ID;
-                if (isTouchEventTrivial && controlToggler != null)
-                    ;
-                isTouchEventTrivial = false;
                 break;
 
             case MotionEvent.ACTION_POINTER_UP: {
@@ -117,7 +107,6 @@ public class OrbitalView extends GLSurfaceView {
                     secondPointerID = MotionEvent.INVALID_POINTER_ID;
                     oneFingerEvent(e, false);
                 }
-                isTouchEventTrivial = false;
 
                 break;
             }
@@ -128,7 +117,6 @@ public class OrbitalView extends GLSurfaceView {
                 // the bed and will come back out later when it's safe.
                 firstPointerID = MotionEvent.INVALID_POINTER_ID;
                 secondPointerID = MotionEvent.INVALID_POINTER_ID;
-                isTouchEventTrivial = false;
                 break;
 
             default:
@@ -140,9 +128,8 @@ public class OrbitalView extends GLSurfaceView {
 
     private double previousX;
     private double previousY;
-    private double cumulativeMovement;
 
-    private boolean oneFingerEvent(MotionEvent e, boolean actionable) {
+    private void oneFingerEvent(MotionEvent e, boolean actionable) {
 
         int pointerIndex = e.findPointerIndex(firstPointerID);
 
@@ -156,16 +143,10 @@ public class OrbitalView extends GLSurfaceView {
             renderState.cameraDrag(dx, dy);
 
             requestRender();
-
-            cumulativeMovement += Math.abs(dx) + Math.abs(dy);
-        } else {
-            cumulativeMovement = 0.;
         }
 
         previousX = x;
         previousY = y;
-
-        return cumulativeMovement > 0.02;
     }
 
     private double previousDistance;
