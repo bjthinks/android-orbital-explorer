@@ -1,7 +1,6 @@
 package com.transvect.orbitalexplorer;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.webkit.WebView;
@@ -16,11 +15,11 @@ public class HelpActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_help);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.help_toolbar);
         toolbar.setTitle(extras.getString("title"));
         setSupportActionBar(toolbar);
 
-        WebView webview = (WebView) findViewById(R.id.helpview);
+        WebView webview = (WebView) findViewById(R.id.help_webview);
         webview.loadUrl(extras.getString("url"));
     }
 }

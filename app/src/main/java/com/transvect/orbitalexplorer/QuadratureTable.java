@@ -26,6 +26,7 @@ public final class QuadratureTable {
                     table[4 * quadraturePoints * i + 4 * j + 1] = stream.readFloat();
                 }
             }
+            stream.close();
         } catch (IOException e) {
             throw new RuntimeException("Error reading asset: " + filename);
         }
