@@ -104,14 +104,11 @@ public class RenderState implements Parcelable {
         camera.fling(vx, vy);
     }
 
-    public synchronized float[] cameraComputeShaderTransform(double aspectRatio) {
-        return camera.computeShaderTransform(aspectRatio);
-    }
-
     // Render thread getter
-    public synchronized FrozenState freeze() {
+    public synchronized FrozenState freeze(double aspectRatio) {
         FrozenState fs = new FrozenState();
 
+        fs.shaderTransform = camera.computeShaderTransform(aspectRatio);
         fs.orbital = orbital;
         fs.orbitalChanged = orbitalChanged;
         fs.color = color;
@@ -124,6 +121,7 @@ public class RenderState implements Parcelable {
     }
 
     static public class FrozenState {
+        public float[] shaderTransform;
         public Orbital orbital;
         public boolean orbitalChanged;
         public boolean color;
