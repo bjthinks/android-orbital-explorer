@@ -113,8 +113,9 @@ public class Integrator extends RenderStage {
 
     private float[] oldTransform;
     private boolean color;
-    public Texture render(float[] shaderTransform, RenderState.FrozenState frozenState) {
+    public Texture render(RenderState.FrozenState frozenState) {
 
+        float[] shaderTransform = frozenState.shaderTransform;
         color = frozenState.color;
         Orbital orbital = frozenState.orbital;
 
