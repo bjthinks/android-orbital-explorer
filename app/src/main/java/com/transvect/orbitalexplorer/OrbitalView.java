@@ -51,6 +51,8 @@ public class OrbitalView extends GLSurfaceView {
     private int firstPointerID = MotionEvent.INVALID_POINTER_ID;
     private int secondPointerID = MotionEvent.INVALID_POINTER_ID;
 
+    private boolean stoppedFling = false;
+
     @Override
     public boolean onTouchEvent(@NonNull MotionEvent e) {
 
@@ -62,7 +64,7 @@ public class OrbitalView extends GLSurfaceView {
                 // One bear in the bed
                 firstPointerID = e.getPointerId(0);
                 oneFingerEvent(e, false);
-                renderState.cameraStopFling();
+                stoppedFling = renderState.cameraStopFling();
                 // setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
                 break;
 
@@ -192,7 +194,7 @@ public class OrbitalView extends GLSurfaceView {
 
         @Override
         public boolean onSingleTapUp(MotionEvent event) {
-            if (controlToggler != null)
+            if (!stoppedFling && controlToggler != null)
                 controlToggler.event();
             return true;
         }
