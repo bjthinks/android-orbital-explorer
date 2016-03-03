@@ -167,8 +167,10 @@ public class OrbitalView extends GLSurfaceView {
         double angle = Math.atan2(y2 - y1, x2 - x1);
         double distance = Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
         // Zero is highly unlikely, but don't take chances
-        if (distance < 1.0)
+        if (distance < 1.0) {
+            angle = 0.0;
             distance = 1.0;
+        }
 
         if (actionable) {
 
