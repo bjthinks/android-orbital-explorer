@@ -8,17 +8,18 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-public class MainActivity extends AppCompatActivity implements RenderStateProvider {
+public class MainActivity extends AppCompatActivity
+        implements RenderStateProvider, ControlToggler {
 
     private RenderState renderState;
     private Toolbar toolbar;
     private OrbitalSelector orbitalSelector;
     private OrbitalView orbitalView;
+    private boolean controlVisibility = true;
 
     @Override
     protected void onCreate(Bundle savedState) {
@@ -29,6 +30,9 @@ public class MainActivity extends AppCompatActivity implements RenderStateProvid
             throw new UnsupportedOperationException();
         }
 
+        // Need to set renderState before calling setContentView, because that will
+        // inflate an OrbitalView, which will ask its context (i.e. this object) for
+        // the renderState.
         if (savedState != null) {
             controlVisibility = savedState.getBoolean(CONTROL_VISIBILITY_KEY);
             renderState = savedState.getParcelable(RENDER_STATE_KEY);
@@ -53,8 +57,6 @@ public class MainActivity extends AppCompatActivity implements RenderStateProvid
             // Adjust menu as well
             menu.setPadding(0, getStatusBarHeight(), 0, 0);
         } */
-
-        orbitalView.setControlToggler(new VisibilityToggler());
 
         if (savedState != null)
             applyControlVisibility();
@@ -140,12 +142,9 @@ public class MainActivity extends AppCompatActivity implements RenderStateProvid
         return super.onOptionsItemSelected(item);
     }
 
-    private boolean controlVisibility = true;
-    private class VisibilityToggler implements Listener {
-        public void event() {
-            controlVisibility = !controlVisibility;
-            applyControlVisibility();
-        }
+    public void toggleControls() {
+        controlVisibility = !controlVisibility;
+        applyControlVisibility();
     }
 
     private void applyControlVisibility() {

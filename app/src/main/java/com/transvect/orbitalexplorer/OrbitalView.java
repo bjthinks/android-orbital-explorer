@@ -11,7 +11,7 @@ import android.view.MotionEvent;
 public class OrbitalView extends GLSurfaceView {
 
     private GestureDetector flingDetector;
-    private Listener controlToggler;
+    private ControlToggler controlToggler;
     private RenderState renderState;
 
     public OrbitalView(Context context) {
@@ -34,6 +34,13 @@ public class OrbitalView extends GLSurfaceView {
         flingDetector = new GestureDetector(context, new FlingListener());
 
         try {
+            controlToggler = (ControlToggler) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString()
+                    + " must implement ControlToggler");
+        }
+
+        try {
             renderState = ((RenderStateProvider) context).provideRenderState();
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString()
@@ -42,10 +49,6 @@ public class OrbitalView extends GLSurfaceView {
 
         // Start the rendering thread
         setRenderer(new OrbitalRenderer(context));
-    }
-
-    public void setControlToggler(Listener s) {
-        controlToggler = s;
     }
 
     private int firstPointerID = MotionEvent.INVALID_POINTER_ID;
@@ -196,8 +199,8 @@ public class OrbitalView extends GLSurfaceView {
 
         @Override
         public boolean onSingleTapUp(MotionEvent event) {
-            if (!stoppedFling && controlToggler != null)
-                controlToggler.event();
+            if (!stoppedFling)
+                controlToggler.toggleControls();
             return true;
         }
 
