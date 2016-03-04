@@ -31,7 +31,7 @@ public class OrbitalView extends GLSurfaceView {
         // Try to preserve our context, if possible
         setPreserveEGLContextOnPause(true);
 
-        flingDetector = new GestureDetector(context, new FlingListener());
+        flingDetector = new GestureDetector(context, new TapFlingListener());
 
         try {
             controlToggler = (ControlToggler) context;
@@ -190,7 +190,7 @@ public class OrbitalView extends GLSurfaceView {
         previousDistance = distance;
     }
 
-    private class FlingListener extends GestureDetector.SimpleOnGestureListener {
+    private class TapFlingListener extends GestureDetector.SimpleOnGestureListener {
 
         @Override
         public boolean onDown(MotionEvent event) {
