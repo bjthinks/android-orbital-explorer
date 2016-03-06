@@ -1,5 +1,6 @@
 package com.example;
 
+import com.transvect.orbitalexplorer.Polynomial;
 import com.transvect.orbitalexplorer.RadialFunction;
 
 import java.io.BufferedOutputStream;
@@ -34,7 +35,8 @@ public class QuadratureGenerator {
                     double distanceFromOrigin = radialFunction.getMaximumRadius()
                             * (double) i / (double) (QUADRATURE_SIZE - 1);
                     WeightFunction weightFunction
-                            = new WeightFunction(exponentialConstant, powerOfR, distanceFromOrigin);
+                            = new WeightFunction(exponentialConstant,
+                            Polynomial.variableToThe(powerOfR), distanceFromOrigin);
                     GaussianQuadrature GQ = new GaussianQuadrature(weightFunction, quadraturePoints);
 
                     for (int j = 0; j < quadraturePoints; ++j) {
