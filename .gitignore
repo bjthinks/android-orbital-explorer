@@ -3,5 +3,6 @@
 build
 captures
 local.properties
-app/src/main/assets/data/data-*
+app/src/main/assets/data/color-*
+app/src/main/assets/data/mono-*
 *.iml

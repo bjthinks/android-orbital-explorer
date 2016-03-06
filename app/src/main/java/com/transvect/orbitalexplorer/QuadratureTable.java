@@ -16,7 +16,7 @@ public final class QuadratureTable {
         int quadraturePoints = orbital.getRadialFunction().getQuadratureOrder();
         float[] table = new float[4 * quadraturePoints * QUADRATURE_SIZE];
 
-        String filename = "data/data-" + orbital.N + "-" + orbital.L;
+        String filename = "data/color-" + orbital.N + "-" + orbital.L;
         try {
             DataInputStream stream
                     = new DataInputStream(new BufferedInputStream(assets.open(filename)));

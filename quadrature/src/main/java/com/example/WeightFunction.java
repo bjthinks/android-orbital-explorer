@@ -6,11 +6,11 @@ import com.transvect.orbitalexplorer.Polynomial;
 
 public class WeightFunction implements Function {
     private double exponentialConstant;
-    private Polynomial polynomialInR;
+    private Function polynomialInR;
     private double distanceFromOrigin;
 
     public WeightFunction(double exponentialConstant_,
-                          Polynomial polynomialInR_,
+                          Function polynomialInR_,
                           double distanceFromOrigin_) {
         exponentialConstant = exponentialConstant_;
         polynomialInR = polynomialInR_;

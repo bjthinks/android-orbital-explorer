@@ -23,6 +23,7 @@ public class QuadratureGenerator {
     }
 
     private void go() throws IOException {
+        // Color
         for (int N = 1; N <= 8; ++N) {
             for (int L = 0; L < N; ++L) {
                 RadialFunction radialFunction = new RadialFunction(N, N, L);
@@ -46,7 +47,37 @@ public class QuadratureGenerator {
                                 = (float) (GQ.getWeight(j) / weightFunction.eval(GQ.getNode(j)));
                     }
                 }
-                writeAsset("data-" + N + "-" + L, quadratureWeights);
+                writeAsset("color-" + N + "-" + L, quadratureWeights);
+            }
+        }
+
+        // Mono
+        for (int N = 1; N <= 8; ++N) {
+            for (int L = 0; L < N; ++L) {
+                RadialFunction radialFunction = new RadialFunction(N, N, L);
+                double exponentialConstant = radialFunction.getExponentialConstant();
+                int powerOfR = radialFunction.getPowerOfR();
+                Polynomial oscillatingPart = radialFunction.getOscillatingPart();
+                int quadraturePoints = radialFunction.getQuadratureOrder();
+
+                float[] quadratureWeights = new float[2 * quadraturePoints * QUADRATURE_SIZE];
+                for (int i = 0; i < QUADRATURE_SIZE; ++i) {
+                    double distanceFromOrigin = radialFunction.getMaximumRadius()
+                            * (double) i / (double) (QUADRATURE_SIZE - 1);
+                    WeightFunction weightFunction
+                            = new WeightFunction(exponentialConstant,
+                            new Product(Polynomial.variableToThe(powerOfR), oscillatingPart),
+                            distanceFromOrigin);
+                    GaussianQuadrature GQ = new GaussianQuadrature(weightFunction, quadraturePoints);
+
+                    for (int j = 0; j < quadraturePoints; ++j) {
+                        quadratureWeights[2 * quadraturePoints * i + 2 * j]
+                                = (float) GQ.getNode(j);
+                        quadratureWeights[2 * quadraturePoints * i + 2 * j + 1]
+                                = (float) (GQ.getWeight(j) / weightFunction.eval(GQ.getNode(j)));
+                    }
+                }
+                writeAsset("mono-" + N + "-" + L, quadratureWeights);
             }
         }
     }
