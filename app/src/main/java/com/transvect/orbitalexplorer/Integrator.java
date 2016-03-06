@@ -10,7 +10,7 @@ public class Integrator extends RenderStage {
 
     AssetManager assetManager;
 
-    private int programColor, programGrey;
+    private int programColor, programMono;
 
     private final int RADIAL_TEXTURE_SIZE = 256;
     private Texture radialTexture;
@@ -21,8 +21,8 @@ public class Integrator extends RenderStage {
     private int quadratureDataSize;
     private Texture quadratureTexture;
 
-    private Texture outputTextureColor, outputTextureGrey;
-    private Framebuffer framebufferColor, framebufferGrey;
+    private Texture outputTextureColor, outputTextureMono;
+    private Framebuffer framebufferColor, framebufferMono;
     private int width, height;
     private boolean newRenderer, needToRender;
 
@@ -63,8 +63,8 @@ public class Integrator extends RenderStage {
         GLES30.glTexParameteri(GLES30.GL_TEXTURE_2D,
                 GLES30.GL_TEXTURE_WRAP_T, GLES30.GL_CLAMP_TO_EDGE);
 
-        outputTextureGrey = new Texture(GLES30.GL_RED_INTEGER, GLES30.GL_SHORT, GLES30.GL_R16I);
-        outputTextureGrey.bindToTexture2DAndResize(1, 1);
+        outputTextureMono = new Texture(GLES30.GL_RED_INTEGER, GLES30.GL_SHORT, GLES30.GL_R16I);
+        outputTextureMono.bindToTexture2DAndResize(1, 1);
 
         setTexture2DMinMagFilters(GLES30.GL_NEAREST, GLES30.GL_NEAREST);
         GLES30.glTexParameteri(GLES30.GL_TEXTURE_2D,
@@ -76,8 +76,8 @@ public class Integrator extends RenderStage {
         framebufferColor = new Framebuffer();
         framebufferColor.bindAndSetTexture(outputTextureColor);
 
-        framebufferGrey = new Framebuffer();
-        framebufferGrey.bindAndSetTexture(outputTextureGrey);
+        framebufferMono = new Framebuffer();
+        framebufferMono.bindAndSetTexture(outputTextureMono);
 
         getGLError();
 
@@ -92,14 +92,14 @@ public class Integrator extends RenderStage {
         GLES30.glLinkProgram(programColor);
         getGLError();
 
-        Shader vertexShaderGrey
-                = new Shader(assetManager, "integrator_grey.vert", GLES30.GL_VERTEX_SHADER);
-        Shader fragmentShaderGrey
-                = new Shader(assetManager, "integrator_grey.frag", GLES30.GL_FRAGMENT_SHADER);
-        programGrey = GLES30.glCreateProgram();
-        GLES30.glAttachShader(programGrey, vertexShaderGrey.getId());
-        GLES30.glAttachShader(programGrey, fragmentShaderGrey.getId());
-        GLES30.glLinkProgram(programGrey);
+        Shader vertexShaderMono
+                = new Shader(assetManager, "integrator_mono.vert", GLES30.GL_VERTEX_SHADER);
+        Shader fragmentShaderMono
+                = new Shader(assetManager, "integrator_mono.frag", GLES30.GL_FRAGMENT_SHADER);
+        programMono = GLES30.glCreateProgram();
+        GLES30.glAttachShader(programMono, vertexShaderMono.getId());
+        GLES30.glAttachShader(programMono, fragmentShaderMono.getId());
+        GLES30.glLinkProgram(programMono);
         getGLError();
     }
 
@@ -107,7 +107,7 @@ public class Integrator extends RenderStage {
         width = w;
         height = h;
         outputTextureColor.bindToTexture2DAndResize(width, height);
-        outputTextureGrey.bindToTexture2DAndResize(width, height);
+        outputTextureMono.bindToTexture2DAndResize(width, height);
         needToRender = true;
     }
 
@@ -159,7 +159,7 @@ public class Integrator extends RenderStage {
             if (color)
                 framebufferColor.bindToAttachmentPoint();
             else
-                framebufferGrey.bindToAttachmentPoint();
+                framebufferMono.bindToAttachmentPoint();
             GLES30.glViewport(0, 0, width, height);
 
             final int zeroes[] = {0, 0, 0, 0};
@@ -168,7 +168,7 @@ public class Integrator extends RenderStage {
             if (color)
                 GLES30.glUseProgram(programColor);
             else
-                GLES30.glUseProgram(programGrey);
+                GLES30.glUseProgram(programMono);
 
             GLES30.glActiveTexture(GLES30.GL_TEXTURE0);
             radialTexture.bindToTexture2D();
@@ -210,7 +210,7 @@ public class Integrator extends RenderStage {
             if (color)
                 inPositionHandle = GLES30.glGetAttribLocation(programColor, "inPosition");
             else
-                inPositionHandle = GLES30.glGetAttribLocation(programGrey, "inPosition");
+                inPositionHandle = GLES30.glGetAttribLocation(programMono, "inPosition");
             GLES30.glEnableVertexAttribArray(inPositionHandle);
             GLES30.glVertexAttribPointer(inPositionHandle, 2, GLES30.GL_FLOAT, false, 8,
                     screenRectangle);
@@ -224,7 +224,7 @@ public class Integrator extends RenderStage {
         if (color)
             return outputTextureColor;
         else
-            return outputTextureGrey;
+            return outputTextureMono;
     }
 
     int getUniformHandle(String name) {
@@ -232,7 +232,7 @@ public class Integrator extends RenderStage {
         if (color)
             handle = GLES30.glGetUniformLocation(programColor, name);
         else
-            handle = GLES30.glGetUniformLocation(programGrey, name);
+            handle = GLES30.glGetUniformLocation(programMono, name);
         return handle;
     }
 

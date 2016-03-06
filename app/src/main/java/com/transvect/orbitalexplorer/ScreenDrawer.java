@@ -8,7 +8,7 @@ public class ScreenDrawer extends RenderStage {
 
     AssetManager assetManager;
 
-    private int programColor, programGrey;
+    private int programColor, programMono;
 
     public ScreenDrawer(Context context) {
         assetManager = context.getAssets();
@@ -24,12 +24,12 @@ public class ScreenDrawer extends RenderStage {
         GLES30.glLinkProgram(programColor);
         getGLError();
 
-        Shader vertexShaderGrey = new Shader(assetManager, "screendrawer_grey.vert", GLES30.GL_VERTEX_SHADER);
-        Shader fragmentShaderGrey = new Shader(assetManager, "screendrawer_grey.frag", GLES30.GL_FRAGMENT_SHADER);
-        programGrey = GLES30.glCreateProgram();
-        GLES30.glAttachShader(programGrey, vertexShaderGrey.getId());
-        GLES30.glAttachShader(programGrey, fragmentShaderGrey.getId());
-        GLES30.glLinkProgram(programGrey);
+        Shader vertexShaderMono = new Shader(assetManager, "screendrawer_mono.vert", GLES30.GL_VERTEX_SHADER);
+        Shader fragmentShaderMono = new Shader(assetManager, "screendrawer_mono.frag", GLES30.GL_FRAGMENT_SHADER);
+        programMono = GLES30.glCreateProgram();
+        GLES30.glAttachShader(programMono, vertexShaderMono.getId());
+        GLES30.glAttachShader(programMono, fragmentShaderMono.getId());
+        GLES30.glLinkProgram(programMono);
         getGLError();
     }
 
@@ -52,7 +52,7 @@ public class ScreenDrawer extends RenderStage {
         if (color)
             GLES30.glUseProgram(programColor);
         else
-            GLES30.glUseProgram(programGrey);
+            GLES30.glUseProgram(programMono);
 
         GLES30.glActiveTexture(GLES30.GL_TEXTURE0);
         texture.bindToTexture2D();
@@ -77,7 +77,7 @@ public class ScreenDrawer extends RenderStage {
         if (color)
             inPositionHandle = GLES30.glGetAttribLocation(programColor, "inPosition");
         else
-            inPositionHandle = GLES30.glGetAttribLocation(programGrey, "inPosition");
+            inPositionHandle = GLES30.glGetAttribLocation(programMono, "inPosition");
         GLES30.glEnableVertexAttribArray(inPositionHandle);
         GLES30.glVertexAttribPointer(inPositionHandle, 2, GLES30.GL_FLOAT, false, 8,
                 screenRectangle);
@@ -92,7 +92,7 @@ public class ScreenDrawer extends RenderStage {
         if (color)
             handle = GLES30.glGetUniformLocation(programColor, name);
         else
-            handle = GLES30.glGetUniformLocation(programGrey, name);
+            handle = GLES30.glGetUniformLocation(programMono, name);
         return handle;
     }
 
