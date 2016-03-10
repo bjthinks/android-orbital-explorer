@@ -1,6 +1,4 @@
 <resources>
-    <string name="appName">Orbital Explorer</string>
-
     <string name="menuColor">Color</string>
     <string name="menuAbout">About</string>
     <string name="menuHelp">Help</string>
