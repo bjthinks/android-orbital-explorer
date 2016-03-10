@@ -102,7 +102,7 @@ public class Camera implements Parcelable {
         return r;
     }
 
-    public float[] computeShaderTransform(double aspectRatio) {
+    public float[] computeInverseShaderTransform(double aspectRatio) {
         if (stillFlinging) {
             // TODO use actual FPS
             drag(flingVelocity.getX() / 60.0, flingVelocity.getY() / 60.0);
@@ -138,6 +138,11 @@ public class Camera implements Parcelable {
         float[] shaderTransform = new float[16];
         Matrix.multiplyMM(shaderTransform, 0, viewProjMatrix, 0, cameraRotation, 0);
 
-        return shaderTransform;
+        // Samsung Galaxy S5 can't invert 4x4 matrices correctly in the OpenGL driver,
+        // so we make the CPU do the inverse instead.
+        float[] inverseTransform = new float[16];
+        Matrix.invertM(inverseTransform, 0, shaderTransform, 0);
+
+        return inverseTransform;
     }
 }
