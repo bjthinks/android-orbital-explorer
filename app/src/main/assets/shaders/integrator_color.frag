@@ -132,7 +132,8 @@ void main() {
         total *= 50.0;
 
         total.xy /= total.z;
-        total.z = 1.0 - exp(-total.z);
+        // Galaxy S6 can't do exp of a negative number correctly
+        total.z = 1.0 - 1.0 / exp(total.z);
         color = ivec3(total * 32767.0);
     } else {
         color = ivec3(0);

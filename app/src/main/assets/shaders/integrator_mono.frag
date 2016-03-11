@@ -121,7 +121,8 @@ void main() {
         // Increase brightness
         total *= 50.0;
 
-        total = 1.0 - exp(-total);
+        // Galaxy S6 can't do exp of a negative number correctly
+        total = 1.0 - 1.0 / exp(total);
         color = int(total * 32767.0);
     } else {
         color = 0;
