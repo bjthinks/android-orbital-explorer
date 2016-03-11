@@ -1,6 +1,7 @@
 #version 300 es
 precision highp int;
 precision highp float;
+precision highp sampler2D;
 
 const float pi = 3.14159265358979;
 

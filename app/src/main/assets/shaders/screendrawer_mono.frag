@@ -1,6 +1,7 @@
 #version 300 es
 precision highp int;
 precision highp float;
+precision highp isampler2D;
 uniform isampler2D data;
 uniform ivec2 upperClamp; // = ivec2(texSize) - ivec2(1)
 in vec2 texCoord;
