@@ -36,8 +36,11 @@ public class Shader {
         id = GLES30.glCreateShader(shaderType);
         GLES30.glShaderSource(id, shaderSource);
         GLES30.glCompileShader(id);
-        String result = GLES30.glGetShaderInfoLog(id);
-        if (!result.equals(""))
+        int[] status = new int[1];
+        GLES30.glGetShaderiv(id, GLES30.GL_COMPILE_STATUS, status, 0);
+        if (status[0] != GLES30.GL_TRUE) {
+            String result = GLES30.glGetShaderInfoLog(id);
             throw new RuntimeException("Error compiling shader: " + result);
+        }
     }
 }
