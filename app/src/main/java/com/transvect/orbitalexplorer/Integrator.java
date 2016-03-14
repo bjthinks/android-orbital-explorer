@@ -115,7 +115,7 @@ public class Integrator extends RenderStage {
     private boolean color;
     public Texture render(RenderState.FrozenState frozenState) {
 
-        float[] shaderTransform = frozenState.shaderTransform;
+        float[] inverseTransform = frozenState.inverseTransform;
         color = frozenState.color;
         Orbital orbital = frozenState.orbital;
 
@@ -145,8 +145,8 @@ public class Integrator extends RenderStage {
             // setTexture2DMinMagFilters(GLES30.GL_NEAREST, GLES30.GL_NEAREST);
         }
 
-        if (oldTransform == null || !Arrays.equals(oldTransform, shaderTransform)) {
-            oldTransform = shaderTransform;
+        if (oldTransform == null || !Arrays.equals(oldTransform, inverseTransform)) {
+            oldTransform = inverseTransform;
             needToRender = true;
         }
 
@@ -203,8 +203,8 @@ public class Integrator extends RenderStage {
             setUniformFloat("numQuadratureSubdivisions", (float) (quadratureDataSize - 1));
             setUniformFloat("M", (float) orbital.M);
 
-            int mvpMatrixHandle = getUniformHandle("shaderTransform");
-            GLES30.glUniformMatrix4fv(mvpMatrixHandle, 1, false, shaderTransform, 0);
+            int mvpMatrixHandle = getUniformHandle("inverseTransform");
+            GLES30.glUniformMatrix4fv(mvpMatrixHandle, 1, false, inverseTransform, 0);
 
             int inPositionHandle;
             if (color)
