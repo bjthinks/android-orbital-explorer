@@ -140,4 +140,8 @@ public class Camera implements Parcelable {
 
         return shaderTransform;
     }
+
+    public double getCameraDistance() {
+        return cameraDistance;
+    }
 }

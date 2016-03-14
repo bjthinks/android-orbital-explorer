@@ -109,6 +109,7 @@ public class RenderState implements Parcelable {
         FrozenState fs = new FrozenState();
 
         fs.shaderTransform = camera.computeShaderTransform(aspectRatio);
+        fs.cameraDistance = camera.getCameraDistance();
         fs.orbital = orbital;
         fs.orbitalChanged = orbitalChanged;
         fs.color = color;
@@ -122,6 +123,7 @@ public class RenderState implements Parcelable {
 
     static public class FrozenState {
         public float[] shaderTransform;
+        public double cameraDistance;
         public Orbital orbital;
         public boolean orbitalChanged;
         public boolean color;
