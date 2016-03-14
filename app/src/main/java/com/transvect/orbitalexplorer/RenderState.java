@@ -59,16 +59,6 @@ public class RenderState implements Parcelable {
         }
     };
 
-    // Deep copy an old RenderState into a new one. We can't just overwrite the new
-    // one in the caller, because a reference to it has already been given to the
-    // rendering thread.
-    public synchronized void copyStateFrom(RenderState old) {
-        orbital = old.orbital;
-        orbitalChanged = true;
-        color = old.color;
-        colorChanged = true;
-    }
-
     // Main thread interface
     public synchronized Orbital getOrbital() {
         return orbital;
