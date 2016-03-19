@@ -3,17 +3,20 @@
         android:id="@+id/integerchanger_uparrow"
         android:layout_width="@dimen/buttonSize"
         android:layout_height="@dimen/buttonSize"
+        android:scaleType="fitCenter"
         android:src="@drawable/ic_keyboard_arrow_up_white_24dp"
         style="@style/ButtonStyle" />
     <TextView
         android:id="@+id/integerchanger_value"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal"/>
+        android:gravity="center_horizontal"
+        android:textSize="24sp" />
     <ImageButton
         android:id="@+id/integerchanger_downarrow"
         android:layout_width="@dimen/buttonSize"
         android:layout_height="@dimen/buttonSize"
+        android:scaleType="fitCenter"
         android:src="@drawable/ic_keyboard_arrow_down_white_24dp"
         style="@style/ButtonStyle" />
 </merge>

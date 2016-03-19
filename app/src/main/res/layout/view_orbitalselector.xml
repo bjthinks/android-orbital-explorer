@@ -16,5 +16,6 @@
         android:layout_width="@dimen/buttonSize"
         android:layout_height="@dimen/buttonSize"
         android:text="@string/complexNumbers"
-        style="@style/ButtonStyle" />
+        style="@style/ButtonStyle"
+        android:textSize="24sp" />
 </merge>
