@@ -3,6 +3,7 @@ package com.transvect.orbitalexplorer;
 public class Quadrature {
 
     private int order;
+    private int size;
 
     public Quadrature(int N) {
         // An important design choice is to make the quadrature order independent of M. This
@@ -16,9 +17,15 @@ public class Quadrature {
         // N + 2 = essentially perfect, visually identical to all higher orders for all but
         //         a few very specific corner cases
         order = N + 1;
+
+        size = 64;
     }
 
     public int getOrder() {
         return order;
+    }
+
+    public int getSize() {
+        return size;
     }
 }

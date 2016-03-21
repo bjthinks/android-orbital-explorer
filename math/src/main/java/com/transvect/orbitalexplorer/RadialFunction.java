@@ -83,8 +83,4 @@ public class RadialFunction implements Function {
     public double getOuter90PercentRadialL2Integral() {
         return outer90PercentRadialL2Integral;
     }
-
-    public int getQuadratureSize() {
-        return 64;
-    }
 }

@@ -45,16 +45,17 @@ public class QuadratureCurves extends RenderStage {
         if (orbital == null || frozenState.orbitalChanged || frozenState.colorChanged) {
             orbital = frozenState.orbital;
             RadialFunction radialFunction = orbital.getRadialFunction();
-            quadratureSize = radialFunction.getQuadratureSize();
-            float[] quadrature = QuadratureTable.get(assetManager, orbital, frozenState.color);
+            Quadrature quadrature = orbital.getQuadrature();
+            quadratureSize = quadrature.getSize();
+            float[] quadratureTable = QuadratureTable.get(assetManager, orbital, frozenState.color);
             float q[] = new float[2 * quadratureSize];
-            quadratureOrder = quadrature.length / 4 / quadratureSize;
+            quadratureOrder = quadratureTable.length / 4 / quadratureSize;
             double orbitalRadius = radialFunction.getMaximumRadius();
             quadratureBuffers = new FloatBuffer[quadratureOrder];
             for (int node = 0; node < quadratureOrder; ++ node) {
                 for (int i = 0; i < quadratureSize; ++i) {
                     q[2 * i] = (float) (i * orbitalRadius / (quadratureSize - 1));
-                    q[2 * i + 1] = quadrature[4 * quadratureOrder * i + 4 * node];
+                    q[2 * i + 1] = quadratureTable[4 * quadratureOrder * i + 4 * node];
                 }
 
                 quadratureBuffers[node] = floatArrayToBuffer(q);

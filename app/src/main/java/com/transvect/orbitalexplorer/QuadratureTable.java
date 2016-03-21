@@ -14,7 +14,7 @@ public final class QuadratureTable {
         RadialFunction radialFunction = orbital.getRadialFunction();
         Quadrature quadrature = orbital.getQuadrature();
         int quadraturePoints = quadrature.getOrder();
-        int quadratureSize = radialFunction.getQuadratureSize();
+        int quadratureSize = quadrature.getSize();
         float[] table = new float[4 * quadraturePoints * quadratureSize];
 
         String filename = "data/";

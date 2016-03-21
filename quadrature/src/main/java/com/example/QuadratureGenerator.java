@@ -25,12 +25,14 @@ public class QuadratureGenerator {
         // Color
         for (int N = 1; N <= 8; ++N) {
             for (int L = 0; L < N; ++L) {
+
                 RadialFunction radialFunction = new RadialFunction(N, N, L);
-                Quadrature quadrature = new Quadrature(N);
-                int quadratureSize = radialFunction.getQuadratureSize();
                 double exponentialConstant = radialFunction.getExponentialConstant();
                 int powerOfR = radialFunction.getPowerOfR();
+
+                Quadrature quadrature = new Quadrature(N);
                 int quadratureOrder = quadrature.getOrder();
+                int quadratureSize = quadrature.getSize();
 
                 float[] quadratureWeights = new float[2 * quadratureOrder * quadratureSize];
                 for (int i = 0; i < quadratureSize; ++i) {
@@ -54,15 +56,17 @@ public class QuadratureGenerator {
         // Mono
         for (int N = 1; N <= 8; ++N) {
             for (int L = 0; L < N; ++L) {
+
                 RadialFunction radialFunction = new RadialFunction(N, N, L);
-                Quadrature quadrature = new Quadrature(N);
-                int quadratureSize = radialFunction.getQuadratureSize();
                 double exponentialConstant = radialFunction.getExponentialConstant();
                 int powerOfR = radialFunction.getPowerOfR();
                 Polynomial oscillatingPart = radialFunction.getOscillatingPart();
-                int quadraturePoints = quadrature.getOrder();
 
-                float[] quadratureWeights = new float[2 * quadraturePoints * quadratureSize];
+                Quadrature quadrature = new Quadrature(N);
+                int quadratureOrder = quadrature.getOrder();
+                int quadratureSize = quadrature.getSize();
+
+                float[] quadratureWeights = new float[2 * quadratureOrder * quadratureSize];
                 for (int i = 0; i < quadratureSize; ++i) {
                     double distanceFromOrigin = radialFunction.getMaximumRadius()
                             * (double) i / (double) (quadratureSize - 1);
@@ -72,12 +76,12 @@ public class QuadratureGenerator {
                             distanceFromOrigin);
                     WeightFunction simpleWeightFunction = new WeightFunction(exponentialConstant,
                             Polynomial.variableToThe(powerOfR), distanceFromOrigin);
-                    GaussianQuadrature GQ = new GaussianQuadrature(weightFunction, quadraturePoints);
+                    GaussianQuadrature GQ = new GaussianQuadrature(weightFunction, quadratureOrder);
 
-                    for (int j = 0; j < quadraturePoints; ++j) {
-                        quadratureWeights[2 * quadraturePoints * i + 2 * j]
+                    for (int j = 0; j < quadratureOrder; ++j) {
+                        quadratureWeights[2 * quadratureOrder * i + 2 * j]
                                 = (float) GQ.getNode(j);
-                        quadratureWeights[2 * quadraturePoints * i + 2 * j + 1]
+                        quadratureWeights[2 * quadratureOrder * i + 2 * j + 1]
                                 = (float) (GQ.getWeight(j)
                                 / simpleWeightFunction.eval(GQ.getNode(j)));
                     }
