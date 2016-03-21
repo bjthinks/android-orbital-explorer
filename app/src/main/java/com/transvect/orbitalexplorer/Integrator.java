@@ -144,9 +144,9 @@ public class Integrator extends RenderStage {
             // Load new quadrature texture
             float[] quadratureData = QuadratureTable.get(assetManager, orbital, color);
             quadratureDataSize = quadratureData.length
-                    / (4 * orbital.getRadialFunction().getQuadratureOrder());
+                    / (4 * orbital.getQuadrature().getOrder());
             quadratureTexture.bindToTexture2DAndSetImage(
-                    orbital.getRadialFunction().getQuadratureOrder(),
+                    orbital.getQuadrature().getOrder(),
                     quadratureDataSize, quadratureData);
         }
 
@@ -186,7 +186,7 @@ public class Integrator extends RenderStage {
 
             setUniformInt("enableColor", 1);
             setUniformInt("realOrbital", orbital.real ? 1 : 0);
-            setUniformInt("numQuadraturePoints", orbital.getRadialFunction().getQuadratureOrder());
+            setUniformInt("numQuadraturePoints", orbital.getQuadrature().getOrder());
 
             RadialFunction radialFunction = orbital.getRadialFunction();
 

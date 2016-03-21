@@ -12,7 +12,8 @@ public final class QuadratureTable {
 
     public static float[] get(AssetManager assets, Orbital orbital, boolean color) {
         RadialFunction radialFunction = orbital.getRadialFunction();
-        int quadraturePoints = radialFunction.getQuadratureOrder();
+        Quadrature quadrature = orbital.getQuadrature();
+        int quadraturePoints = quadrature.getOrder();
         int quadratureSize = radialFunction.getQuadratureSize();
         float[] table = new float[4 * quadraturePoints * quadratureSize];
 

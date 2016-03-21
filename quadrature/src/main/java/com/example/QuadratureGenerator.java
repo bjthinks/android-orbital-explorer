@@ -1,6 +1,7 @@
 package com.example;
 
 import com.transvect.orbitalexplorer.Polynomial;
+import com.transvect.orbitalexplorer.Quadrature;
 import com.transvect.orbitalexplorer.RadialFunction;
 
 import java.io.BufferedOutputStream;
@@ -25,23 +26,24 @@ public class QuadratureGenerator {
         for (int N = 1; N <= 8; ++N) {
             for (int L = 0; L < N; ++L) {
                 RadialFunction radialFunction = new RadialFunction(N, N, L);
+                Quadrature quadrature = new Quadrature(N);
                 int quadratureSize = radialFunction.getQuadratureSize();
                 double exponentialConstant = radialFunction.getExponentialConstant();
                 int powerOfR = radialFunction.getPowerOfR();
-                int quadraturePoints = radialFunction.getQuadratureOrder();
+                int quadratureOrder = quadrature.getOrder();
 
-                float[] quadratureWeights = new float[2 * quadraturePoints * quadratureSize];
+                float[] quadratureWeights = new float[2 * quadratureOrder * quadratureSize];
                 for (int i = 0; i < quadratureSize; ++i) {
                     double distanceFromOrigin = radialFunction.getMaximumRadius()
                             * (double) i / (double) (quadratureSize - 1);
                     WeightFunction weightFunction = new WeightFunction(exponentialConstant,
                             Polynomial.variableToThe(powerOfR), distanceFromOrigin);
-                    GaussianQuadrature GQ = new GaussianQuadrature(weightFunction, quadraturePoints);
+                    GaussianQuadrature GQ = new GaussianQuadrature(weightFunction, quadratureOrder);
 
-                    for (int j = 0; j < quadraturePoints; ++j) {
-                        quadratureWeights[2 * quadraturePoints * i + 2 * j]
+                    for (int j = 0; j < quadratureOrder; ++j) {
+                        quadratureWeights[2 * quadratureOrder * i + 2 * j]
                                 = (float) GQ.getNode(j);
-                        quadratureWeights[2 * quadraturePoints * i + 2 * j + 1]
+                        quadratureWeights[2 * quadratureOrder * i + 2 * j + 1]
                                 = (float) (GQ.getWeight(j) / weightFunction.eval(GQ.getNode(j)));
                     }
                 }
@@ -53,11 +55,12 @@ public class QuadratureGenerator {
         for (int N = 1; N <= 8; ++N) {
             for (int L = 0; L < N; ++L) {
                 RadialFunction radialFunction = new RadialFunction(N, N, L);
+                Quadrature quadrature = new Quadrature(N);
                 int quadratureSize = radialFunction.getQuadratureSize();
                 double exponentialConstant = radialFunction.getExponentialConstant();
                 int powerOfR = radialFunction.getPowerOfR();
                 Polynomial oscillatingPart = radialFunction.getOscillatingPart();
-                int quadraturePoints = radialFunction.getQuadratureOrder();
+                int quadraturePoints = quadrature.getOrder();
 
                 float[] quadratureWeights = new float[2 * quadraturePoints * quadratureSize];
                 for (int i = 0; i < quadratureSize; ++i) {
