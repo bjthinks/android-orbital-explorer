@@ -10,7 +10,7 @@ public class Integrator extends RenderStage {
 
     AssetManager assetManager;
 
-    private int programColor, programMono;
+    private int programColor, programMono, currentProgram;
 
     private final int RADIAL_TEXTURE_SIZE = 256;
     private Texture radialTexture;
@@ -118,6 +118,10 @@ public class Integrator extends RenderStage {
         float[] inverseTransform = frozenState.inverseTransform;
         color = frozenState.color;
         Orbital orbital = frozenState.orbital;
+        if (frozenState.color)
+            currentProgram = programColor;
+        else
+            currentProgram = programMono;
 
         if (frozenState.orbitalChanged || newRenderer) {
             newRenderer = false;
@@ -165,10 +169,7 @@ public class Integrator extends RenderStage {
             final int zeroes[] = {0, 0, 0, 0};
             GLES30.glClearBufferiv(GLES30.GL_COLOR, 0, zeroes, 0);
 
-            if (color)
-                GLES30.glUseProgram(programColor);
-            else
-                GLES30.glUseProgram(programMono);
+            GLES30.glUseProgram(currentProgram);
 
             GLES30.glActiveTexture(GLES30.GL_TEXTURE0);
             radialTexture.bindToTexture2D();
@@ -198,6 +199,8 @@ public class Integrator extends RenderStage {
 
             setUniformFloat("maximumRadius",
                     (float) orbital.getRadialFunction().getMaximumRadius());
+            setUniformFloat("brightness",
+                    50.0f / (float) orbital.getRadialFunction().getOuter90PercentRadialL2Integral());
             setUniformFloat("numRadialSubdivisions", (float) (RADIAL_TEXTURE_SIZE - 1));
             setUniformFloat("numAzimuthalSubdivisions", (float) (AZIMUTHAL_TEXTURE_SIZE - 1));
             setUniformFloat("numQuadratureSubdivisions", (float) (quadratureDataSize - 1));
@@ -207,10 +210,7 @@ public class Integrator extends RenderStage {
             GLES30.glUniformMatrix4fv(mvpMatrixHandle, 1, false, inverseTransform, 0);
 
             int inPositionHandle;
-            if (color)
-                inPositionHandle = GLES30.glGetAttribLocation(programColor, "inPosition");
-            else
-                inPositionHandle = GLES30.glGetAttribLocation(programMono, "inPosition");
+            inPositionHandle = GLES30.glGetAttribLocation(currentProgram, "inPosition");
             GLES30.glEnableVertexAttribArray(inPositionHandle);
             GLES30.glVertexAttribPointer(inPositionHandle, 2, GLES30.GL_FLOAT, false, 8,
                     screenRectangle);
@@ -228,12 +228,7 @@ public class Integrator extends RenderStage {
     }
 
     int getUniformHandle(String name) {
-        int handle;
-        if (color)
-            handle = GLES30.glGetUniformLocation(programColor, name);
-        else
-            handle = GLES30.glGetUniformLocation(programMono, name);
-        return handle;
+        return GLES30.glGetUniformLocation(currentProgram, name);
     }
 
     void setUniformInt(String name, int value) {

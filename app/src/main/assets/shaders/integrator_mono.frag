@@ -21,6 +21,7 @@ uniform int numQuadraturePoints;
 uniform float M;
 uniform float powerOfR;
 uniform bool realOrbital;
+uniform float brightness;
 
 float radialPart(float r) {
     float positionInTexture = r / maximumRadius * numRadialSubdivisions;
@@ -119,7 +120,7 @@ void main() {
 
     if (total > 0.0) {
         // Increase brightness
-        total *= 50.0;
+        total *= brightness;
 
         // Galaxy S6 can't do exp of a negative number correctly
         total = 1.0 - 1.0 / exp(total);
