@@ -100,4 +100,8 @@ public class RadialFunction implements Function {
     public int getQuadratureOrder() {
         return quadratureOrder;
     }
+
+    public int getQuadratureSize() {
+        return 64;
+    }
 }

@@ -10,8 +10,6 @@ import java.io.IOException;
 
 public class QuadratureGenerator {
 
-    private final int QUADRATURE_SIZE = 64;
-
     private void writeAsset(String assetname, float data[])
             throws IOException {
         DataOutputStream stream
@@ -27,14 +25,15 @@ public class QuadratureGenerator {
         for (int N = 1; N <= 8; ++N) {
             for (int L = 0; L < N; ++L) {
                 RadialFunction radialFunction = new RadialFunction(N, N, L);
+                int quadratureSize = radialFunction.getQuadratureSize();
                 double exponentialConstant = radialFunction.getExponentialConstant();
                 int powerOfR = radialFunction.getPowerOfR();
                 int quadraturePoints = radialFunction.getQuadratureOrder();
 
-                float[] quadratureWeights = new float[2 * quadraturePoints * QUADRATURE_SIZE];
-                for (int i = 0; i < QUADRATURE_SIZE; ++i) {
+                float[] quadratureWeights = new float[2 * quadraturePoints * quadratureSize];
+                for (int i = 0; i < quadratureSize; ++i) {
                     double distanceFromOrigin = radialFunction.getMaximumRadius()
-                            * (double) i / (double) (QUADRATURE_SIZE - 1);
+                            * (double) i / (double) (quadratureSize - 1);
                     WeightFunction weightFunction
                             = new WeightFunction(exponentialConstant,
                             Polynomial.variableToThe(powerOfR), distanceFromOrigin);
@@ -55,15 +54,16 @@ public class QuadratureGenerator {
         for (int N = 1; N <= 8; ++N) {
             for (int L = 0; L < N; ++L) {
                 RadialFunction radialFunction = new RadialFunction(N, N, L);
+                int quadratureSize = radialFunction.getQuadratureSize();
                 double exponentialConstant = radialFunction.getExponentialConstant();
                 int powerOfR = radialFunction.getPowerOfR();
                 Polynomial oscillatingPart = radialFunction.getOscillatingPart();
                 int quadraturePoints = radialFunction.getQuadratureOrder();
 
-                float[] quadratureWeights = new float[2 * quadraturePoints * QUADRATURE_SIZE];
-                for (int i = 0; i < QUADRATURE_SIZE; ++i) {
+                float[] quadratureWeights = new float[2 * quadraturePoints * quadratureSize];
+                for (int i = 0; i < quadratureSize; ++i) {
                     double distanceFromOrigin = radialFunction.getMaximumRadius()
-                            * (double) i / (double) (QUADRATURE_SIZE - 1);
+                            * (double) i / (double) (quadratureSize - 1);
                     WeightFunction weightFunction
                             = new WeightFunction(exponentialConstant,
                             new Product(Polynomial.variableToThe(powerOfR), oscillatingPart),
