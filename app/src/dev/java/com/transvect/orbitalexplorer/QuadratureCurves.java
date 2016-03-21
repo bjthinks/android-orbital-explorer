@@ -42,11 +42,11 @@ public class QuadratureCurves extends RenderStage {
     public void render(RenderState.FrozenState frozenState) {
         double cameraDistance = frozenState.cameraDistance;
 
-        if (orbital == null || frozenState.orbitalChanged) {
+        if (orbital == null || frozenState.orbitalChanged || frozenState.colorChanged) {
             orbital = frozenState.orbital;
             RadialFunction radialFunction = orbital.getRadialFunction();
             quadratureSize = radialFunction.getQuadratureSize();
-            float[] quadrature = QuadratureTable.get(assetManager, orbital);
+            float[] quadrature = QuadratureTable.get(assetManager, orbital, frozenState.color);
             float q[] = new float[2 * quadratureSize];
             quadratureOrder = quadrature.length / 4 / quadratureSize;
             double orbitalRadius = radialFunction.getMaximumRadius();

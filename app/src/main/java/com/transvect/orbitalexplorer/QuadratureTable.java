@@ -10,13 +10,19 @@ public final class QuadratureTable {
 
     private QuadratureTable() {}
 
-    public static float[] get(AssetManager assets, Orbital orbital) {
+    public static float[] get(AssetManager assets, Orbital orbital, boolean color) {
         RadialFunction radialFunction = orbital.getRadialFunction();
         int quadraturePoints = radialFunction.getQuadratureOrder();
         int quadratureSize = radialFunction.getQuadratureSize();
         float[] table = new float[4 * quadraturePoints * quadratureSize];
 
-        String filename = "data/color-" + orbital.N + "-" + orbital.L;
+        String filename = "data/";
+        if (color)
+            filename += "color";
+        else
+            filename += "mono";
+        filename += "-" + orbital.N + "-" + orbital.L;
+
         try {
             DataInputStream stream
                     = new DataInputStream(new BufferedInputStream(assets.open(filename)));

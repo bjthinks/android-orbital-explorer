@@ -34,8 +34,7 @@ public class QuadratureGenerator {
                 for (int i = 0; i < quadratureSize; ++i) {
                     double distanceFromOrigin = radialFunction.getMaximumRadius()
                             * (double) i / (double) (quadratureSize - 1);
-                    WeightFunction weightFunction
-                            = new WeightFunction(exponentialConstant,
+                    WeightFunction weightFunction = new WeightFunction(exponentialConstant,
                             Polynomial.variableToThe(powerOfR), distanceFromOrigin);
                     GaussianQuadrature GQ = new GaussianQuadrature(weightFunction, quadraturePoints);
 
@@ -68,13 +67,16 @@ public class QuadratureGenerator {
                             = new WeightFunction(exponentialConstant,
                             new Product(Polynomial.variableToThe(powerOfR), oscillatingPart),
                             distanceFromOrigin);
+                    WeightFunction simpleWeightFunction = new WeightFunction(exponentialConstant,
+                            Polynomial.variableToThe(powerOfR), distanceFromOrigin);
                     GaussianQuadrature GQ = new GaussianQuadrature(weightFunction, quadraturePoints);
 
                     for (int j = 0; j < quadraturePoints; ++j) {
                         quadratureWeights[2 * quadraturePoints * i + 2 * j]
                                 = (float) GQ.getNode(j);
                         quadratureWeights[2 * quadraturePoints * i + 2 * j + 1]
-                                = (float) (GQ.getWeight(j) / weightFunction.eval(GQ.getNode(j)));
+                                = (float) (GQ.getWeight(j)
+                                / simpleWeightFunction.eval(GQ.getNode(j)));
                     }
                 }
                 writeAsset("mono-" + N + "-" + L, quadratureWeights);
