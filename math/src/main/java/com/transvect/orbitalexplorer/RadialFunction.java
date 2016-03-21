@@ -20,7 +20,6 @@ public class RadialFunction implements Function {
     private int powerOfR;
     private Polynomial oscillatingPart;
     private double maximumRadius;
-    private double outer90PercentRadialL2Integral;
 
     public RadialFunction(int Z, int N, int L) {
         double dZ = (double) Z;
@@ -50,12 +49,6 @@ public class RadialFunction implements Function {
                 consecutiveSmall = 0;
         }
         maximumRadius = r;
-
-        outer90PercentRadialL2Integral = 0.0;
-        for (r = 0.1 * maximumRadius; r < maximumRadius; r += 0.1) {
-            double f = eval(r);
-            outer90PercentRadialL2Integral += f * f;
-        }
     }
 
     public double getExponentialConstant() {
@@ -80,7 +73,4 @@ public class RadialFunction implements Function {
         return maximumRadius;
     }
 
-    public double getOuter90PercentRadialL2Integral() {
-        return outer90PercentRadialL2Integral;
-    }
 }
