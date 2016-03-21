@@ -71,7 +71,7 @@ public class OrbitalSelector extends LinearLayout {
 
         nChanger.setInteger(N);
         lChanger.setInteger(L);
-        mChanger.setInteger(M);
+        setMChanger();
         setReal(real);
 
         nChanger.setOnUpListener(new OnClickListener() {
@@ -115,6 +115,7 @@ public class OrbitalSelector extends LinearLayout {
             @Override
             public void onClick(View v) {
                 setReal(!real);
+                setMChanger();
                 orbitalChanged();
             }
         });
@@ -126,7 +127,7 @@ public class OrbitalSelector extends LinearLayout {
         M = M_;
         nChanger.setInteger(N);
         lChanger.setInteger(L);
-        mChanger.setInteger(M);
+        setMChanger();
         setReal(real_);
         orbitalChanged();
     }
@@ -174,7 +175,7 @@ public class OrbitalSelector extends LinearLayout {
     private void increaseM() {
         if (M < maxN - 1) {
             ++M;
-            mChanger.setInteger(M);
+            setMChanger();
             if (M > L)
                 increaseL();
         }
@@ -183,10 +184,19 @@ public class OrbitalSelector extends LinearLayout {
     private void decreaseM() {
         if (M > 1 - maxN) {
             --M;
-            mChanger.setInteger(M);
+            setMChanger();
             if (M < -L)
                 increaseL();
         }
+    }
+
+    private void setMChanger() {
+        if (real && M > 0)
+            mChanger.setText("\u00b1" + M);
+        else if (real && M < 0)
+            mChanger.setText("\u2213" + -M);
+        else
+            mChanger.setInteger(M);
     }
 
     private void setReal(boolean realOrbital_) {
