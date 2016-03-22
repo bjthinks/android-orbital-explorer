@@ -18,8 +18,6 @@ public class QuadratureCurves extends RenderStage {
         height = 1;
     }
 
-    Orbital orbital;
-
     public void newContext() {
         // Compile & link GLSL program
         Shader vertexShader = new Shader(assetManager, "quadraturecurves.vert", GLES30.GL_VERTEX_SHADER);
@@ -36,14 +34,17 @@ public class QuadratureCurves extends RenderStage {
         height = height_;
     }
 
+    private boolean firstTime = true;
     private int quadratureSize;
     private int quadratureOrder;
     private FloatBuffer quadratureBuffers[];
+
     public void render(RenderState.FrozenState frozenState) {
         double cameraDistance = frozenState.cameraDistance;
 
-        if (orbital == null || frozenState.orbitalChanged || frozenState.colorChanged) {
-            orbital = frozenState.orbital;
+        if (firstTime || frozenState.orbitalChanged || frozenState.colorChanged) {
+            firstTime = false;
+            Orbital orbital = frozenState.orbital;
             RadialFunction radialFunction = orbital.getRadialFunction();
             Quadrature quadrature = orbital.getQuadrature();
             quadratureSize = quadrature.getSize();
