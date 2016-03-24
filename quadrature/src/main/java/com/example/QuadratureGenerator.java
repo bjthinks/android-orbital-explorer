@@ -26,7 +26,7 @@ public class QuadratureGenerator {
         for (int N = 1; N <= 8; ++N) {
             for (int L = 0; L < N; ++L) {
 
-                RadialFunction radialFunction = new RadialFunction(N, N, L);
+                RadialFunction radialFunction = new RadialFunction(1, N, L);
                 double exponentialConstant = radialFunction.getExponentialConstant();
                 int powerOfR = radialFunction.getPowerOfR();
 
@@ -57,7 +57,7 @@ public class QuadratureGenerator {
         for (int N = 1; N <= 8; ++N) {
             for (int L = 0; L < N; ++L) {
 
-                RadialFunction radialFunction = new RadialFunction(N, N, L);
+                RadialFunction radialFunction = new RadialFunction(1, N, L);
                 double exponentialConstant = radialFunction.getExponentialConstant();
                 int powerOfR = radialFunction.getPowerOfR();
                 Polynomial oscillatingPart = radialFunction.getOscillatingPart();

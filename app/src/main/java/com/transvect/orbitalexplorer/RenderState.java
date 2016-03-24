@@ -13,7 +13,7 @@ public class RenderState implements Parcelable {
 
     public RenderState() {
         camera = new Camera();
-        orbital = new Orbital(4, 4, 2, 1, false);
+        orbital = new Orbital(1, 4, 2, 1, false);
         orbitalChanged = true;
         color = true;
         colorChanged = true;
