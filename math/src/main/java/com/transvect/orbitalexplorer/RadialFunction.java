@@ -19,9 +19,7 @@ public class RadialFunction implements Function {
     private double exponentialConstant;
     private int powerOfR;
     private Polynomial oscillatingPart;
-    private int quadratureOrder;
     private double maximumRadius;
-    private double outer90PercentRadialL2Integral;
 
     public RadialFunction(int Z, int N, int L) {
         double dZ = (double) Z;
@@ -41,18 +39,6 @@ public class RadialFunction implements Function {
                 .multiply(Math.pow(radialScaleFactor, powerOfR))
                 .multiply(constantFactors);
 
-        // An important design choice is to make the quadrature order independent of M. This
-        // lets us re-use quadrature nodes and weights for all orbitals with the same
-        // (Z, N, L). Combined with the design choice to set Z = N always, this means we
-        // only need nodes and weights for each of the (N, L) pairs.
-        // Experiments show that a very simple formula here suffices:
-        // N     = pretty good, slight defects near center at some viewing angles
-        // N + 1 = extremely good, defects present but not
-        //         visible without direct comparison to N + 2
-        // N + 2 = essentially perfect, visually identical to all higher orders for all but
-        //         a few very specific corner cases
-        quadratureOrder = N + 1;
-
         double r;
         int consecutiveSmall = 0;
         for (r = 5.0; consecutiveSmall < 5; r += 0.1) {
@@ -63,12 +49,6 @@ public class RadialFunction implements Function {
                 consecutiveSmall = 0;
         }
         maximumRadius = r;
-
-        outer90PercentRadialL2Integral = 0.0;
-        for (r = 0.1 * maximumRadius; r < maximumRadius; r += 0.1) {
-            double f = eval(r);
-            outer90PercentRadialL2Integral += f * f;
-        }
     }
 
     public double getExponentialConstant() {
@@ -93,11 +73,4 @@ public class RadialFunction implements Function {
         return maximumRadius;
     }
 
-    public double getOuter90PercentRadialL2Integral() {
-        return outer90PercentRadialL2Integral;
-    }
-
-    public int getQuadratureOrder() {
-        return quadratureOrder;
-    }
 }

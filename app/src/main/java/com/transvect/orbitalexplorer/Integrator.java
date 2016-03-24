@@ -112,20 +112,20 @@ public class Integrator extends RenderStage {
     }
 
     private float[] oldTransform;
-    private boolean color;
     public Texture render(RenderState.FrozenState frozenState) {
 
         float[] inverseTransform = frozenState.inverseTransform;
-        color = frozenState.color;
         Orbital orbital = frozenState.orbital;
-        if (frozenState.color)
+        boolean orbitalChanged = frozenState.orbitalChanged;
+        boolean color = frozenState.color;
+        boolean colorChanged = frozenState.colorChanged;
+
+        if (color)
             currentProgram = programColor;
         else
             currentProgram = programMono;
 
-        if (frozenState.orbitalChanged || newRenderer) {
-            newRenderer = false;
-
+        if (orbitalChanged || newRenderer) {
             // Load new radial texture
             float[] radialData
                     = functionToBuffer2(orbital.getRadialFunction().getOscillatingPart(),
@@ -136,17 +136,18 @@ public class Integrator extends RenderStage {
             float[] azimuthalData = functionToBuffer2(orbital.getAzimuthalFunction(),
                     0.0, Math.PI, AZIMUTHAL_TEXTURE_SIZE - 1);
             azimuthalTexture.bindToTexture2DAndSetImage(AZIMUTHAL_TEXTURE_SIZE, 1, azimuthalData);
+        }
+
+        if (orbitalChanged || newRenderer || colorChanged) {
+            newRenderer = false;
 
             // Load new quadrature texture
-            float[] quadratureData = QuadratureTable.get(assetManager, orbital);
+            float[] quadratureData = QuadratureTable.get(assetManager, orbital, color);
             quadratureDataSize = quadratureData.length
-                    / (4 * orbital.getRadialFunction().getQuadratureOrder());
+                    / (4 * orbital.getQuadrature().getOrder());
             quadratureTexture.bindToTexture2DAndSetImage(
-                    orbital.getRadialFunction().getQuadratureOrder(),
+                    orbital.getQuadrature().getOrder(),
                     quadratureDataSize, quadratureData);
-
-            // Floating point textures are not filterable
-            // setTexture2DMinMagFilters(GLES30.GL_NEAREST, GLES30.GL_NEAREST);
         }
 
         if (oldTransform == null || !Arrays.equals(oldTransform, inverseTransform)) {
@@ -154,7 +155,7 @@ public class Integrator extends RenderStage {
             needToRender = true;
         }
 
-        if (frozenState.orbitalChanged || frozenState.colorChanged)
+        if (orbitalChanged || colorChanged)
             needToRender = true;
 
         if (needToRender && orbital != null) {
@@ -185,7 +186,7 @@ public class Integrator extends RenderStage {
 
             setUniformInt("enableColor", 1);
             setUniformInt("realOrbital", orbital.real ? 1 : 0);
-            setUniformInt("numQuadraturePoints", orbital.getRadialFunction().getQuadratureOrder());
+            setUniformInt("numQuadraturePoints", orbital.getQuadrature().getOrder());
 
             RadialFunction radialFunction = orbital.getRadialFunction();
 
@@ -197,10 +198,9 @@ public class Integrator extends RenderStage {
             int radialPower = 2 * radialFunction.getPowerOfR();
             setUniformFloat("powerOfR", (float) radialPower);
 
-            setUniformFloat("maximumRadius",
-                    (float) orbital.getRadialFunction().getMaximumRadius());
-            setUniformFloat("brightness",
-                    50.0f / (float) orbital.getRadialFunction().getOuter90PercentRadialL2Integral());
+            float maxR = (float) orbital.getRadialFunction().getMaximumRadius();
+            setUniformFloat("maximumRadius", maxR);
+            setUniformFloat("brightness", maxR * maxR / 5.0f);
             setUniformFloat("numRadialSubdivisions", (float) (RADIAL_TEXTURE_SIZE - 1));
             setUniformFloat("numAzimuthalSubdivisions", (float) (AZIMUTHAL_TEXTURE_SIZE - 1));
             setUniformFloat("numQuadratureSubdivisions", (float) (quadratureDataSize - 1));

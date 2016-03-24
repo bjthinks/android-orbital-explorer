@@ -23,16 +23,6 @@ uniform float powerOfR;
 uniform bool realOrbital;
 uniform float brightness;
 
-float radialPart(float r) {
-    float positionInTexture = r / maximumRadius * numRadialSubdivisions;
-    if (positionInTexture >= numRadialSubdivisions)
-        return 0.0;
-    float texturePosition = trunc(positionInTexture);
-    vec2 textureValue = texelFetch(radial, ivec2(texturePosition, 0), 0).xy;
-    float interpolationValue = fract(positionInTexture);
-    return mix(textureValue.x, textureValue.y, interpolationValue);
-}
-
 float azimuthalPart(float theta) {
     float result;
     float positionInTexture = theta / pi * numAzimuthalSubdivisions;
@@ -81,7 +71,6 @@ float angularPart(vec3 x, float r) {
 float integrand_pair(vec3 center, vec3 offset) {
     vec3 x = center - offset;
     float r = length(x);
-    float radialValue = radialPart(r);
 
     float result = angularPart(x, r);
     float total = result * result;
@@ -91,7 +80,7 @@ float integrand_pair(vec3 center, vec3 offset) {
     result = angularPart(x, r);
     total += result * result;
 
-    total *= pow(r, powerOfR) * exp(exponentialConstant * r) * radialValue * radialValue;
+    total *= pow(r, powerOfR) * exp(exponentialConstant * r);
     return total;
 }
 

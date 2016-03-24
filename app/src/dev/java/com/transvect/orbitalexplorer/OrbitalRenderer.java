@@ -2,6 +2,7 @@ package com.transvect.orbitalexplorer;
 
 import android.content.Context;
 import android.opengl.GLSurfaceView;
+import android.util.Log;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -51,8 +52,20 @@ public class OrbitalRenderer implements GLSurfaceView.Renderer {
     }
 
     // Rendering thread
+    private long lastFPSTimeMillis = 0;
+    private int framesSinceLastFPS = 0;
     @Override
     public void onDrawFrame(GL10 unused) {
+        long now = System.currentTimeMillis();
+        long millisBetweenRenders = now - lastFPSTimeMillis;
+        if (millisBetweenRenders >= 1000) {
+            lastFPSTimeMillis = now;
+            Log.d("OrbitalRenderer", "FPS: " + (1000.0 * (double) framesSinceLastFPS
+                    / millisBetweenRenders));
+            framesSinceLastFPS = 0;
+        }
+        ++framesSinceLastFPS;
+
         RenderState.FrozenState frozenState = renderState.freeze(aspectRatio);
 
         Texture integratorOutput = integrator.render(frozenState);
