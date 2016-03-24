@@ -41,9 +41,9 @@ public class RadialFunction implements Function {
 
         double r;
         int consecutiveSmall = 0;
-        for (r = 5.0; consecutiveSmall < 5; r += 0.1) {
+        for (r = 5.0; consecutiveSmall < 100; r += 0.1) {
             double f = eval(r);
-            if (Math.abs(r * f * f) < 1e-4)
+            if (Math.abs(r * f * f) < 1e-8)
                 ++consecutiveSmall;
             else
                 consecutiveSmall = 0;
