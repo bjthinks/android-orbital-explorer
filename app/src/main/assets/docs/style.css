@@ -2,4 +2,4 @@ body { margin-top: 1em }
 h2 { text-align: center; }
 h3 { text-align: center; }
 h4 { text-align: center; margin: 0; font-weight: normal; }
-span { font-family: cursive; letter-spacing: 3px; }
+span.l { font-family: cursive; letter-spacing: 2px; }
