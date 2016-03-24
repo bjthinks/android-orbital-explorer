@@ -67,7 +67,8 @@ public class ScreenDrawer extends RenderStage {
 
         int colorRotation = getUniformHandle("colorRotation");
         float[] rot = new float[4];
-        long period = 9124; // ms
+        int N = frozenState.orbital.N;
+        long period = N * N * 1000; // ms
         double t = 2. * Math.PI * (double) (System.currentTimeMillis() % period) / (double) period;
         rot[0] = (float) Math.cos(t);  rot[2] = (float) -Math.sin(t);
         rot[1] = (float) Math.sin(t);  rot[3] = (float) Math.cos(t);
