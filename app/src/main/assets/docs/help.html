@@ -1,38 +1,45 @@
 <html>
 <head><link rel="stylesheet" type="text/css" href="style.css"></head>
 <body bgcolor="#000" text="#fff">
-<h3>What is this?</h3>
-<p>This app shows the shapes of electron orbitals. An orbital is the volume
-    of space that an electron occupies in an atom.</p>
+<h3>What atom is this?</h3>
+<p></p>
 <h3>What are the numbers?</h3>
-<p>The numbers determine the quantum state of the electron.
-    First is N, the energy level or shell number.
-    Second is L, the orbital angular momentum, and
-    third is M, the z-projection of angular momentum.</p>
+<p>The first number, N, is the electron's energy level or shell number. The second number,
+    <i>l</i>, is the electron's orbital angular momentum, which determines how much the electron
+    is orbiting around the nucleus, versus oscillating radially. Set <i>l</i> to 0 for an "s"
+    orbital, 1 for a "p" orbital, 2, for a "d" orbital, and so on. The third number, <i>m</i>,
+    is the z-component of <i>l</i> and affects how the electron's orbit is aligned.
 <h3>What is the &#x2102; or &#x211d;?</h3>
-<p>This chooses between two different sets of orbitals.
-    The complex or "&#x2102;" orbitals have a unique quantum number M, and are most meaningful
-    for an isolated atom in an external magnetic field. These orbitals are usually
-    discussed in the context of quantum mechanics and solutions to Schr&ouml;dinger's
-    equation. The real or "&#x211d;" orbitals are superpositions of states with two
-    opposite values of M, and are most meaningful when atoms form bonds with each other.
-    These are the orbitals usually discussed in chemistry.</p>
+<p>This button selects which generating set or "basis" of orbitals to display.
+    The complex or "&#x2102;" orbitals each have a well-defined <i>m</i> value, which
+    maximizes the observer's knowledge of the electron's motion. These states are most
+    meaningful for an isolated atom in an external magnetic field, and they are often
+    encountered in the context of quantum mechanics and solutions to Schr&ouml;dinger's
+    equation. The real or "&#x211d;" orbitals are combinations of states with two
+    opposite values of <i>m</i>, which has the effect of localizing the electron's position.
+    These states are most meaningful when atoms interact with each other, and they are often
+    discussed in chemistry.</p>
 <h3>How can I view an s, p, d, or f orbital?</h3>
-<p>This is determined by the second quantum number, L. Set it to 0 for an s orbital,
+<p>This is determined by the second number, <i>l</i>. Set it to 0 for an s orbital,
     1 for p, 2 for d, and 3 for f. If you also set the &#x2102;/&#x211d; switch
-    to &#x211d;, you should get pictures that match your chemistry reference.</p>
-<h3>Is this what an atom's orbitals really look like?</h3>
-<p>Technically, no. The orbitals shown here are only valid for an atom (or ion) with a
-    single electron. When there are multiple electrons, their mutual repulsion
+    to &#x211d;, you should get images that match your chemistry reference.</p>
+<h3>How might real atoms' orbitals differ from what is shown here?</h3>
+<p>The orbitals shown here are correct for a hydrogen atom (or for an ion like He<sup>+</sup>
+    which has a single electron). When there are multiple electrons, their mutual repulsion
     changes the shapes of the orbitals. These interactions are extremely difficult
     to calculate. Loosely speaking, the outer parts of orbitals expand in size due to
     the screening effect of the other electrons, and the orbitals' shapes get distorted
     so as to keep all the electrons farther away from each other.</p>
-<h3>What atom is shown?</h3>
-<p>Orbitals have the same shape regardless of the number of protons in the
-    nucleus. The nuclear charge only affects the size of the orbital,
+<h3>What atom is this?</h3>
+<p>This app shows electron states, not atoms.
+    The element is determined by how many protons an atom has in its nucleus, but orbitals have
+    the same shapes regardless of this number. So the simplest answer to this question is, "all
+    of them". If you ask which orbitals are <i>filled</i> is more interesting, and depends
+    The nuclear charge only affects the size of the orbital,
     causing it to shrink or grow as protons are added or subtracted.
-    This app sets the number of protons, Z, equal to the energy level, N.
+    This app changes the number of protons in the nucleus so that all of the
+    orbitals shown are similar in size to each other, which makes it much
+    easier to navigate and explore different states. Specifically, sets the number of protons, Z, equal to the energy level, N.
     This simplifies internal calculations, and gives all the orbitals
     the same energy (13.6 eV) and similar radial sizes.</p>
 <h3>Why do the colors change?</h3>
