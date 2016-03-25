@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.transvect.orbitalexplorer.OrbitalView
+    <com.gputreats.orbitalexplorer.OrbitalView
         android:id="@+id/orbitalview"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
@@ -27,7 +27,7 @@
             android:layout_height="0dp"
             android:layout_weight=".5" />
 
-        <com.transvect.orbitalexplorer.OrbitalSelector
+        <com.gputreats.orbitalexplorer.OrbitalSelector
             android:id="@+id/orbitalselector"
             android:layout_width="match_parent"
             android:layout_height="0dp"

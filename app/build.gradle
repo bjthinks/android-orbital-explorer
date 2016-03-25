@@ -5,7 +5,7 @@ android {
     buildToolsVersion "23.0.2"
 
     defaultConfig {
-        applicationId "com.transvect.orbitalexplorer"
+        applicationId "com.gputreats.orbitalexplorer"
         minSdkVersion 18
         targetSdkVersion 23
         versionCode 1
@@ -20,7 +20,7 @@ android {
     productFlavors {
         pub {}
         dev {
-            applicationId "com.transvect.orbitalexplorer.dev"
+            applicationId "com.gputreats.orbitalexplorer.dev"
         }
     }
     compileOptions {
