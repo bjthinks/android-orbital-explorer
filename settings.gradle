@@ -1,1 +1,1 @@
-include ':app', ':quadrature', ':math'
+include ':app', ':quadrature', ':math', ':maxradius'
