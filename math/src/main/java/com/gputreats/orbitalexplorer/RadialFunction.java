@@ -39,16 +39,7 @@ public class RadialFunction implements Function {
                 .multiply(Math.pow(radialScaleFactor, powerOfR))
                 .multiply(constantFactors);
 
-        double r;
-        int consecutiveSmall = 0;
-        for (r = 5.0; consecutiveSmall < 100; r += 0.1) {
-            double f = eval(r);
-            if (Math.abs(r * f * f) < 1e-8)
-                ++consecutiveSmall;
-            else
-                consecutiveSmall = 0;
-        }
-        maximumRadius = r;
+        maximumRadius = MaximumRadiusTable.getMaximumRadius(N, L);
     }
 
     public double getExponentialConstant() {
