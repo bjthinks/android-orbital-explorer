@@ -5,4 +5,5 @@ captures
 local.properties
 app/src/main/assets/data/color-*
 app/src/main/assets/data/mono-*
+app/src/main/assets/a/?
 *.iml

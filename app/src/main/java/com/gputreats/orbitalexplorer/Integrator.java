@@ -83,9 +83,9 @@ public class Integrator extends RenderStage {
 
         // Compile & link GLSL programs
         Shader vertexShaderColor
-                = new Shader(assetManager, "integrator_color.vert", GLES30.GL_VERTEX_SHADER);
+                = new Shader(assetManager, "2", GLES30.GL_VERTEX_SHADER);
         Shader fragmentShaderColor
-                = new Shader(assetManager, "integrator_color.frag", GLES30.GL_FRAGMENT_SHADER);
+                = new Shader(assetManager, "1", GLES30.GL_FRAGMENT_SHADER);
         programColor = GLES30.glCreateProgram();
         GLES30.glAttachShader(programColor, vertexShaderColor.getId());
         GLES30.glAttachShader(programColor, fragmentShaderColor.getId());
@@ -93,9 +93,9 @@ public class Integrator extends RenderStage {
         getGLError();
 
         Shader vertexShaderMono
-                = new Shader(assetManager, "integrator_mono.vert", GLES30.GL_VERTEX_SHADER);
+                = new Shader(assetManager, "4", GLES30.GL_VERTEX_SHADER);
         Shader fragmentShaderMono
-                = new Shader(assetManager, "integrator_mono.frag", GLES30.GL_FRAGMENT_SHADER);
+                = new Shader(assetManager, "3", GLES30.GL_FRAGMENT_SHADER);
         programMono = GLES30.glCreateProgram();
         GLES30.glAttachShader(programMono, vertexShaderMono.getId());
         GLES30.glAttachShader(programMono, fragmentShaderMono.getId());

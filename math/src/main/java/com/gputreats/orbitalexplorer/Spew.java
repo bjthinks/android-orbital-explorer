@@ -12,12 +12,12 @@ public class Spew {
             get();
     }
 
-    public long get() {
+    public int get() {
         long x = a;
         long y = b;
         a = y;
         x ^= x << 23;
         b = x ^ y ^ (x >>> 17) ^ (y >>> 26);
-        return b + y;
+        return (int) (b + y);
     }
 }

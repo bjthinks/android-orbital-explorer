@@ -3,6 +3,7 @@ package com.gputreats.orbitalexplorer;
 import android.content.res.AssetManager;
 import android.opengl.GLES30;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -20,15 +21,17 @@ public class Shader {
     public Shader(AssetManager assetManager, String filename, int shaderType) {
         String shaderSource = "";
         try {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(
-                    assetManager.open("shaders/" + filename)));
-            String line;
+            BufferedInputStream instream = new BufferedInputStream(
+                    assetManager.open("a/" + filename));
+            int b = instream.read();
+            int c = filename.charAt(0);
+            Spew spew = new Spew(c, c);
             StringBuilder buf = new StringBuilder();
-            while ((line = reader.readLine()) != null) {
-                buf.append(line);
-                buf.append('\n');
+            while (b != -1) {
+                buf.append((char) (b ^ (spew.get() & 255)));
+                b = instream.read();
             }
-            reader.close();
+            instream.close();
             shaderSource = buf.toString();
         } catch (IOException e) {
             throw new RuntimeException("Error reading shader: " + filename);
