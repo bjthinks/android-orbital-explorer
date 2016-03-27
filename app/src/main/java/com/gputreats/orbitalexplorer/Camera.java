@@ -38,7 +38,7 @@ public class Camera implements Parcelable {
         }
     };
 
-    private double cameraDistance = 16.0;
+    private double cameraDistance = 60.0;
     private static final double MIN_CAMERA_DISTANCE = 1.5;
     private static final double MAX_CAMERA_DISTANCE = 280.0;
 
