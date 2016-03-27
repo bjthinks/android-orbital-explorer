@@ -1,6 +1,5 @@
-body { margin-top: 1em }
-h2 { text-align: center; padding-top: 1em; }
-h3 { text-align: center; }
+h2 { text-align: center; margin: 2em 0; }
+h3 { text-align: center; margin: 1em 0; }
 h4 { text-align: center; margin: 0; font-weight: normal; }
 span.l { font-family: cursive; letter-spacing: 2px; }
 a { color: #8bf }
