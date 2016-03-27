@@ -1,5 +1,5 @@
 body { margin-top: 1em }
-h2 { text-align: center; }
+h2 { text-align: center; padding-top: 1em; }
 h3 { text-align: center; }
 h4 { text-align: center; margin: 0; font-weight: normal; }
 span.l { font-family: cursive; letter-spacing: 2px; }
