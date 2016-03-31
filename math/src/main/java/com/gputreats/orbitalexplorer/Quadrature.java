@@ -2,10 +2,16 @@ package com.gputreats.orbitalexplorer;
 
 public class Quadrature {
 
+    public final int N, L;
+    public final boolean color;
     private int order;
     private int size;
 
-    public Quadrature(int N) {
+    public Quadrature(int N_, int L_, boolean color_) {
+        N = N_;
+        L = L_;
+        color = color_;
+
         // An important design choice is to make the quadrature order independent of M. This
         // lets us re-use quadrature nodes and weights for all orbitals with the same
         // (Z, N, L). Combined with the design choice to set Z = N always, this means we

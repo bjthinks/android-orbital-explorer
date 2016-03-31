@@ -117,8 +117,7 @@ public class Integrator extends RenderStage {
         float[] inverseTransform = frozenState.inverseTransform;
         Orbital orbital = frozenState.orbital;
         boolean orbitalChanged = frozenState.orbitalChanged;
-        boolean color = frozenState.color;
-        boolean colorChanged = frozenState.colorChanged;
+        boolean color = frozenState.orbital.color;
 
         if (color)
             currentProgram = programColor;
@@ -126,6 +125,8 @@ public class Integrator extends RenderStage {
             currentProgram = programMono;
 
         if (orbitalChanged || newRenderer) {
+            newRenderer = false;
+
             // Load new radial texture
             float[] radialData
                     = functionToBuffer2(orbital.getRadialFunction().getOscillatingPart(),
@@ -136,13 +137,9 @@ public class Integrator extends RenderStage {
             float[] azimuthalData = functionToBuffer2(orbital.getAzimuthalFunction(),
                     0.0, Math.PI, AZIMUTHAL_TEXTURE_SIZE - 1);
             azimuthalTexture.bindToTexture2DAndSetImage(AZIMUTHAL_TEXTURE_SIZE, 1, azimuthalData);
-        }
-
-        if (orbitalChanged || newRenderer || colorChanged) {
-            newRenderer = false;
 
             // Load new quadrature texture
-            float[] quadratureData = QuadratureTable.get(assetManager, orbital, color);
+            float[] quadratureData = QuadratureTable.get(assetManager, orbital);
             quadratureDataSize = quadratureData.length
                     / (4 * orbital.getQuadrature().getOrder());
             quadratureTexture.bindToTexture2DAndSetImage(
@@ -155,10 +152,7 @@ public class Integrator extends RenderStage {
             needToRender = true;
         }
 
-        if (orbitalChanged || colorChanged)
-            needToRender = true;
-
-        if (needToRender && orbital != null) {
+        if (orbitalChanged || needToRender) {
             needToRender = false;
 
             if (color)
@@ -188,7 +182,7 @@ public class Integrator extends RenderStage {
             setUniformInt("realOrbital", orbital.real ? 1 : 0);
             setUniformInt("numQuadraturePoints", orbital.getQuadrature().getOrder());
 
-            com.gputreats.orbitalexplorer.RadialFunction radialFunction = orbital.getRadialFunction();
+            RadialFunction radialFunction = orbital.getRadialFunction();
 
             // Multiply by 2 because the wave function is squared
             double exponentialConstant = 2.0 * radialFunction.getExponentialConstant();

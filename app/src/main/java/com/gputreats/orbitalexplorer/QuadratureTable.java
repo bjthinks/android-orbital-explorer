@@ -10,19 +10,18 @@ public final class QuadratureTable {
 
     private QuadratureTable() {}
 
-    public static float[] get(AssetManager assets, Orbital orbital, boolean color) {
-        com.gputreats.orbitalexplorer.RadialFunction radialFunction = orbital.getRadialFunction();
-        com.gputreats.orbitalexplorer.Quadrature quadrature = orbital.getQuadrature();
+    public static float[] get(AssetManager assets, Orbital orbital) {
+        Quadrature quadrature = orbital.getQuadrature();
         int quadraturePoints = quadrature.getOrder();
         int quadratureSize = quadrature.getSize();
         float[] table = new float[4 * quadraturePoints * quadratureSize];
 
         String filename = "data/";
-        if (color)
+        if (quadrature.color)
             filename += "color";
         else
             filename += "mono";
-        filename += "-" + orbital.N + "-" + orbital.L;
+        filename += "-" + quadrature.N + "-" + quadrature.L;
 
         try {
             DataInputStream stream

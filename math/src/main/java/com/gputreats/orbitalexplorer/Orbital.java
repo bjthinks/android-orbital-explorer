@@ -3,20 +3,21 @@ package com.gputreats.orbitalexplorer;
 public class Orbital {
 
     public final int Z, N, L, M;
-    public final boolean real;
+    public final boolean real, color;
     private RadialFunction radialFunction;
     private Function azimuthalFunction;
     private Quadrature quadrature;
 
-    public Orbital(int Z_, int N_, int L_, int M_, boolean real_) {
+    public Orbital(int Z_, int N_, int L_, int M_, boolean real_, boolean color_) {
         Z = Z_;
         N = N_;
         L = L_;
         M = M_;
         real = real_;
-        radialFunction = new RadialFunction(Z_, N_, L_);
-        azimuthalFunction = new AzimuthalFunction(L_, M_);
-        quadrature = new Quadrature(N);
+        color = color_;
+        radialFunction = new RadialFunction(Z, N, L);
+        azimuthalFunction = new AzimuthalFunction(L, M);
+        quadrature = new Quadrature(N, L, color);
     }
 
     public RadialFunction getRadialFunction() {

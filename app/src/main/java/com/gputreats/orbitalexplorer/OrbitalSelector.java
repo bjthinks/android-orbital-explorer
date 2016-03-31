@@ -131,7 +131,7 @@ public class OrbitalSelector extends LinearLayout {
     }
 
     private void orbitalChanged() {
-        renderState.setOrbital(new Orbital(1, N, L, M, real));
+        renderState.setOrbital(1, N, L, M, real);
     }
 
     private void increaseN() {

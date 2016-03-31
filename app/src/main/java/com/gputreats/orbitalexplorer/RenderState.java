@@ -8,15 +8,11 @@ public class RenderState implements Parcelable {
     private Camera camera;
     private Orbital orbital;
     private boolean orbitalChanged;
-    private boolean color;
-    private boolean colorChanged;
 
     public RenderState() {
         camera = new Camera();
-        orbital = new Orbital(1, 4, 2, 1, false);
+        orbital = new Orbital(1, 4, 2, 1, false, true);
         orbitalChanged = true;
-        color = true;
-        colorChanged = true;
     }
 
     // Parcelable stuff
@@ -33,7 +29,7 @@ public class RenderState implements Parcelable {
         out.writeInt(orbital.L);
         out.writeInt(orbital.M);
         out.writeInt(orbital.real ? 1 : 0);
-        out.writeInt(color ? 1 : 0);
+        out.writeInt(orbital.color ? 1 : 0);
     }
 
     public static final Parcelable.Creator<RenderState> CREATOR
@@ -47,10 +43,9 @@ public class RenderState implements Parcelable {
             int L = in.readInt();
             int M = in.readInt();
             boolean real = (in.readInt() != 0);
-            result.orbital = new Orbital(Z, N, L, M, real);
+            boolean color = (in.readInt() != 0);
+            result.orbital = new Orbital(Z, N, L, M, real, color);
             result.orbitalChanged = true;
-            result.color = (in.readInt() != 0);
-            result.colorChanged = true;
             return result;
         }
         @Override
@@ -64,14 +59,15 @@ public class RenderState implements Parcelable {
         return orbital;
     }
 
-    public synchronized void setOrbital(Orbital o) {
-        orbital = o;
+    public synchronized void setOrbital(int Z, int N, int L, int M, boolean real) {
+        orbital = new Orbital(Z, N, L, M, real, orbital.color);
         orbitalChanged = true;
     }
 
     public synchronized void toggleColor() {
-        color = !color;
-        colorChanged = true;
+        orbital = new Orbital(orbital.Z, orbital.N, orbital.L, orbital.M,
+                orbital.real, !orbital.color);
+        orbitalChanged = true;
     }
 
     public synchronized boolean cameraStopFling() {
@@ -102,11 +98,8 @@ public class RenderState implements Parcelable {
         fs.cameraDistance = camera.getCameraDistance();
         fs.orbital = orbital;
         fs.orbitalChanged = orbitalChanged;
-        fs.color = color;
-        fs.colorChanged = colorChanged;
 
         orbitalChanged = false;
-        colorChanged = false;
 
         return fs;
     }
@@ -116,7 +109,5 @@ public class RenderState implements Parcelable {
         public double cameraDistance;
         public Orbital orbital;
         public boolean orbitalChanged;
-        public boolean color;
-        public boolean colorChanged;
     }
 }

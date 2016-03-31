@@ -46,13 +46,13 @@ public class QuadratureCurves extends RenderStage {
     public void render(RenderState.FrozenState frozenState) {
         double cameraDistance = frozenState.cameraDistance;
 
-        if (firstTime || frozenState.orbitalChanged || frozenState.colorChanged) {
+        if (firstTime || frozenState.orbitalChanged) {
             firstTime = false;
-            com.gputreats.orbitalexplorer.Orbital orbital = frozenState.orbital;
+            Orbital orbital = frozenState.orbital;
             RadialFunction radialFunction = orbital.getRadialFunction();
             Quadrature quadrature = orbital.getQuadrature();
             quadratureSize = quadrature.getSize();
-            float[] quadratureTable = QuadratureTable.get(assetManager, orbital, frozenState.color);
+            float[] quadratureTable = QuadratureTable.get(assetManager, orbital, frozenState.orbital.color);
             float q[] = new float[2 * quadratureSize];
             quadratureOrder = quadratureTable.length / 4 / quadratureSize;
             double orbitalRadius = radialFunction.getMaximumRadius();

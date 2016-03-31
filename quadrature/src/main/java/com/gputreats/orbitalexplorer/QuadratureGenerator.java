@@ -26,7 +26,7 @@ public class QuadratureGenerator {
                 double exponentialConstant = radialFunction.getExponentialConstant();
                 int powerOfR = radialFunction.getPowerOfR();
 
-                Quadrature quadrature = new Quadrature(N);
+                Quadrature quadrature = new Quadrature(N, L, true);
                 int quadratureOrder = quadrature.getOrder();
                 int quadratureSize = quadrature.getSize();
 
@@ -58,7 +58,7 @@ public class QuadratureGenerator {
                 int powerOfR = radialFunction.getPowerOfR();
                 Polynomial oscillatingPart = radialFunction.getOscillatingPart();
 
-                Quadrature quadrature = new Quadrature(N);
+                Quadrature quadrature = new Quadrature(N, L, false);
                 int quadratureOrder = quadrature.getOrder();
                 int quadratureSize = quadrature.getSize();
 
