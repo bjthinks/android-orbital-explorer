@@ -77,6 +77,7 @@ public class Camera implements Parcelable {
 
     private Vector2 flingVelocity = new Vector2(0.0, 0.0);
     private boolean stillFlinging = false;
+    private long lastFlingTime;
     // Maximum half-turns per second
     private static final double MAX_FLING_SPEED = 6.0;
     // Fraction of total speed lost per second
@@ -93,6 +94,7 @@ public class Camera implements Parcelable {
         if (flingSpeed > MAX_FLING_SPEED)
             flingVelocity = flingVelocity.multiply(MAX_FLING_SPEED / flingSpeed);
         stillFlinging = true;
+        lastFlingTime = System.currentTimeMillis();
     }
 
     public boolean stopFling() {
@@ -104,14 +106,18 @@ public class Camera implements Parcelable {
 
     public float[] computeInverseShaderTransform(double aspectRatio) {
         if (stillFlinging) {
-            // TODO use actual FPS
-            drag(flingVelocity.getX() / 60.0, flingVelocity.getY() / 60.0);
-            flingVelocity = flingVelocity.multiply(1 - FLING_SLOWDOWN_LINEAR / 60.0);
-            if (flingVelocity.norm() < FLING_SLOWDOWN_CONSTANT / 60.0) {
+            long now = System.currentTimeMillis();
+            long deltaMillis = now - lastFlingTime;
+            double deltaTime = ((double) deltaMillis) / 1000.0;
+            lastFlingTime = now;
+
+            drag(flingVelocity.getX() * deltaTime, flingVelocity.getY() * deltaTime);
+            flingVelocity = flingVelocity.multiply(1 - FLING_SLOWDOWN_LINEAR * deltaTime);
+            if (flingVelocity.norm() < FLING_SLOWDOWN_CONSTANT * deltaTime) {
                 stopFling();
             } else {
                 Vector2 flingDirection = flingVelocity.normalize();
-                Vector2 velocityReduction = flingDirection.multiply(FLING_SLOWDOWN_CONSTANT / 60.0);
+                Vector2 velocityReduction = flingDirection.multiply(FLING_SLOWDOWN_CONSTANT * deltaTime);
                 flingVelocity = flingVelocity.subtract(velocityReduction);
             }
         }
