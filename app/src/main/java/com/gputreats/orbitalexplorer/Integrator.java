@@ -117,9 +117,8 @@ public class Integrator extends RenderStage {
         float[] inverseTransform = frozenState.inverseTransform;
         Orbital orbital = frozenState.orbital;
         boolean orbitalChanged = frozenState.orbitalChanged;
-        boolean color = frozenState.orbital.color;
 
-        if (color)
+        if (orbital.color)
             currentProgram = programColor;
         else
             currentProgram = programMono;
@@ -139,7 +138,7 @@ public class Integrator extends RenderStage {
             azimuthalTexture.bindToTexture2DAndSetImage(AZIMUTHAL_TEXTURE_SIZE, 1, azimuthalData);
 
             // Load new quadrature texture
-            float[] quadratureData = QuadratureTable.get(assetManager, orbital);
+            float[] quadratureData = QuadratureTable.get(assetManager, orbital.getQuadrature());
             quadratureDataSize = quadratureData.length
                     / (4 * orbital.getQuadrature().getOrder());
             quadratureTexture.bindToTexture2DAndSetImage(
@@ -155,7 +154,7 @@ public class Integrator extends RenderStage {
         if (orbitalChanged || needToRender) {
             needToRender = false;
 
-            if (color)
+            if (orbital.color)
                 framebufferColor.bindToAttachmentPoint();
             else
                 framebufferMono.bindToAttachmentPoint();
@@ -215,7 +214,7 @@ public class Integrator extends RenderStage {
 
         getGLError();
 
-        if (color)
+        if (orbital.color)
             return outputTextureColor;
         else
             return outputTextureMono;

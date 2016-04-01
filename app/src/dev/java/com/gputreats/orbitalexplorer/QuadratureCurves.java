@@ -52,7 +52,7 @@ public class QuadratureCurves extends RenderStage {
             RadialFunction radialFunction = orbital.getRadialFunction();
             Quadrature quadrature = orbital.getQuadrature();
             quadratureSize = quadrature.getSize();
-            float[] quadratureTable = QuadratureTable.get(assetManager, orbital);
+            float[] quadratureTable = QuadratureTable.get(assetManager, quadrature);
             float q[] = new float[2 * quadratureSize];
             quadratureOrder = quadratureTable.length / 4 / quadratureSize;
             double orbitalRadius = radialFunction.getMaximumRadius();

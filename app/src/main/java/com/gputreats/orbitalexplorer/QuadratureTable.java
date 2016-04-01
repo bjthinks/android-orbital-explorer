@@ -10,8 +10,7 @@ public final class QuadratureTable {
 
     private QuadratureTable() {}
 
-    public static float[] get(AssetManager assets, Orbital orbital) {
-        Quadrature quadrature = orbital.getQuadrature();
+    public static float[] get(AssetManager assets, Quadrature quadrature) {
         int quadraturePoints = quadrature.getOrder();
         int quadratureSize = quadrature.getSize();
         float[] table = new float[4 * quadraturePoints * quadratureSize];
