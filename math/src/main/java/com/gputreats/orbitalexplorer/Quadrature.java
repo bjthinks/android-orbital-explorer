@@ -22,9 +22,9 @@ public class Quadrature {
         //         visible without direct comparison to N + 2
         // N + 2 = essentially perfect, visually identical to all higher orders for all but
         //         a few very specific corner cases
-        order = N + 1;
+        order = color ? N + 1 : L + 2;
 
-        size = 64;
+        size = color ? 64 : 1024;
     }
 
     public int getOrder() {
