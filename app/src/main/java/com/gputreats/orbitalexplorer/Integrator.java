@@ -193,7 +193,7 @@ public class Integrator extends RenderStage {
 
             float maxR = (float) orbital.getRadialFunction().getMaximumRadius();
             setUniformFloat("maximumRadius", maxR);
-            setUniformFloat("brightness", maxR * maxR / 5.0f);
+            setUniformFloat("brightness", maxR * maxR / 2.0f);
             setUniformFloat("numRadialSubdivisions", (float) (RADIAL_TEXTURE_SIZE - 1));
             setUniformFloat("numAzimuthalSubdivisions", (float) (AZIMUTHAL_TEXTURE_SIZE - 1));
             setUniformFloat("numQuadratureSubdivisions", (float) (quadratureDataSize - 1));
