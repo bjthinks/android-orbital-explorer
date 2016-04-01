@@ -23,6 +23,7 @@
         <activity
             android:name=".HelpActivity"
             android:label="Help"
+            android:parentActivityName=".MainActivity"
             android:theme="@style/AuxTheme" >
         </activity>
     </application>
