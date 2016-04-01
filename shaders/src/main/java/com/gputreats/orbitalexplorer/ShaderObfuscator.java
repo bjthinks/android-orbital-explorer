@@ -8,9 +8,9 @@ import java.io.IOException;
 
 public class ShaderObfuscator {
 
-    private void obfuscate(String infile, String outfile) throws IOException {
+    private void obfuscate(String infile, String outfile, boolean dev) throws IOException {
         String infilename = "shaders/src/main/java/" + infile;
-        String outfilename = "app/src/main/assets/a/" + outfile;
+        String outfilename = "app/src/" + (dev ? "dev" : "main") + "/assets/a/" + outfile;
         BufferedInputStream instream =
                 new BufferedInputStream(new FileInputStream(infilename));
         BufferedOutputStream outstream =
@@ -27,14 +27,16 @@ public class ShaderObfuscator {
     }
 
     private void go() throws IOException {
-        obfuscate("integrator_color.frag",   "1");
-        obfuscate("integrator_color.vert",   "2");
-        obfuscate("integrator_mono.frag",    "3");
-        obfuscate("integrator_mono.vert",    "4");
-        obfuscate("screendrawer_color.frag", "5");
-        obfuscate("screendrawer_color.vert", "6");
-        obfuscate("screendrawer_mono.frag",  "7");
-        obfuscate("screendrawer_mono.vert",  "8");
+        obfuscate("integrator_color.frag",   "1", false);
+        obfuscate("integrator_color.vert",   "2", false);
+        obfuscate("integrator_mono.frag",    "3", false);
+        obfuscate("integrator_mono.vert",    "4", false);
+        obfuscate("screendrawer_color.frag", "5", false);
+        obfuscate("screendrawer_color.vert", "6", false);
+        obfuscate("screendrawer_mono.frag",  "7", false);
+        obfuscate("screendrawer_mono.vert",  "8", false);
+        obfuscate("quadraturecurves.vert",   "a",  true);
+        obfuscate("quadraturecurves.frag",   "b", true);
     }
 
     public static void main(String args[]) {

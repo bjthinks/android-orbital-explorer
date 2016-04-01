@@ -24,8 +24,8 @@ public class QuadratureCurves extends RenderStage {
 
     public void newContext() {
         // Compile & link GLSL program
-        Shader vertexShader = new Shader(assetManager, "quadraturecurves.vert", GLES30.GL_VERTEX_SHADER);
-        Shader fragmentShader = new Shader(assetManager, "quadraturecurves.frag", GLES30.GL_FRAGMENT_SHADER);
+        Shader vertexShader = new Shader(assetManager, "a", GLES30.GL_VERTEX_SHADER);
+        Shader fragmentShader = new Shader(assetManager, "b", GLES30.GL_FRAGMENT_SHADER);
         program = GLES30.glCreateProgram();
         GLES30.glAttachShader(program, vertexShader.getId());
         GLES30.glAttachShader(program, fragmentShader.getId());
@@ -52,7 +52,7 @@ public class QuadratureCurves extends RenderStage {
             RadialFunction radialFunction = orbital.getRadialFunction();
             Quadrature quadrature = orbital.getQuadrature();
             quadratureSize = quadrature.getSize();
-            float[] quadratureTable = QuadratureTable.get(assetManager, orbital, frozenState.orbital.color);
+            float[] quadratureTable = QuadratureTable.get(assetManager, orbital);
             float q[] = new float[2 * quadratureSize];
             quadratureOrder = quadratureTable.length / 4 / quadratureSize;
             double orbitalRadius = radialFunction.getMaximumRadius();
