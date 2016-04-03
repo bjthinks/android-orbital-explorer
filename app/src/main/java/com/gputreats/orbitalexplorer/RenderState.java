@@ -1,9 +1,12 @@
 package com.gputreats.orbitalexplorer;
 
+import android.opengl.GLSurfaceView;
 import android.os.Parcel;
 import android.os.Parcelable;
 
 public class RenderState implements Parcelable {
+
+    private OrbitalView orbitalView;
 
     private Camera camera;
     private boolean cameraChanged;
@@ -15,6 +18,10 @@ public class RenderState implements Parcelable {
         cameraChanged = true;
         orbital = new Orbital(1, 4, 2, 1, false, true);
         orbitalChanged = true;
+    }
+
+    public void setOrbitalView(OrbitalView ov) {
+        orbitalView = ov;
     }
 
     // Parcelable stuff
@@ -107,7 +114,7 @@ public class RenderState implements Parcelable {
         fs.orbital = orbital;
         fs.orbitalChanged = orbitalChanged;
         fs.needToIntegrate = orbitalChanged || cameraChanged || stillFlinging;
-        // if (fs.needToIntegrate || orbital.color) needToDrawScreen = true;
+        // if (!stillFlinging && !orbital.color) orbitalView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
 
         orbitalChanged = false;
         cameraChanged = false;
