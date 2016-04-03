@@ -51,6 +51,8 @@ public class OrbitalView extends GLSurfaceView {
 
         // Start the rendering thread
         setRenderer(new OrbitalRenderer(context));
+
+        renderState.finalSetup();
     }
 
     private int firstPointerID = MotionEvent.INVALID_POINTER_ID;

@@ -20,8 +20,17 @@ public class RenderState implements Parcelable {
         orbitalChanged = true;
     }
 
+    // This happens BEFORE the render thread starts up
     public void setOrbitalView(OrbitalView ov) {
         orbitalView = ov;
+    }
+
+    // This happens AFTER the render thread starts up
+    public void finalSetup() {
+        if (!orbital.color) {
+            orbitalView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
+            orbitalView.requestRender();
+        }
     }
 
     // Parcelable stuff
@@ -72,12 +81,21 @@ public class RenderState implements Parcelable {
     public synchronized void setOrbital(int Z, int N, int L, int M, boolean real) {
         orbital = new Orbital(Z, N, L, M, real, orbital.color);
         orbitalChanged = true;
+        if (orbitalView != null && !orbital.color)
+            orbitalView.requestRender();
     }
 
     public synchronized void toggleColor() {
+        boolean color = !orbital.color;
         orbital = new Orbital(orbital.Z, orbital.N, orbital.L, orbital.M,
-                orbital.real, !orbital.color);
+                orbital.real, color);
         orbitalChanged = true;
+        if (color)
+            orbitalView.setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
+        else {
+            orbitalView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
+            orbitalView.requestRender();
+        }
     }
 
     public synchronized boolean cameraStopFling() {
@@ -87,16 +105,22 @@ public class RenderState implements Parcelable {
     public synchronized void cameraDrag(double dx, double dy) {
         camera.drag(dx, dy);
         cameraChanged = true;
+        if (!orbital.color)
+            orbitalView.requestRender();
     }
 
     public synchronized void cameraTwist(double angle) {
         camera.twist(angle);
         cameraChanged = true;
+        if (!orbital.color)
+            orbitalView.requestRender();
     }
 
     public synchronized void cameraZoom(double factor) {
         camera.zoom(factor);
         cameraChanged = true;
+        if (!orbital.color)
+            orbitalView.requestRender();
     }
 
     public synchronized void cameraFling(double vx, double vy) {
