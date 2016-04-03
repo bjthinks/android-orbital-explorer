@@ -107,7 +107,7 @@ public class RenderState implements Parcelable {
         fs.orbital = orbital;
         fs.orbitalChanged = orbitalChanged;
         fs.needToIntegrate = orbitalChanged || cameraChanged || stillFlinging;
-        fs.needToDrawScreen = orbitalChanged || cameraChanged || orbital.color;
+        // if (fs.needToIntegrate || orbital.color) needToDrawScreen = true;
 
         orbitalChanged = false;
         cameraChanged = false;
@@ -121,6 +121,5 @@ public class RenderState implements Parcelable {
         public Orbital orbital;
         public boolean orbitalChanged;
         public boolean needToIntegrate;
-        public boolean needToDrawScreen;
     }
 }
