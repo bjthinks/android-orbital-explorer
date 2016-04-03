@@ -72,7 +72,6 @@ public class OrbitalView extends GLSurfaceView {
                 firstPointerID = e.getPointerId(0);
                 oneFingerEvent(e, false);
                 stoppedFling = renderState.cameraStopFling();
-                // setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
                 break;
 
             case MotionEvent.ACTION_POINTER_DOWN:
@@ -150,8 +149,6 @@ public class OrbitalView extends GLSurfaceView {
             double dx = (x - previousX) / meanSize;
             double dy = (y - previousY) / meanSize;
             renderState.cameraDrag(dx, dy);
-
-            requestRender();
         }
 
         previousX = x;
@@ -186,8 +183,6 @@ public class OrbitalView extends GLSurfaceView {
 
             double zoomFactor = distance / previousDistance;
             renderState.cameraZoom(zoomFactor);
-
-            requestRender();
         }
 
         previousAngle = angle;
@@ -213,7 +208,6 @@ public class OrbitalView extends GLSurfaceView {
                                float velocityX, float velocityY) {
             double meanSize = Math.sqrt(getWidth() * getHeight());
             renderState.cameraFling(velocityX / meanSize, velocityY / meanSize);
-            setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
 
             return true;
         }

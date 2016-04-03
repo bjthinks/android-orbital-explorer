@@ -126,6 +126,8 @@ public class RenderState implements Parcelable {
     public synchronized void cameraFling(double vx, double vy) {
         camera.fling(vx, vy);
         cameraChanged = true;
+        if (!orbital.color)
+            orbitalView.requestRender();
     }
 
     // Render thread getter
@@ -133,12 +135,14 @@ public class RenderState implements Parcelable {
         FrozenState fs = new FrozenState();
 
         boolean stillFlinging = camera.continueFling();
+        if (stillFlinging && !orbital.color)
+            orbitalView.requestRender();
+
         fs.inverseTransform = camera.computeInverseShaderTransform(aspectRatio);
         fs.cameraDistance = camera.getCameraDistance();
         fs.orbital = orbital;
         fs.orbitalChanged = orbitalChanged;
         fs.needToIntegrate = orbitalChanged || cameraChanged || stillFlinging;
-        // if (!stillFlinging && !orbital.color) orbitalView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
 
         orbitalChanged = false;
         cameraChanged = false;
