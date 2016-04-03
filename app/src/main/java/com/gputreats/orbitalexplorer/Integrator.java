@@ -4,8 +4,6 @@ import android.content.Context;
 import android.content.res.AssetManager;
 import android.opengl.GLES30;
 
-import java.util.Arrays;
-
 public class Integrator extends RenderStage {
 
     AssetManager assetManager;
@@ -24,12 +22,12 @@ public class Integrator extends RenderStage {
     private Texture outputTextureColor, outputTextureMono;
     private Framebuffer framebufferColor, framebufferMono;
     private int width, height;
-    private boolean newRenderer, needToRender;
+    private boolean newRenderer, outputTextureResized;
 
     Integrator(Context context) {
         assetManager = context.getAssets();
         newRenderer = true;
-        needToRender = true;
+        outputTextureResized = true;
     }
 
     public void newContext() {
@@ -108,7 +106,7 @@ public class Integrator extends RenderStage {
         height = h;
         outputTextureColor.bindToTexture2DAndResize(width, height);
         outputTextureMono.bindToTexture2DAndResize(width, height);
-        needToRender = true;
+        outputTextureResized = true;
     }
 
     private float[] oldTransform;
@@ -117,6 +115,7 @@ public class Integrator extends RenderStage {
         float[] inverseTransform = frozenState.inverseTransform;
         Orbital orbital = frozenState.orbital;
         boolean orbitalChanged = frozenState.orbitalChanged;
+        boolean needToIntegrate = frozenState.needToIntegrate;
 
         if (orbital.color)
             currentProgram = programColor;
@@ -124,7 +123,7 @@ public class Integrator extends RenderStage {
             currentProgram = programMono;
 
         if (orbitalChanged || newRenderer) {
-            newRenderer = false;
+            newRenderer = false; // We need this for e.g. orientation changes
 
             // Load new radial texture
             float[] radialData
@@ -146,13 +145,8 @@ public class Integrator extends RenderStage {
                     quadratureDataSize, quadratureData);
         }
 
-        if (oldTransform == null || !Arrays.equals(oldTransform, inverseTransform)) {
-            oldTransform = inverseTransform;
-            needToRender = true;
-        }
-
-        if (orbitalChanged || needToRender) {
-            needToRender = false;
+        if (needToIntegrate || outputTextureResized) {
+            outputTextureResized = false; // Also needed for e.g. orientation changes
 
             if (orbital.color)
                 framebufferColor.bindToAttachmentPoint();

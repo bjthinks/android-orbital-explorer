@@ -6,11 +6,13 @@ import android.os.Parcelable;
 public class RenderState implements Parcelable {
 
     private Camera camera;
+    private boolean cameraChanged;
     private Orbital orbital;
     private boolean orbitalChanged;
 
     public RenderState() {
         camera = new Camera();
+        cameraChanged = true;
         orbital = new Orbital(1, 4, 2, 1, false, true);
         orbitalChanged = true;
     }
@@ -38,6 +40,7 @@ public class RenderState implements Parcelable {
         public RenderState createFromParcel(Parcel in) {
             RenderState result = new RenderState();
             result.camera = in.readParcelable(Camera.class.getClassLoader());
+            result.cameraChanged = true;
             int Z = in.readInt();
             int N = in.readInt();
             int L = in.readInt();
@@ -76,30 +79,38 @@ public class RenderState implements Parcelable {
 
     public synchronized void cameraDrag(double dx, double dy) {
         camera.drag(dx, dy);
+        cameraChanged = true;
     }
 
     public synchronized void cameraTwist(double angle) {
         camera.twist(angle);
+        cameraChanged = true;
     }
 
     public synchronized void cameraZoom(double factor) {
         camera.zoom(factor);
+        cameraChanged = true;
     }
 
     public synchronized void cameraFling(double vx, double vy) {
         camera.fling(vx, vy);
+        cameraChanged = true;
     }
 
     // Render thread getter
     public synchronized FrozenState freeze(double aspectRatio) {
         FrozenState fs = new FrozenState();
 
+        boolean stillFlinging = camera.continueFling();
         fs.inverseTransform = camera.computeInverseShaderTransform(aspectRatio);
         fs.cameraDistance = camera.getCameraDistance();
         fs.orbital = orbital;
         fs.orbitalChanged = orbitalChanged;
+        fs.needToIntegrate = orbitalChanged || cameraChanged || stillFlinging;
+        fs.needToDrawScreen = orbitalChanged || cameraChanged || orbital.color;
 
         orbitalChanged = false;
+        cameraChanged = false;
 
         return fs;
     }
@@ -109,5 +120,7 @@ public class RenderState implements Parcelable {
         public double cameraDistance;
         public Orbital orbital;
         public boolean orbitalChanged;
+        public boolean needToIntegrate;
+        public boolean needToDrawScreen;
     }
 }

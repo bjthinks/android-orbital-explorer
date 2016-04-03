@@ -104,24 +104,28 @@ public class Camera implements Parcelable {
         return r;
     }
 
-    public float[] computeInverseShaderTransform(double aspectRatio) {
+    public boolean continueFling() {
         if (stillFlinging) {
             long now = System.currentTimeMillis();
             long deltaMillis = now - lastFlingTime;
             double deltaTime = ((double) deltaMillis) / 1000.0;
             lastFlingTime = now;
 
-            drag(flingVelocity.getX() * deltaTime, flingVelocity.getY() * deltaTime);
-            flingVelocity = flingVelocity.multiply(1 - FLING_SLOWDOWN_LINEAR * deltaTime);
+            flingVelocity = flingVelocity.multiply(1 - Math.max(1.0, FLING_SLOWDOWN_LINEAR * deltaTime));
             if (flingVelocity.norm() < FLING_SLOWDOWN_CONSTANT * deltaTime) {
                 stopFling();
             } else {
                 Vector2 flingDirection = flingVelocity.normalize();
                 Vector2 velocityReduction = flingDirection.multiply(FLING_SLOWDOWN_CONSTANT * deltaTime);
                 flingVelocity = flingVelocity.subtract(velocityReduction);
+                drag(flingVelocity.getX() * deltaTime, flingVelocity.getY() * deltaTime);
             }
         }
 
+        return stillFlinging;
+    }
+
+    public float[] computeInverseShaderTransform(double aspectRatio) {
         float ratio = (float) Math.sqrt(aspectRatio);
         float near = (float) cameraDistance;
         float far = (float) (cameraDistance + 1.0);
