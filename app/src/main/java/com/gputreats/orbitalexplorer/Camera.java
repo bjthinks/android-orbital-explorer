@@ -111,7 +111,7 @@ public class Camera implements Parcelable {
             double deltaTime = ((double) deltaMillis) / 1000.0;
             lastFlingTime = now;
 
-            flingVelocity = flingVelocity.multiply(1 - Math.max(1.0, FLING_SLOWDOWN_LINEAR * deltaTime));
+            flingVelocity = flingVelocity.multiply(1 - Math.min(1.0, FLING_SLOWDOWN_LINEAR * deltaTime));
             if (flingVelocity.norm() < FLING_SLOWDOWN_CONSTANT * deltaTime) {
                 stopFling();
             } else {
