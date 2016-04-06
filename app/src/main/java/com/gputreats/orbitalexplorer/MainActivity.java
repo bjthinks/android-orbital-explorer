@@ -122,7 +122,7 @@ public class MainActivity extends AppCompatActivity
         switch (item.getItemId()) {
 
             case R.id.menuShare:
-                Log.d("MainActivity", "Share button pressed");
+                renderState.requestScreenGrab();
                 break;
 
             case R.id.menuColor:

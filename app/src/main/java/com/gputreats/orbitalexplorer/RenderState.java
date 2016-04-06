@@ -12,12 +12,14 @@ public class RenderState implements Parcelable {
     private boolean cameraChanged;
     private Orbital orbital;
     private boolean orbitalChanged;
+    private boolean screenGrabRequested;
 
     public RenderState() {
         camera = new Camera();
         cameraChanged = true;
         orbital = new Orbital(1, 4, 2, 1, false, true);
         orbitalChanged = true;
+        screenGrabRequested = false;
     }
 
     // This happens BEFORE the render thread starts up
@@ -65,6 +67,7 @@ public class RenderState implements Parcelable {
             boolean color = (in.readInt() != 0);
             result.orbital = new Orbital(Z, N, L, M, real, color);
             result.orbitalChanged = true;
+            result.screenGrabRequested = false;
             return result;
         }
         @Override
@@ -130,6 +133,12 @@ public class RenderState implements Parcelable {
             orbitalView.requestRender();
     }
 
+    public synchronized void requestScreenGrab() {
+        screenGrabRequested = true;
+        if (!orbital.color)
+            orbitalView.requestRender();
+    }
+
     // Render thread getter
     public synchronized FrozenState freeze(double aspectRatio) {
         FrozenState fs = new FrozenState();
@@ -143,9 +152,11 @@ public class RenderState implements Parcelable {
         fs.orbital = orbital;
         fs.orbitalChanged = orbitalChanged;
         fs.needToIntegrate = orbitalChanged || cameraChanged || stillFlinging;
+        fs.screenGrabRequested = screenGrabRequested;
 
         orbitalChanged = false;
         cameraChanged = false;
+        screenGrabRequested = false;
 
         return fs;
     }
@@ -156,5 +167,6 @@ public class RenderState implements Parcelable {
         public Orbital orbital;
         public boolean orbitalChanged;
         public boolean needToIntegrate;
+        public boolean screenGrabRequested;
     }
 }

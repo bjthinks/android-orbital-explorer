@@ -3,6 +3,7 @@ package com.gputreats.orbitalexplorer;
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.opengl.GLES30;
+import android.util.Log;
 
 public class ScreenDrawer extends RenderStage {
 
@@ -86,6 +87,9 @@ public class ScreenDrawer extends RenderStage {
         GLES30.glDrawArrays(GLES30.GL_TRIANGLE_FAN, 0, 4);
         GLES30.glDisableVertexAttribArray(inPositionHandle);
         getGLError();
+
+        if (frozenState.screenGrabRequested)
+            Log.d("ScreenDrawer", "Screen grab requested");
     }
 
     int getUniformHandle(String name) {
