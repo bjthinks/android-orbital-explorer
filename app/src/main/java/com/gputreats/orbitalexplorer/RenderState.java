@@ -1,6 +1,7 @@
 package com.gputreats.orbitalexplorer;
 
 import android.opengl.GLSurfaceView;
+import android.os.Handler;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -13,6 +14,7 @@ public class RenderState implements Parcelable {
     private Orbital orbital;
     private boolean orbitalChanged;
     private boolean screenGrabRequested;
+    private Handler screenGrabHandler;
 
     public RenderState() {
         camera = new Camera();
@@ -133,8 +135,9 @@ public class RenderState implements Parcelable {
             orbitalView.requestRender();
     }
 
-    public synchronized void requestScreenGrab() {
+    public synchronized void requestScreenGrab(Handler handler) {
         screenGrabRequested = true;
+        screenGrabHandler = handler;
         if (!orbital.color)
             orbitalView.requestRender();
     }
@@ -153,10 +156,12 @@ public class RenderState implements Parcelable {
         fs.orbitalChanged = orbitalChanged;
         fs.needToIntegrate = orbitalChanged || cameraChanged || stillFlinging;
         fs.screenGrabRequested = screenGrabRequested;
+        fs.screenGrabHandler = screenGrabHandler;
 
         orbitalChanged = false;
         cameraChanged = false;
         screenGrabRequested = false;
+        screenGrabHandler = null;
 
         return fs;
     }
@@ -168,5 +173,6 @@ public class RenderState implements Parcelable {
         public boolean orbitalChanged;
         public boolean needToIntegrate;
         public boolean screenGrabRequested;
+        public Handler screenGrabHandler;
     }
 }

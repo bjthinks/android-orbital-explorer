@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ConfigurationInfo;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -14,7 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 public class MainActivity extends AppCompatActivity
-        implements RenderStateProvider, ControlToggler {
+        implements RenderStateProvider, ControlToggler, Handler.Callback {
 
     private RenderState renderState;
     private Toolbar toolbar;
@@ -122,7 +124,7 @@ public class MainActivity extends AppCompatActivity
         switch (item.getItemId()) {
 
             case R.id.menuShare:
-                renderState.requestScreenGrab();
+                renderState.requestScreenGrab(new Handler(this));
                 break;
 
             case R.id.menuColor:
@@ -145,6 +147,12 @@ public class MainActivity extends AppCompatActivity
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean handleMessage(Message message) {
+        Log.d("MainActivity", "Received message: " + message.arg1 + " " + message.arg2);
+        return true;
     }
 
     public void toggleControls() {
