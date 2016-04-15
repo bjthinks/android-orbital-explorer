@@ -4,16 +4,21 @@ import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ConfigurationInfo;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.nio.ByteBuffer;
 
 public class MainActivity extends AppCompatActivity
         implements RenderStateProvider, ControlToggler, Handler.Callback {
@@ -151,7 +156,35 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean handleMessage(Message message) {
-        Log.d("MainActivity", "Received message: " + message.arg1 + " " + message.arg2);
+        int width = message.arg1;
+        int height = message.arg2;
+        int[] colors = new int[width * height];
+        ByteBuffer buf = (ByteBuffer) message.obj;
+        for (int i = 0; i < width * height; ++i) {
+            colors[i] = 0xff000000
+                    | ((buf.get(4 * i) & 0x000000ff) << 16)
+                    | ((buf.get(4 * i + 1) & 0x000000ff) << 8)
+                    | (buf.get(4 * i + 2) & 0x000000ff);
+        }
+        Bitmap bitmap = Bitmap.createBitmap(colors, width, height, Bitmap.Config.ARGB_8888);
+
+        try {
+            File file = new File(getCacheDir(), "share.png");
+            FileOutputStream fileOutputStream = new FileOutputStream(file);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream);
+            fileOutputStream.flush();
+            fileOutputStream.close();
+            file.setReadable(true, false); // BAD
+            Intent intent = new Intent(Intent.ACTION_SEND);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
+            intent.setType("image/png");
+            Intent chooser = Intent.createChooser(intent, "Share image with");
+            startActivity(chooser);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         return true;
     }
 
