@@ -26,6 +26,15 @@
             android:parentActivityName=".MainActivity"
             android:theme="@style/AuxTheme" >
         </activity>
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="com.gputreats.orbitalexplorer.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/paths" />
+        </provider>
     </application>
 
 </manifest>

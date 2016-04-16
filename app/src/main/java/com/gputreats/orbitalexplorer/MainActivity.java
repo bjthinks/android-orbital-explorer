@@ -10,8 +10,10 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -49,9 +51,9 @@ public class MainActivity extends AppCompatActivity
         }
 
         setContentView(R.layout.activity_main);
-        toolbar         = (Toolbar)         findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         orbitalSelector = (OrbitalSelector) findViewById(R.id.orbitalselector);
-        orbitalView     = (OrbitalView)     findViewById(R.id.orbitalview);
+        orbitalView = (OrbitalView) findViewById(R.id.orbitalview);
 
         setSupportActionBar(toolbar);
 
@@ -159,26 +161,27 @@ public class MainActivity extends AppCompatActivity
         int width = message.arg1;
         int height = message.arg2;
         int[] colors = new int[width * height];
-        ByteBuffer buf = (ByteBuffer) message.obj;
+        byte[] imageArray = ((ByteBuffer) message.obj).array();
         for (int i = 0; i < width * height; ++i) {
             colors[i] = 0xff000000
-                    | ((buf.get(4 * i) & 0x000000ff) << 16)
-                    | ((buf.get(4 * i + 1) & 0x000000ff) << 8)
-                    | (buf.get(4 * i + 2) & 0x000000ff);
+                    | ((imageArray[4 * i] & 0xff) << 16)
+                    | ((imageArray[4 * i + 1] & 0xff) << 8)
+                    | (imageArray[4 * i + 2] & 0xff);
         }
         Bitmap bitmap = Bitmap.createBitmap(colors, width, height, Bitmap.Config.ARGB_8888);
 
         try {
-            File file = new File(getCacheDir(), "share.png");
+            File file = new File(getCacheDir(), "share.jpg"); // TODO
             FileOutputStream fileOutputStream = new FileOutputStream(file);
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream);
-            fileOutputStream.flush();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 90, fileOutputStream);
             fileOutputStream.close();
-            file.setReadable(true, false); // BAD
+            Uri shareUri = FileProvider
+                    .getUriForFile(this, "com.gputreats.orbitalexplorer.provider", file);
             Intent intent = new Intent(Intent.ACTION_SEND);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
-            intent.setType("image/png");
+            intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            intent.putExtra(Intent.EXTRA_STREAM, shareUri);
+            intent.setType("image/jpeg");
             Intent chooser = Intent.createChooser(intent, "Share image with");
             startActivity(chooser);
         } catch (Exception e) {
