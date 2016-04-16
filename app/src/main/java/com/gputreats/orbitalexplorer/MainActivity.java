@@ -164,11 +164,14 @@ public class MainActivity extends AppCompatActivity
         int height = message.arg2;
         int[] colors = new int[width * height];
         byte[] imageArray = ((ByteBuffer) message.obj).array();
-        for (int i = 0; i < width * height; ++i) {
-            colors[i] = 0xff000000
-                    | ((imageArray[4 * i] & 0xff) << 16)
-                    | ((imageArray[4 * i + 1] & 0xff) << 8)
-                    | (imageArray[4 * i + 2] & 0xff);
+        for (int row = 0; row < height; ++row) {
+            for (int col = 0; col < width; ++col) {
+                int cell = row * width + col;
+                colors[(height - 1 - row) * width + col] = 0xff000000
+                        | ((imageArray[4 * cell] & 0xff) << 16)
+                        | ((imageArray[4 * cell + 1] & 0xff) << 8)
+                        | (imageArray[4 * cell + 2] & 0xff);
+            }
         }
         Bitmap bitmap = Bitmap.createBitmap(colors, width, height, Bitmap.Config.ARGB_8888);
 
