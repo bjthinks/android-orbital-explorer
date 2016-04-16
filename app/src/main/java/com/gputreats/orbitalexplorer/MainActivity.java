@@ -19,7 +19,9 @@ import android.view.MenuItem;
 import android.view.View;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.nio.ByteBuffer;
 
 public class MainActivity extends AppCompatActivity
@@ -170,25 +172,51 @@ public class MainActivity extends AppCompatActivity
         }
         Bitmap bitmap = Bitmap.createBitmap(colors, width, height, Bitmap.Config.ARGB_8888);
 
+        int name = (int) (System.currentTimeMillis() % 0x10000);
+        File file = new File(getCacheDir(), "screens/" + name + ".jpg");
+        FileOutputStream fileOutputStream;
         try {
-            File file = new File(getCacheDir(), "share.jpg"); // TODO
-            FileOutputStream fileOutputStream = new FileOutputStream(file);
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 90, fileOutputStream);
+            fileOutputStream = new FileOutputStream(file);
+        } catch (FileNotFoundException e) {
+            File parent = file.getParentFile();
+            if (!parent.mkdirs())
+                // TODO show toast
+                return true;
+            try {
+                fileOutputStream = new FileOutputStream(file);
+            } catch (FileNotFoundException ee) {
+                // TODO show toast
+                return true;
+            }
+        }
+        if (!bitmap.compress(Bitmap.CompressFormat.JPEG, 90, fileOutputStream)) {
+            // TODO show toast
+            return true;
+        }
+        try {
             fileOutputStream.close();
-            Uri shareUri = FileProvider
-                    .getUriForFile(this, "com.gputreats.orbitalexplorer.provider", file);
-            Intent intent = new Intent(Intent.ACTION_SEND);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            intent.putExtra(Intent.EXTRA_STREAM, shareUri);
-            intent.setType("image/jpeg");
-            Intent chooser = Intent.createChooser(intent, "Share image with");
-            startActivity(chooser);
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO show toast
+            return true;
         }
 
+        Uri shareUri = FileProvider
+                .getUriForFile(this, "com.gputreats.orbitalexplorer.provider", file);
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        intent.putExtra(Intent.EXTRA_STREAM, shareUri);
+        intent.setType("image/jpeg");
+        Intent chooser = Intent.createChooser(intent, "Share image " + name + " with");
+        startActivityForResult(chooser, name);
+
         return true;
+    }
+
+    @Override
+    public void onActivityResult(int request, int result, Intent data) {
+        File file = new File(getCacheDir(), "screens/" + request + ".jpg");
+        file.delete();
     }
 
     public void toggleControls() {
