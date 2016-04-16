@@ -13,7 +13,6 @@ import android.support.annotation.NonNull;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -210,7 +209,7 @@ public class MainActivity extends AppCompatActivity
         intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         intent.putExtra(Intent.EXTRA_STREAM, shareUri);
         intent.setType("image/jpeg");
-        Intent chooser = Intent.createChooser(intent, "Share image " + name + " with");
+        Intent chooser = Intent.createChooser(intent, "Share image with");
         startActivityForResult(chooser, name);
 
         return true;
