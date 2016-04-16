@@ -4,6 +4,7 @@ import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ConfigurationInfo;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -16,6 +17,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -181,24 +183,25 @@ public class MainActivity extends AppCompatActivity
             fileOutputStream = new FileOutputStream(file);
         } catch (FileNotFoundException e) {
             File parent = file.getParentFile();
-            if (!parent.mkdirs())
-                // TODO show toast
+            if (!parent.mkdirs()) {
+                shareError(name);
                 return true;
+            }
             try {
                 fileOutputStream = new FileOutputStream(file);
             } catch (FileNotFoundException ee) {
-                // TODO show toast
+                shareError(name);
                 return true;
             }
         }
         if (!bitmap.compress(Bitmap.CompressFormat.JPEG, 90, fileOutputStream)) {
-            // TODO show toast
+            shareError(name);
             return true;
         }
         try {
             fileOutputStream.close();
         } catch (IOException e) {
-            // TODO show toast
+            shareError(name);
             return true;
         }
 
@@ -209,10 +212,21 @@ public class MainActivity extends AppCompatActivity
         intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         intent.putExtra(Intent.EXTRA_STREAM, shareUri);
         intent.setType("image/jpeg");
+        if (getPackageManager()
+                .queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY).size() == 0) {
+            shareError(name);
+            return true;
+        }
         Intent chooser = Intent.createChooser(intent, "Share image with");
         startActivityForResult(chooser, name);
 
         return true;
+    }
+
+    private void shareError(int name) {
+        Toast.makeText(this, "Unable to share", Toast.LENGTH_SHORT).show();
+        File file = new File(getCacheDir(), "screens/" + name + ".jpg");
+        file.delete();
     }
 
     @Override
