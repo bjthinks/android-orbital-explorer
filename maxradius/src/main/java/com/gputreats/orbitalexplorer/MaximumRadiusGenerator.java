@@ -12,7 +12,7 @@ public class MaximumRadiusGenerator {
             total += f.eval(r) / 8.0;
         double m = 1000.0;
         double mtot = f.eval(m) / 8.0;
-        while (Math.abs(mtot) < 1e-3 * Math.abs(total)) {
+        while (Math.abs(mtot) < 1e-4 * Math.abs(total)) {
             m -= 0.125;
             mtot += f.eval(m) / 8.0;
         }
