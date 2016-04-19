@@ -109,7 +109,7 @@ public class Integrator extends RenderStage {
         outputTextureResized = true;
     }
 
-    private float[] oldTransform;
+    private float quadratureRadius, maximumRadius;
     public Texture render(RenderState.FrozenState frozenState) {
 
         float[] inverseTransform = frozenState.inverseTransform;
@@ -125,12 +125,6 @@ public class Integrator extends RenderStage {
         if (orbitalChanged || newRenderer) {
             newRenderer = false; // We need this for e.g. orientation changes
 
-            // Load new radial texture
-            float[] radialData
-                    = functionToBuffer2(orbital.getRadialFunction().getOscillatingPart(),
-                    0.0, orbital.getRadialFunction().getMaximumRadius(), RADIAL_TEXTURE_SIZE - 1);
-            radialTexture.bindToTexture2DAndSetImage(RADIAL_TEXTURE_SIZE, 1, radialData);
-
             // Load new azimuthal texture
             float[] azimuthalData = functionToBuffer2(orbital.getAzimuthalFunction(),
                     0.0, Math.PI, AZIMUTHAL_TEXTURE_SIZE - 1);
@@ -143,6 +137,16 @@ public class Integrator extends RenderStage {
             quadratureTexture.bindToTexture2DAndSetImage(
                     orbital.getQuadrature().getOrder(),
                     quadratureDataSize, quadratureData);
+
+            quadratureRadius = (float) orbital.getRadialFunction().getMaximumRadius();
+            float maxLateral = quadratureData[quadratureData.length - 2];
+            maximumRadius = (float) Math.sqrt(quadratureRadius * quadratureRadius + maxLateral * maxLateral);
+
+            // Load new radial texture
+            float[] radialData
+                    = functionToBuffer2(orbital.getRadialFunction().getOscillatingPart(),
+                    0.0, maximumRadius, RADIAL_TEXTURE_SIZE - 1);
+            radialTexture.bindToTexture2DAndSetImage(RADIAL_TEXTURE_SIZE, 1, radialData);
         }
 
         if (needToIntegrate || outputTextureResized) {
@@ -185,10 +189,9 @@ public class Integrator extends RenderStage {
             int radialPower = 2 * radialFunction.getPowerOfR();
             setUniformFloat("powerOfR", (float) radialPower);
 
-            float maxR = (float) orbital.getRadialFunction().getMaximumRadius();
-            setUniformFloat("maximumRadius", maxR); // TODO
-            setUniformFloat("quadratureRadius", maxR);
-            setUniformFloat("brightness", maxR * maxR / 2.0f);
+            setUniformFloat("maximumRadius", maximumRadius);
+            setUniformFloat("quadratureRadius", quadratureRadius);
+            setUniformFloat("brightness", quadratureRadius * quadratureRadius / 2.0f);
             setUniformFloat("numRadialSubdivisions", (float) (RADIAL_TEXTURE_SIZE - 1));
             setUniformFloat("numAzimuthalSubdivisions", (float) (AZIMUTHAL_TEXTURE_SIZE - 1));
             setUniformFloat("numQuadratureSubdivisions", (float) (quadratureDataSize - 1));
