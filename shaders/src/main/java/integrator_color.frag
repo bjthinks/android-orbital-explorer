@@ -18,6 +18,7 @@ uniform float numAzimuthalSubdivisions;
 uniform sampler2D quadrature;
 uniform float numQuadratureSubdivisions;
 uniform int numQuadraturePoints;
+uniform float quadratureRadius;
 uniform float M;
 uniform float powerOfR;
 uniform bool realOrbital;
@@ -48,7 +49,7 @@ float azimuthalPart(float theta) {
 }
 
 vec2 quadratureData(float distanceToOrigin, int point) {
-    float positionInTexture = distanceToOrigin / maximumRadius * numQuadratureSubdivisions;
+    float positionInTexture = distanceToOrigin / quadratureRadius * numQuadratureSubdivisions;
     if (positionInTexture >= numQuadratureSubdivisions)
         return vec2(0.0);
     float texturePosition = trunc(positionInTexture);
