@@ -51,7 +51,6 @@ public class OrbitalSelector extends LinearLayout {
         M = previouslyDisplayedOrbital.M;
         real = previouslyDisplayedOrbital.real;
 
-        setOrientation(HORIZONTAL);
         LayoutInflater inflater
                 = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         inflater.inflate(R.layout.view_orbitalselector, this);
