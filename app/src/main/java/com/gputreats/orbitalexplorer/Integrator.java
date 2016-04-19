@@ -10,7 +10,7 @@ public class Integrator extends RenderStage {
 
     private int programColor, programMono, currentProgram;
 
-    private final int RADIAL_TEXTURE_SIZE = 256;
+    private final int RADIAL_TEXTURE_SIZE = 1024;
     private Texture radialTexture;
 
     private final int AZIMUTHAL_TEXTURE_SIZE = 256;
