@@ -1,11 +1,13 @@
 package com.gputreats.orbitalexplorer;
 
 import android.content.Context;
+import android.text.Html;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 public class OrbitalSelector extends LinearLayout {
 
@@ -13,11 +15,14 @@ public class OrbitalSelector extends LinearLayout {
 
     RenderState renderState;
 
+    private String plusMinus, minusPlus, realNumbers, complexNumbers;
+
     private int N;
     private int L;
     private int M;
     private boolean real;
 
+    private TextView orbitalName;
     private ValueChanger nChanger;
     private ValueChanger lChanger;
     private ValueChanger mChanger;
@@ -39,6 +44,11 @@ public class OrbitalSelector extends LinearLayout {
     }
 
     private void constructorSetup(Context context) {
+        plusMinus = context.getString(R.string.plusMinus);
+        minusPlus = context.getString(R.string.minusPlus);
+        realNumbers = context.getString(R.string.realNumbers);
+        complexNumbers = context.getString(R.string.complexNumbers);
+
         try {
             renderState = ((RenderStateProvider) context).provideRenderState();
         } catch (ClassCastException e) {
@@ -61,11 +71,13 @@ public class OrbitalSelector extends LinearLayout {
     protected void onFinishInflate() {
         super.onFinishInflate();
 
+        orbitalName = (TextView) findViewById(R.id.orbitalname);
         nChanger = (ValueChanger) findViewById(R.id.nchanger);
         lChanger = (ValueChanger) findViewById(R.id.lchanger);
         mChanger = (ValueChanger) findViewById(R.id.mchanger);
         rcChanger = (Button) findViewById(R.id.rcchanger);
 
+        setOrbitalName();
         nChanger.setInteger(N);
         lChanger.setInteger(L);
         setMChanger();
@@ -130,6 +142,7 @@ public class OrbitalSelector extends LinearLayout {
     }
 
     private void orbitalChanged() {
+        setOrbitalName();
         renderState.setOrbital(1, N, L, M, real);
     }
 
@@ -189,9 +202,9 @@ public class OrbitalSelector extends LinearLayout {
 
     private void setMChanger() {
         if (real && M > 0)
-            mChanger.setText("\u00b1" + M);
+            mChanger.setText(plusMinus + M);
         else if (real && M < 0)
-            mChanger.setText("\u2213" + -M);
+            mChanger.setText(minusPlus + (-M));
         else
             mChanger.setInteger(M);
     }
@@ -199,8 +212,139 @@ public class OrbitalSelector extends LinearLayout {
     private void setReal(boolean realOrbital_) {
         real = realOrbital_;
         if (real)
-            rcChanger.setText(R.string.realNumbers);
+            rcChanger.setText(realNumbers);
         else
-            rcChanger.setText(R.string.complexNumbers);
+            rcChanger.setText(complexNumbers);
+    }
+
+    private void setOrbitalName() {
+        String name = Integer.toString(N);
+        String subscript = "";
+        if (real) {
+            if (M > 0) subscript = plusMinus;
+            if (M < 0) subscript = minusPlus;
+            subscript += Math.abs(M);
+        } else {
+            subscript = Integer.toString(M);
+        }
+        switch (L) {
+            case 0:
+                name += "s";
+                subscript = "";
+                break;
+            case 1:
+                name += "p";
+                if (real) {
+                    switch (M) {
+                        case -1:
+                            subscript = "y";
+                            break;
+                        case 0:
+                            subscript = "z";
+                            break;
+                        case 1:
+                            subscript = "x";
+                            break;
+                    }
+                }
+                break;
+            case 2:
+                name += "d";
+                if (real) {
+                    switch (M) {
+                        case -2:
+                            subscript = "xy";
+                            break;
+                        case -1:
+                            subscript = "yz";
+                            break;
+                        case 0:
+                            subscript = "z<sup>2</sup>";
+                            break;
+                        case 1:
+                            subscript = "xz";
+                            break;
+                        case 2:
+                            subscript = "x<sup>2</sup>-y<sup>2</sup>";
+                            break;
+                    }
+                }
+                break;
+            case 3:
+                name += "f";
+                if (real) {
+                    switch (M) {
+                        case -3:
+                            subscript = "y(3x<sup>2</sup>-y<sup>2</sup>)";
+                            break;
+                        case -2:
+                            subscript = "xyz";
+                            break;
+                        case -1:
+                            subscript = "yz<sup>2</sup>";
+                            break;
+                        case 0:
+                            subscript = "z<sup>3</sup>";
+                            break;
+                        case 1:
+                            subscript = "xz<sup>2</sup>";
+                            break;
+                        case 2:
+                            subscript = "z(x<sup>2</sup>-y<sup>2</sup>)";
+                            break;
+                        case 3:
+                            subscript = "x(x<sup>2</sup>-3y<sup>2</sup>)";
+                            break;
+                    }
+                }
+                break;
+            case 4:
+                name += "g";
+                if (real) {
+                    switch (M) {
+                        case -4:
+                            subscript = "xy(x<sup>2</sup>-y<sup>2</sup>)";
+                            break;
+                        case -3:
+                            subscript = "zy<sup>3</sup>";
+                            break;
+                        case -2:
+                            subscript = "z<sup>2</sup>xy";
+                            break;
+                        case -1:
+                            subscript = "z<sup>3</sup>y";
+                            break;
+                        case 0:
+                            subscript = "z<sup>4</sup>";
+                            break;
+                        case 1:
+                            subscript = "z<sup>3</sup>x";
+                            break;
+                        case 2:
+                            subscript = "z<sup>2</sup>(x<sup>2</sup>-y<sup>2</sup>)";
+                            break;
+                        case 3:
+                            subscript = "zx<sup>3</sup>";
+                            break;
+                        case 4:
+                            subscript = "x<sup>4</sup>+y<sup>4</sup>";
+                            break;
+                    }
+                }
+                break;
+            case 5:
+                name += "h";
+                break;
+            case 6:
+                name += "i";
+                break;
+            case 7:
+                name += "k";
+                break;
+            default:
+                name += Integer.toString(L);
+        }
+        name += "<sub>" + subscript + "</sub>";
+        orbitalName.setText(Html.fromHtml(name));
     }
 }

@@ -6,4 +6,7 @@
 
     <string name="complexNumbers">\u2102</string>
     <string name="realNumbers">\u211d</string>
+
+    <string name="plusMinus">\u00b1</string>
+    <string name="minusPlus">\u2213</string>
 </resources>

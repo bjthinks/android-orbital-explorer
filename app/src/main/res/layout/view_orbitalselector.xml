@@ -1,21 +1,43 @@
 <merge xmlns:android="http://schemas.android.com/apk/res/android">
-    <com.gputreats.orbitalexplorer.ValueChanger
-        android:id="@+id/nchanger"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-    <com.gputreats.orbitalexplorer.ValueChanger
-        android:id="@+id/lchanger"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-    <com.gputreats.orbitalexplorer.ValueChanger
-        android:id="@+id/mchanger"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-    <Button
-        android:id="@+id/rcchanger"
-        android:layout_width="@dimen/buttonSize"
-        android:layout_height="@dimen/buttonSize"
-        android:text="@string/complexNumbers"
-        style="@style/ButtonStyle"
+
+    <TextView
+        android:id="@+id/orbitalname"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight=".5"
+        android:gravity="center"
         android:textSize="24sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight=".5"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <com.gputreats.orbitalexplorer.ValueChanger
+            android:id="@+id/nchanger"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <com.gputreats.orbitalexplorer.ValueChanger
+            android:id="@+id/lchanger"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <com.gputreats.orbitalexplorer.ValueChanger
+            android:id="@+id/mchanger"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/rcchanger"
+            style="@style/ButtonStyle"
+            android:layout_width="@dimen/buttonSize"
+            android:layout_height="@dimen/buttonSize"
+            android:text="@string/complexNumbers"
+            android:textSize="24sp" />
+
+    </LinearLayout>
+
 </merge>
