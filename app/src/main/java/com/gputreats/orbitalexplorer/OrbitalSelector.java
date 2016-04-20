@@ -259,13 +259,13 @@ public class OrbitalSelector extends LinearLayout {
                             subscript = "yz";
                             break;
                         case 0:
-                            subscript = "z<sup>2</sup>";
+                            subscript = "z<sup><small>2</small></sup>";
                             break;
                         case 1:
                             subscript = "xz";
                             break;
                         case 2:
-                            subscript = "x<sup>2</sup>-y<sup>2</sup>";
+                            subscript = "x<sup><small>2</small></sup>-y<sup><small>2</small></sup>";
                             break;
                     }
                 }
@@ -275,25 +275,25 @@ public class OrbitalSelector extends LinearLayout {
                 if (real) {
                     switch (M) {
                         case -3:
-                            subscript = "y(3x<sup>2</sup>-y<sup>2</sup>)";
+                            subscript = "y(3x<sup><small>2</small></sup>-y<sup><small>2</small></sup>)";
                             break;
                         case -2:
                             subscript = "xyz";
                             break;
                         case -1:
-                            subscript = "yz<sup>2</sup>";
+                            subscript = "yz<sup><small>2</small></sup>";
                             break;
                         case 0:
-                            subscript = "z<sup>3</sup>";
+                            subscript = "z<sup><small>3</small></sup>";
                             break;
                         case 1:
-                            subscript = "xz<sup>2</sup>";
+                            subscript = "xz<sup><small>2</small></sup>";
                             break;
                         case 2:
-                            subscript = "z(x<sup>2</sup>-y<sup>2</sup>)";
+                            subscript = "z(x<sup><small>2</small></sup>-y<sup><small>2</small></sup>)";
                             break;
                         case 3:
-                            subscript = "x(x<sup>2</sup>-3y<sup>2</sup>)";
+                            subscript = "x(x<sup><small>2</small></sup>-3y<sup><small>2</small></sup>)";
                             break;
                     }
                 }
@@ -303,31 +303,31 @@ public class OrbitalSelector extends LinearLayout {
                 if (real) {
                     switch (M) {
                         case -4:
-                            subscript = "xy(x<sup>2</sup>-y<sup>2</sup>)";
+                            subscript = "xy(x<sup><small>2</small></sup>-y<sup><small>2</small></sup>)";
                             break;
                         case -3:
-                            subscript = "zy<sup>3</sup>";
+                            subscript = "zy<sup><small>3</small></sup>";
                             break;
                         case -2:
-                            subscript = "z<sup>2</sup>xy";
+                            subscript = "z<sup><small>2</small></sup>xy";
                             break;
                         case -1:
-                            subscript = "z<sup>3</sup>y";
+                            subscript = "z<sup><small>3</small></sup>y";
                             break;
                         case 0:
-                            subscript = "z<sup>4</sup>";
+                            subscript = "z<sup><small>4</small></sup>";
                             break;
                         case 1:
-                            subscript = "z<sup>3</sup>x";
+                            subscript = "z<sup><small>3</small></sup>x";
                             break;
                         case 2:
-                            subscript = "z<sup>2</sup>(x<sup>2</sup>-y<sup>2</sup>)";
+                            subscript = "z<sup><small>2</small></sup>(x<sup><small>2</small></sup>-y<sup><small>2</small></sup>)";
                             break;
                         case 3:
-                            subscript = "zx<sup>3</sup>";
+                            subscript = "zx<sup><small>3</small></sup>";
                             break;
                         case 4:
-                            subscript = "x<sup>4</sup>+y<sup>4</sup>";
+                            subscript = "x<sup><small>4</small></sup>+y<sup><small>4</small></sup>";
                             break;
                     }
                 }
