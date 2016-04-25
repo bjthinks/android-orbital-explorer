@@ -38,11 +38,17 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedState) {
         super.onCreate(savedState);
 
-        if (!hasGLES30()) {
-            // TODO show a helpful message
-            throw new UnsupportedOperationException();
-        }
+        if (hasGLES30())
+            startApp(savedState);
+        else
+            startApology();
+    }
 
+    private void startApology() {
+        setContentView(R.layout.activity_apology);
+    }
+
+    private void startApp(Bundle savedState) {
         // Need to set renderState before calling setContentView, because that will
         // inflate an OrbitalView, which will ask its context (i.e. this object) for
         // the renderState.
