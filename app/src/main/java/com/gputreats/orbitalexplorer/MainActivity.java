@@ -44,6 +44,14 @@ public class MainActivity extends AppCompatActivity
             startApology();
     }
 
+    private boolean hasGLES30() {
+        ActivityManager manager =
+                (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        ConfigurationInfo info = manager.getDeviceConfigurationInfo();
+        int majorVersion = info.reqGlEsVersion >> 16;
+        return majorVersion >= 3;
+    }
+
     private void startApology() {
         setContentView(R.layout.activity_apology);
     }
@@ -88,14 +96,6 @@ public class MainActivity extends AppCompatActivity
             result = getResources().getDimensionPixelSize(resourceId);
         return result;
     } */
-
-    private boolean hasGLES30() {
-        ActivityManager manager =
-                (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-        ConfigurationInfo info = manager.getDeviceConfigurationInfo();
-        int majorVersion = info.reqGlEsVersion >> 16;
-        return majorVersion >= 3;
-    }
 
     @Override
     public RenderState provideRenderState() {
