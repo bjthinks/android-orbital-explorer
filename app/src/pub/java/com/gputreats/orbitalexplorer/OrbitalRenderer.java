@@ -14,6 +14,7 @@ public class OrbitalRenderer implements GLSurfaceView.Renderer {
     private RenderState renderState;
 
     // Main thread
+
     public OrbitalRenderer(Context context) {
         try {
             renderState = ((RenderStateProvider) context).provideRenderState();
@@ -27,31 +28,45 @@ public class OrbitalRenderer implements GLSurfaceView.Renderer {
     }
 
     // Rendering thread
+
     @Override
     public void onSurfaceCreated(GL10 unused, EGLConfig config) {
-        integrator.newContext();
-        screenDrawer.newContext();
+        try {
+            integrator.onSurfaceCreated();
+            screenDrawer.onSurfaceCreated();
+        } catch (Exception e) {
+            renderState.reportRenderException(e);
+        }
     }
+
+    // Rendering thread
 
     private float aspectRatio = 1.0f;
 
-    // Rendering thread
     @Override
     public void onSurfaceChanged(GL10 unused, int width, int height) {
-        aspectRatio = (float) width / (float) height;
-        double scaleDownFactor = 160.0 / Math.max(160.0, dpi);
-        int integrationWidth  = (int) (scaleDownFactor * width);
-        int integrationHeight = (int) (scaleDownFactor * height);
-        integrator.resize(integrationWidth, integrationHeight);
-        screenDrawer.resize(integrationWidth, integrationHeight, width, height);
+        try {
+            aspectRatio = (float) width / (float) height;
+            double scaleDownFactor = 160.0 / Math.max(160.0, dpi);
+            int integrationWidth  = (int) (scaleDownFactor * width);
+            int integrationHeight = (int) (scaleDownFactor * height);
+            integrator.resize(integrationWidth, integrationHeight);
+            screenDrawer.resize(integrationWidth, integrationHeight, width, height);
+        } catch (Exception e) {
+            renderState.reportRenderException(e);
+        }
     }
 
     // Rendering thread
+
     @Override
     public void onDrawFrame(GL10 unused) {
-        RenderState.FrozenState frozenState = renderState.freeze(aspectRatio);
-
-        Texture integratorOutput = integrator.render(frozenState);
-        screenDrawer.render(integratorOutput, frozenState);
+        try {
+            RenderState.FrozenState frozenState = renderState.freeze(aspectRatio);
+            Texture integratorOutput = integrator.render(frozenState);
+            screenDrawer.render(integratorOutput, frozenState);
+        } catch (Exception e) {
+            renderState.reportRenderException(e);
+        }
     }
 }

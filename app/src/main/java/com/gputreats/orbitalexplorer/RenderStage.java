@@ -1,7 +1,7 @@
 package com.gputreats.orbitalexplorer;
 
 import android.opengl.GLES30;
-import android.util.Log;
+
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
@@ -58,9 +58,9 @@ public class RenderStage {
                 GLES30.GL_TEXTURE_MAG_FILTER, magFilter);
     }
 
-    protected static void getGLError() {
-        int error;
-        while ((error = GLES30.glGetError()) != 0)
-            Log.e(TAG, "OpenGL error code " + error);
+    protected static void checkGLES() throws OpenGLException {
+        int error = GLES30.glGetError();
+        if (error != 0)
+            throw new OpenGLException(error);
     }
 }

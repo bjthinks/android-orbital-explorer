@@ -2,11 +2,13 @@ package com.gputreats.orbitalexplorer;
 
 import android.opengl.GLSurfaceView;
 import android.os.Handler;
+import android.os.Message;
 import android.os.Parcel;
 import android.os.Parcelable;
 
 public class RenderState implements Parcelable {
 
+    private Handler renderExceptionHandler;
     private OrbitalView orbitalView;
 
     private Camera camera;
@@ -24,13 +26,19 @@ public class RenderState implements Parcelable {
         screenGrabRequested = false;
     }
 
-    // This happens BEFORE the render thread starts up
+    // These happen BEFORE the render thread starts up
+
+    public void setRenderExceptionHandler(Handler h) {
+        renderExceptionHandler = h;
+    }
+
     public void setOrbitalView(OrbitalView ov) {
         orbitalView = ov;
     }
 
     // This happens AFTER the render thread starts up
-    public void finalSetup() {
+
+    public void postRenderThreadSetup() {
         if (!orbital.color) {
             orbitalView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
             orbitalView.requestRender();
@@ -38,6 +46,7 @@ public class RenderState implements Parcelable {
     }
 
     // Parcelable stuff
+
     @Override
     public int describeContents() {
         return 0;
@@ -143,6 +152,7 @@ public class RenderState implements Parcelable {
     }
 
     // Render thread getter
+
     public synchronized FrozenState freeze(double aspectRatio) {
         FrozenState fs = new FrozenState();
 
@@ -174,5 +184,11 @@ public class RenderState implements Parcelable {
         public boolean needToIntegrate;
         public boolean screenGrabRequested;
         public Handler screenGrabHandler;
+    }
+
+    // Render thread error handling
+
+    public synchronized void reportRenderException(Exception e) {
+        Message.obtain(renderExceptionHandler, 0, e).sendToTarget();
     }
 }

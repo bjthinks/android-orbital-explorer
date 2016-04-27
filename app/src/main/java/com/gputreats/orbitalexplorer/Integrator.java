@@ -30,87 +30,131 @@ public class Integrator extends RenderStage {
         outputTextureResized = true;
     }
 
-    public void newContext() {
+    public void onSurfaceCreated() throws OpenGLException {
+
+        checkGLES();
 
         // Create input textures for storing the radial, azimuthal, and quadrature data.
         radialTexture     = new Texture(GLES30.GL_RG,   GLES30.GL_FLOAT, GLES30.GL_RG32F);
+        checkGLES();
         azimuthalTexture  = new Texture(GLES30.GL_RG,   GLES30.GL_FLOAT, GLES30.GL_RG32F);
+        checkGLES();
         quadratureTexture = new Texture(GLES30.GL_RGBA, GLES30.GL_FLOAT, GLES30.GL_RGBA32F);
+        checkGLES();
 
         // Floating point textures are not filterable
         radialTexture.bindToTexture2D();
+        checkGLES();
         setTexture2DMinMagFilters(GLES30.GL_NEAREST, GLES30.GL_NEAREST);
+        checkGLES();
         azimuthalTexture.bindToTexture2D();
+        checkGLES();
         setTexture2DMinMagFilters(GLES30.GL_NEAREST, GLES30.GL_NEAREST);
+        checkGLES();
         quadratureTexture.bindToTexture2D();
+        checkGLES();
         setTexture2DMinMagFilters(GLES30.GL_NEAREST, GLES30.GL_NEAREST);
+        checkGLES();
 
         // Create textures to render to.
         // The following parameters have to match a row of Table 3.2 in the
         // OpenGL ES 3.0 specification, or we will get an OpenGL error. We also
         // need to choose a sized internal format which is color-renderable
         // according to Table 3.13 (in the absence of extensions).
+
+        // COLOR rendering
+
         outputTextureColor = new Texture(GLES30.GL_RGBA_INTEGER, GLES30.GL_SHORT, GLES30.GL_RGBA16I);
+        checkGLES();
         outputTextureColor.bindToTexture2DAndResize(1, 1);
+        checkGLES();
 
         // Set the filters for sampling the bound texture, when sampling at
         // a different resolution than native.
         setTexture2DMinMagFilters(GLES30.GL_NEAREST, GLES30.GL_NEAREST);
+        checkGLES();
         GLES30.glTexParameteri(GLES30.GL_TEXTURE_2D,
                 GLES30.GL_TEXTURE_WRAP_S, GLES30.GL_CLAMP_TO_EDGE);
+        checkGLES();
         GLES30.glTexParameteri(GLES30.GL_TEXTURE_2D,
                 GLES30.GL_TEXTURE_WRAP_T, GLES30.GL_CLAMP_TO_EDGE);
+        checkGLES();
+
+        framebufferColor = new Framebuffer();
+        checkGLES();
+        framebufferColor.bindAndSetTexture(outputTextureColor);
+        checkGLES();
+
+        // MONO rendering
 
         outputTextureMono = new Texture(GLES30.GL_RED_INTEGER, GLES30.GL_SHORT, GLES30.GL_R16I);
+        checkGLES();
         outputTextureMono.bindToTexture2DAndResize(1, 1);
+        checkGLES();
 
         setTexture2DMinMagFilters(GLES30.GL_NEAREST, GLES30.GL_NEAREST);
+        checkGLES();
         GLES30.glTexParameteri(GLES30.GL_TEXTURE_2D,
                 GLES30.GL_TEXTURE_WRAP_S, GLES30.GL_CLAMP_TO_EDGE);
+        checkGLES();
         GLES30.glTexParameteri(GLES30.GL_TEXTURE_2D,
                 GLES30.GL_TEXTURE_WRAP_T, GLES30.GL_CLAMP_TO_EDGE);
-
-        // Create framebuffers to render to
-        framebufferColor = new Framebuffer();
-        framebufferColor.bindAndSetTexture(outputTextureColor);
+        checkGLES();
 
         framebufferMono = new Framebuffer();
+        checkGLES();
         framebufferMono.bindAndSetTexture(outputTextureMono);
-
-        getGLError();
+        checkGLES();
 
         // Compile & link GLSL programs
+
         Shader vertexShaderColor
                 = new Shader(assetManager, "2", GLES30.GL_VERTEX_SHADER);
+        checkGLES();
         Shader fragmentShaderColor
                 = new Shader(assetManager, "1", GLES30.GL_FRAGMENT_SHADER);
+        checkGLES();
         programColor = GLES30.glCreateProgram();
+        checkGLES();
         GLES30.glAttachShader(programColor, vertexShaderColor.getId());
+        checkGLES();
         GLES30.glAttachShader(programColor, fragmentShaderColor.getId());
+        checkGLES();
         GLES30.glLinkProgram(programColor);
-        getGLError();
+        checkGLES();
 
         Shader vertexShaderMono
                 = new Shader(assetManager, "4", GLES30.GL_VERTEX_SHADER);
+        checkGLES();
         Shader fragmentShaderMono
                 = new Shader(assetManager, "3", GLES30.GL_FRAGMENT_SHADER);
+        checkGLES();
         programMono = GLES30.glCreateProgram();
+        checkGLES();
         GLES30.glAttachShader(programMono, vertexShaderMono.getId());
+        checkGLES();
         GLES30.glAttachShader(programMono, fragmentShaderMono.getId());
+        checkGLES();
         GLES30.glLinkProgram(programMono);
-        getGLError();
+        checkGLES();
     }
 
-    public void resize(int w, int h) {
+    public void resize(int w, int h) throws OpenGLException {
         width = w;
         height = h;
-        outputTextureColor.bindToTexture2DAndResize(width, height);
-        outputTextureMono.bindToTexture2DAndResize(width, height);
         outputTextureResized = true;
+
+        checkGLES();
+        outputTextureColor.bindToTexture2DAndResize(width, height);
+        checkGLES();
+        outputTextureMono.bindToTexture2DAndResize(width, height);
+        checkGLES();
     }
 
     private float quadratureRadius, maximumRadius;
-    public Texture render(RenderState.FrozenState frozenState) {
+    public Texture render(RenderState.FrozenState frozenState) throws OpenGLException {
+
+        checkGLES();
 
         float[] inverseTransform = frozenState.inverseTransform;
         Orbital orbital = frozenState.orbital;
@@ -123,30 +167,39 @@ public class Integrator extends RenderStage {
             currentProgram = programMono;
 
         if (orbitalChanged || newRenderer) {
+
             newRenderer = false; // We need this for e.g. orientation changes
 
             // Load new azimuthal texture
+
             float[] azimuthalData = functionToBuffer2(orbital.getAzimuthalFunction(),
                     0.0, Math.PI, AZIMUTHAL_TEXTURE_SIZE - 1);
             azimuthalTexture.bindToTexture2DAndSetImage(AZIMUTHAL_TEXTURE_SIZE, 1, azimuthalData);
+            checkGLES();
 
             // Load new quadrature texture
+
             float[] quadratureData = QuadratureTable.get(assetManager, orbital.getQuadrature());
             quadratureDataSize = quadratureData.length
                     / (4 * orbital.getQuadrature().getOrder());
             quadratureTexture.bindToTexture2DAndSetImage(
                     orbital.getQuadrature().getOrder(),
                     quadratureDataSize, quadratureData);
+            checkGLES();
+
+            // Calculate radius info
 
             quadratureRadius = (float) orbital.getRadialFunction().getMaximumRadius();
             float maxLateral = quadratureData[quadratureData.length - 2];
             maximumRadius = (float) Math.sqrt(quadratureRadius * quadratureRadius + maxLateral * maxLateral);
 
             // Load new radial texture
+
             float[] radialData
                     = functionToBuffer2(orbital.getRadialFunction().getOscillatingPart(),
                     0.0, maximumRadius, RADIAL_TEXTURE_SIZE - 1);
             radialTexture.bindToTexture2DAndSetImage(RADIAL_TEXTURE_SIZE, 1, radialData);
+            checkGLES();
         }
 
         if (needToIntegrate || outputTextureResized) {
@@ -210,7 +263,7 @@ public class Integrator extends RenderStage {
             GLES30.glDisableVertexAttribArray(inPositionHandle);
         }
 
-        getGLError();
+        checkGLES();
 
         if (orbital.color)
             return outputTextureColor;

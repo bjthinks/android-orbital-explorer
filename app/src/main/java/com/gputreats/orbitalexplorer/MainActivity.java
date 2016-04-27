@@ -17,12 +17,15 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.nio.ByteBuffer;
 
 public class MainActivity extends AppCompatActivity
@@ -41,7 +44,7 @@ public class MainActivity extends AppCompatActivity
         if (hasGLES30())
             startApp(savedState);
         else
-            startApology();
+            showDriverError();
     }
 
     private boolean hasGLES30() {
@@ -52,20 +55,24 @@ public class MainActivity extends AppCompatActivity
         return majorVersion >= 3;
     }
 
-    private void startApology() {
-        setContentView(R.layout.activity_apology);
+    private void showDriverError() {
+        setContentView(R.layout.activity_nodriver);
     }
 
     private void startApp(Bundle savedState) {
+
         // Need to set renderState before calling setContentView, because that will
         // inflate an OrbitalView, which will ask its context (i.e. this object) for
         // the renderState.
+
         if (savedState != null) {
             controlVisibility = savedState.getBoolean(CONTROL_VISIBILITY_KEY);
             renderState = savedState.getParcelable(RENDER_STATE_KEY);
         } else {
             renderState = new RenderState();
         }
+
+        renderState.setRenderExceptionHandler(new Handler(new RenderExceptionCallback()));
 
         setContentView(R.layout.activity_main);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -96,6 +103,26 @@ public class MainActivity extends AppCompatActivity
             result = getResources().getDimensionPixelSize(resourceId);
         return result;
     } */
+
+    private boolean renderExceptionAlreadyReported = false;
+    private class RenderExceptionCallback implements Handler.Callback {
+        @Override
+        public boolean handleMessage(Message m) {
+            if (!renderExceptionAlreadyReported) {
+                renderExceptionAlreadyReported = true;
+                // TODO  Improve activity_error to be more user friendly and send real
+                // TODO  crash data via Google analytics
+                setContentView(R.layout.activity_error);
+                TextView glErrorMessage = (TextView) findViewById(R.id.errorMessage);
+                Exception e = (Exception) m.obj;
+                StringWriter sw = new StringWriter();
+                PrintWriter pw = new PrintWriter(sw);
+                e.printStackTrace(pw);
+                glErrorMessage.setText(sw.toString());
+            }
+            return true;
+        }
+    }
 
     @Override
     public RenderState provideRenderState() {

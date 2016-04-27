@@ -7,7 +7,6 @@ import android.util.AttributeSet;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 
-// TODO review concurrency
 public class OrbitalView extends GLSurfaceView {
 
     private GestureDetector flingDetector;
@@ -52,7 +51,7 @@ public class OrbitalView extends GLSurfaceView {
         // Start the rendering thread
         setRenderer(new OrbitalRenderer(context));
 
-        renderState.finalSetup();
+        renderState.postRenderThreadSetup();
     }
 
     private int firstPointerID = MotionEvent.INVALID_POINTER_ID;

@@ -4,9 +4,7 @@ import android.content.res.AssetManager;
 import android.opengl.GLES30;
 
 import java.io.BufferedInputStream;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 
 public class Shader {
 
@@ -18,7 +16,7 @@ public class Shader {
         return id;
     }
 
-    public Shader(AssetManager assetManager, String filename, int shaderType) {
+    public Shader(AssetManager assetManager, String filename, int shaderType) throws OpenGLException {
         String shaderSource = "";
         try {
             BufferedInputStream instream = new BufferedInputStream(
@@ -43,7 +41,12 @@ public class Shader {
         GLES30.glGetShaderiv(id, GLES30.GL_COMPILE_STATUS, status, 0);
         if (status[0] != GLES30.GL_TRUE) {
             String result = GLES30.glGetShaderInfoLog(id);
-            throw new RuntimeException("Error compiling shader: " + result);
+            String type = "";
+            if (shaderType == GLES30.GL_VERTEX_SHADER)
+                type = "vertex ";
+            else if (shaderType == GLES30.GL_FRAGMENT_SHADER)
+                type = "fragment ";
+            throw new OpenGLException("Error compiling " + type + "shader:\n" + result);
         }
     }
 }

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.res.AssetManager;
 import android.opengl.GLES30;
 import android.os.Message;
-import android.util.Log;
 
 import java.nio.ByteBuffer;
 
@@ -18,23 +17,37 @@ public class ScreenDrawer extends RenderStage {
         assetManager = context.getAssets();
     }
 
-    public void newContext() {
+    public void onSurfaceCreated() throws OpenGLException {
+
+        checkGLES();
+
         // Compile & link GLSL programs
+
         Shader vertexShaderColor = new Shader(assetManager, "6", GLES30.GL_VERTEX_SHADER);
+        checkGLES();
         Shader fragmentShaderColor = new Shader(assetManager, "5", GLES30.GL_FRAGMENT_SHADER);
+        checkGLES();
         programColor = GLES30.glCreateProgram();
+        checkGLES();
         GLES30.glAttachShader(programColor, vertexShaderColor.getId());
+        checkGLES();
         GLES30.glAttachShader(programColor, fragmentShaderColor.getId());
+        checkGLES();
         GLES30.glLinkProgram(programColor);
-        getGLError();
+        checkGLES();
 
         Shader vertexShaderMono = new Shader(assetManager, "8", GLES30.GL_VERTEX_SHADER);
+        checkGLES();
         Shader fragmentShaderMono = new Shader(assetManager, "7", GLES30.GL_FRAGMENT_SHADER);
+        checkGLES();
         programMono = GLES30.glCreateProgram();
+        checkGLES();
         GLES30.glAttachShader(programMono, vertexShaderMono.getId());
+        checkGLES();
         GLES30.glAttachShader(programMono, fragmentShaderMono.getId());
+        checkGLES();
         GLES30.glLinkProgram(programMono);
-        getGLError();
+        checkGLES();
     }
 
     private int inputWidth, inputHeight;
@@ -48,7 +61,10 @@ public class ScreenDrawer extends RenderStage {
     }
 
     private boolean color;
-    public void render(Texture texture, RenderState.FrozenState frozenState) {
+    public void render(Texture texture, RenderState.FrozenState frozenState) throws OpenGLException {
+
+        checkGLES();
+
         color = frozenState.orbital.color;
 
         GLES30.glBindFramebuffer(GLES30.GL_FRAMEBUFFER, 0);
@@ -89,13 +105,14 @@ public class ScreenDrawer extends RenderStage {
 
         GLES30.glDrawArrays(GLES30.GL_TRIANGLE_FAN, 0, 4);
         GLES30.glDisableVertexAttribArray(inPositionHandle);
-        getGLError();
 
         if (frozenState.screenGrabRequested) {
             ByteBuffer buf = ByteBuffer.allocate(width * height * 4);
             GLES30.glReadPixels(0, 0, width, height, GLES30.GL_RGBA, GLES30.GL_UNSIGNED_BYTE, buf);
             Message.obtain(frozenState.screenGrabHandler, 0, width, height, buf).sendToTarget();
         }
+
+        checkGLES();
     }
 
     int getUniformHandle(String name) {
@@ -105,13 +122,5 @@ public class ScreenDrawer extends RenderStage {
         else
             handle = GLES30.glGetUniformLocation(programMono, name);
         return handle;
-    }
-
-    void setUniformInt(String name, int value) {
-        GLES30.glUniform1i(getUniformHandle(name), value);
-    }
-
-    void setUniformFloat(String name, float value) {
-        GLES30.glUniform1f(getUniformHandle(name), value);
     }
 }
