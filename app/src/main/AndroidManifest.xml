@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.gputreats.orbitalexplorer" >
+    package="com.gputreats.orbitalexplorer">
 
     <uses-feature
         android:glEsVersion="0x00030000"
@@ -11,6 +11,7 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/appName"
         android:theme="@style/MainTheme" >
+
         <activity
             android:name=".MainActivity"
             android:label="@string/appName"
@@ -20,12 +21,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".HelpActivity"
             android:label="Help"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AuxTheme" >
         </activity>
+
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="com.gputreats.orbitalexplorer.provider"
@@ -35,6 +38,7 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/paths" />
         </provider>
+
     </application>
 
 </manifest>
