@@ -6,6 +6,7 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -27,6 +28,7 @@ public class OrbitalSelector extends LinearLayout {
     private ValueChanger lChanger;
     private ValueChanger mChanger;
     private Button rcChanger;
+    private ImageButton colorChanger;
 
     public OrbitalSelector(Context context) {
         super(context);
@@ -76,6 +78,7 @@ public class OrbitalSelector extends LinearLayout {
         lChanger = (ValueChanger) findViewById(R.id.lchanger);
         mChanger = (ValueChanger) findViewById(R.id.mchanger);
         rcChanger = (Button) findViewById(R.id.rcchanger);
+        colorChanger = (ImageButton) findViewById(R.id.colorchanger);
 
         setOrbitalName();
         nChanger.setInteger(N);
@@ -126,6 +129,12 @@ public class OrbitalSelector extends LinearLayout {
                 setReal(!real);
                 setMChanger();
                 orbitalChanged();
+            }
+        });
+        colorChanger.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                renderState.toggleColor();
             }
         });
     }
