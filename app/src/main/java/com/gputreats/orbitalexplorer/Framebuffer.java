@@ -22,7 +22,7 @@ public class Framebuffer {
         GLES30.glBindFramebuffer(GLES30.GL_FRAMEBUFFER, framebufferId);
     }
 
-    public void bindAndSetTexture(Texture texture) {
+    public void bindAndSetTexture(Texture texture) throws OpenGLException {
         bindToAttachmentPoint();
         GLES30.glFramebufferTexture2D(GLES30.GL_FRAMEBUFFER, GLES30.GL_COLOR_ATTACHMENT0,
                 GLES30.GL_TEXTURE_2D, texture.getId(), 0);
@@ -30,6 +30,6 @@ public class Framebuffer {
         // Check if framebuffer is complete
         int status = GLES30.glCheckFramebufferStatus(GLES30.GL_FRAMEBUFFER);
         if (status != GLES30.GL_FRAMEBUFFER_COMPLETE)
-            Log.e(TAG, "Framebuffer not complete");
+            throw new OpenGLException("Framebuffer not complete");
     }
 }
