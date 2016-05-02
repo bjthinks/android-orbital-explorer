@@ -170,6 +170,12 @@ public class MainActivity extends AppCompatActivity
                 renderState.requestScreenGrab(new Handler(this));
                 break;
 
+            case R.id.menuStore:
+                intent = new Intent(Intent.ACTION_VIEW);
+                intent.setData(Uri.parse("market://details?id=com.gputreats.orbitalexplorer"));
+                startActivity(intent);
+                break;
+
             case R.id.menuAbout:
                 intent = new Intent(this, HelpActivity.class);
                 intent.putExtra("url", "file:///android_asset/docs/about.html");
