@@ -14,11 +14,15 @@ import android.support.annotation.NonNull;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -31,6 +35,7 @@ import java.nio.ByteBuffer;
 public class MainActivity extends AppCompatActivity
         implements RenderStateProvider, ControlToggler, Handler.Callback {
 
+    private Tracker tracker;
     private RenderState renderState;
     private Toolbar toolbar;
     private OrbitalSelector orbitalSelector;
@@ -39,6 +44,9 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onCreate(Bundle savedState) {
+        AnalyticsApplication application = (AnalyticsApplication) getApplication();
+        tracker = application.getDefaultTracker();
+
         super.onCreate(savedState);
 
         if (hasGLES30())
@@ -153,6 +161,11 @@ public class MainActivity extends AppCompatActivity
         super.onResume();
         if (orbitalView != null)
             orbitalView.onResume();
+
+        String name = "Main";
+        Log.i("MainActivity", "Setting screen name: " + name);
+        tracker.setScreenName("Image~" + name);
+        tracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 
     @Override
