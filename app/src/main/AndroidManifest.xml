@@ -6,11 +6,12 @@
         android:glEsVersion="0x00030000"
         android:required="true" />
 
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <!-- Google Analytics needs these -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
-        android:name=".AnalyticsApplication"
+        android:name="AnalyticsApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/appName"
@@ -33,6 +34,7 @@
             android:theme="@style/AuxTheme" >
         </activity>
 
+        <!-- Image sharing -->
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="com.gputreats.orbitalexplorer.provider"
