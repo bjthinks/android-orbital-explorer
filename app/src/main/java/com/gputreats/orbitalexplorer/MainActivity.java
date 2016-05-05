@@ -14,7 +14,6 @@ import android.support.annotation.NonNull;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -163,7 +162,6 @@ public class MainActivity extends AppCompatActivity
             orbitalView.onResume();
 
         String name = "Main";
-        Log.i("MainActivity", "Setting screen name: " + name);
         tracker.setScreenName("Image~" + name);
         tracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
