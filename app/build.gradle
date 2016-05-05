@@ -33,4 +33,8 @@ dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:appcompat-v7:23.3.0'
     compile project(':math')
+    compile 'com.google.android.gms:play-services-analytics:8.4.0'
 }
+
+// Google Analytics
+apply plugin: 'com.google.gms.google-services'
