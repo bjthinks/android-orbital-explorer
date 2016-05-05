@@ -1,0 +1,38 @@
+{
+  "project_info": {
+    "project_number": "835321014904",
+    "project_id": "orbital-explorer"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:835321014904:android:ce3935286c6633dd",
+        "android_client_info": {
+          "package_name": "com.gputreats.orbitalexplorer"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBjja6v9BWreHdD5jCvJrMPiPwV-BfNl-k"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 2,
+          "analytics_property": {
+            "tracking_id": "UA-77355304-1"
+          }
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
