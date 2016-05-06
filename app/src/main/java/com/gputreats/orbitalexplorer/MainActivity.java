@@ -43,8 +43,9 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onCreate(Bundle savedState) {
+
         AnalyticsApplication application = (AnalyticsApplication) getApplication();
-        tracker = application.getDefaultTracker();
+        tracker = application.getTracker();
 
         super.onCreate(savedState);
 
@@ -161,8 +162,7 @@ public class MainActivity extends AppCompatActivity
         if (orbitalView != null)
             orbitalView.onResume();
 
-        String name = "Main";
-        tracker.setScreenName("Image~" + name);
+        tracker.setScreenName("Main");
         tracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 
