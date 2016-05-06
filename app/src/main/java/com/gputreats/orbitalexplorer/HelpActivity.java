@@ -8,10 +8,20 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.webkit.WebView;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
+
 public class HelpActivity extends AppCompatActivity {
+
+    private Tracker tracker;
+    private String title;
 
     @Override
     protected void onCreate(Bundle savedState) {
+
+        AnalyticsApplication application = (AnalyticsApplication) getApplication();
+        tracker = application.getTracker();
+
         super.onCreate(savedState);
 
         Bundle extras = getIntent().getExtras();
@@ -19,14 +29,24 @@ public class HelpActivity extends AppCompatActivity {
         setContentView(R.layout.activity_help);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.help_toolbar);
-        toolbar.setTitle(extras.getString("title"));
+        title = extras.getString("title");
+        toolbar.setTitle(title);
         setSupportActionBar(toolbar);
         ActionBar a = getSupportActionBar();
         if (a != null)
             a.setDisplayHomeAsUpEnabled(true);
 
         WebView webview = (WebView) findViewById(R.id.help_webview);
-        webview.loadUrl(extras.getString("url"));
+        String url = extras.getString("url");
+        webview.loadUrl(url);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        tracker.setScreenName("Help " + title);
+        tracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 
     @Override
