@@ -17,7 +17,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.analytics.HitBuilders;
@@ -27,8 +26,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.nio.ByteBuffer;
 
 public class MainActivity extends AppCompatActivity
@@ -64,7 +61,11 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void showDriverError() {
-        setContentView(R.layout.activity_nodriver);
+        setContentView(R.layout.activity_error);
+        tracker.send(new HitBuilders.ExceptionBuilder()
+                .setDescription("GLES version check failed")
+                .setFatal(true)
+                .build());
     }
 
     private void startApp(Bundle savedState) {
@@ -121,12 +122,18 @@ public class MainActivity extends AppCompatActivity
                 // TODO  Improve activity_error to be more user friendly and send real
                 // TODO  crash data via Google analytics
                 setContentView(R.layout.activity_error);
-                TextView glErrorMessage = (TextView) findViewById(R.id.errorMessage);
                 Exception e = (Exception) m.obj;
-                StringWriter sw = new StringWriter();
-                PrintWriter pw = new PrintWriter(sw);
-                e.printStackTrace(pw);
-                glErrorMessage.setText(sw.toString());
+                StackTraceElement[] trace = e.getStackTrace();
+                String traceStr = e.toString();
+                for (int i = 0; i < 3 && i < trace.length; ++i) {
+                    traceStr += " ";
+                    StackTraceElement level = trace[i];
+                    traceStr += level.getFileName() + ":" + level.getLineNumber();
+                }
+                tracker.send(new HitBuilders.ExceptionBuilder()
+                .setDescription(traceStr)
+                .setFatal(true)
+                .build());
             }
             return true;
         }

@@ -1,6 +1,6 @@
 <resources>
-    <string name="apology">Apologies. Orbital Explorer does not support this Android device.</string>
-    <string name="apologyWhy">OpenGL ES version 3.0 is required.</string>
+    <string name="apology">The electrons have gone missing.</string>
+    <string name="apologySubtext">How embarrassing. Orbital Explorer isn\'t working on this Android device. Problems of this magnitude are a high priority; expect a fix in the near future.</string>
 
     <string name="menuShare">Share</string>
     <string name="menuStore">Play Store</string>
