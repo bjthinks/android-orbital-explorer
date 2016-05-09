@@ -31,7 +31,7 @@ public class Quaternion implements Parcelable {
         }
     };
 
-    private final double r, i, j, k;
+    public final double r, i, j, k;
 
     public Quaternion(double real, double imaginary, double jmaginary, double kmaginary) {
         r = real;
