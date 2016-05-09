@@ -3,6 +3,7 @@ package com.gputreats.orbitalexplorer;
 import android.opengl.Matrix;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 public class Camera implements Parcelable {
 
@@ -121,6 +122,10 @@ public class Camera implements Parcelable {
         }
 
         return stillFlinging;
+    }
+
+    public void snapToAxis() {
+        Log.d("Camera", "Components: " + totalRotation.r + " " + totalRotation.i + " " + totalRotation.j + " " + totalRotation.k);
     }
 
     public float[] computeInverseShaderTransform(double aspectRatio) {

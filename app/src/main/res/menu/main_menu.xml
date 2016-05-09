@@ -3,6 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/menuSnap"
+        android:icon="@drawable/ic_keyboard_arrow_down_white_24dp"
+        android:title="Snap"
+        app:showAsAction="always" />
+
+    <item
         android:id="@+id/menuShare"
         android:icon="@drawable/ic_share_white_24dp"
         android:title="@string/menuShare"
