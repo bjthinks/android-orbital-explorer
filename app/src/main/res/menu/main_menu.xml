@@ -4,7 +4,7 @@
 
     <item
         android:id="@+id/menuSnap"
-        android:icon="@drawable/ic_keyboard_arrow_down_white_24dp"
+        android:icon="@drawable/snap"
         android:title="Snap"
         app:showAsAction="always" />
 
