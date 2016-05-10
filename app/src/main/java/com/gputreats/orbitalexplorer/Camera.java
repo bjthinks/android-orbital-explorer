@@ -7,7 +7,60 @@ import android.util.Log;
 
 public class Camera implements Parcelable {
 
-    public Camera() {}
+    static final double r2 = Math.sqrt(0.5);
+    static final Quaternion alignedRotations[] = {
+            new Quaternion( 1,  0,  0,  0),
+            new Quaternion(-1,  0,  0,  0),
+            new Quaternion( 0,  1,  0,  0),
+            new Quaternion( 0, -1,  0,  0),
+            new Quaternion( 0,  0,  1,  0),
+            new Quaternion( 0,  0, -1,  0),
+            new Quaternion( 0,  0,  0,  1),
+            new Quaternion( 0,  0,  0, -1),
+            new Quaternion( r2,  r2, 0, 0),
+            new Quaternion( r2, -r2, 0, 0),
+            new Quaternion(-r2,  r2, 0, 0),
+            new Quaternion(-r2, -r2, 0, 0),
+            new Quaternion( r2, 0,  r2, 0),
+            new Quaternion( r2, 0, -r2, 0),
+            new Quaternion(-r2, 0,  r2, 0),
+            new Quaternion(-r2, 0, -r2, 0),
+            new Quaternion( r2, 0, 0,  r2),
+            new Quaternion( r2, 0, 0, -r2),
+            new Quaternion(-r2, 0, 0,  r2),
+            new Quaternion(-r2, 0, 0, -r2),
+            new Quaternion(0,  r2,  r2, 0),
+            new Quaternion(0,  r2, -r2, 0),
+            new Quaternion(0, -r2,  r2, 0),
+            new Quaternion(0, -r2, -r2, 0),
+            new Quaternion(0,  r2, 0,  r2),
+            new Quaternion(0,  r2, 0, -r2),
+            new Quaternion(0, -r2, 0,  r2),
+            new Quaternion(0, -r2, 0, -r2),
+            new Quaternion(0, 0,  r2,  r2),
+            new Quaternion(0, 0,  r2, -r2),
+            new Quaternion(0, 0, -r2,  r2),
+            new Quaternion(0, 0, -r2, -r2),
+            new Quaternion( .5,  .5,  .5,  .5),
+            new Quaternion( .5,  .5,  .5, -.5),
+            new Quaternion( .5,  .5, -.5,  .5),
+            new Quaternion( .5,  .5, -.5, -.5),
+            new Quaternion( .5, -.5,  .5,  .5),
+            new Quaternion( .5, -.5,  .5, -.5),
+            new Quaternion( .5, -.5, -.5,  .5),
+            new Quaternion( .5, -.5, -.5, -.5),
+            new Quaternion(-.5,  .5,  .5,  .5),
+            new Quaternion(-.5,  .5,  .5, -.5),
+            new Quaternion(-.5,  .5, -.5,  .5),
+            new Quaternion(-.5,  .5, -.5, -.5),
+            new Quaternion(-.5, -.5,  .5,  .5),
+            new Quaternion(-.5, -.5,  .5, -.5),
+            new Quaternion(-.5, -.5, -.5,  .5),
+            new Quaternion(-.5, -.5, -.5, -.5)
+    };
+
+    public Camera() {
+    }
 
     public Camera(double cameraDistance_, Quaternion totalRotation_) {
         cameraDistance = cameraDistance_;
@@ -32,6 +85,7 @@ public class Camera implements Parcelable {
             return new Camera(in.readDouble(),
                     (Quaternion) in.readParcelable(Quaternion.class.getClassLoader()));
         }
+
         public Camera[] newArray(int size) {
             return new Camera[size];
         }
@@ -125,7 +179,17 @@ public class Camera implements Parcelable {
     }
 
     public void snapToAxis() {
-        Log.d("Camera", "Components: " + totalRotation.r + " " + totalRotation.i + " " + totalRotation.j + " " + totalRotation.k);
+        int best = -1;
+        double bestDistance = 1e9;
+        for (int i = 0; i < alignedRotations.length; ++i) {
+            double d = totalRotation.dist(alignedRotations[i]);
+            if (d < bestDistance) {
+                bestDistance = d;
+                best = i;
+            }
+        }
+        if (best >= 0)
+            totalRotation = alignedRotations[best];
     }
 
     public float[] computeInverseShaderTransform(double aspectRatio) {
