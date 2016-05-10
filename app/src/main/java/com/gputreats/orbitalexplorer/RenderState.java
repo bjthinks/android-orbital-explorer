@@ -144,6 +144,13 @@ public class RenderState implements Parcelable {
             orbitalView.requestRender();
     }
 
+    public synchronized void snapCameraToAxis() {
+        camera.stopFling();
+        camera.snapToAxis();
+        cameraChanged = true;
+        orbitalView.requestRender();
+    }
+
     public synchronized void requestScreenGrab(Handler handler) {
         screenGrabRequested = true;
         screenGrabHandler = handler;

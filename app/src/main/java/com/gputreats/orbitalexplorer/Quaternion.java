@@ -31,7 +31,7 @@ public class Quaternion implements Parcelable {
         }
     };
 
-    private final double r, i, j, k;
+    public final double r, i, j, k;
 
     public Quaternion(double real, double imaginary, double jmaginary, double kmaginary) {
         r = real;
@@ -53,6 +53,14 @@ public class Quaternion implements Parcelable {
         j = 0;
         k = 0;
     } */
+
+    public Quaternion add(Quaternion y) {
+        return new Quaternion(r + y.r, i + y.i, j + y.j, k + y.k);
+    }
+
+    public Quaternion subtract(Quaternion y) {
+        return add(y.multiply(-1.0));
+    }
 
     public Quaternion multiply(Quaternion y) {
         return new Quaternion(
@@ -76,6 +84,10 @@ public class Quaternion implements Parcelable {
 
     public Quaternion normalize() {
         return divide(norm());
+    }
+
+    public double dist(Quaternion y) {
+        return subtract(y).norm();
     }
 
     public static Quaternion rotation(double angle, Vector3 v) {

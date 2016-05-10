@@ -184,6 +184,10 @@ public class MainActivity extends AppCompatActivity
         Intent intent;
         switch (item.getItemId()) {
 
+            case R.id.menuSnap:
+                renderState.snapCameraToAxis();
+                break;
+
             case R.id.menuShare:
                 renderState.requestScreenGrab(new Handler(this));
                 break;
