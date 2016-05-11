@@ -37,6 +37,16 @@
             android:theme="@style/AuxTheme">
         </activity>
 
+        <activity
+            android:name=".ErrorActivity"
+            android:label="Error"
+            android:theme="@style/MainTheme">
+            <intent-filter>
+                <action android:name="com.gputreats.orbitalexplorer.SHOW_ERROR" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
         <!-- Image sharing -->
         <provider
             android:name="android.support.v4.content.FileProvider"
