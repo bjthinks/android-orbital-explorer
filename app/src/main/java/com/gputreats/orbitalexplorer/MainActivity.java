@@ -7,6 +7,7 @@ import android.content.pm.ConfigurationInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -182,10 +183,12 @@ public class MainActivity extends AppCompatActivity
                 break;
 
             case R.id.menuFullscreen:
+                int immersive = 0;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
+                    immersive = View.SYSTEM_UI_FLAG_IMMERSIVE;
                 orbitalView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN
                         | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                        // TODO fix for API 18
-                        | View.SYSTEM_UI_FLAG_IMMERSIVE);
+                        | immersive);
                 break;
 
             case R.id.menuShare:
