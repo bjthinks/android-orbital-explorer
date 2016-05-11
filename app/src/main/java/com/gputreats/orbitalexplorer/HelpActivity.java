@@ -19,7 +19,7 @@ public class HelpActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedState) {
 
-        AnalyticsApplication application = (AnalyticsApplication) getApplication();
+        OrbitalApplication application = (OrbitalApplication) getApplication();
         tracker = application.getTracker();
 
         super.onCreate(savedState);
