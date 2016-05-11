@@ -18,12 +18,12 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/appName"
-        android:theme="@style/MainTheme" >
+        android:theme="@style/MainTheme">
 
         <activity
             android:name=".MainActivity"
             android:label="@string/appName"
-            android:theme="@style/MainTheme" >
+            android:theme="@style/MainTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -34,7 +34,7 @@
             android:name=".HelpActivity"
             android:label="Help"
             android:parentActivityName=".MainActivity"
-            android:theme="@style/AuxTheme" >
+            android:theme="@style/AuxTheme">
         </activity>
 
         <!-- Image sharing -->
