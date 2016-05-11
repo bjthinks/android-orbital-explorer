@@ -6,12 +6,13 @@ import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
+import android.view.View;
 
 public class OrbitalView extends GLSurfaceView {
 
     private GestureDetector flingDetector;
-    private ControlToggler controlToggler;
     private RenderState renderState;
+    private VisibilityChanger visibilityChanger;
 
     public OrbitalView(Context context) {
         super(context);
@@ -30,13 +31,13 @@ public class OrbitalView extends GLSurfaceView {
         // Try to preserve our context, if possible
         setPreserveEGLContextOnPause(true);
 
-        flingDetector = new GestureDetector(context, new TapFlingListener());
+        flingDetector = new GestureDetector(context, new FlingListener());
 
         try {
-            controlToggler = (ControlToggler) context;
+            visibilityChanger = (VisibilityChanger) context;
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString()
-                    + " must implement ControlToggler");
+                    + " must implement VisibilityChanger");
         }
 
         try {
@@ -47,6 +48,7 @@ public class OrbitalView extends GLSurfaceView {
         }
 
         renderState.setOrbitalView(this);
+        setOnSystemUiVisibilityChangeListener(new UiVisibilityListener());
 
         // Start the rendering thread
         setRenderer(new OrbitalRenderer(context));
@@ -56,8 +58,6 @@ public class OrbitalView extends GLSurfaceView {
 
     private int firstPointerID = MotionEvent.INVALID_POINTER_ID;
     private int secondPointerID = MotionEvent.INVALID_POINTER_ID;
-
-    private boolean stoppedFling = false;
 
     @Override
     public boolean onTouchEvent(@NonNull MotionEvent e) {
@@ -70,7 +70,7 @@ public class OrbitalView extends GLSurfaceView {
                 // One bear in the bed
                 firstPointerID = e.getPointerId(0);
                 oneFingerEvent(e, false);
-                stoppedFling = renderState.cameraStopFling();
+                renderState.cameraStopFling();
                 break;
 
             case MotionEvent.ACTION_POINTER_DOWN:
@@ -188,17 +188,10 @@ public class OrbitalView extends GLSurfaceView {
         previousDistance = distance;
     }
 
-    private class TapFlingListener extends GestureDetector.SimpleOnGestureListener {
+    private class FlingListener extends GestureDetector.SimpleOnGestureListener {
 
         @Override
         public boolean onDown(MotionEvent event) {
-            return true;
-        }
-
-        @Override
-        public boolean onSingleTapUp(MotionEvent event) {
-            if (!stoppedFling)
-                controlToggler.toggleControls();
             return true;
         }
 
@@ -209,6 +202,16 @@ public class OrbitalView extends GLSurfaceView {
             renderState.cameraFling(velocityX / meanSize, velocityY / meanSize);
 
             return true;
+        }
+    }
+
+    private class UiVisibilityListener implements OnSystemUiVisibilityChangeListener {
+
+        @Override
+        public void onSystemUiVisibilityChange(int v) {
+            // TODO the below check should be improved. Values are 0 and 6, must look up bitmasks
+            visibilityChanger.applyControlVisibility(v == 0);
+            requestLayout();
         }
     }
 }

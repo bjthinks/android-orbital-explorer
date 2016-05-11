@@ -29,14 +29,13 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 
 public class MainActivity extends AppCompatActivity
-        implements RenderStateProvider, ControlToggler, Handler.Callback {
+        implements RenderStateProvider, Handler.Callback, VisibilityChanger {
 
     private Tracker tracker;
     private RenderState renderState;
     private Toolbar toolbar;
     private OrbitalSelector orbitalSelector;
     private OrbitalView orbitalView;
-    private boolean controlVisibility = true;
 
     @Override
     protected void onCreate(Bundle savedState) {
@@ -75,7 +74,6 @@ public class MainActivity extends AppCompatActivity
         // the renderState.
 
         if (savedState != null) {
-            controlVisibility = savedState.getBoolean(CONTROL_VISIBILITY_KEY);
             renderState = savedState.getParcelable(RENDER_STATE_KEY);
         } else {
             renderState = new RenderState();
@@ -100,9 +98,6 @@ public class MainActivity extends AppCompatActivity
             // Adjust menu as well
             menu.setPadding(0, getStatusBarHeight(), 0, 0);
         } */
-
-        if (savedState != null)
-            applyControlVisibility();
     }
 
     /* private int getStatusBarHeight() {
@@ -144,14 +139,12 @@ public class MainActivity extends AppCompatActivity
         return renderState;
     }
 
-    private static final String CONTROL_VISIBILITY_KEY = "controlVisibility";
     private static final String RENDER_STATE_KEY = "renderState";
 
     // This might happen before or after onPause(), but if it needs to be called,
     // it will always be called before onStop().
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
-        outState.putBoolean(CONTROL_VISIBILITY_KEY, controlVisibility);
         outState.putParcelable(RENDER_STATE_KEY, renderState);
         super.onSaveInstanceState(outState);
     }
@@ -186,6 +179,17 @@ public class MainActivity extends AppCompatActivity
 
             case R.id.menuSnap:
                 renderState.snapCameraToAxis();
+                break;
+
+            case R.id.menuFullscreen:
+                orbitalView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                        // TODO fix for API 18
+                        | View.SYSTEM_UI_FLAG_IMMERSIVE
+                        // TODO what do these do?
+                        | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
                 break;
 
             case R.id.menuShare:
@@ -292,13 +296,9 @@ public class MainActivity extends AppCompatActivity
         file.delete();
     }
 
-    public void toggleControls() {
-        controlVisibility = !controlVisibility;
-        applyControlVisibility();
-    }
-
-    private void applyControlVisibility() {
-        if (controlVisibility) {
+    @Override
+    public void applyControlVisibility(boolean v) {
+        if (v) {
             toolbar.setVisibility(View.VISIBLE);
             orbitalSelector.setVisibility(View.VISIBLE);
         } else {
