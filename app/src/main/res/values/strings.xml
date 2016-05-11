@@ -1,4 +1,5 @@
 <resources>
+    <string name="appName">Orbital Explorer</string>
     <string name="apology">The electrons have gone missing.</string>
     <string name="apologySubtext">How embarrassing. Orbital Explorer isn\'t working on this Android device. Problems of this magnitude are a high priority; expect a fix in the near future.</string>
 
@@ -11,7 +12,6 @@
 
     <string name="complexNumbers">\u2102</string>
     <string name="realNumbers">\u211d</string>
-
     <string name="plusMinus">\u00b1</string>
     <string name="minusPlus">\u2213</string>
 </resources>
