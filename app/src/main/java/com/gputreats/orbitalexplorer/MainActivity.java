@@ -88,26 +88,7 @@ public class MainActivity extends AppCompatActivity
         orbitalView = (OrbitalView) findViewById(R.id.orbitalview);
 
         setSupportActionBar(toolbar);
-
-        /* // Can we use a translucent status bar?
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            // API 19+, yay!
-
-            // Adjust toolbar downward so it doesn't overlap the Status Bar
-            toolbar.setPadding(0, getStatusBarHeight(), 0, 0);
-
-            // Adjust menu as well
-            menu.setPadding(0, getStatusBarHeight(), 0, 0);
-        } */
     }
-
-    /* private int getStatusBarHeight() {
-        int result = 0;
-        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
-        if (resourceId > 0)
-            result = getResources().getDimensionPixelSize(resourceId);
-        return result;
-    } */
 
     private boolean renderExceptionAlreadyReported = false;
     private class RenderExceptionCallback implements Handler.Callback {
@@ -115,17 +96,18 @@ public class MainActivity extends AppCompatActivity
         public boolean handleMessage(Message m) {
             if (!renderExceptionAlreadyReported) {
                 renderExceptionAlreadyReported = true;
-                // TODO  Improve activity_error to be more user friendly and send real
-                // TODO  crash data via Google analytics
+
                 setContentView(R.layout.activity_error);
+
                 Exception e = (Exception) m.obj;
-                StackTraceElement[] trace = e.getStackTrace();
                 String traceStr = e.toString();
+                StackTraceElement[] trace = e.getStackTrace();
                 for (int i = 0; i < 3 && i < trace.length; ++i) {
                     traceStr += " ";
                     StackTraceElement level = trace[i];
                     traceStr += level.getFileName() + ":" + level.getLineNumber();
                 }
+
                 tracker.send(new HitBuilders.ExceptionBuilder()
                 .setDescription(traceStr)
                 .setFatal(true)
