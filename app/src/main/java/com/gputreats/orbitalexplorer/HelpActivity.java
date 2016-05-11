@@ -37,6 +37,7 @@ public class HelpActivity extends AppCompatActivity {
             a.setDisplayHomeAsUpEnabled(true);
 
         WebView webview = (WebView) findViewById(R.id.help_webview);
+        webview.getSettings().setDefaultTextEncodingName("utf-8");
         String url = extras.getString("url");
         webview.loadUrl(url);
     }
