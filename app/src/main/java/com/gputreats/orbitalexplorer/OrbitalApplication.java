@@ -11,23 +11,20 @@ public class OrbitalApplication extends Application {
 
         Analytics.init(this);
 
-        Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
-            @Override
-            public void uncaughtException(Thread thread, Throwable ex) {
-                handleUncaughtException(thread, ex);
-            }
-        });
+        Thread.setDefaultUncaughtExceptionHandler(new UIExceptionHandler());
     }
 
-    public void handleUncaughtException(Thread thread, Throwable ex) {
+    private class UIExceptionHandler implements Thread.UncaughtExceptionHandler {
+        @Override
+        public void uncaughtException(Thread thread, Throwable ex) {
+            Analytics.reportException(ex);
 
-        Analytics.reportException(ex);
+            Intent intent = new Intent();
+            intent.setAction("com.gputreats.orbitalexplorer.SHOW_ERROR");
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
 
-        Intent intent = new Intent();
-        intent.setAction("com.gputreats.orbitalexplorer.SHOW_ERROR");
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
-
-        System.exit(1);
+            System.exit(1);
+        }
     }
 }
