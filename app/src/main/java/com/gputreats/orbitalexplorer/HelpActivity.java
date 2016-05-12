@@ -14,9 +14,6 @@ public class HelpActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedState) {
-
-        OrbitalApplication application = (OrbitalApplication) getApplication();
-
         super.onCreate(savedState);
 
         Bundle extras = getIntent().getExtras();
@@ -25,16 +22,19 @@ public class HelpActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.help_toolbar);
         title = extras.getString("title");
-        toolbar.setTitle(title);
+        if (toolbar != null)
+            toolbar.setTitle(title);
         setSupportActionBar(toolbar);
         ActionBar a = getSupportActionBar();
         if (a != null)
             a.setDisplayHomeAsUpEnabled(true);
 
         WebView webview = (WebView) findViewById(R.id.help_webview);
-        webview.getSettings().setDefaultTextEncodingName("utf-8");
-        String url = extras.getString("url");
-        webview.loadUrl(url);
+        if (webview != null) {
+            webview.getSettings().setDefaultTextEncodingName("utf-8");
+            String url = extras.getString("url");
+            webview.loadUrl(url);
+        }
     }
 
     @Override

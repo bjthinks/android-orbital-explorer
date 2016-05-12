@@ -3,7 +3,6 @@ package com.gputreats.orbitalexplorer;
 import android.opengl.Matrix;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.util.Log;
 
 public class Camera implements Parcelable {
 

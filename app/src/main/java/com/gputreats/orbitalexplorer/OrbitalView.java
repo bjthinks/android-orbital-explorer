@@ -6,7 +6,6 @@ import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
-import android.view.View;
 
 public class OrbitalView extends GLSurfaceView {
 

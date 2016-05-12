@@ -28,7 +28,6 @@ public class OrbitalSelector extends LinearLayout {
     private ValueChanger lChanger;
     private ValueChanger mChanger;
     private Button rcChanger;
-    private ImageButton colorChanger;
 
     public OrbitalSelector(Context context) {
         super(context);
@@ -78,7 +77,7 @@ public class OrbitalSelector extends LinearLayout {
         lChanger = (ValueChanger) findViewById(R.id.lchanger);
         mChanger = (ValueChanger) findViewById(R.id.mchanger);
         rcChanger = (Button) findViewById(R.id.rcchanger);
-        colorChanger = (ImageButton) findViewById(R.id.colorchanger);
+        ImageButton colorChanger = (ImageButton) findViewById(R.id.colorchanger);
 
         setOrbitalName();
         nChanger.setInteger(N);
@@ -137,17 +136,6 @@ public class OrbitalSelector extends LinearLayout {
                 renderState.toggleColor();
             }
         });
-    }
-
-    public void setOrbital(int N_, int L_, int M_, boolean real_) {
-        N = N_;
-        L = L_;
-        M = M_;
-        nChanger.setInteger(N);
-        lChanger.setInteger(L);
-        setMChanger();
-        setReal(real_);
-        orbitalChanged();
     }
 
     private void orbitalChanged() {

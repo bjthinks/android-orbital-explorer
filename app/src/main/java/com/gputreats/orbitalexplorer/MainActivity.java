@@ -36,9 +36,6 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onCreate(Bundle savedState) {
-
-        OrbitalApplication application = (OrbitalApplication) getApplication();
-
         super.onCreate(savedState);
 
         if (hasGLES30())

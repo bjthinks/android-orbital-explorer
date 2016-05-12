@@ -15,10 +15,6 @@ public final class Analytics {
         tracker = GoogleAnalytics.getInstance(context).newTracker(R.xml.global_tracker);
     }
 
-    public static Tracker getTracker() {
-        return tracker;
-    }
-
     public static void setScreenName(String screen) {
         tracker.setScreenName(screen);
         tracker.send(new HitBuilders.ScreenViewBuilder().build());

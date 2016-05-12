@@ -7,6 +7,8 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.util.Locale;
+
 public class ValueChanger extends LinearLayout {
 
     private TextView text;
@@ -49,7 +51,7 @@ public class ValueChanger extends LinearLayout {
     }
 
     public void setInteger(int i) {
-        text.setText(String.format("%d", i));
+        text.setText(String.format(Locale.US, "%d", i));
     }
 
     public void setOnUpListener(OnClickListener ocl) {

@@ -8,10 +8,7 @@ import java.nio.FloatBuffer;
 
 public class RenderStage {
 
-    private static final String TAG = "RenderStage";
-
     FloatBuffer screenRectangle;
-
     RenderStage() {
         float squareCoordinates[] = {
                 -1.0f, -1.0f,
