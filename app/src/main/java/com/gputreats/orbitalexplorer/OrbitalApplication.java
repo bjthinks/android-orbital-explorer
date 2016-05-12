@@ -2,9 +2,7 @@ package com.gputreats.orbitalexplorer;
 
 import android.app.Application;
 import android.content.Intent;
-import android.util.Log;
 
-import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 
@@ -13,6 +11,7 @@ public class OrbitalApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        Analytics.init(this);
 
         Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
             @Override
@@ -32,7 +31,7 @@ public class OrbitalApplication extends Application {
             traceStr += level.getFileName() + ":" + level.getLineNumber();
         }
 
-        tracker.send(new HitBuilders.ExceptionBuilder()
+        Analytics.getTracker().send(new HitBuilders.ExceptionBuilder()
                 .setDescription(traceStr)
                 .setFatal(true)
                 .build());
@@ -45,14 +44,8 @@ public class OrbitalApplication extends Application {
         System.exit(1);
     }
 
-    private Tracker tracker;
-
     synchronized public Tracker getTracker() {
-        if (tracker == null) {
-            GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
-            tracker = analytics.newTracker(R.xml.global_tracker);
-        }
-        return tracker;
+        return Analytics.getTracker();
     }
 
 }
