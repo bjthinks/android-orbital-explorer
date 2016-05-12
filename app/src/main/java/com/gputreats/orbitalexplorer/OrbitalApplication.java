@@ -11,6 +11,7 @@ public class OrbitalApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
         Analytics.init(this);
 
         Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
@@ -23,18 +24,7 @@ public class OrbitalApplication extends Application {
 
     public void handleUncaughtException(Thread thread, Throwable ex) {
 
-        String traceStr = ex.toString();
-        StackTraceElement[] trace = ex.getStackTrace();
-        for (int i = 0; i < 3 && i < trace.length; ++i) {
-            traceStr += " ";
-            StackTraceElement level = trace[i];
-            traceStr += level.getFileName() + ":" + level.getLineNumber();
-        }
-
-        Analytics.getTracker().send(new HitBuilders.ExceptionBuilder()
-                .setDescription(traceStr)
-                .setFatal(true)
-                .build());
+        Analytics.reportException(ex);
 
         Intent intent = new Intent();
         intent.setAction("com.gputreats.orbitalexplorer.SHOW_ERROR");
