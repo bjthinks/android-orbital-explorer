@@ -11,4 +11,9 @@ public class ErrorActivity extends Activity {
 
         setContentView(R.layout.activity_error);
     }
+
+    @Override
+    public void onBackPressed() {
+        moveTaskToBack(true);
+    }
 }
