@@ -19,7 +19,13 @@ public final class Analytics {
         return tracker;
     }
 
+    public static void setScreenName(String screen) {
+        tracker.setScreenName(screen);
+        tracker.send(new HitBuilders.ScreenViewBuilder().build());
+    }
+
     public static void reportException(Throwable exception) {
+
         String traceStr = exception.toString();
         StackTraceElement[] stackTrace = exception.getStackTrace();
         for (int i = 0; i < 3 && i < stackTrace.length; ++i) {
@@ -28,8 +34,12 @@ public final class Analytics {
             traceStr += level.getFileName() + ":" + level.getLineNumber();
         }
 
+        reportFatalError(traceStr);
+    }
+
+    public static void reportFatalError(String error) {
         tracker.send(new HitBuilders.ExceptionBuilder()
-                .setDescription(traceStr)
+                .setDescription(error)
                 .setFatal(true)
                 .build());
     }

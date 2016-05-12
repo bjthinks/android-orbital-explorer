@@ -20,9 +20,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -32,7 +29,6 @@ import java.nio.ByteBuffer;
 public class MainActivity extends AppCompatActivity
         implements RenderStateProvider, Handler.Callback, VisibilityChanger {
 
-    private Tracker tracker;
     private RenderState renderState;
     private Toolbar toolbar;
     private OrbitalSelector orbitalSelector;
@@ -42,7 +38,6 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedState) {
 
         OrbitalApplication application = (OrbitalApplication) getApplication();
-        tracker = application.getTracker();
 
         super.onCreate(savedState);
 
@@ -62,10 +57,7 @@ public class MainActivity extends AppCompatActivity
 
     private void showDriverError() {
         setContentView(R.layout.activity_error);
-        tracker.send(new HitBuilders.ExceptionBuilder()
-                .setDescription("GLES version check failed")
-                .setFatal(true)
-                .build());
+        Analytics.reportFatalError("GLES version check failed");
     }
 
     private void startApp(Bundle savedState) {
@@ -99,19 +91,7 @@ public class MainActivity extends AppCompatActivity
 
                 setContentView(R.layout.activity_error);
 
-                Exception e = (Exception) m.obj;
-                String traceStr = e.toString();
-                StackTraceElement[] trace = e.getStackTrace();
-                for (int i = 0; i < 3 && i < trace.length; ++i) {
-                    traceStr += " ";
-                    StackTraceElement level = trace[i];
-                    traceStr += level.getFileName() + ":" + level.getLineNumber();
-                }
-
-                tracker.send(new HitBuilders.ExceptionBuilder()
-                .setDescription(traceStr)
-                .setFatal(true)
-                .build());
+                Analytics.reportException((Exception) m.obj);
             }
             return true;
         }
@@ -145,8 +125,7 @@ public class MainActivity extends AppCompatActivity
         if (orbitalView != null)
             orbitalView.onResume();
 
-        tracker.setScreenName("Main");
-        tracker.send(new HitBuilders.ScreenViewBuilder().build());
+        Analytics.setScreenName("Main");
     }
 
     @Override

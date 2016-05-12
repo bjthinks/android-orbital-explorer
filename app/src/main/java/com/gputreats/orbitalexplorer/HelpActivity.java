@@ -8,19 +8,14 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.webkit.WebView;
 
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
-
 public class HelpActivity extends AppCompatActivity {
 
-    private Tracker tracker;
     private String title;
 
     @Override
     protected void onCreate(Bundle savedState) {
 
         OrbitalApplication application = (OrbitalApplication) getApplication();
-        tracker = application.getTracker();
 
         super.onCreate(savedState);
 
@@ -45,9 +40,7 @@ public class HelpActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-
-        tracker.setScreenName("Help " + title);
-        tracker.send(new HitBuilders.ScreenViewBuilder().build());
+        Analytics.setScreenName("Help " + title);
     }
 
     @Override

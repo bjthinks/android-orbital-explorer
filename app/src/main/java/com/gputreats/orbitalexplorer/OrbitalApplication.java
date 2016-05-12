@@ -3,9 +3,6 @@ package com.gputreats.orbitalexplorer;
 import android.app.Application;
 import android.content.Intent;
 
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
-
 public class OrbitalApplication extends Application {
 
     @Override
@@ -33,9 +30,4 @@ public class OrbitalApplication extends Application {
 
         System.exit(1);
     }
-
-    synchronized public Tracker getTracker() {
-        return Analytics.getTracker();
-    }
-
 }
