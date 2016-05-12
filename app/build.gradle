@@ -8,8 +8,8 @@ android {
         applicationId "com.gputreats.orbitalexplorer"
         minSdkVersion 18
         targetSdkVersion 23
-        versionCode 93
-        versionName "0.9.3"
+        versionCode 94
+        versionName "0.9.4"
     }
     buildTypes {
         release {
