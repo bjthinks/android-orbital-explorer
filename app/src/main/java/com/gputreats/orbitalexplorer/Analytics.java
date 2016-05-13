@@ -12,6 +12,10 @@ public final class Analytics {
 
     private static Tracker tracker;
     public static void init(Context context) {
+
+        // For testing
+        // GoogleAnalytics.getInstance(context).setDryRun(true);
+
         tracker = GoogleAnalytics.getInstance(context).newTracker(R.xml.global_tracker);
     }
 
