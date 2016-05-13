@@ -14,4 +14,8 @@
     <string name="realNumbers">\u211d</string>
     <string name="plusMinus">\u00b1</string>
     <string name="minusPlus">\u2213</string>
+
+    <string name="up">Up</string>
+    <string name="down">Down</string>
+    <string name="error">Error</string>
 </resources>

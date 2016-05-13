@@ -244,12 +244,14 @@ public class MainActivity extends AppCompatActivity
     private void shareError(int name) {
         Toast.makeText(this, "Unable to share", Toast.LENGTH_SHORT).show();
         File file = new File(getCacheDir(), "screens/" + name + ".jpg");
+        // TODO fix lint error
         file.delete();
     }
 
     @Override
     public void onActivityResult(int request, int result, Intent data) {
         File file = new File(getCacheDir(), "screens/" + request + ".jpg");
+        // TODO fix lint error
         file.delete();
     }
 

@@ -13,6 +13,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" tools:node="remove" />
 
+    // TODO fix lint error
     <application
         android:name=".OrbitalApplication"
         android:allowBackup="true"

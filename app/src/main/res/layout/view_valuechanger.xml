@@ -5,6 +5,7 @@
         android:layout_height="@dimen/buttonSize"
         android:scaleType="fitCenter"
         android:src="@drawable/ic_keyboard_arrow_up_white_24dp"
+        android:contentDescription="@string/up"
         style="@style/ButtonStyle" />
     <TextView
         android:id="@+id/integerchanger_value"
@@ -18,5 +19,6 @@
         android:layout_height="@dimen/buttonSize"
         android:scaleType="fitCenter"
         android:src="@drawable/ic_keyboard_arrow_down_white_24dp"
+        android:contentDescription="@string/down"
         style="@style/ButtonStyle" />
 </merge>
