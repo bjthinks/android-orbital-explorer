@@ -6,6 +6,9 @@ import android.content.Intent;
 import android.content.pm.ConfigurationInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -15,6 +18,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -193,6 +197,16 @@ public class MainActivity extends AppCompatActivity
             }
         }
         Bitmap bitmap = Bitmap.createBitmap(colors, width, height, Bitmap.Config.ARGB_8888);
+
+        bitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true);
+        Canvas canvas = new Canvas(bitmap);
+        Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        paint.setColor(Color.rgb(255, 255, 255));
+        paint.setTextAlign(Paint.Align.CENTER);
+        DisplayMetrics metrics = getResources().getDisplayMetrics();
+        float density = getResources().getDisplayMetrics().density;
+        paint.setTextSize(20 * density); // ~20dp
+        canvas.drawText("Orbital Explorer", width / 2, height - 20 * density, paint);
 
         int name = (int) (System.currentTimeMillis() % 0x10000);
         File file = new File(getCacheDir(), "screens/" + name + ".jpg");
