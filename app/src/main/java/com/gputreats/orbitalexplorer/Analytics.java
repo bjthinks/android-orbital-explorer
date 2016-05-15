@@ -17,6 +17,7 @@ public final class Analytics {
         // GoogleAnalytics.getInstance(context).setDryRun(true);
 
         tracker = GoogleAnalytics.getInstance(context).newTracker(R.xml.global_tracker);
+        tracker.enableAdvertisingIdCollection(true);
     }
 
     public static void setScreenName(String screen) {
