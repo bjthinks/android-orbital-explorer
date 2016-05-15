@@ -25,6 +25,13 @@ public final class Analytics {
         tracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 
+    public static void reportEvent(String category, String action) {
+        tracker.send(new HitBuilders.EventBuilder()
+                .setCategory(category)
+                .setAction(action)
+                .build());
+    }
+
     public static void reportException(Throwable exception) {
 
         String traceStr = exception.toString();
