@@ -141,10 +141,12 @@ public class MainActivity extends AppCompatActivity
         switch (item.getItemId()) {
 
             case R.id.menuSnap:
+                Analytics.reportEvent("menu", "snap");
                 renderState.snapCameraToAxis();
                 break;
 
             case R.id.menuFullscreen:
+                Analytics.reportEvent("menu", "full");
                 int immersive = 0;
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
                     immersive = View.SYSTEM_UI_FLAG_IMMERSIVE;
@@ -154,16 +156,19 @@ public class MainActivity extends AppCompatActivity
                 break;
 
             case R.id.menuShare:
+                Analytics.reportEvent("menu", "share");
                 renderState.requestScreenGrab(new Handler(this));
                 break;
 
             case R.id.menuStore:
+                Analytics.reportEvent("menu", "store");
                 intent = new Intent(Intent.ACTION_VIEW);
                 intent.setData(Uri.parse("market://details?id=com.gputreats.orbitalexplorer"));
                 startActivity(intent);
                 break;
 
             case R.id.menuAbout:
+                Analytics.reportEvent("menu", "about");
                 intent = new Intent(this, HelpActivity.class);
                 intent.putExtra("url", "file:///android_asset/docs/about.html");
                 intent.putExtra("title", getString(R.string.menuAbout));
@@ -171,6 +176,7 @@ public class MainActivity extends AppCompatActivity
                 break;
 
             case R.id.menuHelp:
+                Analytics.reportEvent("menu", "help");
                 intent = new Intent(this, HelpActivity.class);
                 intent.putExtra("url", "file:///android_asset/docs/help.html");
                 intent.putExtra("title", getString(R.string.menuHelp));
