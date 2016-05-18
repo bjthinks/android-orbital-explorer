@@ -18,7 +18,6 @@ import android.support.annotation.NonNull;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -209,7 +208,6 @@ public class MainActivity extends AppCompatActivity
         Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         paint.setColor(Color.rgb(255, 255, 255));
         paint.setTextAlign(Paint.Align.CENTER);
-        DisplayMetrics metrics = getResources().getDisplayMetrics();
         float density = getResources().getDisplayMetrics().density;
         paint.setTextSize(20 * density); // ~20dp
         canvas.drawText("Orbital Explorer", width / 2, height - 20 * density, paint);
