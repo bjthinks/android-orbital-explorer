@@ -4,33 +4,22 @@ import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ConfigurationInfo;
-import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
-import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.nio.ByteBuffer;
 
 public class MainActivity extends AppCompatActivity
-        implements RenderStateProvider, Handler.Callback, VisibilityChanger {
+        implements RenderStateProvider, VisibilityChanger {
 
     private RenderState renderState;
     private Toolbar toolbar;
@@ -156,7 +145,7 @@ public class MainActivity extends AppCompatActivity
 
             case R.id.menuShare:
                 Analytics.reportEvent("menu", "share");
-                renderState.requestScreenGrab(new Handler(this));
+                renderState.requestScreenGrab(new Handler(new ShareCallback(this)));
                 break;
 
             case R.id.menuStore:
@@ -184,86 +173,6 @@ public class MainActivity extends AppCompatActivity
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public boolean handleMessage(Message message) {
-        int width = message.arg1;
-        int height = message.arg2;
-        int[] colors = new int[width * height];
-        byte[] imageArray = ((ByteBuffer) message.obj).array();
-        for (int row = 0; row < height; ++row) {
-            for (int col = 0; col < width; ++col) {
-                int cell = row * width + col;
-                colors[(height - 1 - row) * width + col] = 0xff000000
-                        | ((imageArray[4 * cell] & 0xff) << 16)
-                        | ((imageArray[4 * cell + 1] & 0xff) << 8)
-                        | (imageArray[4 * cell + 2] & 0xff);
-            }
-        }
-        Bitmap bitmap = Bitmap.createBitmap(colors, width, height, Bitmap.Config.ARGB_8888);
-
-        bitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true);
-        Canvas canvas = new Canvas(bitmap);
-        Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        paint.setColor(Color.rgb(255, 255, 255));
-        paint.setTextAlign(Paint.Align.CENTER);
-        float density = getResources().getDisplayMetrics().density;
-        paint.setTextSize(20 * density); // ~20dp
-        canvas.drawText("Orbital Explorer", width / 2, height - 20 * density, paint);
-
-        int name = (int) (System.currentTimeMillis() % 0x10000);
-        File file = new File(getCacheDir(), "screens/" + name + ".jpg");
-        FileOutputStream fileOutputStream;
-        try {
-            fileOutputStream = new FileOutputStream(file);
-        } catch (FileNotFoundException e) {
-            File parent = file.getParentFile();
-            if (!parent.mkdirs()) {
-                shareError(name);
-                return true;
-            }
-            try {
-                fileOutputStream = new FileOutputStream(file);
-            } catch (FileNotFoundException ee) {
-                shareError(name);
-                return true;
-            }
-        }
-        if (!bitmap.compress(Bitmap.CompressFormat.JPEG, 90, fileOutputStream)) {
-            shareError(name);
-            return true;
-        }
-        try {
-            fileOutputStream.close();
-        } catch (IOException e) {
-            shareError(name);
-            return true;
-        }
-
-        Uri shareUri = FileProvider
-                .getUriForFile(this, "com.gputreats.orbitalexplorer.provider", file);
-        Intent intent = new Intent(Intent.ACTION_SEND);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        intent.putExtra(Intent.EXTRA_STREAM, shareUri);
-        intent.setType("image/jpeg");
-        if (getPackageManager()
-                .queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY).size() == 0) {
-            shareError(name);
-            return true;
-        }
-        Intent chooser = Intent.createChooser(intent, "Share image with");
-        startActivityForResult(chooser, name);
-
-        return true;
-    }
-
-    private void shareError(int name) {
-        Toast.makeText(this, "Unable to share", Toast.LENGTH_SHORT).show();
-        File file = new File(getCacheDir(), "screens/" + name + ".jpg");
-        // TODO fix lint error
-        file.delete();
     }
 
     @Override
