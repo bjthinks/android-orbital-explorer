@@ -24,10 +24,8 @@ public class HelpActivity extends AppCompatActivity {
         title = extras.getString("title");
         if (toolbar != null)
             toolbar.setTitle(title);
+            toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
         setSupportActionBar(toolbar);
-        ActionBar a = getSupportActionBar();
-        if (a != null)
-            a.setDisplayHomeAsUpEnabled(true);
 
         WebView webview = (WebView) findViewById(R.id.help_webview);
         if (webview != null) {
