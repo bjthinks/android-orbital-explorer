@@ -22,9 +22,10 @@ public class HelpActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.help_toolbar);
         title = extras.getString("title");
-        if (toolbar != null)
+        if (toolbar != null) {
             toolbar.setTitle(title);
             toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
+        }
         setSupportActionBar(toolbar);
 
         WebView webview = (WebView) findViewById(R.id.help_webview);
