@@ -1,6 +1,7 @@
 package com.gputreats.orbitalexplorer;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.text.Html;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -84,6 +85,7 @@ public class OrbitalSelector extends LinearLayout {
         lChanger.setInteger(L);
         setMChanger();
         setReal(real);
+        setButtonTint();
 
         nChanger.setOnUpListener(new OnClickListener() {
             public void onClick(View v) {
@@ -140,6 +142,7 @@ public class OrbitalSelector extends LinearLayout {
 
     private void orbitalChanged() {
         setOrbitalName();
+        setButtonTint();
         renderState.setOrbital(1, N, L, M, real);
     }
 
@@ -212,6 +215,52 @@ public class OrbitalSelector extends LinearLayout {
             rcChanger.setText(realNumbers);
         else
             rcChanger.setText(complexNumbers);
+    }
+
+    private void setButtonTint() {
+        int dark = Color.rgb(0, 0, 0);
+        int dim = Color.rgb(128, 128, 128);
+        int bright = Color.rgb(255, 255, 255);
+
+        if (N == maxN)
+            nChanger.setUpTint(dark);
+        else
+            nChanger.setUpTint(bright);
+
+        if (N == 1)
+            nChanger.setDownTint(dark);
+        else if (N <= L + 1)
+            nChanger.setDownTint(dim);
+        else
+            nChanger.setDownTint(bright);
+
+        if (L == maxN - 1)
+            lChanger.setUpTint(dark);
+        else if (L >= N - 1)
+            lChanger.setUpTint(dim);
+        else
+            lChanger.setUpTint(bright);
+
+        if (L == 0)
+            lChanger.setDownTint(dark);
+        else if (L <= Math.abs(M))
+            lChanger.setDownTint(dim);
+        else
+            lChanger.setDownTint(bright);
+
+        if (M == maxN - 1)
+            mChanger.setUpTint(dark);
+        else if (M >= L)
+            mChanger.setUpTint(dim);
+        else
+            mChanger.setUpTint(bright);
+
+        if (M == 1 - maxN)
+            mChanger.setDownTint(dark);
+        else if (M <= -L)
+            mChanger.setDownTint(dim);
+        else
+            mChanger.setDownTint(bright);
     }
 
     private void setOrbitalName() {
