@@ -54,6 +54,14 @@ public class ValueChanger extends LinearLayout {
         text.setText(String.format(Locale.US, "%d", i));
     }
 
+    public void setUpTint(int c) {
+        upArrow.setColorFilter(c);
+    }
+
+    public void setDownTint(int c) {
+        downArrow.setColorFilter(c);
+    }
+
     public void setOnUpListener(OnClickListener ocl) {
         upArrow.setOnClickListener(ocl);
     }

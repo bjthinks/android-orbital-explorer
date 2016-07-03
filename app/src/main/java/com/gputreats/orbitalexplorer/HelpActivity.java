@@ -22,12 +22,11 @@ public class HelpActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.help_toolbar);
         title = extras.getString("title");
-        if (toolbar != null)
+        if (toolbar != null) {
             toolbar.setTitle(title);
+            toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
+        }
         setSupportActionBar(toolbar);
-        ActionBar a = getSupportActionBar();
-        if (a != null)
-            a.setDisplayHomeAsUpEnabled(true);
 
         WebView webview = (WebView) findViewById(R.id.help_webview);
         if (webview != null) {
@@ -47,7 +46,7 @@ public class HelpActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                NavUtils.navigateUpFromSameTask(this);
+                finish();
                 return true;
         }
         return super.onOptionsItemSelected(item);
