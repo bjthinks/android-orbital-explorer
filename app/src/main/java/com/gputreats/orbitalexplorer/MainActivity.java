@@ -9,7 +9,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -96,7 +95,7 @@ public class MainActivity extends AppCompatActivity
     // This might happen before or after onPause(), but if it needs to be called,
     // it will always be called before onStop().
     @Override
-    protected void onSaveInstanceState(@NonNull Bundle outState) {
+    protected void onSaveInstanceState(Bundle outState) {
         outState.putParcelable(RENDER_STATE_KEY, renderState);
         super.onSaveInstanceState(outState);
     }

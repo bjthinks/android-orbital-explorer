@@ -2,7 +2,6 @@ package com.gputreats.orbitalexplorer;
 
 import android.content.Context;
 import android.opengl.GLSurfaceView;
-import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
@@ -59,7 +58,7 @@ public class OrbitalView extends GLSurfaceView {
     private int secondPointerID = MotionEvent.INVALID_POINTER_ID;
 
     @Override
-    public boolean onTouchEvent(@NonNull MotionEvent e) {
+    public boolean onTouchEvent(MotionEvent e) {
 
         flingDetector.onTouchEvent(e);
 
