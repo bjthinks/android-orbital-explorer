@@ -134,12 +134,9 @@ public class MainActivity extends AppCompatActivity
 
             case R.id.menuFullscreen:
                 Analytics.reportEvent("menu", "full");
-                int immersive = 0;
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
-                    immersive = View.SYSTEM_UI_FLAG_IMMERSIVE;
                 orbitalView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN
                         | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                        | immersive);
+                        | View.SYSTEM_UI_FLAG_IMMERSIVE);
                 break;
 
             case R.id.menuShare:
