@@ -3,12 +3,13 @@ package com.gputreats.orbitalexplorer;
 import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 
 public class OrbitalView extends GLSurfaceView {
 
-    private GestureDetector flingDetector;
+    private GestureDetector tapFlingDetector;
     private RenderState renderState;
     private VisibilityChanger visibilityChanger;
 
@@ -29,7 +30,7 @@ public class OrbitalView extends GLSurfaceView {
         // Try to preserve our context, if possible
         setPreserveEGLContextOnPause(true);
 
-        flingDetector = new GestureDetector(context, new FlingListener());
+        tapFlingDetector = new GestureDetector(context, new TapFlingListener());
 
         try {
             visibilityChanger = (VisibilityChanger) context;
@@ -60,7 +61,7 @@ public class OrbitalView extends GLSurfaceView {
     @Override
     public boolean onTouchEvent(MotionEvent e) {
 
-        flingDetector.onTouchEvent(e);
+        tapFlingDetector.onTouchEvent(e);
 
         switch (e.getActionMasked()) {
 
@@ -186,10 +187,18 @@ public class OrbitalView extends GLSurfaceView {
         previousDistance = distance;
     }
 
-    private class FlingListener extends GestureDetector.SimpleOnGestureListener {
+    private class TapFlingListener extends GestureDetector.SimpleOnGestureListener {
 
         @Override
         public boolean onDown(MotionEvent event) {
+            return true;
+        }
+
+        @Override
+        public boolean onSingleTapUp(MotionEvent event) {
+            Log.d("OrbitalView", "Tap detected");
+            /*if (!stoppedFling)
+                controlToggler.toggleControls();*/
             return true;
         }
 
