@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         applicationId "com.gputreats.orbitalexplorer"
-        minSdkVersion 18
+        minSdkVersion 19
         targetSdkVersion 23
         versionCode 95
         versionName "0.9.5"
