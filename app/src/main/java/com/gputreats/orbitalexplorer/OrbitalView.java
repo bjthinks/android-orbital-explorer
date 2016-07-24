@@ -3,7 +3,6 @@ package com.gputreats.orbitalexplorer;
 import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 
@@ -199,8 +198,7 @@ public class OrbitalView extends GLSurfaceView {
         @Override
         public boolean onSingleTapUp(MotionEvent event) {
             if (!stoppedFling)
-                Log.d("OrbitalView", "Tap which did not stop a fling was detected");
-                /*controlToggler.toggleControls();*/
+                setSystemUiVisibility(0);
             return true;
         }
 
