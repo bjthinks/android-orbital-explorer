@@ -10,7 +10,6 @@ public class OrbitalView extends GLSurfaceView {
 
     private GestureDetector tapFlingDetector;
     private RenderState renderState;
-    private VisibilityChanger visibilityChanger;
 
     public OrbitalView(Context context) {
         super(context);
@@ -32,13 +31,6 @@ public class OrbitalView extends GLSurfaceView {
         tapFlingDetector = new GestureDetector(context, new TapFlingListener());
 
         try {
-            visibilityChanger = (VisibilityChanger) context;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(context.toString()
-                    + " must implement VisibilityChanger");
-        }
-
-        try {
             renderState = ((RenderStateProvider) context).provideRenderState();
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString()
@@ -46,13 +38,15 @@ public class OrbitalView extends GLSurfaceView {
         }
 
         renderState.setOrbitalView(this);
-        setOnSystemUiVisibilityChangeListener(new UiVisibilityListener());
 
         // Start the rendering thread
         setRenderer(new OrbitalRenderer(context));
 
         renderState.postRenderThreadSetup();
     }
+
+    private Runnable onSingleTapUp = null;
+    void setOnSingleTapUp(Runnable r) { onSingleTapUp = r; }
 
     private int firstPointerID = MotionEvent.INVALID_POINTER_ID;
     private int secondPointerID = MotionEvent.INVALID_POINTER_ID;
@@ -197,8 +191,8 @@ public class OrbitalView extends GLSurfaceView {
 
         @Override
         public boolean onSingleTapUp(MotionEvent event) {
-            if (!stoppedFling)
-                setSystemUiVisibility(0);
+            if (!stoppedFling && onSingleTapUp != null)
+                onSingleTapUp.run();
             return true;
         }
 
@@ -209,16 +203,6 @@ public class OrbitalView extends GLSurfaceView {
             renderState.cameraFling(velocityX / meanSize, velocityY / meanSize);
 
             return true;
-        }
-    }
-
-    private class UiVisibilityListener implements OnSystemUiVisibilityChangeListener {
-
-        @Override
-        public void onSystemUiVisibilityChange(int v) {
-            // TODO the below check should be improved. Values are 0 and 6, must look up bitmasks
-            visibilityChanger.applyControlVisibility(v == 0);
-            requestLayout();
         }
     }
 }

@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ConfigurationInfo;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -17,13 +16,23 @@ import android.view.View;
 
 import java.io.File;
 
-public class MainActivity extends AppCompatActivity
-        implements RenderStateProvider, VisibilityChanger {
+public class MainActivity extends AppCompatActivity implements RenderStateProvider {
 
     private RenderState renderState;
+    private View decorView;
     private Toolbar toolbar;
     private OrbitalSelector orbitalSelector;
     private OrbitalView orbitalView;
+    private boolean fullScreenMode = false;
+
+    @Override
+    public RenderState provideRenderState() {
+        return renderState;
+    }
+
+    //
+    // STARTUP -- CHECK OPENGL ES 3.0
+    //
 
     @Override
     protected void onCreate(Bundle savedState) {
@@ -48,6 +57,10 @@ public class MainActivity extends AppCompatActivity
         Analytics.reportFatalError("GLES version check failed");
     }
 
+    //
+    // INITIALIZATION
+    //
+
     private void startApp(Bundle savedState) {
 
         // Need to set renderState before calling setContentView, because that will
@@ -63,32 +76,43 @@ public class MainActivity extends AppCompatActivity
         renderState.setRenderExceptionHandler(new Handler(new RenderExceptionCallback()));
 
         setContentView(R.layout.activity_main);
+        decorView = getWindow().getDecorView();
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         orbitalSelector = (OrbitalSelector) findViewById(R.id.orbitalselector);
         orbitalView = (OrbitalView) findViewById(R.id.orbitalview);
 
+        orbitalView.setOnSingleTapUp(new Runnable() {
+            @Override
+            public void run() {
+                setFullscreen(false);
+            }
+        });
+
+        decorView.setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener() {
+            @Override
+            public void onSystemUiVisibilityChange(int flags) {
+                // If we're in fullscreen mode and the decor has been shown, get the user out
+                // of fullscreen mode. This tends to happen in two different ways:
+                // (1) Swipe down from top, the built-in way to exit immersive fullscreen.
+                //     We are not notified if this gesture is detected, but we do get
+                //     an event here after re-displaying the decor.
+                // (2) The user executes an immersive fullscreen "panic", by hitting the
+                //     power button twice in five seconds,
+                //     This causes the decor to be force-shown, but due to an apparent Android
+                //     framework bug, it also causes the fullscreen state of the UI to get
+                //     into an inconsistent state. The best we can do is to follow along and
+                //     also show the app controls.
+                if (fullScreenMode && (flags & View.SYSTEM_UI_FLAG_FULLSCREEN) == 0)
+                    setFullscreen(false);
+            }
+        });
+
         setSupportActionBar(toolbar);
     }
 
-    private boolean renderExceptionAlreadyReported = false;
-    private class RenderExceptionCallback implements Handler.Callback {
-        @Override
-        public boolean handleMessage(Message m) {
-            if (!renderExceptionAlreadyReported) {
-                renderExceptionAlreadyReported = true;
-
-                setContentView(R.layout.activity_error);
-
-                Analytics.reportException((Exception) m.obj);
-            }
-            return true;
-        }
-    }
-
-    @Override
-    public RenderState provideRenderState() {
-        return renderState;
-    }
+    //
+    // LIFE CYCLE
+    //
 
     private static final String RENDER_STATE_KEY = "renderState";
 
@@ -116,6 +140,57 @@ public class MainActivity extends AppCompatActivity
         Analytics.setScreenName("Main");
     }
 
+    //
+    // RENDER THREAD ERROR HANDLING
+    //
+
+    private boolean renderExceptionAlreadyReported = false;
+    private class RenderExceptionCallback implements Handler.Callback {
+        @Override
+        public boolean handleMessage(Message m) {
+            if (!renderExceptionAlreadyReported) {
+                renderExceptionAlreadyReported = true;
+                // TODO just re-throw it!
+                // Replace below two lines with: throw (Exception) m.obj;
+                Analytics.reportException((Exception) m.obj);
+                setContentView(R.layout.activity_error);
+            }
+            return true;
+        }
+    }
+
+    //
+    // FULL SCREEN MODE
+    //
+
+    public void setFullscreen(boolean f) {
+        if (f) {
+            decorView.setSystemUiVisibility(
+                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE |
+                    View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION |
+                    View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN |
+                    View.SYSTEM_UI_FLAG_FULLSCREEN |
+                    View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
+                    View.SYSTEM_UI_FLAG_IMMERSIVE);
+            toolbar.setVisibility(View.INVISIBLE);
+            orbitalSelector.setVisibility(View.INVISIBLE);
+        } else {
+            decorView.setSystemUiVisibility(
+                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE |
+                    View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION |
+                    View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+            );
+            toolbar.setVisibility(View.VISIBLE);
+            orbitalSelector.setVisibility(View.VISIBLE);
+        }
+        decorView.requestLayout();
+        fullScreenMode = f;
+    }
+
+    //
+    // OPTIONS MENU
+    //
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_menu, menu);
@@ -134,9 +209,7 @@ public class MainActivity extends AppCompatActivity
 
             case R.id.menuFullscreen:
                 Analytics.reportEvent("menu", "full");
-                orbitalView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN
-                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                        | View.SYSTEM_UI_FLAG_IMMERSIVE);
+                setFullscreen(true);
                 break;
 
             case R.id.menuShare:
@@ -176,16 +249,5 @@ public class MainActivity extends AppCompatActivity
         File file = new File(getCacheDir(), "screens/" + request + ".jpg");
         // TODO fix lint error
         file.delete();
-    }
-
-    @Override
-    public void applyControlVisibility(boolean v) {
-        if (v) {
-            toolbar.setVisibility(View.VISIBLE);
-            orbitalSelector.setVisibility(View.VISIBLE);
-        } else {
-            toolbar.setVisibility(View.INVISIBLE);
-            orbitalSelector.setVisibility(View.INVISIBLE);
-        }
     }
 }
