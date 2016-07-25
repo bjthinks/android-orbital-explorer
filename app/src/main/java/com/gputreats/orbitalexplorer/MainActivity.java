@@ -108,6 +108,8 @@ public class MainActivity extends AppCompatActivity implements RenderStateProvid
         });
 
         setSupportActionBar(toolbar);
+
+        setFullscreen(false);
     }
 
     //
