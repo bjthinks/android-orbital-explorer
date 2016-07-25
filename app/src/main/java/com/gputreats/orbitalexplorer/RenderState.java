@@ -195,7 +195,7 @@ public class RenderState implements Parcelable {
 
     // Render thread error handling
 
-    public synchronized void reportRenderException(Exception e) {
+    public synchronized void reportRenderException(RuntimeException e) {
         Message.obtain(renderExceptionHandler, 0, e).sendToTarget();
     }
 }

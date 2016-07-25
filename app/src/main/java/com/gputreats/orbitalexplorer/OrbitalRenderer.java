@@ -34,7 +34,7 @@ public class OrbitalRenderer implements GLSurfaceView.Renderer {
         try {
             integrator.onSurfaceCreated();
             screenDrawer.onSurfaceCreated();
-        } catch (Exception e) {
+        } catch (RuntimeException e) {
             renderState.reportRenderException(e);
         }
     }
@@ -52,7 +52,7 @@ public class OrbitalRenderer implements GLSurfaceView.Renderer {
             int integrationHeight = (int) (scaleDownFactor * height);
             integrator.resize(integrationWidth, integrationHeight);
             screenDrawer.resize(integrationWidth, integrationHeight, width, height);
-        } catch (Exception e) {
+        } catch (RuntimeException e) {
             renderState.reportRenderException(e);
         }
     }
@@ -65,7 +65,7 @@ public class OrbitalRenderer implements GLSurfaceView.Renderer {
             RenderState.FrozenState frozenState = renderState.freeze(aspectRatio);
             Texture integratorOutput = integrator.render(frozenState);
             screenDrawer.render(integratorOutput, frozenState);
-        } catch (Exception e) {
+        } catch (RuntimeException e) {
             renderState.reportRenderException(e);
         }
     }

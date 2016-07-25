@@ -152,10 +152,7 @@ public class MainActivity extends AppCompatActivity implements RenderStateProvid
         public boolean handleMessage(Message m) {
             if (!renderExceptionAlreadyReported) {
                 renderExceptionAlreadyReported = true;
-                // TODO just re-throw it!
-                // Replace below two lines with: throw (Exception) m.obj;
-                Analytics.reportException((Exception) m.obj);
-                setContentView(R.layout.activity_error);
+                throw (RuntimeException) m.obj;
             }
             return true;
         }
