@@ -93,8 +93,14 @@ public class RenderState implements Parcelable {
     }
 
     public synchronized void setOrbital(int Z, int N, int L, int M, boolean real, boolean color) {
-        if (Z != orbital.Z || N != orbital.N || L != orbital.L
+        if (orbital == null || Z != orbital.Z || N != orbital.N || L != orbital.L
                 || M != orbital.M || real != orbital.real || color != orbital.color) {
+            Analytics.reportEvent("change", "("
+                    + Integer.toString(N) + ","
+                    + Integer.toString(L) + ","
+                    + Integer.toString(M) + ","
+                    + Integer.toString(real ? 1 : 0) + ","
+                    + Integer.toString(color ? 1 : 0) + ")");
             orbital = new Orbital(Z, N, L, M, real, color);
             orbitalChanged = true;
             if (orbitalView != null) {
