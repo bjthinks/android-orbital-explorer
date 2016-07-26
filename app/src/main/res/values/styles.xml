@@ -28,6 +28,8 @@
         <!-- <item name="android:textColorSecondary">#f0f</item> -->
         <!-- Plain TextViews get this -->
         <item name="android:textColorTertiary">@color/white</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentNavigation">true</item>
     </style>
 
     <style name="AuxTheme" parent="Theme.AppCompat.NoActionBar">
