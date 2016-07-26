@@ -92,23 +92,19 @@ public class RenderState implements Parcelable {
         return orbital;
     }
 
-    public synchronized void setOrbital(int Z, int N, int L, int M, boolean real) {
-        orbital = new Orbital(Z, N, L, M, real, orbital.color);
-        orbitalChanged = true;
-        if (orbitalView != null && !orbital.color)
-            orbitalView.requestRender();
-    }
-
-    public synchronized void toggleColor() {
-        boolean color = !orbital.color;
-        orbital = new Orbital(orbital.Z, orbital.N, orbital.L, orbital.M,
-                orbital.real, color);
-        orbitalChanged = true;
-        if (color)
-            orbitalView.setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
-        else {
-            orbitalView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
-            orbitalView.requestRender();
+    public synchronized void setOrbital(int Z, int N, int L, int M, boolean real, boolean color) {
+        if (Z != orbital.Z || N != orbital.N || L != orbital.L
+                || M != orbital.M || real != orbital.real || color != orbital.color) {
+            orbital = new Orbital(Z, N, L, M, real, color);
+            orbitalChanged = true;
+            if (orbitalView != null) {
+                if (color)
+                    orbitalView.setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
+                else {
+                    orbitalView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
+                    orbitalView.requestRender();
+                }
+            }
         }
     }
 

@@ -2,6 +2,7 @@ package com.gputreats.orbitalexplorer;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.support.v4.content.ContextCompat;
 import android.text.Html;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -17,18 +18,21 @@ public class OrbitalSelector extends LinearLayout {
 
     RenderState renderState;
 
+    private Context context;
     private String plusMinus, minusPlus, realNumbers, complexNumbers;
 
     private int N;
     private int L;
     private int M;
     private boolean real;
+    private boolean color;
 
     private TextView orbitalName;
     private ValueChanger nChanger;
     private ValueChanger lChanger;
     private ValueChanger mChanger;
     private Button rcChanger;
+    private ImageButton colorChanger;
 
     public OrbitalSelector(Context context) {
         super(context);
@@ -45,7 +49,9 @@ public class OrbitalSelector extends LinearLayout {
         constructorSetup(context);
     }
 
-    private void constructorSetup(Context context) {
+    private void constructorSetup(Context context_) {
+        context = context_;
+
         plusMinus = context.getString(R.string.plusMinus);
         minusPlus = context.getString(R.string.minusPlus);
         realNumbers = context.getString(R.string.realNumbers);
@@ -62,6 +68,7 @@ public class OrbitalSelector extends LinearLayout {
         L = previouslyDisplayedOrbital.L;
         M = previouslyDisplayedOrbital.M;
         real = previouslyDisplayedOrbital.real;
+        color = previouslyDisplayedOrbital.color;
 
         LayoutInflater inflater
                 = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -78,13 +85,14 @@ public class OrbitalSelector extends LinearLayout {
         lChanger = (ValueChanger) findViewById(R.id.lchanger);
         mChanger = (ValueChanger) findViewById(R.id.mchanger);
         rcChanger = (Button) findViewById(R.id.rcchanger);
-        ImageButton colorChanger = (ImageButton) findViewById(R.id.colorchanger);
+        colorChanger = (ImageButton) findViewById(R.id.colorchanger);
 
         setOrbitalName();
         nChanger.setInteger(N);
         lChanger.setInteger(L);
         setMChanger();
         setReal(real);
+        setColor(color);
         setButtonTint();
 
         nChanger.setOnUpListener(new OnClickListener() {
@@ -135,7 +143,8 @@ public class OrbitalSelector extends LinearLayout {
         colorChanger.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                renderState.toggleColor();
+                setColor(!color);
+                orbitalChanged();
             }
         });
     }
@@ -143,7 +152,7 @@ public class OrbitalSelector extends LinearLayout {
     private void orbitalChanged() {
         setOrbitalName();
         setButtonTint();
-        renderState.setOrbital(1, N, L, M, real);
+        renderState.setOrbital(1, N, L, M, real, color);
     }
 
     private void increaseN() {
@@ -215,6 +224,16 @@ public class OrbitalSelector extends LinearLayout {
             rcChanger.setText(realNumbers);
         else
             rcChanger.setText(complexNumbers);
+    }
+
+    private void setColor(boolean newColor) {
+        color = newColor;
+        int d;
+        if (color)
+            d = R.drawable.ic_palette_white_24dp;
+        else
+            d = R.drawable.ic_share_white_24dp;
+        colorChanger.setImageDrawable(ContextCompat.getDrawable(context, d));
     }
 
     private void setButtonTint() {
