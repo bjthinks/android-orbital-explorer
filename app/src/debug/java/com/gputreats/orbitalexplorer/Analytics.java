@@ -14,7 +14,7 @@ public final class Analytics {
     public static void init(Context context) {
 
         // For testing
-        // GoogleAnalytics.getInstance(context).setDryRun(true);
+        GoogleAnalytics.getInstance(context).setDryRun(true);
 
         tracker = GoogleAnalytics.getInstance(context).newTracker(R.xml.global_tracker);
         tracker.enableAdvertisingIdCollection(true);
