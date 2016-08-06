@@ -6,6 +6,7 @@
     <string name="menuSnap">Align Image</string>
     <string name="menuFullscreen">Fullscreen</string>
     <string name="menuShare">Share Image</string>
+    <string name="menuCardboard">Cardboard</string>
     <string name="menuStore">Play Store</string>
     <string name="menuAbout">About</string>
     <string name="menuHelp">Help</string>

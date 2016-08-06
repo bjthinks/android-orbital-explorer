@@ -21,6 +21,12 @@
         app:showAsAction="ifRoom" />
 
     <item
+        android:id="@+id/menuCardboard"
+        android:icon="@drawable/snap"
+        android:title="@string/menuCardboard"
+        app:showAsAction="never" />
+
+    <item
         android:id="@+id/menuStore"
         android:title="@string/menuStore"
         app:showAsAction="never" />
