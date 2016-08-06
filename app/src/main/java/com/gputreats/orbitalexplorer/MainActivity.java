@@ -208,6 +208,11 @@ public class MainActivity extends AppCompatActivity implements RenderStateProvid
                 renderState.requestScreenGrab(new Handler(new ShareCallback(this)));
                 break;
 
+            case R.id.menuCardboard:
+                intent = new Intent(this, CardboardActivity.class);
+                startActivity(intent);
+                break;
+
             case R.id.menuStore:
                 Analytics.reportEvent("menu", "store");
                 intent = new Intent(Intent.ACTION_VIEW);
