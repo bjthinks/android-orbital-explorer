@@ -12,6 +12,8 @@ public class CardboardActivity extends GvrActivity {
         super.onCreate(savedState);
 
         setContentView(R.layout.activity_cardboard);
+        CardboardView cv = (CardboardView) findViewById(R.id.cardboardView);
+        setGvrView(cv);
     }
 
     @Override
