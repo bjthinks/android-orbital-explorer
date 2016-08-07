@@ -2,6 +2,7 @@ package com.gputreats.orbitalexplorer;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.os.Build;
 import android.support.v4.content.ContextCompat;
 import android.text.Html;
 import android.text.Spanned;
@@ -16,6 +17,10 @@ import android.widget.TextView;
 public class OrbitalSelector extends LinearLayout {
 
     private static final int maxN = 8;
+
+    private static final int dark = Color.rgb(0, 0, 0);
+    private static final int dim = Color.rgb(128, 128, 128);
+    private static final int bright = Color.rgb(255, 255, 255);
 
     RenderState renderState;
 
@@ -199,6 +204,11 @@ public class OrbitalSelector extends LinearLayout {
             mChanger.setText(minusPlus + (-M));
         else
             mChanger.setInteger(M);
+
+        if (M == 0)
+            rcChanger.setTextColor(dim);
+        else
+            rcChanger.setTextColor(bright);
     }
 
     private void setReal(boolean realOrbital_) {
@@ -220,10 +230,6 @@ public class OrbitalSelector extends LinearLayout {
     }
 
     private void setButtonTint() {
-        int dark = Color.rgb(0, 0, 0);
-        int dim = Color.rgb(128, 128, 128);
-        int bright = Color.rgb(255, 255, 255);
-
         if (N == maxN)
             nChanger.setUpTint(dark);
         else
@@ -394,7 +400,7 @@ public class OrbitalSelector extends LinearLayout {
         }
         name += "<sub>" + subscript + "</sub>";
         Spanned foo;
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+        if (Build.VERSION.SDK_INT >= 24) {
             foo = Html.fromHtml(name, Html.FROM_HTML_MODE_LEGACY);
         } else {
             foo = Html.fromHtml(name);
