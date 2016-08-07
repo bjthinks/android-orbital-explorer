@@ -18,36 +18,9 @@ public class ScreenDrawer extends RenderStage {
     }
 
     public void onSurfaceCreated() throws OpenGLException {
-
         MyGL.checkGLES();
-
-        // Compile & link GLSL programs
-
-        Shader vertexShaderColor = new Shader(assetManager, "6", GLES30.GL_VERTEX_SHADER);
-        MyGL.checkGLES();
-        Shader fragmentShaderColor = new Shader(assetManager, "5", GLES30.GL_FRAGMENT_SHADER);
-        MyGL.checkGLES();
-        programColor = GLES30.glCreateProgram();
-        MyGL.checkGLES();
-        GLES30.glAttachShader(programColor, vertexShaderColor.getId());
-        MyGL.checkGLES();
-        GLES30.glAttachShader(programColor, fragmentShaderColor.getId());
-        MyGL.checkGLES();
-        GLES30.glLinkProgram(programColor);
-        MyGL.checkGLES();
-
-        Shader vertexShaderMono = new Shader(assetManager, "8", GLES30.GL_VERTEX_SHADER);
-        MyGL.checkGLES();
-        Shader fragmentShaderMono = new Shader(assetManager, "7", GLES30.GL_FRAGMENT_SHADER);
-        MyGL.checkGLES();
-        programMono = GLES30.glCreateProgram();
-        MyGL.checkGLES();
-        GLES30.glAttachShader(programMono, vertexShaderMono.getId());
-        MyGL.checkGLES();
-        GLES30.glAttachShader(programMono, fragmentShaderMono.getId());
-        MyGL.checkGLES();
-        GLES30.glLinkProgram(programMono);
-        MyGL.checkGLES();
+        programColor = new Program(assetManager, "6", "5").getId();
+        programMono = new Program(assetManager, "8", "7").getId();
     }
 
     private int inputWidth, inputHeight;

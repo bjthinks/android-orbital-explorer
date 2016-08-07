@@ -103,37 +103,8 @@ public class Integrator extends RenderStage {
         framebufferMono.bindAndSetTexture(outputTextureMono);
         MyGL.checkGLES();
 
-        // Compile & link GLSL programs
-
-        Shader vertexShaderColor
-                = new Shader(assetManager, "2", GLES30.GL_VERTEX_SHADER);
-        MyGL.checkGLES();
-        Shader fragmentShaderColor
-                = new Shader(assetManager, "1", GLES30.GL_FRAGMENT_SHADER);
-        MyGL.checkGLES();
-        programColor = GLES30.glCreateProgram();
-        MyGL.checkGLES();
-        GLES30.glAttachShader(programColor, vertexShaderColor.getId());
-        MyGL.checkGLES();
-        GLES30.glAttachShader(programColor, fragmentShaderColor.getId());
-        MyGL.checkGLES();
-        GLES30.glLinkProgram(programColor);
-        MyGL.checkGLES();
-
-        Shader vertexShaderMono
-                = new Shader(assetManager, "4", GLES30.GL_VERTEX_SHADER);
-        MyGL.checkGLES();
-        Shader fragmentShaderMono
-                = new Shader(assetManager, "3", GLES30.GL_FRAGMENT_SHADER);
-        MyGL.checkGLES();
-        programMono = GLES30.glCreateProgram();
-        MyGL.checkGLES();
-        GLES30.glAttachShader(programMono, vertexShaderMono.getId());
-        MyGL.checkGLES();
-        GLES30.glAttachShader(programMono, fragmentShaderMono.getId());
-        MyGL.checkGLES();
-        GLES30.glLinkProgram(programMono);
-        MyGL.checkGLES();
+        programColor = new Program(assetManager, "2", "1").getId();
+        programMono = new Program(assetManager, "4", "3").getId();
     }
 
     public void resize(int w, int h) throws OpenGLException {
