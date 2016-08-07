@@ -81,30 +81,22 @@ public class MainActivity extends AppCompatActivity implements RenderStateProvid
         orbitalSelector = (OrbitalSelector) findViewById(R.id.orbitalselector);
         orbitalView = (OrbitalView) findViewById(R.id.orbitalview);
 
-        orbitalView.setOnSingleTapUp(new Runnable() {
-            @Override
-            public void run() {
-                setFullscreen(false);
-            }
-        });
+        orbitalView.setOnSingleTapUp(() -> setFullscreen(false));
 
-        decorView.setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener() {
-            @Override
-            public void onSystemUiVisibilityChange(int flags) {
-                // If we're in fullscreen mode and the decor has been shown, get the user out
-                // of fullscreen mode. This tends to happen in two different ways:
-                // (1) Swipe down from top, the built-in way to exit immersive fullscreen.
-                //     We are not notified if this gesture is detected, but we do get
-                //     an event here after re-displaying the decor.
-                // (2) The user executes an immersive fullscreen "panic", by hitting the
-                //     power button twice in five seconds,
-                //     This causes the decor to be force-shown, but due to an apparent Android
-                //     framework bug, it also causes the fullscreen state of the UI to get
-                //     into an inconsistent state. The best we can do is to follow along and
-                //     also show the app controls.
-                if (fullScreenMode && (flags & View.SYSTEM_UI_FLAG_FULLSCREEN) == 0)
-                    setFullscreen(false);
-            }
+        decorView.setOnSystemUiVisibilityChangeListener((int flags) -> {
+            // If we're in fullscreen mode and the decor has been shown, get the user out
+            // of fullscreen mode. This tends to happen in two different ways:
+            // (1) Swipe down from top, the built-in way to exit immersive fullscreen.
+            //     We are not notified if this gesture is detected, but we do get
+            //     an event here after re-displaying the decor.
+            // (2) The user executes an immersive fullscreen "panic", by hitting the
+            //     power button twice in five seconds,
+            //     This causes the decor to be force-shown, but due to an apparent Android
+            //     framework bug, it also causes the fullscreen state of the UI to get
+            //     into an inconsistent state. The best we can do is to follow along and
+            //     also show the app controls.
+            if (fullScreenMode && (flags & View.SYSTEM_UI_FLAG_FULLSCREEN) == 0)
+                setFullscreen(false);
         });
 
         setSupportActionBar(toolbar);

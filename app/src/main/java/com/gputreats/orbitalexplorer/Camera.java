@@ -82,7 +82,7 @@ public class Camera implements Parcelable {
         @Override
         public Camera createFromParcel(Parcel in) {
             return new Camera(in.readDouble(),
-                    (Quaternion) in.readParcelable(Quaternion.class.getClassLoader()));
+                    in.readParcelable(Quaternion.class.getClassLoader()));
         }
 
         public Camera[] newArray(int size) {
