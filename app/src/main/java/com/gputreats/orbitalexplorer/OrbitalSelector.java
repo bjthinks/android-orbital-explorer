@@ -60,8 +60,15 @@ public class OrbitalSelector extends LinearLayout {
 
         plusMinus = context.getString(R.string.plusMinus);
         minusPlus = context.getString(R.string.minusPlus);
-        realNumbers = context.getString(R.string.realNumbers);
-        complexNumbers = context.getString(R.string.complexNumbers);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            realNumbers = context.getString(R.string.realNumbers);
+            complexNumbers = context.getString(R.string.complexNumbers);
+        } else {
+            // The unicode glyphs appear to be missing pre-Lollipop
+            realNumbers = "R";
+            complexNumbers = "C";
+        }
 
         try {
             renderState = ((RenderStateProvider) context).provideRenderState();
