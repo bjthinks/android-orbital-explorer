@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.support.v4.content.ContextCompat;
 import android.text.Html;
+import android.text.Spanned;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -95,57 +96,39 @@ public class OrbitalSelector extends LinearLayout {
         setColor(color);
         setButtonTint();
 
-        nChanger.setOnUpListener(new OnClickListener() {
-            public void onClick(View v) {
+        nChanger.setOnUpListener((View v) -> {
                 increaseN();
                 orbitalChanged();
-            }
         });
-        nChanger.setOnDownListener(new OnClickListener() {
-            public void onClick(View v) {
+        nChanger.setOnDownListener((View v) -> {
                 decreaseN();
                 orbitalChanged();
-            }
         });
-        lChanger.setOnUpListener(new OnClickListener() {
-            public void onClick(View v) {
+        lChanger.setOnUpListener((View x) -> {
                 increaseL();
                 orbitalChanged();
-            }
         });
-        lChanger.setOnDownListener(new OnClickListener() {
-            public void onClick(View v) {
+        lChanger.setOnDownListener((View v) -> {
                 decreaseL();
                 orbitalChanged();
-            }
         });
-        mChanger.setOnUpListener(new OnClickListener() {
-            public void onClick(View v) {
+        mChanger.setOnUpListener((View v) -> {
                 increaseM();
                 orbitalChanged();
-            }
         });
-        mChanger.setOnDownListener(new OnClickListener() {
-            public void onClick(View v) {
+        mChanger.setOnDownListener((View v) -> {
                 decreaseM();
                 orbitalChanged();
-            }
         });
 
-        rcChanger.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        rcChanger.setOnClickListener((View v) -> {
                 setReal(!real);
                 setMChanger();
                 orbitalChanged();
-            }
         });
-        colorChanger.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        colorChanger.setOnClickListener((View v) -> {
                 setColor(!color);
                 orbitalChanged();
-            }
         });
     }
 
@@ -410,7 +393,13 @@ public class OrbitalSelector extends LinearLayout {
                 name += Integer.toString(L);
         }
         name += "<sub>" + subscript + "</sub>";
-        orbitalName.setText(Html.fromHtml(name));
+        Spanned foo;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+            foo = Html.fromHtml(name, Html.FROM_HTML_MODE_LEGACY);
+        } else {
+            foo = Html.fromHtml(name);
+        }
+        orbitalName.setText(foo);
     }
 
     private static String ss(int x) {
