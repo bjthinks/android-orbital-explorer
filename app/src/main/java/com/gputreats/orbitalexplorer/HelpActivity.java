@@ -33,7 +33,7 @@ public class HelpActivity extends AppCompatActivity {
         if (webview != null) {
             webview.getSettings().setDefaultTextEncodingName("utf-8");
             String url;
-            if (false && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 url = extras.getString("url");
             } else {
                 url = extras.getString("url-v19");
