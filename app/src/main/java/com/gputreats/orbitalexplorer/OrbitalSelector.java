@@ -407,7 +407,7 @@ public class OrbitalSelector extends LinearLayout {
         }
         name += "<sub>" + subscript + "</sub>";
         Spanned foo;
-        if (Build.VERSION.SDK_INT >= 24) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             foo = Html.fromHtml(name, Html.FROM_HTML_MODE_LEGACY);
         } else {
             foo = Html.fromHtml(name);

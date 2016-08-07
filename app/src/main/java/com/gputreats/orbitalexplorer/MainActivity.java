@@ -226,7 +226,8 @@ public class MainActivity extends AppCompatActivity implements RenderStateProvid
             case R.id.menuAbout:
                 Analytics.reportEvent("menu", "about");
                 intent = new Intent(this, HelpActivity.class);
-                intent.putExtra("url", "file:///android_asset/docs/about.html");
+                intent.putExtra("url",     "file:///android_asset/docs/about.html");
+                intent.putExtra("url-v19", "file:///android_asset/docs/about.html");
                 intent.putExtra("title", getString(R.string.menuAbout));
                 startActivity(intent);
                 break;
@@ -234,7 +235,8 @@ public class MainActivity extends AppCompatActivity implements RenderStateProvid
             case R.id.menuHelp:
                 Analytics.reportEvent("menu", "help");
                 intent = new Intent(this, HelpActivity.class);
-                intent.putExtra("url", "file:///android_asset/docs/help.html");
+                intent.putExtra("url",     "file:///android_asset/docs/help.html");
+                intent.putExtra("url-v19", "file:///android_asset/docs/help-v19.html");
                 intent.putExtra("title", getString(R.string.menuHelp));
                 startActivity(intent);
                 break;

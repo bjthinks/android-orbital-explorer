@@ -1,5 +1,6 @@
 package com.gputreats.orbitalexplorer;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
@@ -31,7 +32,12 @@ public class HelpActivity extends AppCompatActivity {
         WebView webview = (WebView) findViewById(R.id.help_webview);
         if (webview != null) {
             webview.getSettings().setDefaultTextEncodingName("utf-8");
-            String url = extras.getString("url");
+            String url;
+            if (false && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                url = extras.getString("url");
+            } else {
+                url = extras.getString("url-v19");
+            }
             webview.loadUrl(url);
         }
     }
