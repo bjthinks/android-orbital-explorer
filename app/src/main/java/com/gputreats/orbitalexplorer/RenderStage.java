@@ -54,10 +54,4 @@ public class RenderStage {
         GLES30.glTexParameteri(GLES30.GL_TEXTURE_2D,
                 GLES30.GL_TEXTURE_MAG_FILTER, magFilter);
     }
-
-    protected static void checkGLES() throws OpenGLException {
-        int error = GLES30.glGetError();
-        if (error != 0)
-            throw new OpenGLException(error);
-    }
 }

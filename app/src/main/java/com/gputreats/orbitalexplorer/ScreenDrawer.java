@@ -19,35 +19,35 @@ public class ScreenDrawer extends RenderStage {
 
     public void onSurfaceCreated() throws OpenGLException {
 
-        checkGLES();
+        MyGL.checkGLES();
 
         // Compile & link GLSL programs
 
         Shader vertexShaderColor = new Shader(assetManager, "6", GLES30.GL_VERTEX_SHADER);
-        checkGLES();
+        MyGL.checkGLES();
         Shader fragmentShaderColor = new Shader(assetManager, "5", GLES30.GL_FRAGMENT_SHADER);
-        checkGLES();
+        MyGL.checkGLES();
         programColor = GLES30.glCreateProgram();
-        checkGLES();
+        MyGL.checkGLES();
         GLES30.glAttachShader(programColor, vertexShaderColor.getId());
-        checkGLES();
+        MyGL.checkGLES();
         GLES30.glAttachShader(programColor, fragmentShaderColor.getId());
-        checkGLES();
+        MyGL.checkGLES();
         GLES30.glLinkProgram(programColor);
-        checkGLES();
+        MyGL.checkGLES();
 
         Shader vertexShaderMono = new Shader(assetManager, "8", GLES30.GL_VERTEX_SHADER);
-        checkGLES();
+        MyGL.checkGLES();
         Shader fragmentShaderMono = new Shader(assetManager, "7", GLES30.GL_FRAGMENT_SHADER);
-        checkGLES();
+        MyGL.checkGLES();
         programMono = GLES30.glCreateProgram();
-        checkGLES();
+        MyGL.checkGLES();
         GLES30.glAttachShader(programMono, vertexShaderMono.getId());
-        checkGLES();
+        MyGL.checkGLES();
         GLES30.glAttachShader(programMono, fragmentShaderMono.getId());
-        checkGLES();
+        MyGL.checkGLES();
         GLES30.glLinkProgram(programMono);
-        checkGLES();
+        MyGL.checkGLES();
     }
 
     private int inputWidth, inputHeight;
@@ -63,7 +63,7 @@ public class ScreenDrawer extends RenderStage {
     private boolean color;
     public void render(Texture texture, RenderState.FrozenState frozenState) throws OpenGLException {
 
-        checkGLES();
+        MyGL.checkGLES();
 
         color = frozenState.orbital.color;
 
@@ -112,7 +112,7 @@ public class ScreenDrawer extends RenderStage {
             Message.obtain(frozenState.screenGrabHandler, 0, width, height, buf).sendToTarget();
         }
 
-        checkGLES();
+        MyGL.checkGLES();
     }
 
     int getUniformHandle(String name) {
