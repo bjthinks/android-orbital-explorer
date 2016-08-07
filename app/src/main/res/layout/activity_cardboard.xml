@@ -4,8 +4,9 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent" >
 
-    <com.google.vr.sdk.base.GvrView
-        android:id="@+id/gvrView"
+    <!-- TODO can this layout be collapsed into a single xml element? -->
+    <com.gputreats.orbitalexplorer.CardboardView
+        android:id="@+id/cardboardView"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_alignParentTop="true"

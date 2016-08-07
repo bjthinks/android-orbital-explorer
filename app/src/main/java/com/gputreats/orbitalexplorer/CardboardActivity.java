@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.google.vr.sdk.base.GvrActivity;
-import com.google.vr.sdk.base.GvrView;
 
 public class CardboardActivity extends GvrActivity {
 
@@ -13,8 +12,6 @@ public class CardboardActivity extends GvrActivity {
         super.onCreate(savedState);
 
         setContentView(R.layout.activity_cardboard);
-        GvrView gvrView = (GvrView) findViewById(R.id.gvrView);
-        gvrView.setRenderer(new CardboardRenderer());
     }
 
     @Override
