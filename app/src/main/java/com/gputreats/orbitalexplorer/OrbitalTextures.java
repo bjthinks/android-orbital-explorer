@@ -1,5 +1,6 @@
 package com.gputreats.orbitalexplorer;
 
+import android.content.res.AssetManager;
 import android.opengl.GLES30;
 
 public class OrbitalTextures {
@@ -7,11 +8,17 @@ public class OrbitalTextures {
     public static final int RADIAL_TEXTURE_SIZE = 1024;
     public static final int AZIMUTHAL_TEXTURE_SIZE = 256;
 
+    private AssetManager assets;
+
     public Texture radialTexture;
     public Texture azimuthalTexture;
     public Texture quadratureTexture;
+    public int quadratureDataSize;
+    public float quadratureRadius, maximumRadius;
 
-    public OrbitalTextures() {
+    public OrbitalTextures(AssetManager a) {
+        assets = a;
+
         radialTexture     = new Texture(GLES30.GL_RG,   GLES30.GL_FLOAT, GLES30.GL_RG32F);
         azimuthalTexture  = new Texture(GLES30.GL_RG,   GLES30.GL_FLOAT, GLES30.GL_RG32F);
         quadratureTexture = new Texture(GLES30.GL_RGBA, GLES30.GL_FLOAT, GLES30.GL_RGBA32F);
@@ -24,6 +31,19 @@ public class OrbitalTextures {
         float[] azimuthalData = MyMath.functionToBuffer2(orbital.getAzimuthalFunction(),
                 0.0, Math.PI, OrbitalTextures.AZIMUTHAL_TEXTURE_SIZE);
         azimuthalTexture.bindToTexture2DAndSetImage(AZIMUTHAL_TEXTURE_SIZE, 1, azimuthalData);
+
+        // Load new quadrature texture
+        Quadrature quadrature = orbital.getQuadrature();
+        int order = quadrature.getOrder();
+        float[] quadratureData = QuadratureTable.get(assets, quadrature);
+        quadratureDataSize = quadratureData.length / (4 * order);
+        quadratureTexture.bindToTexture2DAndSetImage(order, quadratureDataSize, quadratureData);
+
+        // Calculate radius info
+        quadratureRadius = (float) orbital.getRadialFunction().getMaximumRadius();
+        float maxLateral = quadratureData[quadratureData.length - 2];
+        maximumRadius = (float) Math.sqrt(quadratureRadius * quadratureRadius
+                + maxLateral * maxLateral);
 
         MyGL.checkGLES();
     }

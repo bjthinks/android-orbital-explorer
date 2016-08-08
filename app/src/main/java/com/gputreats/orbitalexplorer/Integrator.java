@@ -12,8 +12,6 @@ public class Integrator extends RenderStage {
 
     OrbitalTextures orbitalTextures;
 
-    private int quadratureDataSize;
-
     private Texture outputTextureColor, outputTextureMono;
     private Framebuffer framebufferColor, framebufferMono;
     private int width, height;
@@ -29,7 +27,7 @@ public class Integrator extends RenderStage {
 
         MyGL.checkGLES();
 
-        orbitalTextures = new OrbitalTextures();
+        orbitalTextures = new OrbitalTextures(assetManager);
 
         // Create textures to render to.
         // The following parameters have to match a row of Table 3.2 in the
@@ -91,7 +89,6 @@ public class Integrator extends RenderStage {
         MyGL.checkGLES();
     }
 
-    private float quadratureRadius, maximumRadius;
     public Texture render(RenderState.FrozenState frozenState) throws OpenGLException {
 
         MyGL.checkGLES();
@@ -112,27 +109,11 @@ public class Integrator extends RenderStage {
 
             orbitalTextures.loadOrbital(orbital);
 
-            // Load new quadrature texture
-
-            float[] quadratureData = QuadratureTable.get(assetManager, orbital.getQuadrature());
-            quadratureDataSize = quadratureData.length
-                    / (4 * orbital.getQuadrature().getOrder());
-            orbitalTextures.quadratureTexture.bindToTexture2DAndSetImage(
-                    orbital.getQuadrature().getOrder(),
-                    quadratureDataSize, quadratureData);
-            MyGL.checkGLES();
-
-            // Calculate radius info
-
-            quadratureRadius = (float) orbital.getRadialFunction().getMaximumRadius();
-            float maxLateral = quadratureData[quadratureData.length - 2];
-            maximumRadius = (float) Math.sqrt(quadratureRadius * quadratureRadius + maxLateral * maxLateral);
-
             // Load new radial texture
 
             float[] radialData
                     = MyMath.functionToBuffer2(orbital.getRadialFunction().getOscillatingPart(),
-                    0.0, maximumRadius, OrbitalTextures.RADIAL_TEXTURE_SIZE);
+                    0.0, orbitalTextures.maximumRadius, OrbitalTextures.RADIAL_TEXTURE_SIZE);
             orbitalTextures.radialTexture.bindToTexture2DAndSetImage(OrbitalTextures.RADIAL_TEXTURE_SIZE,
                     1, radialData);
             MyGL.checkGLES();
@@ -168,14 +149,14 @@ public class Integrator extends RenderStage {
             int radialPower = 2 * radialFunction.getPowerOfR();
             setUniformFloat("powerOfR", (float) radialPower);
 
-            setUniformFloat("maximumRadius", maximumRadius);
-            setUniformFloat("quadratureRadius", quadratureRadius);
-            setUniformFloat("brightness", quadratureRadius * quadratureRadius / 2.0f);
+            setUniformFloat("maximumRadius", orbitalTextures.maximumRadius);
+            setUniformFloat("quadratureRadius", orbitalTextures.quadratureRadius);
+            setUniformFloat("brightness", orbitalTextures.quadratureRadius * orbitalTextures.quadratureRadius / 2.0f);
             setUniformFloat("numRadialSubdivisions", (float)
                     (OrbitalTextures.RADIAL_TEXTURE_SIZE - 1));
             setUniformFloat("numAzimuthalSubdivisions", (float)
                     (OrbitalTextures.AZIMUTHAL_TEXTURE_SIZE - 1));
-            setUniformFloat("numQuadratureSubdivisions", (float) (quadratureDataSize - 1));
+            setUniformFloat("numQuadratureSubdivisions", (float) (orbitalTextures.quadratureDataSize - 1));
             setUniformFloat("M", (float) orbital.M);
 
             int mvpMatrixHandle = getUniformHandle("inverseTransform");
