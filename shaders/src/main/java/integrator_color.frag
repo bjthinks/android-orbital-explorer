@@ -15,7 +15,7 @@ uniform sampler2D quadrature;
 uniform float fQuadratureRadius;
 uniform float fMaximumRadius;
 uniform float fNumRadialSubdivisions;
-uniform float exponentialConstant;
+uniform float fExponentialConstant;
 uniform float numAzimuthalSubdivisions;
 uniform float numQuadratureSubdivisions;
 uniform int numQuadraturePoints;
@@ -102,7 +102,7 @@ vec3 integrand_pair(vec3 center, vec3 offset) {
     len = length(result);
     total += len * vec3(radialSign * result, len);
 
-    total *= pow(r, powerOfR) * exp(exponentialConstant * r) * radialValue * radialValue;
+    total *= pow(r, powerOfR) * exp(fExponentialConstant * r) * radialValue * radialValue;
     return total;
 }
 

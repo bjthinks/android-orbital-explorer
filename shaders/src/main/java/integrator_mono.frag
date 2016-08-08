@@ -15,7 +15,7 @@ uniform sampler2D quadrature;
 uniform float fQuadratureRadius;
 uniform float fMaximumRadius; // unused
 uniform float fNumRadialSubdivisions; // unused
-uniform float exponentialConstant;
+uniform float fExponentialConstant;
 uniform float numAzimuthalSubdivisions;
 uniform float numQuadratureSubdivisions;
 uniform int numQuadraturePoints;
@@ -81,7 +81,7 @@ float integrand_pair(vec3 center, vec3 offset) {
     result = angularPart(x, r);
     total += result * result;
 
-    total *= pow(r, powerOfR) * exp(exponentialConstant * r);
+    total *= pow(r, powerOfR) * exp(fExponentialConstant * r);
     return total;
 }
 
