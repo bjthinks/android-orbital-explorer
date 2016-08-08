@@ -16,7 +16,7 @@ uniform float fQuadratureRadius;
 uniform float fMaximumRadius;
 uniform float fNumRadialSubdivisions;
 uniform float fExponentialConstant;
-uniform float numAzimuthalSubdivisions;
+uniform float fNumAzimuthalSubdivisions;
 uniform float numQuadratureSubdivisions;
 uniform int numQuadraturePoints;
 uniform float M;
@@ -36,9 +36,9 @@ float radialPart(float r) {
 
 float azimuthalPart(float theta) {
     float result;
-    float positionInTexture = theta / pi * numAzimuthalSubdivisions;
-    if (positionInTexture >= numAzimuthalSubdivisions) {
-        result = texelFetch(azimuthal, ivec2(numAzimuthalSubdivisions, 0), 0).x;
+    float positionInTexture = theta / pi * fNumAzimuthalSubdivisions;
+    if (positionInTexture >= fNumAzimuthalSubdivisions) {
+        result = texelFetch(azimuthal, ivec2(fNumAzimuthalSubdivisions, 0), 0).x;
     } else {
         float texturePosition = trunc(positionInTexture);
         vec2 textureValue = texelFetch(azimuthal, ivec2(texturePosition, 0), 0).xy;
