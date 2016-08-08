@@ -13,7 +13,7 @@ uniform sampler2D azimuthal;
 uniform sampler2D quadrature;
 
 uniform float fQuadratureRadius;
-uniform float maximumRadius;
+uniform float fMaximumRadius;
 uniform float numRadialSubdivisions;
 uniform float exponentialConstant;
 uniform float numAzimuthalSubdivisions;
@@ -25,7 +25,7 @@ uniform bool realOrbital;
 uniform float brightness;
 
 float radialPart(float r) {
-    float positionInTexture = r / maximumRadius * numRadialSubdivisions;
+    float positionInTexture = r / fMaximumRadius * numRadialSubdivisions;
     if (positionInTexture >= numRadialSubdivisions)
         return 0.0;
     float texturePosition = trunc(positionInTexture);

@@ -18,7 +18,7 @@ public class OrbitalTextures {
 
     private float fQuadratureRadius;
     private int quadratureDataSize;
-    private float maximumRadius;
+    private float fMaximumRadius;
     private int realOrbital;
     private int order;
     private float exponentialConstant;
@@ -62,14 +62,14 @@ public class OrbitalTextures {
             // Calculate radius info
             fQuadratureRadius = (float) orbital.getRadialFunction().getMaximumRadius();
             float maxLateral = quadratureData[quadratureData.length - 2];
-            maximumRadius = (float) Math.sqrt(fQuadratureRadius * fQuadratureRadius
+            fMaximumRadius = (float) Math.sqrt(fQuadratureRadius * fQuadratureRadius
                     + maxLateral * maxLateral);
             brightness = fQuadratureRadius * fQuadratureRadius / 2.0f;
 
             // Load new radial texture
             float[] radialData
                     = MyMath.functionToBuffer2(orbital.getRadialFunction().getOscillatingPart(),
-                    0.0, maximumRadius, RADIAL_TEXTURE_SIZE);
+                    0.0, fMaximumRadius, RADIAL_TEXTURE_SIZE);
             radialTexture.bindToTexture2DAndSetImage(RADIAL_TEXTURE_SIZE, 1, radialData);
 
             MyGL.checkGLES();
@@ -90,11 +90,12 @@ public class OrbitalTextures {
         program.setUniform1i("quadrature", 2);
 
         program.setUniform1f("fQuadratureRadius", fQuadratureRadius);
+        program.setUniform1f("fMaximumRadius", fMaximumRadius);
+
         program.setUniform1i("realOrbital", realOrbital);
         program.setUniform1i("numQuadraturePoints", order);
         program.setUniform1f("exponentialConstant", exponentialConstant);
         program.setUniform1f("powerOfR", radialPower);
-        program.setUniform1f("maximumRadius", maximumRadius);
         program.setUniform1f("brightness", brightness);
         program.setUniform1f("numRadialSubdivisions", (float) (RADIAL_TEXTURE_SIZE - 1));
         program.setUniform1f("numAzimuthalSubdivisions", (float) (AZIMUTHAL_TEXTURE_SIZE - 1));
