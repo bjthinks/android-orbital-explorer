@@ -10,11 +10,18 @@ public class OrbitalTextures {
 
     private AssetManager assets;
 
+    private Orbital orbital;
+
     public Texture radialTexture;
     public Texture azimuthalTexture;
     public Texture quadratureTexture;
     public int quadratureDataSize;
-    public float quadratureRadius, maximumRadius;
+    public float quadratureRadius;
+    public float maximumRadius;
+    private int realOrbital;
+    private int order;
+    private float exponentialConstant;
+    private float radialPower;
 
     public OrbitalTextures(AssetManager a) {
         assets = a;
@@ -26,26 +33,38 @@ public class OrbitalTextures {
         MyGL.checkGLES();
     }
 
-    public void loadOrbital(Orbital orbital) {
-        // Load new azimuthal texture
-        float[] azimuthalData = MyMath.functionToBuffer2(orbital.getAzimuthalFunction(),
-                0.0, Math.PI, OrbitalTextures.AZIMUTHAL_TEXTURE_SIZE);
-        azimuthalTexture.bindToTexture2DAndSetImage(AZIMUTHAL_TEXTURE_SIZE, 1, azimuthalData);
+    public void loadOrbital(Orbital newOrbital) {
+        if (orbital != newOrbital) {
+            orbital = newOrbital;
 
-        // Load new quadrature texture
-        Quadrature quadrature = orbital.getQuadrature();
-        int order = quadrature.getOrder();
-        float[] quadratureData = QuadratureTable.get(assets, quadrature);
-        quadratureDataSize = quadratureData.length / (4 * order);
-        quadratureTexture.bindToTexture2DAndSetImage(order, quadratureDataSize, quadratureData);
+            RadialFunction radialFunction = orbital.getRadialFunction();
 
-        // Calculate radius info
-        quadratureRadius = (float) orbital.getRadialFunction().getMaximumRadius();
-        float maxLateral = quadratureData[quadratureData.length - 2];
-        maximumRadius = (float) Math.sqrt(quadratureRadius * quadratureRadius
-                + maxLateral * maxLateral);
+            // Multiply by 2 because the wave function is squared
+            exponentialConstant = 2.0f * (float) radialFunction.getExponentialConstant();
+            radialPower = 2.0f * radialFunction.getPowerOfR();
 
-        MyGL.checkGLES();
+            realOrbital = orbital.real ? 1 : 0;
+
+            // Load new azimuthal texture
+            float[] azimuthalData = MyMath.functionToBuffer2(orbital.getAzimuthalFunction(),
+                    0.0, Math.PI, OrbitalTextures.AZIMUTHAL_TEXTURE_SIZE);
+            azimuthalTexture.bindToTexture2DAndSetImage(AZIMUTHAL_TEXTURE_SIZE, 1, azimuthalData);
+
+            // Load new quadrature texture
+            Quadrature quadrature = orbital.getQuadrature();
+            order = quadrature.getOrder();
+            float[] quadratureData = QuadratureTable.get(assets, quadrature);
+            quadratureDataSize = quadratureData.length / (4 * order);
+            quadratureTexture.bindToTexture2DAndSetImage(order, quadratureDataSize, quadratureData);
+
+            // Calculate radius info
+            quadratureRadius = (float) orbital.getRadialFunction().getMaximumRadius();
+            float maxLateral = quadratureData[quadratureData.length - 2];
+            maximumRadius = (float) Math.sqrt(quadratureRadius * quadratureRadius
+                    + maxLateral * maxLateral);
+
+            MyGL.checkGLES();
+        }
     }
 
     public void bindForRendering(Program program) {
@@ -60,6 +79,11 @@ public class OrbitalTextures {
         GLES30.glActiveTexture(GLES30.GL_TEXTURE2);
         quadratureTexture.bindToTexture2D();
         program.setUniform("quadrature", 2);
+
+        program.setUniform("realOrbital", realOrbital);
+        program.setUniform("numQuadraturePoints", order);
+        program.setUniform("exponentialConstant", exponentialConstant);
+        program.setUniform("powerOfR", radialPower);
 
         MyGL.checkGLES();
     }

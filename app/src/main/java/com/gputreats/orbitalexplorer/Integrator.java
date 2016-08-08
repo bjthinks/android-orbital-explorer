@@ -135,20 +135,6 @@ public class Integrator extends RenderStage {
 
             orbitalTextures.bindForRendering(currentProgram);
 
-            currentProgram.setUniform("enableColor", 1);
-            currentProgram.setUniform("realOrbital", orbital.real ? 1 : 0);
-            currentProgram.setUniform("numQuadraturePoints", orbital.getQuadrature().getOrder());
-
-            RadialFunction radialFunction = orbital.getRadialFunction();
-
-            // Multiply by 2 because the wave function is squared
-            double exponentialConstant = 2.0 * radialFunction.getExponentialConstant();
-            setUniformFloat("exponentialConstant", (float) exponentialConstant);
-
-            // Multiply by 2 because the wave function is squared
-            int radialPower = 2 * radialFunction.getPowerOfR();
-            setUniformFloat("powerOfR", (float) radialPower);
-
             setUniformFloat("maximumRadius", orbitalTextures.maximumRadius);
             setUniformFloat("quadratureRadius", orbitalTextures.quadratureRadius);
             setUniformFloat("brightness", orbitalTextures.quadratureRadius * orbitalTextures.quadratureRadius / 2.0f);
