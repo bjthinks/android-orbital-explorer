@@ -14,7 +14,7 @@ uniform sampler2D quadrature;
 
 uniform float fQuadratureRadius;
 uniform float fMaximumRadius;
-uniform float numRadialSubdivisions;
+uniform float fNumRadialSubdivisions;
 uniform float exponentialConstant;
 uniform float numAzimuthalSubdivisions;
 uniform float numQuadratureSubdivisions;
@@ -25,8 +25,8 @@ uniform bool realOrbital;
 uniform float brightness;
 
 float radialPart(float r) {
-    float positionInTexture = r / fMaximumRadius * numRadialSubdivisions;
-    if (positionInTexture >= numRadialSubdivisions)
+    float positionInTexture = r / fMaximumRadius * fNumRadialSubdivisions;
+    if (positionInTexture >= fNumRadialSubdivisions)
         return 0.0;
     float texturePosition = trunc(positionInTexture);
     vec2 textureValue = texelFetch(radial, ivec2(texturePosition, 0), 0).xy;

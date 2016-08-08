@@ -14,7 +14,7 @@ uniform sampler2D quadrature;
 
 uniform float fQuadratureRadius;
 uniform float fMaximumRadius; // unused
-uniform float numRadialSubdivisions;
+uniform float fNumRadialSubdivisions; // unused
 uniform float exponentialConstant;
 uniform float numAzimuthalSubdivisions;
 uniform float numQuadratureSubdivisions;

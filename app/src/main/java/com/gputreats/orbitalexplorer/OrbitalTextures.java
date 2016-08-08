@@ -17,8 +17,9 @@ public class OrbitalTextures {
     private Texture quadratureTexture;
 
     private float fQuadratureRadius;
-    private int quadratureDataSize;
     private float fMaximumRadius;
+    private static final float fNumRadialSubdivisions = (float) (RADIAL_TEXTURE_SIZE - 1);
+    private int quadratureDataSize;
     private int realOrbital;
     private int order;
     private float exponentialConstant;
@@ -91,13 +92,13 @@ public class OrbitalTextures {
 
         program.setUniform1f("fQuadratureRadius", fQuadratureRadius);
         program.setUniform1f("fMaximumRadius", fMaximumRadius);
+        program.setUniform1f("fNumRadialSubdivisions", fNumRadialSubdivisions);
 
         program.setUniform1i("realOrbital", realOrbital);
         program.setUniform1i("numQuadraturePoints", order);
         program.setUniform1f("exponentialConstant", exponentialConstant);
         program.setUniform1f("powerOfR", radialPower);
         program.setUniform1f("brightness", brightness);
-        program.setUniform1f("numRadialSubdivisions", (float) (RADIAL_TEXTURE_SIZE - 1));
         program.setUniform1f("numAzimuthalSubdivisions", (float) (AZIMUTHAL_TEXTURE_SIZE - 1));
         program.setUniform1f("numQuadratureSubdivisions", (float) (quadratureDataSize - 1));
         program.setUniform1f("M", (float) orbital.M);
