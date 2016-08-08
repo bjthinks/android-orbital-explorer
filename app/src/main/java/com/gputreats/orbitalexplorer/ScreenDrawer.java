@@ -48,20 +48,19 @@ public class ScreenDrawer extends RenderStage {
         texture.bindToTexture2D();
         program.setUniform1i("data", 0);
 
-        int texSizeHandle = program.getUniformLocation("texSize");
-        GLES30.glUniform2f(texSizeHandle, (float) inputWidth, (float) inputHeight);
+        GLES30.glUniform2f(program.getUniformLocation("texSize"),
+                (float) inputWidth, (float) inputHeight);
 
-        int upperClampHandle = program.getUniformLocation("upperClamp");
-        GLES30.glUniform2i(upperClampHandle, inputWidth - 1, inputHeight - 1);
+        GLES30.glUniform2i(program.getUniformLocation("upperClamp"),
+                inputWidth - 1, inputHeight - 1);
 
-        int colorRotation = program.getUniformLocation("colorRotation");
         float[] rot = new float[4];
         int N = frozenState.orbital.N;
         long period = N * N * 1000; // ms
         double t = 2. * Math.PI * (double) (System.currentTimeMillis() % period) / (double) period;
         rot[0] = (float) Math.cos(t);  rot[2] = (float) -Math.sin(t);
         rot[1] = (float) Math.sin(t);  rot[3] = (float) Math.cos(t);
-        GLES30.glUniformMatrix2fv(colorRotation, 1, false, rot, 0);
+        GLES30.glUniformMatrix2fv(program.getUniformLocation("colorRotation"), 1, false, rot, 0);
 
         int inPositionHandle = program.getAttribLocation("inPosition");
         GLES30.glEnableVertexAttribArray(inPositionHandle);
