@@ -2,21 +2,20 @@ package com.gputreats.orbitalexplorer;
 
 import android.content.res.AssetManager;
 import android.opengl.GLES30;
-import android.util.Log;
 
 public class OrbitalTextures {
 
-    public static final int RADIAL_TEXTURE_SIZE = 1024;
-    public static final int AZIMUTHAL_TEXTURE_SIZE = 256;
+    private static final int RADIAL_TEXTURE_SIZE = 1024;
+    private static final int AZIMUTHAL_TEXTURE_SIZE = 256;
 
     private AssetManager assets;
 
     private Orbital orbital;
 
-    public Texture radialTexture;
-    public Texture azimuthalTexture;
-    public Texture quadratureTexture;
-    public int quadratureDataSize;
+    private Texture radialTexture;
+    private Texture azimuthalTexture;
+    private Texture quadratureTexture;
+    private int quadratureDataSize;
     private float quadratureRadius;
     private float maximumRadius;
     private int realOrbital;
