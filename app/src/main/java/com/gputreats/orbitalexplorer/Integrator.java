@@ -110,13 +110,7 @@ public class Integrator extends RenderStage {
 
             newRenderer = false; // We need this for e.g. orientation changes
 
-            // Load new azimuthal texture
-
-            float[] azimuthalData = functionToBuffer2(orbital.getAzimuthalFunction(),
-                    0.0, Math.PI, OrbitalTextures.AZIMUTHAL_TEXTURE_SIZE - 1);
-            orbitalTextures.azimuthalTexture.bindToTexture2DAndSetImage(OrbitalTextures.AZIMUTHAL_TEXTURE_SIZE,
-                    1, azimuthalData);
-            MyGL.checkGLES();
+            orbitalTextures.loadOrbital(orbital);
 
             // Load new quadrature texture
 
@@ -137,8 +131,8 @@ public class Integrator extends RenderStage {
             // Load new radial texture
 
             float[] radialData
-                    = functionToBuffer2(orbital.getRadialFunction().getOscillatingPart(),
-                    0.0, maximumRadius, OrbitalTextures.RADIAL_TEXTURE_SIZE - 1);
+                    = MyMath.functionToBuffer2(orbital.getRadialFunction().getOscillatingPart(),
+                    0.0, maximumRadius, OrbitalTextures.RADIAL_TEXTURE_SIZE);
             orbitalTextures.radialTexture.bindToTexture2DAndSetImage(OrbitalTextures.RADIAL_TEXTURE_SIZE,
                     1, radialData);
             MyGL.checkGLES();

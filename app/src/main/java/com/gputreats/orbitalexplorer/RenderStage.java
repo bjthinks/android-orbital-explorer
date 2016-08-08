@@ -25,24 +25,4 @@ public class RenderStage {
         fb.position(0);
         return fb;
     }
-
-    /* protected static float[] functionToBuffer(Function f, double start, double end, int steps) {
-        float data[] = new float[steps + 1];
-        for (int i = 0; i <= steps; ++i) {
-            double x = start + (end - start) * (double) i / steps;
-            data[i] = (float) f.eval(x);
-        }
-        return data;
-    } */
-
-    protected static float[] functionToBuffer2(Function f, double start, double end, int steps) {
-        float data[] = new float[2 * (steps + 1)];
-        for (int i = 0; i <= steps; ++i) {
-            double x = start + (end - start) * (double) i / steps;
-            data[2 * i] = (float) f.eval(x);
-            x = start + (end - start) * (double) (i + 1) / steps;
-            data[2 * i + 1] = (float) f.eval(x);
-        }
-        return data;
-    }
 }

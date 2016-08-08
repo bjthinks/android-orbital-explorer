@@ -15,6 +15,16 @@ public class OrbitalTextures {
         radialTexture     = new Texture(GLES30.GL_RG,   GLES30.GL_FLOAT, GLES30.GL_RG32F);
         azimuthalTexture  = new Texture(GLES30.GL_RG,   GLES30.GL_FLOAT, GLES30.GL_RG32F);
         quadratureTexture = new Texture(GLES30.GL_RGBA, GLES30.GL_FLOAT, GLES30.GL_RGBA32F);
+
+        MyGL.checkGLES();
+    }
+
+    public void loadOrbital(Orbital orbital) {
+        // Load new azimuthal texture
+        float[] azimuthalData = MyMath.functionToBuffer2(orbital.getAzimuthalFunction(),
+                0.0, Math.PI, OrbitalTextures.AZIMUTHAL_TEXTURE_SIZE);
+        azimuthalTexture.bindToTexture2DAndSetImage(AZIMUTHAL_TEXTURE_SIZE, 1, azimuthalData);
+
         MyGL.checkGLES();
     }
 
@@ -30,5 +40,7 @@ public class OrbitalTextures {
         GLES30.glActiveTexture(GLES30.GL_TEXTURE2);
         quadratureTexture.bindToTexture2D();
         program.setUniform("quadrature", 2);
+
+        MyGL.checkGLES();
     }
 }
