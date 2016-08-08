@@ -2,6 +2,7 @@ package com.gputreats.orbitalexplorer;
 
 import android.content.res.AssetManager;
 import android.opengl.GLES30;
+import android.util.Log;
 
 public class OrbitalTextures {
 
@@ -22,6 +23,7 @@ public class OrbitalTextures {
     private int order;
     private float exponentialConstant;
     private float radialPower;
+    private float brightness;
 
     public OrbitalTextures(AssetManager a) {
         assets = a;
@@ -34,7 +36,13 @@ public class OrbitalTextures {
     }
 
     public void loadOrbital(Orbital newOrbital) {
-        if (orbital != newOrbital) {
+        if (orbital == null
+                || orbital.Z != newOrbital.Z
+                || orbital.N != newOrbital.N
+                || orbital.L != newOrbital.L
+                || orbital.M != newOrbital.M
+                || orbital.real != newOrbital.real
+                || orbital.color != newOrbital.color) {
             orbital = newOrbital;
 
             RadialFunction radialFunction = orbital.getRadialFunction();
@@ -47,7 +55,7 @@ public class OrbitalTextures {
 
             // Load new azimuthal texture
             float[] azimuthalData = MyMath.functionToBuffer2(orbital.getAzimuthalFunction(),
-                    0.0, Math.PI, OrbitalTextures.AZIMUTHAL_TEXTURE_SIZE);
+                    0.0, Math.PI, AZIMUTHAL_TEXTURE_SIZE);
             azimuthalTexture.bindToTexture2DAndSetImage(AZIMUTHAL_TEXTURE_SIZE, 1, azimuthalData);
 
             // Load new quadrature texture
@@ -62,6 +70,13 @@ public class OrbitalTextures {
             float maxLateral = quadratureData[quadratureData.length - 2];
             maximumRadius = (float) Math.sqrt(quadratureRadius * quadratureRadius
                     + maxLateral * maxLateral);
+            brightness = quadratureRadius * quadratureRadius / 2.0f;
+
+            // Load new radial texture
+            float[] radialData
+                    = MyMath.functionToBuffer2(orbital.getRadialFunction().getOscillatingPart(),
+                    0.0, maximumRadius, RADIAL_TEXTURE_SIZE);
+            radialTexture.bindToTexture2DAndSetImage(RADIAL_TEXTURE_SIZE, 1, radialData);
 
             MyGL.checkGLES();
         }
@@ -84,6 +99,13 @@ public class OrbitalTextures {
         program.setUniform("numQuadraturePoints", order);
         program.setUniform("exponentialConstant", exponentialConstant);
         program.setUniform("powerOfR", radialPower);
+        program.setUniform("maximumRadius", maximumRadius);
+        program.setUniform("quadratureRadius", quadratureRadius);
+        program.setUniform("brightness", brightness);
+        program.setUniform("numRadialSubdivisions", (float) (RADIAL_TEXTURE_SIZE - 1));
+        program.setUniform("numAzimuthalSubdivisions", (float) (AZIMUTHAL_TEXTURE_SIZE - 1));
+        program.setUniform("numQuadratureSubdivisions", (float) (quadratureDataSize - 1));
+        program.setUniform("M", (float) orbital.M);
 
         MyGL.checkGLES();
     }

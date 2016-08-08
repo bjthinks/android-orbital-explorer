@@ -8,18 +8,17 @@ public class Integrator extends RenderStage {
 
     AssetManager assetManager;
 
-    private Program programColor, programMono, currentProgram;
+    private Program programColor, programMono;
 
     OrbitalTextures orbitalTextures;
 
     private Texture outputTextureColor, outputTextureMono;
     private Framebuffer framebufferColor, framebufferMono;
     private int width, height;
-    private boolean newRenderer, outputTextureResized;
+    private boolean outputTextureResized;
 
     Integrator(Context context) {
         assetManager = context.getAssets();
-        newRenderer = true;
         outputTextureResized = true;
     }
 
@@ -98,26 +97,9 @@ public class Integrator extends RenderStage {
         boolean orbitalChanged = frozenState.orbitalChanged;
         boolean needToIntegrate = frozenState.needToIntegrate;
 
-        if (orbital.color)
-            currentProgram = programColor;
-        else
-            currentProgram = programMono;
+        Program currentProgram = orbital.color ? programColor : programMono;
 
-        if (orbitalChanged || newRenderer) {
-
-            newRenderer = false; // We need this for e.g. orientation changes
-
-            orbitalTextures.loadOrbital(orbital);
-
-            // Load new radial texture
-
-            float[] radialData
-                    = MyMath.functionToBuffer2(orbital.getRadialFunction().getOscillatingPart(),
-                    0.0, orbitalTextures.maximumRadius, OrbitalTextures.RADIAL_TEXTURE_SIZE);
-            orbitalTextures.radialTexture.bindToTexture2DAndSetImage(OrbitalTextures.RADIAL_TEXTURE_SIZE,
-                    1, radialData);
-            MyGL.checkGLES();
-        }
+        orbitalTextures.loadOrbital(orbital);
 
         if (needToIntegrate || outputTextureResized) {
             outputTextureResized = false; // Also needed for e.g. orientation changes
@@ -135,17 +117,7 @@ public class Integrator extends RenderStage {
 
             orbitalTextures.bindForRendering(currentProgram);
 
-            setUniformFloat("maximumRadius", orbitalTextures.maximumRadius);
-            setUniformFloat("quadratureRadius", orbitalTextures.quadratureRadius);
-            setUniformFloat("brightness", orbitalTextures.quadratureRadius * orbitalTextures.quadratureRadius / 2.0f);
-            setUniformFloat("numRadialSubdivisions", (float)
-                    (OrbitalTextures.RADIAL_TEXTURE_SIZE - 1));
-            setUniformFloat("numAzimuthalSubdivisions", (float)
-                    (OrbitalTextures.AZIMUTHAL_TEXTURE_SIZE - 1));
-            setUniformFloat("numQuadratureSubdivisions", (float) (orbitalTextures.quadratureDataSize - 1));
-            setUniformFloat("M", (float) orbital.M);
-
-            int mvpMatrixHandle = getUniformHandle("inverseTransform");
+            int mvpMatrixHandle = currentProgram.getUniformLocation("inverseTransform");
             GLES30.glUniformMatrix4fv(mvpMatrixHandle, 1, false, inverseTransform, 0);
 
             int inPositionHandle;
@@ -160,17 +132,6 @@ public class Integrator extends RenderStage {
 
         MyGL.checkGLES();
 
-        if (orbital.color)
-            return outputTextureColor;
-        else
-            return outputTextureMono;
-    }
-
-    int getUniformHandle(String name) {
-        return GLES30.glGetUniformLocation(currentProgram.getId(), name);
-    }
-
-    void setUniformFloat(String name, float value) {
-        GLES30.glUniform1f(getUniformHandle(name), value);
+        return orbital.color ? outputTextureColor : outputTextureMono;
     }
 }
