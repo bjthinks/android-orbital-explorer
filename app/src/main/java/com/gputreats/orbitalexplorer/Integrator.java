@@ -8,13 +8,11 @@ public class Integrator extends RenderStage {
 
     AssetManager assetManager;
 
-    private int programColor, programMono, currentProgram;
+    private Program programColor, programMono, currentProgram;
 
-    private Texture radialTexture;
-    private Texture azimuthalTexture;
+    OrbitalTextures orbitalTextures;
 
     private int quadratureDataSize;
-    private Texture quadratureTexture;
 
     private Texture outputTextureColor, outputTextureMono;
     private Framebuffer framebufferColor, framebufferMono;
@@ -31,27 +29,7 @@ public class Integrator extends RenderStage {
 
         MyGL.checkGLES();
 
-        // Create input textures for storing the radial, azimuthal, and quadrature data.
-        radialTexture     = new Texture(GLES30.GL_RG,   GLES30.GL_FLOAT, GLES30.GL_RG32F);
-        MyGL.checkGLES();
-        azimuthalTexture  = new Texture(GLES30.GL_RG,   GLES30.GL_FLOAT, GLES30.GL_RG32F);
-        MyGL.checkGLES();
-        quadratureTexture = new Texture(GLES30.GL_RGBA, GLES30.GL_FLOAT, GLES30.GL_RGBA32F);
-        MyGL.checkGLES();
-
-        // Floating point textures are not filterable
-        radialTexture.bindToTexture2D();
-        MyGL.checkGLES();
-        setTexture2DMinMagFilters(GLES30.GL_NEAREST, GLES30.GL_NEAREST);
-        MyGL.checkGLES();
-        azimuthalTexture.bindToTexture2D();
-        MyGL.checkGLES();
-        setTexture2DMinMagFilters(GLES30.GL_NEAREST, GLES30.GL_NEAREST);
-        MyGL.checkGLES();
-        quadratureTexture.bindToTexture2D();
-        MyGL.checkGLES();
-        setTexture2DMinMagFilters(GLES30.GL_NEAREST, GLES30.GL_NEAREST);
-        MyGL.checkGLES();
+        orbitalTextures = new OrbitalTextures();
 
         // Create textures to render to.
         // The following parameters have to match a row of Table 3.2 in the
@@ -66,10 +44,6 @@ public class Integrator extends RenderStage {
         outputTextureColor.bindToTexture2DAndResize(1, 1);
         MyGL.checkGLES();
 
-        // Set the filters for sampling the bound texture, when sampling at
-        // a different resolution than native.
-        setTexture2DMinMagFilters(GLES30.GL_NEAREST, GLES30.GL_NEAREST);
-        MyGL.checkGLES();
         GLES30.glTexParameteri(GLES30.GL_TEXTURE_2D,
                 GLES30.GL_TEXTURE_WRAP_S, GLES30.GL_CLAMP_TO_EDGE);
         MyGL.checkGLES();
@@ -89,8 +63,6 @@ public class Integrator extends RenderStage {
         outputTextureMono.bindToTexture2DAndResize(1, 1);
         MyGL.checkGLES();
 
-        setTexture2DMinMagFilters(GLES30.GL_NEAREST, GLES30.GL_NEAREST);
-        MyGL.checkGLES();
         GLES30.glTexParameteri(GLES30.GL_TEXTURE_2D,
                 GLES30.GL_TEXTURE_WRAP_S, GLES30.GL_CLAMP_TO_EDGE);
         MyGL.checkGLES();
@@ -103,8 +75,8 @@ public class Integrator extends RenderStage {
         framebufferMono.bindAndSetTexture(outputTextureMono);
         MyGL.checkGLES();
 
-        programColor = new Program(assetManager, "2", "1").getId();
-        programMono = new Program(assetManager, "4", "3").getId();
+        programColor = new Program(assetManager, "2", "1");
+        programMono = new Program(assetManager, "4", "3");
     }
 
     public void resize(int w, int h) throws OpenGLException {
@@ -124,9 +96,6 @@ public class Integrator extends RenderStage {
 
         MyGL.checkGLES();
 
-        final int RADIAL_TEXTURE_SIZE = 1024;
-        final int AZIMUTHAL_TEXTURE_SIZE = 256;
-
         float[] inverseTransform = frozenState.inverseTransform;
         Orbital orbital = frozenState.orbital;
         boolean orbitalChanged = frozenState.orbitalChanged;
@@ -144,8 +113,9 @@ public class Integrator extends RenderStage {
             // Load new azimuthal texture
 
             float[] azimuthalData = functionToBuffer2(orbital.getAzimuthalFunction(),
-                    0.0, Math.PI, AZIMUTHAL_TEXTURE_SIZE - 1);
-            azimuthalTexture.bindToTexture2DAndSetImage(AZIMUTHAL_TEXTURE_SIZE, 1, azimuthalData);
+                    0.0, Math.PI, OrbitalTextures.AZIMUTHAL_TEXTURE_SIZE - 1);
+            orbitalTextures.azimuthalTexture.bindToTexture2DAndSetImage(OrbitalTextures.AZIMUTHAL_TEXTURE_SIZE,
+                    1, azimuthalData);
             MyGL.checkGLES();
 
             // Load new quadrature texture
@@ -153,7 +123,7 @@ public class Integrator extends RenderStage {
             float[] quadratureData = QuadratureTable.get(assetManager, orbital.getQuadrature());
             quadratureDataSize = quadratureData.length
                     / (4 * orbital.getQuadrature().getOrder());
-            quadratureTexture.bindToTexture2DAndSetImage(
+            orbitalTextures.quadratureTexture.bindToTexture2DAndSetImage(
                     orbital.getQuadrature().getOrder(),
                     quadratureDataSize, quadratureData);
             MyGL.checkGLES();
@@ -168,8 +138,9 @@ public class Integrator extends RenderStage {
 
             float[] radialData
                     = functionToBuffer2(orbital.getRadialFunction().getOscillatingPart(),
-                    0.0, maximumRadius, RADIAL_TEXTURE_SIZE - 1);
-            radialTexture.bindToTexture2DAndSetImage(RADIAL_TEXTURE_SIZE, 1, radialData);
+                    0.0, maximumRadius, OrbitalTextures.RADIAL_TEXTURE_SIZE - 1);
+            orbitalTextures.radialTexture.bindToTexture2DAndSetImage(OrbitalTextures.RADIAL_TEXTURE_SIZE,
+                    1, radialData);
             MyGL.checkGLES();
         }
 
@@ -185,23 +156,13 @@ public class Integrator extends RenderStage {
             final int zeroes[] = {0, 0, 0, 0};
             GLES30.glClearBufferiv(GLES30.GL_COLOR, 0, zeroes, 0);
 
-            GLES30.glUseProgram(currentProgram);
+            GLES30.glUseProgram(currentProgram.getId());
 
-            GLES30.glActiveTexture(GLES30.GL_TEXTURE0);
-            radialTexture.bindToTexture2D();
-            setUniformInt("radial", 0);
+            orbitalTextures.bindForRendering(currentProgram);
 
-            GLES30.glActiveTexture(GLES30.GL_TEXTURE1);
-            azimuthalTexture.bindToTexture2D();
-            setUniformInt("azimuthal", 1);
-
-            GLES30.glActiveTexture(GLES30.GL_TEXTURE2);
-            quadratureTexture.bindToTexture2D();
-            setUniformInt("quadrature", 2);
-
-            setUniformInt("enableColor", 1);
-            setUniformInt("realOrbital", orbital.real ? 1 : 0);
-            setUniformInt("numQuadraturePoints", orbital.getQuadrature().getOrder());
+            currentProgram.setUniform("enableColor", 1);
+            currentProgram.setUniform("realOrbital", orbital.real ? 1 : 0);
+            currentProgram.setUniform("numQuadraturePoints", orbital.getQuadrature().getOrder());
 
             RadialFunction radialFunction = orbital.getRadialFunction();
 
@@ -216,8 +177,10 @@ public class Integrator extends RenderStage {
             setUniformFloat("maximumRadius", maximumRadius);
             setUniformFloat("quadratureRadius", quadratureRadius);
             setUniformFloat("brightness", quadratureRadius * quadratureRadius / 2.0f);
-            setUniformFloat("numRadialSubdivisions", (float) (RADIAL_TEXTURE_SIZE - 1));
-            setUniformFloat("numAzimuthalSubdivisions", (float) (AZIMUTHAL_TEXTURE_SIZE - 1));
+            setUniformFloat("numRadialSubdivisions", (float)
+                    (OrbitalTextures.RADIAL_TEXTURE_SIZE - 1));
+            setUniformFloat("numAzimuthalSubdivisions", (float)
+                    (OrbitalTextures.AZIMUTHAL_TEXTURE_SIZE - 1));
             setUniformFloat("numQuadratureSubdivisions", (float) (quadratureDataSize - 1));
             setUniformFloat("M", (float) orbital.M);
 
@@ -225,7 +188,7 @@ public class Integrator extends RenderStage {
             GLES30.glUniformMatrix4fv(mvpMatrixHandle, 1, false, inverseTransform, 0);
 
             int inPositionHandle;
-            inPositionHandle = GLES30.glGetAttribLocation(currentProgram, "inPosition");
+            inPositionHandle = GLES30.glGetAttribLocation(currentProgram.getId(), "inPosition");
             GLES30.glEnableVertexAttribArray(inPositionHandle);
             GLES30.glVertexAttribPointer(inPositionHandle, 2, GLES30.GL_FLOAT, false, 8,
                     screenRectangle);
@@ -243,11 +206,7 @@ public class Integrator extends RenderStage {
     }
 
     int getUniformHandle(String name) {
-        return GLES30.glGetUniformLocation(currentProgram, name);
-    }
-
-    void setUniformInt(String name, int value) {
-        GLES30.glUniform1i(getUniformHandle(name), value);
+        return GLES30.glGetUniformLocation(currentProgram.getId(), name);
     }
 
     void setUniformFloat(String name, float value) {

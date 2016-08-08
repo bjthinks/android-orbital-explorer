@@ -24,4 +24,9 @@ public class Program {
         GLES30.glLinkProgram(id);
         MyGL.checkGLES();
     }
+
+    void setUniform(String name, int value) {
+        int location = GLES30.glGetUniformLocation(id, name);
+        GLES30.glUniform1i(location, value);
+    }
 }

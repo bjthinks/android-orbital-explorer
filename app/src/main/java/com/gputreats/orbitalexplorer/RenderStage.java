@@ -1,7 +1,5 @@
 package com.gputreats.orbitalexplorer;
 
-import android.opengl.GLES30;
-
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
@@ -46,12 +44,5 @@ public class RenderStage {
             data[2 * i + 1] = (float) f.eval(x);
         }
         return data;
-    }
-
-    protected void setTexture2DMinMagFilters(int minFilter, int magFilter) {
-        GLES30.glTexParameteri(GLES30.GL_TEXTURE_2D,
-                GLES30.GL_TEXTURE_MIN_FILTER, minFilter);
-        GLES30.glTexParameteri(GLES30.GL_TEXTURE_2D,
-                GLES30.GL_TEXTURE_MAG_FILTER, magFilter);
     }
 }

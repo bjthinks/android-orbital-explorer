@@ -19,6 +19,14 @@ public class Texture {
         int temp[] = new int[1];
         GLES30.glGenTextures(1, temp, 0);
         id = temp[0];
+
+        // Fixed functionality filtering is too limited in its acceptable data types,
+        // so we filter manually in all cases
+        bindToTexture2D();
+        GLES30.glTexParameteri(GLES30.GL_TEXTURE_2D,
+                GLES30.GL_TEXTURE_MIN_FILTER, GLES30.GL_NEAREST);
+        GLES30.glTexParameteri(GLES30.GL_TEXTURE_2D,
+                GLES30.GL_TEXTURE_MAG_FILTER, GLES30.GL_NEAREST);
     }
 
     public void bindToTexture2D() {
