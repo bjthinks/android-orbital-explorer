@@ -94,7 +94,6 @@ public class Integrator extends RenderStage {
 
         float[] inverseTransform = frozenState.inverseTransform;
         Orbital orbital = frozenState.orbital;
-        boolean orbitalChanged = frozenState.orbitalChanged;
         boolean needToIntegrate = frozenState.needToIntegrate;
 
         Program currentProgram = orbital.color ? programColor : programMono;

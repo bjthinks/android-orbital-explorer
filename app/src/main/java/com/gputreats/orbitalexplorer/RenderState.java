@@ -172,7 +172,6 @@ public class RenderState implements Parcelable {
         fs.inverseTransform = camera.computeInverseShaderTransform(aspectRatio);
         fs.cameraDistance = camera.getCameraDistance();
         fs.orbital = orbital;
-        fs.orbitalChanged = orbitalChanged;
         fs.needToIntegrate = orbitalChanged || cameraChanged || stillFlinging;
         fs.screenGrabRequested = screenGrabRequested;
         fs.screenGrabHandler = screenGrabHandler;
@@ -189,7 +188,6 @@ public class RenderState implements Parcelable {
         public float[] inverseTransform;
         public double cameraDistance;
         public Orbital orbital;
-        public boolean orbitalChanged;
         public boolean needToIntegrate;
         public boolean screenGrabRequested;
         public Handler screenGrabHandler;

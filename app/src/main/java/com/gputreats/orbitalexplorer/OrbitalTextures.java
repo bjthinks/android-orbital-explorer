@@ -17,8 +17,8 @@ public class OrbitalTextures {
     public Texture azimuthalTexture;
     public Texture quadratureTexture;
     public int quadratureDataSize;
-    public float quadratureRadius;
-    public float maximumRadius;
+    private float quadratureRadius;
+    private float maximumRadius;
     private int realOrbital;
     private int order;
     private float exponentialConstant;
