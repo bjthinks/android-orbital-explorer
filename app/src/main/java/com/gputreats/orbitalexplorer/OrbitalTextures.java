@@ -19,11 +19,12 @@ public class OrbitalTextures {
     private float fQuadratureRadius;
     private float fMaximumRadius;
     private static final float fNumRadialSubdivisions = (float) (RADIAL_TEXTURE_SIZE - 1);
+    private float fExponentialConstant;
     private static final float fNumAzimuthalSubdivisions = (float) (AZIMUTHAL_TEXTURE_SIZE - 1);
+    private float fNumQuadratureSubdivisions;
     private int quadratureDataSize;
     private int realOrbital;
     private int order;
-    private float fExponentialConstant;
     private float radialPower;
     private float brightness;
 
@@ -60,6 +61,7 @@ public class OrbitalTextures {
             float[] quadratureData = QuadratureTable.get(assets, quadrature);
             quadratureDataSize = quadratureData.length / (4 * order);
             quadratureTexture.bindToTexture2DAndSetImage(order, quadratureDataSize, quadratureData);
+            fNumQuadratureSubdivisions = (float) (quadratureDataSize - 1);
 
             // Calculate radius info
             fQuadratureRadius = (float) orbital.getRadialFunction().getMaximumRadius();
@@ -96,12 +98,12 @@ public class OrbitalTextures {
         program.setUniform1f("fNumRadialSubdivisions", fNumRadialSubdivisions);
         program.setUniform1f("fExponentialConstant", fExponentialConstant);
         program.setUniform1f("fNumAzimuthalSubdivisions", fNumAzimuthalSubdivisions);
+        program.setUniform1f("fNumQuadratureSubdivisions", fNumQuadratureSubdivisions);
 
         program.setUniform1i("realOrbital", realOrbital);
         program.setUniform1i("numQuadraturePoints", order);
         program.setUniform1f("powerOfR", radialPower);
         program.setUniform1f("brightness", brightness);
-        program.setUniform1f("numQuadratureSubdivisions", (float) (quadratureDataSize - 1));
         program.setUniform1f("M", (float) orbital.M);
 
         MyGL.checkGLES();

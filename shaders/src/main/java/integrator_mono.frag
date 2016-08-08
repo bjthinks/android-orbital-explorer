@@ -17,7 +17,7 @@ uniform float fMaximumRadius; // unused
 uniform float fNumRadialSubdivisions; // unused
 uniform float fExponentialConstant;
 uniform float fNumAzimuthalSubdivisions;
-uniform float numQuadratureSubdivisions;
+uniform float fNumQuadratureSubdivisions;
 uniform int numQuadraturePoints;
 uniform float M;
 uniform float powerOfR;
@@ -39,8 +39,8 @@ float azimuthalPart(float theta) {
 }
 
 vec2 quadratureData(float distanceToOrigin, int point) {
-    float positionInTexture = distanceToOrigin / fQuadratureRadius * numQuadratureSubdivisions;
-    if (positionInTexture >= numQuadratureSubdivisions)
+    float positionInTexture = distanceToOrigin / fQuadratureRadius * fNumQuadratureSubdivisions;
+    if (positionInTexture >= fNumQuadratureSubdivisions)
         return vec2(0.0);
     float texturePosition = trunc(positionInTexture);
     vec4 textureValue = texelFetch(quadrature, ivec2(point, texturePosition), 0);
