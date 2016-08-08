@@ -20,6 +20,11 @@ public class Orbital {
         quadrature = new Quadrature(N, L, color);
     }
 
+    public boolean notEquals(Orbital r) {
+        return (r == null || Z != r.Z || N != r.N || L != r.L || M != r.M
+                || real != r.real || color != r.color);
+    }
+
     public RadialFunction getRadialFunction() {
         return radialFunction;
     }

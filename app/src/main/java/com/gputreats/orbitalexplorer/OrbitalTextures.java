@@ -35,13 +35,7 @@ public class OrbitalTextures {
     }
 
     public void loadOrbital(Orbital newOrbital) {
-        if (orbital == null
-                || orbital.Z != newOrbital.Z
-                || orbital.N != newOrbital.N
-                || orbital.L != newOrbital.L
-                || orbital.M != newOrbital.M
-                || orbital.real != newOrbital.real
-                || orbital.color != newOrbital.color) {
+        if (newOrbital.notEquals(orbital)) {
             orbital = newOrbital;
 
             RadialFunction radialFunction = orbital.getRadialFunction();
