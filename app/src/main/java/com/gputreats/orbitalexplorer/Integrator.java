@@ -96,7 +96,7 @@ public class Integrator extends RenderStage {
         Orbital orbital = frozenState.orbital;
         boolean needToIntegrate = frozenState.needToIntegrate;
 
-        Program currentProgram = orbital.color ? programColor : programMono;
+        Program program = orbital.color ? programColor : programMono;
 
         orbitalTextures.loadOrbital(orbital);
 
@@ -112,15 +112,15 @@ public class Integrator extends RenderStage {
             final int zeroes[] = {0, 0, 0, 0};
             GLES30.glClearBufferiv(GLES30.GL_COLOR, 0, zeroes, 0);
 
-            GLES30.glUseProgram(currentProgram.getId());
+            program.use();
 
-            orbitalTextures.bindForRendering(currentProgram);
+            orbitalTextures.bindForRendering(program);
 
-            int mvpMatrixHandle = currentProgram.getUniformLocation("inverseTransform");
+            int mvpMatrixHandle = program.getUniformLocation("inverseTransform");
             GLES30.glUniformMatrix4fv(mvpMatrixHandle, 1, false, inverseTransform, 0);
 
             int inPositionHandle;
-            inPositionHandle = GLES30.glGetAttribLocation(currentProgram.getId(), "inPosition");
+            inPositionHandle = GLES30.glGetAttribLocation(program.getId(), "inPosition");
             GLES30.glEnableVertexAttribArray(inPositionHandle);
             GLES30.glVertexAttribPointer(inPositionHandle, 2, GLES30.GL_FLOAT, false, 8,
                     screenRectangle);

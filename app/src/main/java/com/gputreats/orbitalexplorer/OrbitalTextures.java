@@ -78,27 +78,27 @@ public class OrbitalTextures {
     public void bindForRendering(Program program) {
         GLES30.glActiveTexture(GLES30.GL_TEXTURE0);
         radialTexture.bindToTexture2D();
-        program.setUniform("radial", 0);
+        program.setUniform1i("radial", 0);
 
         GLES30.glActiveTexture(GLES30.GL_TEXTURE1);
         azimuthalTexture.bindToTexture2D();
-        program.setUniform("azimuthal", 1);
+        program.setUniform1i("azimuthal", 1);
 
         GLES30.glActiveTexture(GLES30.GL_TEXTURE2);
         quadratureTexture.bindToTexture2D();
-        program.setUniform("quadrature", 2);
+        program.setUniform1i("quadrature", 2);
 
-        program.setUniform("realOrbital", realOrbital);
-        program.setUniform("numQuadraturePoints", order);
-        program.setUniform("exponentialConstant", exponentialConstant);
-        program.setUniform("powerOfR", radialPower);
-        program.setUniform("maximumRadius", maximumRadius);
-        program.setUniform("quadratureRadius", quadratureRadius);
-        program.setUniform("brightness", brightness);
-        program.setUniform("numRadialSubdivisions", (float) (RADIAL_TEXTURE_SIZE - 1));
-        program.setUniform("numAzimuthalSubdivisions", (float) (AZIMUTHAL_TEXTURE_SIZE - 1));
-        program.setUniform("numQuadratureSubdivisions", (float) (quadratureDataSize - 1));
-        program.setUniform("M", (float) orbital.M);
+        program.setUniform1i("realOrbital", realOrbital);
+        program.setUniform1i("numQuadraturePoints", order);
+        program.setUniform1f("exponentialConstant", exponentialConstant);
+        program.setUniform1f("powerOfR", radialPower);
+        program.setUniform1f("maximumRadius", maximumRadius);
+        program.setUniform1f("quadratureRadius", quadratureRadius);
+        program.setUniform1f("brightness", brightness);
+        program.setUniform1f("numRadialSubdivisions", (float) (RADIAL_TEXTURE_SIZE - 1));
+        program.setUniform1f("numAzimuthalSubdivisions", (float) (AZIMUTHAL_TEXTURE_SIZE - 1));
+        program.setUniform1f("numQuadratureSubdivisions", (float) (quadratureDataSize - 1));
+        program.setUniform1f("M", (float) orbital.M);
 
         MyGL.checkGLES();
     }

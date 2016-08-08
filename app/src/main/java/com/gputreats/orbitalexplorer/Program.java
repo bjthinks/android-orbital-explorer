@@ -25,15 +25,23 @@ public class Program {
         MyGL.checkGLES();
     }
 
+    void use() {
+        GLES30.glUseProgram(id);
+    }
+
+    int getAttribLocation(String name) {
+        return GLES30.glGetAttribLocation(id, name);
+    }
+
     int getUniformLocation(String name) {
         return GLES30.glGetUniformLocation(id, name);
     }
 
-    void setUniform(String name, int value) {
+    void setUniform1i(String name, int value) {
         GLES30.glUniform1i(getUniformLocation(name), value);
     }
 
-    void setUniform(String name, float value) {
+    void setUniform1f(String name, float value) {
         GLES30.glUniform1f(getUniformLocation(name), value);
     }
 }

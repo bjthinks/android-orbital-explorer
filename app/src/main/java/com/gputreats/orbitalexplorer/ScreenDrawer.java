@@ -11,7 +11,7 @@ public class ScreenDrawer extends RenderStage {
 
     AssetManager assetManager;
 
-    private int programColor, programMono;
+    private Program programColor, programMono;
 
     public ScreenDrawer(Context context) {
         assetManager = context.getAssets();
@@ -19,8 +19,8 @@ public class ScreenDrawer extends RenderStage {
 
     public void onSurfaceCreated() throws OpenGLException {
         MyGL.checkGLES();
-        programColor = new Program(assetManager, "6", "5").getId();
-        programMono = new Program(assetManager, "8", "7").getId();
+        programColor = new Program(assetManager, "6", "5");
+        programMono = new Program(assetManager, "8", "7");
     }
 
     private int inputWidth, inputHeight;
@@ -33,32 +33,28 @@ public class ScreenDrawer extends RenderStage {
         height = newHeight;
     }
 
-    private boolean color;
     public void render(Texture texture, RenderState.FrozenState frozenState) throws OpenGLException {
 
         MyGL.checkGLES();
 
-        color = frozenState.orbital.color;
+        boolean color = frozenState.orbital.color;
+        Program program = color ? programColor : programMono;
 
         GLES30.glBindFramebuffer(GLES30.GL_FRAMEBUFFER, 0);
         GLES30.glViewport(0, 0, width, height);
-        if (color)
-            GLES30.glUseProgram(programColor);
-        else
-            GLES30.glUseProgram(programMono);
+        program.use();
 
         GLES30.glActiveTexture(GLES30.GL_TEXTURE0);
         texture.bindToTexture2D();
-        int dataHandle = getUniformHandle("data");
-        GLES30.glUniform1i(dataHandle, 0);
+        program.setUniform1i("data", 0);
 
-        int texSizeHandle = getUniformHandle("texSize");
+        int texSizeHandle = program.getUniformLocation("texSize");
         GLES30.glUniform2f(texSizeHandle, (float) inputWidth, (float) inputHeight);
 
-        int upperClampHandle = getUniformHandle("upperClamp");
+        int upperClampHandle = program.getUniformLocation("upperClamp");
         GLES30.glUniform2i(upperClampHandle, inputWidth - 1, inputHeight - 1);
 
-        int colorRotation = getUniformHandle("colorRotation");
+        int colorRotation = program.getUniformLocation("colorRotation");
         float[] rot = new float[4];
         int N = frozenState.orbital.N;
         long period = N * N * 1000; // ms
@@ -67,11 +63,7 @@ public class ScreenDrawer extends RenderStage {
         rot[1] = (float) Math.sin(t);  rot[3] = (float) Math.cos(t);
         GLES30.glUniformMatrix2fv(colorRotation, 1, false, rot, 0);
 
-        int inPositionHandle;
-        if (color)
-            inPositionHandle = GLES30.glGetAttribLocation(programColor, "inPosition");
-        else
-            inPositionHandle = GLES30.glGetAttribLocation(programMono, "inPosition");
+        int inPositionHandle = program.getAttribLocation("inPosition");
         GLES30.glEnableVertexAttribArray(inPositionHandle);
         GLES30.glVertexAttribPointer(inPositionHandle, 2, GLES30.GL_FLOAT, false, 8,
                 screenRectangle);
@@ -86,14 +78,5 @@ public class ScreenDrawer extends RenderStage {
         }
 
         MyGL.checkGLES();
-    }
-
-    int getUniformHandle(String name) {
-        int handle;
-        if (color)
-            handle = GLES30.glGetUniformLocation(programColor, name);
-        else
-            handle = GLES30.glGetUniformLocation(programMono, name);
-        return handle;
     }
 }
