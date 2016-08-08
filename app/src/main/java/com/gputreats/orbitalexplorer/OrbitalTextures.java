@@ -15,8 +15,9 @@ public class OrbitalTextures {
     private Texture radialTexture;
     private Texture azimuthalTexture;
     private Texture quadratureTexture;
+
+    private float fQuadratureRadius;
     private int quadratureDataSize;
-    private float quadratureRadius;
     private float maximumRadius;
     private int realOrbital;
     private int order;
@@ -59,11 +60,11 @@ public class OrbitalTextures {
             quadratureTexture.bindToTexture2DAndSetImage(order, quadratureDataSize, quadratureData);
 
             // Calculate radius info
-            quadratureRadius = (float) orbital.getRadialFunction().getMaximumRadius();
+            fQuadratureRadius = (float) orbital.getRadialFunction().getMaximumRadius();
             float maxLateral = quadratureData[quadratureData.length - 2];
-            maximumRadius = (float) Math.sqrt(quadratureRadius * quadratureRadius
+            maximumRadius = (float) Math.sqrt(fQuadratureRadius * fQuadratureRadius
                     + maxLateral * maxLateral);
-            brightness = quadratureRadius * quadratureRadius / 2.0f;
+            brightness = fQuadratureRadius * fQuadratureRadius / 2.0f;
 
             // Load new radial texture
             float[] radialData
@@ -88,12 +89,12 @@ public class OrbitalTextures {
         quadratureTexture.bindToTexture2D();
         program.setUniform1i("quadrature", 2);
 
+        program.setUniform1f("fQuadratureRadius", fQuadratureRadius);
         program.setUniform1i("realOrbital", realOrbital);
         program.setUniform1i("numQuadraturePoints", order);
         program.setUniform1f("exponentialConstant", exponentialConstant);
         program.setUniform1f("powerOfR", radialPower);
         program.setUniform1f("maximumRadius", maximumRadius);
-        program.setUniform1f("quadratureRadius", quadratureRadius);
         program.setUniform1f("brightness", brightness);
         program.setUniform1f("numRadialSubdivisions", (float) (RADIAL_TEXTURE_SIZE - 1));
         program.setUniform1f("numAzimuthalSubdivisions", (float) (AZIMUTHAL_TEXTURE_SIZE - 1));

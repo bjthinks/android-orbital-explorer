@@ -8,17 +8,17 @@ const float pi = 3.14159265358979;
 in vec3 near, far;
 out int color;
 
-// Orbital
 uniform sampler2D radial;
+uniform sampler2D azimuthal;
+uniform sampler2D quadrature;
+
+uniform float fQuadratureRadius;
 uniform float maximumRadius;
 uniform float numRadialSubdivisions;
 uniform float exponentialConstant;
-uniform sampler2D azimuthal;
 uniform float numAzimuthalSubdivisions;
-uniform sampler2D quadrature;
 uniform float numQuadratureSubdivisions;
 uniform int numQuadraturePoints;
-uniform float quadratureRadius;
 uniform float M;
 uniform float powerOfR;
 uniform bool realOrbital;
@@ -39,7 +39,7 @@ float azimuthalPart(float theta) {
 }
 
 vec2 quadratureData(float distanceToOrigin, int point) {
-    float positionInTexture = distanceToOrigin / quadratureRadius * numQuadratureSubdivisions;
+    float positionInTexture = distanceToOrigin / fQuadratureRadius * numQuadratureSubdivisions;
     if (positionInTexture >= numQuadratureSubdivisions)
         return vec2(0.0);
     float texturePosition = trunc(positionInTexture);

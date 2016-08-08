@@ -96,17 +96,16 @@ public class Integrator extends RenderStage {
         Orbital orbital = frozenState.orbital;
         boolean needToIntegrate = frozenState.needToIntegrate;
 
-        Program program = orbital.color ? programColor : programMono;
+        boolean color = orbital.color;
+        Program program = color ? programColor : programMono;
 
         orbitalTextures.loadOrbital(orbital);
 
         if (needToIntegrate || outputTextureResized) {
             outputTextureResized = false; // Also needed for e.g. orientation changes
 
-            if (orbital.color)
-                framebufferColor.bindToAttachmentPoint();
-            else
-                framebufferMono.bindToAttachmentPoint();
+            Framebuffer framebuffer = color ? framebufferColor : framebufferMono;
+            framebuffer.bindToAttachmentPoint();
             GLES30.glViewport(0, 0, width, height);
 
             final int zeroes[] = {0, 0, 0, 0};
@@ -131,6 +130,6 @@ public class Integrator extends RenderStage {
 
         MyGL.checkGLES();
 
-        return orbital.color ? outputTextureColor : outputTextureMono;
+        return color ? outputTextureColor : outputTextureMono;
     }
 }
