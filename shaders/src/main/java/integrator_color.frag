@@ -21,7 +21,7 @@ uniform float fNumAzimuthalSubdivisions;
 uniform float fNumQuadratureSubdivisions;
 uniform int iOrder;
 uniform bool bReal;
-uniform float M;
+uniform float fM;
 uniform float brightness;
 
 float radialPart(float r) {
@@ -60,13 +60,13 @@ vec2 quadratureData(float distanceToOrigin, int point) {
 
 vec2 longitudinalPart(float phi) {
     vec2 result;
-    if (M == 0.0) {
+    if (fM == 0.0) {
         result = vec2(1.0, 0.0);
     } else {
-        float Mphi = M * phi;
+        float Mphi = fM * phi;
         if (bReal) {
             const float sqrt2 = sqrt(2.0);
-            if (M > 0.0)
+            if (fM > 0.0)
                 result = vec2(sqrt2 * cos(Mphi), 0.0);
             else // M < 0.0
                 result = vec2(sqrt2 * sin(Mphi), 0.0);

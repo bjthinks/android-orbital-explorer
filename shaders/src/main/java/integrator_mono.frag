@@ -21,7 +21,7 @@ uniform float fNumAzimuthalSubdivisions;
 uniform float fNumQuadratureSubdivisions;
 uniform int iOrder;
 uniform bool bReal;
-uniform float M;
+uniform float fM;
 uniform float brightness;
 
 float azimuthalPart(float theta) {
@@ -52,10 +52,10 @@ float longitudinalPart(float phi) {
     // Normalization constant so that this function times its conjugate,
     // integrated from 0 to 2pi, yields 1
     float result = 1.0 / sqrt(2.0 * pi);
-    if (bReal && M != 0.0) {
-        float Mphi = M * phi;
+    if (bReal && fM != 0.0) {
+        float Mphi = fM * phi;
         const float sqrt2 = sqrt(2.0);
-        if (M > 0.0)
+        if (fM > 0.0)
             result *= sqrt2 * cos(Mphi);
         else // M < 0.0
             result *= sqrt2 * sin(Mphi);

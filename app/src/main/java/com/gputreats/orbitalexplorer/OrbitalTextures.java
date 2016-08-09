@@ -24,9 +24,10 @@ public class OrbitalTextures {
     private static final float fNumAzimuthalSubdivisions = (float) (AZIMUTHAL_TEXTURE_SIZE - 1);
     private float fNumQuadratureSubdivisions;
     private int iOrder;
-    private int quadratureDataSize;
     private boolean bReal;
+    private float fM;
     private float brightness;
+    private int quadratureDataSize;
 
     public OrbitalTextures(AssetManager a) {
         assets = a;
@@ -41,6 +42,7 @@ public class OrbitalTextures {
     public void loadOrbital(Orbital newOrbital) {
         if (newOrbital.notEquals(orbital)) {
             orbital = newOrbital;
+            fM = (float) orbital.M;
 
             RadialFunction radialFunction = orbital.getRadialFunction();
 
@@ -102,9 +104,9 @@ public class OrbitalTextures {
         program.setUniform1f("fNumQuadratureSubdivisions", fNumQuadratureSubdivisions);
         program.setUniform1i("iOrder", iOrder);
         program.setUniform1i("bReal", bReal ? 1 : 0);
+        program.setUniform1f("fM", fM);
 
         program.setUniform1f("brightness", brightness);
-        program.setUniform1f("M", (float) orbital.M);
 
         MyGL.checkGLES();
     }
