@@ -18,8 +18,8 @@ public class OrbitalTextures {
 
     private boolean bReal;
     private float fBrightness;
+    private float fInverseRadialStepSize;
     private float fM;
-    private float fMaximumRadius;
     private float fNumAzimuthalSubdivisions;
     private float fNumQuadratureSubdivisions;
     private float fNumRadialSubdivisions;
@@ -68,16 +68,17 @@ public class OrbitalTextures {
             // Calculate radius info
             fQuadratureRadius = (float) orbital.getRadialFunction().getMaximumRadius();
             float maxLateral = quadratureData[quadratureData.length - 2];
-            fMaximumRadius = (float) Math.sqrt(fQuadratureRadius * fQuadratureRadius
+            float maximumRadius = (float) Math.sqrt(fQuadratureRadius * fQuadratureRadius
                     + maxLateral * maxLateral);
             fBrightness = fQuadratureRadius * fQuadratureRadius / 2.0f;
 
             // Load new radial texture
             float[] radialData
                     = MyMath.functionToBuffer2(orbital.getRadialFunction().getOscillatingPart(),
-                    0.0, fMaximumRadius, RADIAL_TEXTURE_SIZE);
+                    0.0, maximumRadius, RADIAL_TEXTURE_SIZE);
             radialTexture.bindToTexture2DAndSetImage(RADIAL_TEXTURE_SIZE, 1, radialData);
             fNumRadialSubdivisions = (float) (RADIAL_TEXTURE_SIZE - 1);
+            fInverseRadialStepSize = fNumRadialSubdivisions / maximumRadius;
 
             MyGL.checkGLES();
         }
@@ -98,8 +99,8 @@ public class OrbitalTextures {
 
         program.setUniform1i("bReal", bReal ? 1 : 0);
         program.setUniform1f("fBrightness", fBrightness);
+        program.setUniform1f("fInverseRadialStepSize", fInverseRadialStepSize);
         program.setUniform1f("fM", fM);
-        program.setUniform1f("fMaximumRadius", fMaximumRadius);
         program.setUniform1f("fNumAzimuthalSubdivisions", fNumAzimuthalSubdivisions);
         program.setUniform1f("fNumQuadratureSubdivisions", fNumQuadratureSubdivisions);
         program.setUniform1f("fNumRadialSubdivisions", fNumRadialSubdivisions);

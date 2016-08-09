@@ -14,8 +14,8 @@ uniform sampler2D quadrature;
 
 uniform bool bReal;
 uniform float fBrightness;
+uniform float fInverseRadialStepSize; // unused
 uniform float fM;
-uniform float fMaximumRadius; // unused
 uniform float fNumAzimuthalSubdivisions;
 uniform float fNumQuadratureSubdivisions;
 uniform float fNumRadialSubdivisions; // unused

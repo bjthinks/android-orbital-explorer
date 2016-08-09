@@ -14,8 +14,8 @@ uniform sampler2D quadrature;
 
 uniform bool bReal;
 uniform float fBrightness;
+uniform float fInverseRadialStepSize;
 uniform float fM;
-uniform float fMaximumRadius;
 uniform float fNumAzimuthalSubdivisions;
 uniform float fNumQuadratureSubdivisions;
 uniform float fNumRadialSubdivisions;
@@ -25,7 +25,7 @@ uniform float fRadialPower;
 uniform int iOrder;
 
 float radialPart(float r) {
-    float positionInTexture = r / fMaximumRadius * fNumRadialSubdivisions;
+    float positionInTexture = r * fInverseRadialStepSize;
     if (positionInTexture >= fNumRadialSubdivisions)
         return 0.0;
     float texturePosition = trunc(positionInTexture);
