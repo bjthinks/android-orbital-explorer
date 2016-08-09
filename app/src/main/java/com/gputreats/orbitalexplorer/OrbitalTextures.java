@@ -19,7 +19,7 @@ public class OrbitalTextures {
     private float fQuadratureRadius;
     private float fMaximumRadius;
     private static final float fNumRadialSubdivisions = (float) (RADIAL_TEXTURE_SIZE - 1);
-    private float fExponentialConstant;
+    private float fRadialExponent;
     private float fRadialPower;
     private static final float fNumAzimuthalSubdivisions = (float) (AZIMUTHAL_TEXTURE_SIZE - 1);
     private float fNumQuadratureSubdivisions;
@@ -45,7 +45,7 @@ public class OrbitalTextures {
             RadialFunction radialFunction = orbital.getRadialFunction();
 
             // Multiply by 2 because the wave function is squared
-            fExponentialConstant = 2.0f * (float) radialFunction.getExponentialConstant();
+            fRadialExponent = 2.0f * (float) radialFunction.getExponentialConstant();
             fRadialPower = 2.0f * radialFunction.getPowerOfR();
 
             realOrbital = orbital.real ? 1 : 0;
@@ -96,7 +96,7 @@ public class OrbitalTextures {
         program.setUniform1f("fQuadratureRadius", fQuadratureRadius);
         program.setUniform1f("fMaximumRadius", fMaximumRadius);
         program.setUniform1f("fNumRadialSubdivisions", fNumRadialSubdivisions);
-        program.setUniform1f("fExponentialConstant", fExponentialConstant);
+        program.setUniform1f("fRadialExponent", fRadialExponent);
         program.setUniform1f("fRadialPower", fRadialPower);
         program.setUniform1f("fNumAzimuthalSubdivisions", fNumAzimuthalSubdivisions);
         program.setUniform1f("fNumQuadratureSubdivisions", fNumQuadratureSubdivisions);
