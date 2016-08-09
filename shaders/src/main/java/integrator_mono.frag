@@ -12,17 +12,17 @@ uniform sampler2D radial;
 uniform sampler2D azimuthal;
 uniform sampler2D quadrature;
 
-uniform float fQuadratureRadius;
+uniform bool bReal;
+uniform float fBrightness;
+uniform float fM;
 uniform float fMaximumRadius; // unused
-uniform float fNumRadialSubdivisions; // unused
-uniform float fRadialExponent;
-uniform float fRadialPower;
 uniform float fNumAzimuthalSubdivisions;
 uniform float fNumQuadratureSubdivisions;
+uniform float fNumRadialSubdivisions; // unused
+uniform float fQuadratureRadius;
+uniform float fRadialExponent;
+uniform float fRadialPower;
 uniform int iOrder;
-uniform bool bReal;
-uniform float fM;
-uniform float fBrightness;
 
 float azimuthalPart(float theta) {
     float result;

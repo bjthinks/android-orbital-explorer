@@ -12,17 +12,17 @@ uniform sampler2D radial;
 uniform sampler2D azimuthal;
 uniform sampler2D quadrature;
 
-uniform float fQuadratureRadius;
+uniform bool bReal;
+uniform float fBrightness;
+uniform float fM;
 uniform float fMaximumRadius;
-uniform float fNumRadialSubdivisions;
-uniform float fRadialExponent;
-uniform float fRadialPower;
 uniform float fNumAzimuthalSubdivisions;
 uniform float fNumQuadratureSubdivisions;
+uniform float fNumRadialSubdivisions;
+uniform float fQuadratureRadius;
+uniform float fRadialExponent;
+uniform float fRadialPower;
 uniform int iOrder;
-uniform bool bReal;
-uniform float fM;
-uniform float fBrightness;
 
 float radialPart(float r) {
     float positionInTexture = r / fMaximumRadius * fNumRadialSubdivisions;

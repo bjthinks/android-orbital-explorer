@@ -16,17 +16,18 @@ public class OrbitalTextures {
     private Texture azimuthalTexture;
     private Texture quadratureTexture;
 
-    private float fQuadratureRadius;
+    private boolean bReal;
+    private float fBrightness;
+    private float fM;
     private float fMaximumRadius;
-    private static final float fNumRadialSubdivisions = (float) (RADIAL_TEXTURE_SIZE - 1);
+    private float fNumAzimuthalSubdivisions = (float) (AZIMUTHAL_TEXTURE_SIZE - 1);
+    private float fNumQuadratureSubdivisions;
+    private float fNumRadialSubdivisions = (float) (RADIAL_TEXTURE_SIZE - 1);
+    private float fQuadratureRadius;
     private float fRadialExponent;
     private float fRadialPower;
-    private static final float fNumAzimuthalSubdivisions = (float) (AZIMUTHAL_TEXTURE_SIZE - 1);
-    private float fNumQuadratureSubdivisions;
     private int iOrder;
-    private boolean bReal;
-    private float fM;
-    private float fBrightness;
+
     private int quadratureDataSize;
 
     public OrbitalTextures(AssetManager a) {
@@ -95,18 +96,17 @@ public class OrbitalTextures {
         quadratureTexture.bindToTexture2D();
         program.setUniform1i("quadrature", 2);
 
-        program.setUniform1f("fQuadratureRadius", fQuadratureRadius);
+        program.setUniform1i("bReal", bReal ? 1 : 0);
+        program.setUniform1f("fBrightness", fBrightness);
+        program.setUniform1f("fM", fM);
         program.setUniform1f("fMaximumRadius", fMaximumRadius);
-        program.setUniform1f("fNumRadialSubdivisions", fNumRadialSubdivisions);
-        program.setUniform1f("fRadialExponent", fRadialExponent);
-        program.setUniform1f("fRadialPower", fRadialPower);
         program.setUniform1f("fNumAzimuthalSubdivisions", fNumAzimuthalSubdivisions);
         program.setUniform1f("fNumQuadratureSubdivisions", fNumQuadratureSubdivisions);
+        program.setUniform1f("fNumRadialSubdivisions", fNumRadialSubdivisions);
+        program.setUniform1f("fQuadratureRadius", fQuadratureRadius);
+        program.setUniform1f("fRadialExponent", fRadialExponent);
+        program.setUniform1f("fRadialPower", fRadialPower);
         program.setUniform1i("iOrder", iOrder);
-        program.setUniform1i("bReal", bReal ? 1 : 0);
-        program.setUniform1f("fM", fM);
-
-        program.setUniform1f("fBrightness", fBrightness);
 
         MyGL.checkGLES();
     }
