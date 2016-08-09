@@ -16,11 +16,11 @@ uniform float fQuadratureRadius;
 uniform float fMaximumRadius; // unused
 uniform float fNumRadialSubdivisions; // unused
 uniform float fExponentialConstant;
+uniform float fRadialPower;
 uniform float fNumAzimuthalSubdivisions;
 uniform float fNumQuadratureSubdivisions;
 uniform int iOrder;
 uniform float M;
-uniform float powerOfR;
 uniform bool realOrbital;
 uniform float brightness;
 
@@ -81,7 +81,7 @@ float integrand_pair(vec3 center, vec3 offset) {
     result = angularPart(x, r);
     total += result * result;
 
-    total *= pow(r, powerOfR) * exp(fExponentialConstant * r);
+    total *= pow(r, fRadialPower) * exp(fExponentialConstant * r);
     return total;
 }
 

@@ -16,11 +16,11 @@ uniform float fQuadratureRadius;
 uniform float fMaximumRadius;
 uniform float fNumRadialSubdivisions;
 uniform float fExponentialConstant;
+uniform float fRadialPower;
 uniform float fNumAzimuthalSubdivisions;
 uniform float fNumQuadratureSubdivisions;
 uniform int iOrder;
 uniform float M;
-uniform float powerOfR;
 uniform bool realOrbital;
 uniform float brightness;
 
@@ -102,7 +102,7 @@ vec3 integrand_pair(vec3 center, vec3 offset) {
     len = length(result);
     total += len * vec3(radialSign * result, len);
 
-    total *= pow(r, powerOfR) * exp(fExponentialConstant * r) * radialValue * radialValue;
+    total *= pow(r, fRadialPower) * exp(fExponentialConstant * r) * radialValue * radialValue;
     return total;
 }
 

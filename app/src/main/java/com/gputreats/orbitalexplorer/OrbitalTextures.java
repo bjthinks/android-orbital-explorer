@@ -20,12 +20,12 @@ public class OrbitalTextures {
     private float fMaximumRadius;
     private static final float fNumRadialSubdivisions = (float) (RADIAL_TEXTURE_SIZE - 1);
     private float fExponentialConstant;
+    private float fRadialPower;
     private static final float fNumAzimuthalSubdivisions = (float) (AZIMUTHAL_TEXTURE_SIZE - 1);
     private float fNumQuadratureSubdivisions;
     private int iOrder;
     private int quadratureDataSize;
     private int realOrbital;
-    private float radialPower;
     private float brightness;
 
     public OrbitalTextures(AssetManager a) {
@@ -46,7 +46,7 @@ public class OrbitalTextures {
 
             // Multiply by 2 because the wave function is squared
             fExponentialConstant = 2.0f * (float) radialFunction.getExponentialConstant();
-            radialPower = 2.0f * radialFunction.getPowerOfR();
+            fRadialPower = 2.0f * radialFunction.getPowerOfR();
 
             realOrbital = orbital.real ? 1 : 0;
 
@@ -97,12 +97,12 @@ public class OrbitalTextures {
         program.setUniform1f("fMaximumRadius", fMaximumRadius);
         program.setUniform1f("fNumRadialSubdivisions", fNumRadialSubdivisions);
         program.setUniform1f("fExponentialConstant", fExponentialConstant);
+        program.setUniform1f("fRadialPower", fRadialPower);
         program.setUniform1f("fNumAzimuthalSubdivisions", fNumAzimuthalSubdivisions);
         program.setUniform1f("fNumQuadratureSubdivisions", fNumQuadratureSubdivisions);
         program.setUniform1i("iOrder", iOrder);
 
         program.setUniform1i("realOrbital", realOrbital);
-        program.setUniform1f("powerOfR", radialPower);
         program.setUniform1f("brightness", brightness);
         program.setUniform1f("M", (float) orbital.M);
 
