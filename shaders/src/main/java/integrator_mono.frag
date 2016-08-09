@@ -22,7 +22,7 @@ uniform float fNumQuadratureSubdivisions;
 uniform int iOrder;
 uniform bool bReal;
 uniform float fM;
-uniform float brightness;
+uniform float fBrightness;
 
 float azimuthalPart(float theta) {
     float result;
@@ -110,7 +110,7 @@ void main() {
 
     if (total > 0.0) {
         // Increase brightness
-        total *= brightness;
+        total *= fBrightness;
 
         // Galaxy S6 can't do exp of a negative number correctly
         total = 1.0 - 1.0 / exp(total);

@@ -26,7 +26,7 @@ public class OrbitalTextures {
     private int iOrder;
     private boolean bReal;
     private float fM;
-    private float brightness;
+    private float fBrightness;
     private int quadratureDataSize;
 
     public OrbitalTextures(AssetManager a) {
@@ -70,7 +70,7 @@ public class OrbitalTextures {
             float maxLateral = quadratureData[quadratureData.length - 2];
             fMaximumRadius = (float) Math.sqrt(fQuadratureRadius * fQuadratureRadius
                     + maxLateral * maxLateral);
-            brightness = fQuadratureRadius * fQuadratureRadius / 2.0f;
+            fBrightness = fQuadratureRadius * fQuadratureRadius / 2.0f;
 
             // Load new radial texture
             float[] radialData
@@ -106,7 +106,7 @@ public class OrbitalTextures {
         program.setUniform1i("bReal", bReal ? 1 : 0);
         program.setUniform1f("fM", fM);
 
-        program.setUniform1f("brightness", brightness);
+        program.setUniform1f("fBrightness", fBrightness);
 
         MyGL.checkGLES();
     }

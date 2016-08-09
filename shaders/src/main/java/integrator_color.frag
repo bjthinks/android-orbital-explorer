@@ -22,7 +22,7 @@ uniform float fNumQuadratureSubdivisions;
 uniform int iOrder;
 uniform bool bReal;
 uniform float fM;
-uniform float brightness;
+uniform float fBrightness;
 
 float radialPart(float r) {
     float positionInTexture = r / fMaximumRadius * fNumRadialSubdivisions;
@@ -131,7 +131,7 @@ void main() {
 
     if (total.z > 0.0) {
         // Increase brightness
-        total *= brightness;
+        total *= fBrightness;
 
         total.xy /= total.z;
         // Galaxy S6 can't do exp of a negative number correctly
