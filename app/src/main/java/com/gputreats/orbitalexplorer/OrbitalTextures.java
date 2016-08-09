@@ -28,8 +28,6 @@ public class OrbitalTextures {
     private float fRadialPower;
     private int iOrder;
 
-    private int quadratureDataSize;
-
     public OrbitalTextures(AssetManager a) {
         assets = a;
 
@@ -62,7 +60,7 @@ public class OrbitalTextures {
             Quadrature quadrature = orbital.getQuadrature();
             iOrder = quadrature.getOrder();
             float[] quadratureData = QuadratureTable.get(assets, quadrature);
-            quadratureDataSize = quadratureData.length / (4 * iOrder);
+            int quadratureDataSize = quadratureData.length / (4 * iOrder);
             quadratureTexture.bindToTexture2DAndSetImage(iOrder, quadratureDataSize, quadratureData);
             fNumQuadratureSubdivisions = (float) (quadratureDataSize - 1);
 
