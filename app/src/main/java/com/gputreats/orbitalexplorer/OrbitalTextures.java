@@ -22,9 +22,9 @@ public class OrbitalTextures {
     private float fExponentialConstant;
     private static final float fNumAzimuthalSubdivisions = (float) (AZIMUTHAL_TEXTURE_SIZE - 1);
     private float fNumQuadratureSubdivisions;
+    private int iOrder;
     private int quadratureDataSize;
     private int realOrbital;
-    private int order;
     private float radialPower;
     private float brightness;
 
@@ -57,10 +57,10 @@ public class OrbitalTextures {
 
             // Load new quadrature texture
             Quadrature quadrature = orbital.getQuadrature();
-            order = quadrature.getOrder();
+            iOrder = quadrature.getOrder();
             float[] quadratureData = QuadratureTable.get(assets, quadrature);
-            quadratureDataSize = quadratureData.length / (4 * order);
-            quadratureTexture.bindToTexture2DAndSetImage(order, quadratureDataSize, quadratureData);
+            quadratureDataSize = quadratureData.length / (4 * iOrder);
+            quadratureTexture.bindToTexture2DAndSetImage(iOrder, quadratureDataSize, quadratureData);
             fNumQuadratureSubdivisions = (float) (quadratureDataSize - 1);
 
             // Calculate radius info
@@ -99,9 +99,9 @@ public class OrbitalTextures {
         program.setUniform1f("fExponentialConstant", fExponentialConstant);
         program.setUniform1f("fNumAzimuthalSubdivisions", fNumAzimuthalSubdivisions);
         program.setUniform1f("fNumQuadratureSubdivisions", fNumQuadratureSubdivisions);
+        program.setUniform1i("iOrder", iOrder);
 
         program.setUniform1i("realOrbital", realOrbital);
-        program.setUniform1i("numQuadraturePoints", order);
         program.setUniform1f("powerOfR", radialPower);
         program.setUniform1f("brightness", brightness);
         program.setUniform1f("M", (float) orbital.M);

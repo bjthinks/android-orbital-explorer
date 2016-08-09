@@ -18,7 +18,7 @@ uniform float fNumRadialSubdivisions;
 uniform float fExponentialConstant;
 uniform float fNumAzimuthalSubdivisions;
 uniform float fNumQuadratureSubdivisions;
-uniform int numQuadraturePoints;
+uniform int iOrder;
 uniform float M;
 uniform float powerOfR;
 uniform bool realOrbital;
@@ -124,7 +124,7 @@ void main() {
 
     vec3 total = vec3(0);
     vec2 q;
-    for (int i = 0; i < numQuadraturePoints; ++i) {
+    for (int i = 0; i < iOrder; ++i) {
         q = quadratureData(distanceToOrigin, i);
         total += q.y * integrand_pair(center, q.x * ray);
     }
