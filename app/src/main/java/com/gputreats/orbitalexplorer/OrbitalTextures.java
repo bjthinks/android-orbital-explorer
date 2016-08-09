@@ -20,9 +20,9 @@ public class OrbitalTextures {
     private float fBrightness;
     private float fM;
     private float fMaximumRadius;
-    private float fNumAzimuthalSubdivisions = (float) (AZIMUTHAL_TEXTURE_SIZE - 1);
+    private float fNumAzimuthalSubdivisions;
     private float fNumQuadratureSubdivisions;
-    private float fNumRadialSubdivisions = (float) (RADIAL_TEXTURE_SIZE - 1);
+    private float fNumRadialSubdivisions;
     private float fQuadratureRadius;
     private float fRadialExponent;
     private float fRadialPower;
@@ -55,6 +55,7 @@ public class OrbitalTextures {
             float[] azimuthalData = MyMath.functionToBuffer2(orbital.getAzimuthalFunction(),
                     0.0, Math.PI, AZIMUTHAL_TEXTURE_SIZE);
             azimuthalTexture.bindToTexture2DAndSetImage(AZIMUTHAL_TEXTURE_SIZE, 1, azimuthalData);
+            fNumAzimuthalSubdivisions = (float) (AZIMUTHAL_TEXTURE_SIZE - 1);
 
             // Load new quadrature texture
             Quadrature quadrature = orbital.getQuadrature();
@@ -76,6 +77,7 @@ public class OrbitalTextures {
                     = MyMath.functionToBuffer2(orbital.getRadialFunction().getOscillatingPart(),
                     0.0, fMaximumRadius, RADIAL_TEXTURE_SIZE);
             radialTexture.bindToTexture2DAndSetImage(RADIAL_TEXTURE_SIZE, 1, radialData);
+            fNumRadialSubdivisions = (float) (RADIAL_TEXTURE_SIZE - 1);
 
             MyGL.checkGLES();
         }
