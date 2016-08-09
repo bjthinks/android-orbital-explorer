@@ -20,8 +20,8 @@ uniform float fRadialPower;
 uniform float fNumAzimuthalSubdivisions;
 uniform float fNumQuadratureSubdivisions;
 uniform int iOrder;
+uniform bool bReal;
 uniform float M;
-uniform bool realOrbital;
 uniform float brightness;
 
 float radialPart(float r) {
@@ -64,7 +64,7 @@ vec2 longitudinalPart(float phi) {
         result = vec2(1.0, 0.0);
     } else {
         float Mphi = M * phi;
-        if (realOrbital) {
+        if (bReal) {
             const float sqrt2 = sqrt(2.0);
             if (M > 0.0)
                 result = vec2(sqrt2 * cos(Mphi), 0.0);

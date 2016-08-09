@@ -25,7 +25,7 @@ public class OrbitalTextures {
     private float fNumQuadratureSubdivisions;
     private int iOrder;
     private int quadratureDataSize;
-    private int realOrbital;
+    private boolean bReal;
     private float brightness;
 
     public OrbitalTextures(AssetManager a) {
@@ -48,7 +48,7 @@ public class OrbitalTextures {
             fRadialExponent = 2.0f * (float) radialFunction.getExponentialConstant();
             fRadialPower = 2.0f * radialFunction.getPowerOfR();
 
-            realOrbital = orbital.real ? 1 : 0;
+            bReal = orbital.real;
 
             // Load new azimuthal texture
             float[] azimuthalData = MyMath.functionToBuffer2(orbital.getAzimuthalFunction(),
@@ -101,8 +101,8 @@ public class OrbitalTextures {
         program.setUniform1f("fNumAzimuthalSubdivisions", fNumAzimuthalSubdivisions);
         program.setUniform1f("fNumQuadratureSubdivisions", fNumQuadratureSubdivisions);
         program.setUniform1i("iOrder", iOrder);
+        program.setUniform1i("bReal", bReal ? 1 : 0);
 
-        program.setUniform1i("realOrbital", realOrbital);
         program.setUniform1f("brightness", brightness);
         program.setUniform1f("M", (float) orbital.M);
 

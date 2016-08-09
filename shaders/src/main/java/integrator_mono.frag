@@ -20,8 +20,8 @@ uniform float fRadialPower;
 uniform float fNumAzimuthalSubdivisions;
 uniform float fNumQuadratureSubdivisions;
 uniform int iOrder;
+uniform bool bReal;
 uniform float M;
-uniform bool realOrbital;
 uniform float brightness;
 
 float azimuthalPart(float theta) {
@@ -52,7 +52,7 @@ float longitudinalPart(float phi) {
     // Normalization constant so that this function times its conjugate,
     // integrated from 0 to 2pi, yields 1
     float result = 1.0 / sqrt(2.0 * pi);
-    if (realOrbital && M != 0.0) {
+    if (bReal && M != 0.0) {
         float Mphi = M * phi;
         const float sqrt2 = sqrt(2.0);
         if (M > 0.0)
