@@ -1,23 +1,35 @@
 package com.gputreats.orbitalexplorer;
 
 import android.content.Context;
-import android.util.Log;
+
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 
 public final class Analytics {
 
-    private static final String TAG = "Analytics";
-
     private Analytics() {}
 
+    private static Tracker tracker;
     public static void init(Context context) {
+
+        // For testing
+        GoogleAnalytics.getInstance(context).setDryRun(true);
+
+        tracker = GoogleAnalytics.getInstance(context).newTracker(R.xml.global_tracker);
+        tracker.enableAdvertisingIdCollection(true);
     }
 
     public static void setScreenName(String screen) {
-        Log.d(TAG, "Screen: " + screen);
+        tracker.setScreenName(screen);
+        tracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 
     public static void reportEvent(String category, String action) {
-        Log.d(TAG, "Event: " + category + ", " + action);
+        tracker.send(new HitBuilders.EventBuilder()
+                .setCategory(category)
+                .setAction(action)
+                .build());
     }
 
     public static void reportException(Throwable exception) {
@@ -34,6 +46,9 @@ public final class Analytics {
     }
 
     public static void reportFatalError(String error) {
-        Log.d(TAG, "Fatal: " + error);
+        tracker.send(new HitBuilders.ExceptionBuilder()
+                .setDescription(error)
+                .setFatal(true)
+                .build());
     }
 }
