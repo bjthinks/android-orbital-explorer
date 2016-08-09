@@ -13,12 +13,14 @@ public class Shader {
         return id;
     }
 
-    public Shader(AssetManager assetManager, String filename, int shaderType) throws OpenGLException {
+    public Shader(AssetManager assets, String filename, int shaderType) throws OpenGLException {
         String shaderSource;
         try {
             BufferedInputStream instream = new BufferedInputStream(
-                    assetManager.open("a/" + filename));
+                    assets.open("a/" + filename));
             int b = instream.read();
+            // TODO make this depend on app version
+            // getPackageManager().getPackageInfo(getPackageName(), 0).versionCode
             int c = filename.charAt(0);
             Spew spew = new Spew(c, c);
             StringBuilder buf = new StringBuilder();
