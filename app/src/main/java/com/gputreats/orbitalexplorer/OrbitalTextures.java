@@ -52,7 +52,7 @@ public class OrbitalTextures {
             bReal = orbital.real;
 
             // Load new azimuthal texture
-            float[] azimuthalData = MyMath.functionToBuffer2(orbital.getAzimuthalFunction(),
+            float[] azimuthalData = MyGL.functionToBuffer2(orbital.getAzimuthalFunction(),
                     0.0, Math.PI, AZIMUTHAL_TEXTURE_SIZE);
             azimuthalTexture.bindToTexture2DAndSetImage(AZIMUTHAL_TEXTURE_SIZE, 1, azimuthalData);
             fNumAzimuthalSubdivisions = (float) (AZIMUTHAL_TEXTURE_SIZE - 1);
@@ -74,7 +74,7 @@ public class OrbitalTextures {
 
             // Load new radial texture
             float[] radialData
-                    = MyMath.functionToBuffer2(orbital.getRadialFunction().getOscillatingPart(),
+                    = MyGL.functionToBuffer2(orbital.getRadialFunction().getOscillatingPart(),
                     0.0, maximumRadius, RADIAL_TEXTURE_SIZE);
             radialTexture.bindToTexture2DAndSetImage(RADIAL_TEXTURE_SIZE, 1, radialData);
             fNumRadialSubdivisions = (float) (RADIAL_TEXTURE_SIZE - 1);
