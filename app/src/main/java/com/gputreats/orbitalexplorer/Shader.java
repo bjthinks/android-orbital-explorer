@@ -19,9 +19,7 @@ public class Shader {
             BufferedInputStream instream = new BufferedInputStream(
                     assets.open("a/" + filename));
             int b = instream.read();
-            // TODO make this depend on app version
-            // getPackageManager().getPackageInfo(getPackageName(), 0).versionCode
-            int c = filename.charAt(0);
+            int c = filename.charAt(0) + 100 * BuildConfig.VERSION_CODE;
             Spew spew = new Spew(c, c);
             StringBuilder buf = new StringBuilder();
             while (b != -1) {
