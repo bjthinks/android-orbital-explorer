@@ -14,38 +14,37 @@ uniform sampler2D quadrature;
 
 uniform bool bReal;
 uniform float fBrightness;
+uniform float fInverseAzimuthalStepSize;
 uniform float fInverseRadialStepSize;
 uniform float fM;
-uniform float fNumAzimuthalSubdivisions;
 uniform float fNumQuadratureSubdivisions;
-uniform float fNumRadialSubdivisions;
 uniform float fQuadratureRadius;
 uniform float fRadialExponent;
 uniform float fRadialPower;
+uniform int iAzimuthalSteps;
 uniform int iOrder;
+uniform int iRadialSteps;
 
 float radialPart(float r) {
     float positionInTexture = r * fInverseRadialStepSize;
-    if (positionInTexture >= fNumRadialSubdivisions)
+    int texturePosition = int(trunc(positionInTexture));
+    if (texturePosition >= iRadialSteps) {
         return 0.0;
-    float texturePosition = trunc(positionInTexture);
+    }
     vec2 textureValue = texelFetch(radial, ivec2(texturePosition, 0), 0).xy;
     float interpolationValue = fract(positionInTexture);
     return mix(textureValue.x, textureValue.y, interpolationValue);
 }
 
 float azimuthalPart(float theta) {
-    float result;
-    float positionInTexture = theta / pi * fNumAzimuthalSubdivisions;
-    if (positionInTexture >= fNumAzimuthalSubdivisions) {
-        result = texelFetch(azimuthal, ivec2(fNumAzimuthalSubdivisions, 0), 0).x;
-    } else {
-        float texturePosition = trunc(positionInTexture);
-        vec2 textureValue = texelFetch(azimuthal, ivec2(texturePosition, 0), 0).xy;
-        float interpolationValue = fract(positionInTexture);
-        result = mix(textureValue.x, textureValue.y, interpolationValue);
+    float positionInTexture = theta * fInverseAzimuthalStepSize;
+    int texturePosition = int(trunc(positionInTexture));
+    if (texturePosition >= iAzimuthalSteps) {
+        return texelFetch(azimuthal, ivec2(iAzimuthalSteps - 1, 0), 0).y;
     }
-    return result;
+    vec2 textureValue = texelFetch(azimuthal, ivec2(texturePosition, 0), 0).xy;
+    float interpolationValue = fract(positionInTexture);
+    return mix(textureValue.x, textureValue.y, interpolationValue);
 }
 
 vec2 quadratureData(float distanceToOrigin, int point) {

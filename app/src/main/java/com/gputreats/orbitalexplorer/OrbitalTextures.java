@@ -18,15 +18,16 @@ public class OrbitalTextures {
 
     private boolean bReal;
     private float fBrightness;
+    private float fInverseAzimuthalStepSize;
     private float fInverseRadialStepSize;
     private float fM;
-    private float fNumAzimuthalSubdivisions;
     private float fNumQuadratureSubdivisions;
-    private float fNumRadialSubdivisions;
     private float fQuadratureRadius;
     private float fRadialExponent;
     private float fRadialPower;
+    private int iAzimuthalSteps;
     private int iOrder;
+    private int iRadialSteps;
 
     public OrbitalTextures(AssetManager a) {
         assets = a;
@@ -55,7 +56,8 @@ public class OrbitalTextures {
             float[] azimuthalData = MyGL.functionToBuffer2(orbital.getAzimuthalFunction(),
                     0.0, Math.PI, AZIMUTHAL_TEXTURE_SIZE);
             azimuthalTexture.bindToTexture2DAndSetImage(AZIMUTHAL_TEXTURE_SIZE, 1, azimuthalData);
-            fNumAzimuthalSubdivisions = (float) (AZIMUTHAL_TEXTURE_SIZE - 1);
+            iAzimuthalSteps = AZIMUTHAL_TEXTURE_SIZE;
+            fInverseAzimuthalStepSize = AZIMUTHAL_TEXTURE_SIZE / 3.14159265359f;
 
             // Load new quadrature texture
             Quadrature quadrature = orbital.getQuadrature();
@@ -77,8 +79,8 @@ public class OrbitalTextures {
                     = MyGL.functionToBuffer2(orbital.getRadialFunction().getOscillatingPart(),
                     0.0, maximumRadius, RADIAL_TEXTURE_SIZE);
             radialTexture.bindToTexture2DAndSetImage(RADIAL_TEXTURE_SIZE, 1, radialData);
-            fNumRadialSubdivisions = (float) (RADIAL_TEXTURE_SIZE - 1);
-            fInverseRadialStepSize = fNumRadialSubdivisions / maximumRadius;
+            iRadialSteps = RADIAL_TEXTURE_SIZE;
+            fInverseRadialStepSize = iRadialSteps / maximumRadius;
 
             MyGL.checkGLES();
         }
@@ -99,15 +101,16 @@ public class OrbitalTextures {
 
         program.setUniform1i("bReal", bReal ? 1 : 0);
         program.setUniform1f("fBrightness", fBrightness);
+        program.setUniform1f("fInverseAzimuthalStepSize", fInverseAzimuthalStepSize);
         program.setUniform1f("fInverseRadialStepSize", fInverseRadialStepSize);
         program.setUniform1f("fM", fM);
-        program.setUniform1f("fNumAzimuthalSubdivisions", fNumAzimuthalSubdivisions);
         program.setUniform1f("fNumQuadratureSubdivisions", fNumQuadratureSubdivisions);
-        program.setUniform1f("fNumRadialSubdivisions", fNumRadialSubdivisions);
         program.setUniform1f("fQuadratureRadius", fQuadratureRadius);
         program.setUniform1f("fRadialExponent", fRadialExponent);
         program.setUniform1f("fRadialPower", fRadialPower);
+        program.setUniform1i("iAzimuthalSteps", iAzimuthalSteps);
         program.setUniform1i("iOrder", iOrder);
+        program.setUniform1i("iRadialSteps", iRadialSteps);
 
         MyGL.checkGLES();
     }
