@@ -19,14 +19,14 @@ public class OrbitalTextures {
     private boolean bReal;
     private float fBrightness;
     private float fInverseAzimuthalStepSize;
+    private float fInverseQuadratureStepSize;
     private float fInverseRadialStepSize;
     private float fM;
-    private float fNumQuadratureSubdivisions;
-    private float fQuadratureRadius;
     private float fRadialExponent;
     private float fRadialPower;
     private int iAzimuthalSteps;
     private int iOrder;
+    private int iQuadratureSteps;
     private int iRadialSteps;
 
     public OrbitalTextures(AssetManager a) {
@@ -62,17 +62,17 @@ public class OrbitalTextures {
             // Load new quadrature texture
             Quadrature quadrature = orbital.getQuadrature();
             iOrder = quadrature.getOrder();
-            float[] quadratureData = QuadratureTable.get(assets, quadrature);
-            int quadratureDataSize = quadratureData.length / (4 * iOrder);
-            quadratureTexture.bindToTexture2DAndSetImage(iOrder, quadratureDataSize, quadratureData);
-            fNumQuadratureSubdivisions = (float) (quadratureDataSize - 1);
+            float[] quadratureData = new QuadratureData(assets, quadrature).get();
+            iQuadratureSteps = quadrature.getSteps();
+            quadratureTexture.bindToTexture2DAndSetImage(iOrder, iQuadratureSteps, quadratureData);
 
             // Calculate radius info
-            fQuadratureRadius = (float) orbital.getRadialFunction().getMaximumRadius();
+            float quadratureRadius = (float) orbital.getRadialFunction().getMaximumRadius();
+            fInverseQuadratureStepSize = iQuadratureSteps / quadratureRadius;
             float maxLateral = quadratureData[quadratureData.length - 2];
-            float maximumRadius = (float) Math.sqrt(fQuadratureRadius * fQuadratureRadius
+            float maximumRadius = (float) Math.sqrt(quadratureRadius * quadratureRadius
                     + maxLateral * maxLateral);
-            fBrightness = fQuadratureRadius * fQuadratureRadius / 2.0f;
+            fBrightness = quadratureRadius * quadratureRadius / 2.0f;
 
             // Load new radial texture
             float[] radialData
@@ -102,14 +102,14 @@ public class OrbitalTextures {
         program.setUniform1i("bReal", bReal ? 1 : 0);
         program.setUniform1f("fBrightness", fBrightness);
         program.setUniform1f("fInverseAzimuthalStepSize", fInverseAzimuthalStepSize);
+        program.setUniform1f("fInverseQuadratureStepSize", fInverseQuadratureStepSize);
         program.setUniform1f("fInverseRadialStepSize", fInverseRadialStepSize);
         program.setUniform1f("fM", fM);
-        program.setUniform1f("fNumQuadratureSubdivisions", fNumQuadratureSubdivisions);
-        program.setUniform1f("fQuadratureRadius", fQuadratureRadius);
         program.setUniform1f("fRadialExponent", fRadialExponent);
         program.setUniform1f("fRadialPower", fRadialPower);
         program.setUniform1i("iAzimuthalSteps", iAzimuthalSteps);
         program.setUniform1i("iOrder", iOrder);
+        program.setUniform1i("iQuadratureSteps", iQuadratureSteps);
         program.setUniform1i("iRadialSteps", iRadialSteps);
 
         MyGL.checkGLES();

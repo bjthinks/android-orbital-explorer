@@ -15,32 +15,31 @@ uniform sampler2D quadrature;
 uniform bool bReal;
 uniform float fBrightness;
 uniform float fInverseAzimuthalStepSize;
+uniform float fInverseQuadratureStepSize;
 uniform float fInverseRadialStepSize; // unused
 uniform float fM;
-uniform float fNumQuadratureSubdivisions;
-uniform float fQuadratureRadius;
 uniform float fRadialExponent;
 uniform float fRadialPower;
 uniform int iAzimuthalSteps;
 uniform int iOrder;
+uniform int iQuadratureSteps;
 uniform int iRadialSteps; // unused
 
 float azimuthalPart(float theta) {
     float positionInTexture = theta * fInverseAzimuthalStepSize;
     int texturePosition = int(trunc(positionInTexture));
-    if (texturePosition >= iAzimuthalSteps) {
+    if (texturePosition >= iAzimuthalSteps)
         return texelFetch(azimuthal, ivec2(iAzimuthalSteps - 1, 0), 0).y;
-    }
     vec2 textureValue = texelFetch(azimuthal, ivec2(texturePosition, 0), 0).xy;
     float interpolationValue = fract(positionInTexture);
     return mix(textureValue.x, textureValue.y, interpolationValue);
 }
 
 vec2 quadratureData(float distanceToOrigin, int point) {
-    float positionInTexture = distanceToOrigin / fQuadratureRadius * fNumQuadratureSubdivisions;
-    if (positionInTexture >= fNumQuadratureSubdivisions)
+    float positionInTexture = distanceToOrigin * fInverseQuadratureStepSize;
+    int texturePosition = int(trunc(positionInTexture));
+    if (texturePosition >= iQuadratureSteps)
         return vec2(0.0);
-    float texturePosition = trunc(positionInTexture);
     vec4 textureValue = texelFetch(quadrature, ivec2(point, texturePosition), 0);
     float interpolationValue = fract(positionInTexture);
     return mix(textureValue.xy, textureValue.zw, interpolationValue);

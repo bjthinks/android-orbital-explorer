@@ -27,21 +27,21 @@ public class QuadratureGenerator {
                 int powerOfR = radialFunction.getPowerOfR();
 
                 Quadrature quadrature = new Quadrature(N, L, true);
-                int quadratureOrder = quadrature.getOrder();
-                int quadratureSize = quadrature.getSize();
+                int order = quadrature.getOrder();
+                int steps = quadrature.getSteps();
 
-                float[] quadratureWeights = new float[2 * quadratureOrder * quadratureSize];
-                for (int i = 0; i < quadratureSize; ++i) {
+                float[] quadratureWeights = new float[2 * order * (steps + 1)];
+                for (int i = 0; i <= steps; ++i) {
                     double distanceFromOrigin = radialFunction.getMaximumRadius()
-                            * (double) i / (double) (quadratureSize - 1);
+                            * (double) i / (double) steps;
                     WeightFunction weightFunction = new WeightFunction(exponentialConstant,
                             Polynomial.variableToThe(powerOfR), distanceFromOrigin);
-                    GaussianQuadrature GQ = new GaussianQuadrature(weightFunction, quadratureOrder);
+                    GaussianQuadrature GQ = new GaussianQuadrature(weightFunction, order);
 
-                    for (int j = 0; j < quadratureOrder; ++j) {
-                        quadratureWeights[2 * quadratureOrder * i + 2 * j]
+                    for (int j = 0; j < order; ++j) {
+                        quadratureWeights[2 * order * i + 2 * j]
                                 = (float) GQ.getNode(j);
-                        quadratureWeights[2 * quadratureOrder * i + 2 * j + 1]
+                        quadratureWeights[2 * order * i + 2 * j + 1]
                                 = (float) (GQ.getWeight(j) / weightFunction.eval(GQ.getNode(j)));
                     }
                 }
@@ -59,25 +59,25 @@ public class QuadratureGenerator {
                 Polynomial oscillatingPart = radialFunction.getOscillatingPart();
 
                 Quadrature quadrature = new Quadrature(N, L, false);
-                int quadratureOrder = quadrature.getOrder();
-                int quadratureSize = quadrature.getSize();
+                int order = quadrature.getOrder();
+                int steps = quadrature.getSteps();
 
-                float[] quadratureWeights = new float[2 * quadratureOrder * quadratureSize];
-                for (int i = 0; i < quadratureSize; ++i) {
+                float[] quadratureWeights = new float[2 * order * (steps + 1)];
+                for (int i = 0; i <= steps; ++i) {
                     double distanceFromOrigin = radialFunction.getMaximumRadius()
-                            * (double) i / (double) (quadratureSize - 1);
+                            * (double) i / (double) steps;
                     WeightFunction weightFunction
                             = new WeightFunction(exponentialConstant,
                             new Product(Polynomial.variableToThe(powerOfR), oscillatingPart),
                             distanceFromOrigin);
                     WeightFunction simpleWeightFunction = new WeightFunction(exponentialConstant,
                             Polynomial.variableToThe(powerOfR), distanceFromOrigin);
-                    GaussianQuadrature GQ = new GaussianQuadrature(weightFunction, quadratureOrder);
+                    GaussianQuadrature GQ = new GaussianQuadrature(weightFunction, order);
 
-                    for (int j = 0; j < quadratureOrder; ++j) {
-                        quadratureWeights[2 * quadratureOrder * i + 2 * j]
+                    for (int j = 0; j < order; ++j) {
+                        quadratureWeights[2 * order * i + 2 * j]
                                 = (float) GQ.getNode(j);
-                        quadratureWeights[2 * quadratureOrder * i + 2 * j + 1]
+                        quadratureWeights[2 * order * i + 2 * j + 1]
                                 = (float) (GQ.getWeight(j)
                                 / simpleWeightFunction.eval(GQ.getNode(j)));
                     }

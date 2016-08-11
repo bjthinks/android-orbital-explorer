@@ -5,7 +5,7 @@ public class Quadrature {
     public final int N, L;
     public final boolean color;
     private int order;
-    private int size;
+    private int steps;
 
     public Quadrature(int N_, int L_, boolean color_) {
         N = N_;
@@ -24,14 +24,14 @@ public class Quadrature {
         //         a few very specific corner cases
         order = color ? N + 1 : L + 2;
 
-        size = color ? 64 : 1024;
+        steps = color ? 64 : 1024;
     }
 
     public int getOrder() {
         return order;
     }
 
-    public int getSize() {
-        return size;
+    public int getSteps() {
+        return steps;
     }
 }
