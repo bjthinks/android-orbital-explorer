@@ -1,5 +1,6 @@
 package com.gputreats.orbitalexplorer;
 
+import android.content.Context;
 import android.content.res.AssetManager;
 import android.opengl.GLES30;
 
@@ -26,8 +27,8 @@ public class OrbitalTextures {
     private int iQuadratureSteps;
     private int iRadialSteps;
 
-    public OrbitalTextures(AssetManager a) {
-        assets = a;
+    public OrbitalTextures(Context context) {
+        assets = context.getAssets();
     }
 
     public void onSurfaceCreated() {

@@ -9,6 +9,7 @@ import javax.microedition.khronos.opengles.GL10;
 public class OrbitalRenderer implements GLSurfaceView.Renderer {
 
     private int dpi;
+    private OrbitalTextures orbitalTextures;
     private Integrator integrator;
     private ScreenDrawer screenDrawer;
     private RenderState renderState;
@@ -23,6 +24,7 @@ public class OrbitalRenderer implements GLSurfaceView.Renderer {
                     + " must implement RenderStateProvider");
         }
         dpi = context.getResources().getDisplayMetrics().densityDpi;
+        orbitalTextures = new OrbitalTextures(context);
         integrator = new Integrator(context);
         screenDrawer = new ScreenDrawer(context);
     }
@@ -32,6 +34,7 @@ public class OrbitalRenderer implements GLSurfaceView.Renderer {
     @Override
     public void onSurfaceCreated(GL10 unused, EGLConfig config) {
         try {
+            orbitalTextures.onSurfaceCreated();
             integrator.onSurfaceCreated();
             screenDrawer.onSurfaceCreated();
         } catch (RuntimeException e) {
@@ -64,7 +67,8 @@ public class OrbitalRenderer implements GLSurfaceView.Renderer {
         try {
             FPS.frame();
             RenderState.FrozenState frozenState = renderState.freeze(aspectRatio);
-            Texture integratorOutput = integrator.render(frozenState);
+            orbitalTextures.loadOrbital(frozenState.orbital);
+            Texture integratorOutput = integrator.render(frozenState, orbitalTextures);
             screenDrawer.render(integratorOutput, frozenState);
         } catch (RuntimeException e) {
             renderState.reportRenderException(e);

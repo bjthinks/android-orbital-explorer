@@ -10,8 +10,6 @@ public class Integrator extends RenderStage {
 
     private Program programColor, programMono;
 
-    OrbitalTextures orbitalTextures;
-
     private Texture outputTextureColor, outputTextureMono;
     private Framebuffer framebufferColor, framebufferMono;
     private int width, height;
@@ -25,9 +23,6 @@ public class Integrator extends RenderStage {
     public void onSurfaceCreated() throws OpenGLException {
 
         MyGL.checkGLES();
-
-        orbitalTextures = new OrbitalTextures(assetManager);
-        orbitalTextures.onSurfaceCreated();
 
         // Create textures to render to.
         // The following parameters have to match a row of Table 3.2 in the
@@ -89,7 +84,8 @@ public class Integrator extends RenderStage {
         MyGL.checkGLES();
     }
 
-    public Texture render(RenderState.FrozenState frozenState) throws OpenGLException {
+    public Texture render(RenderState.FrozenState frozenState, OrbitalTextures orbitalTextures)
+            throws OpenGLException {
 
         MyGL.checkGLES();
 
@@ -99,8 +95,6 @@ public class Integrator extends RenderStage {
 
         boolean color = orbital.color;
         Program program = color ? programColor : programMono;
-
-        orbitalTextures.loadOrbital(orbital);
 
         if (needToIntegrate || outputTextureResized) {
             outputTextureResized = false; // Also needed for e.g. orientation changes
