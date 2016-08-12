@@ -5,16 +5,13 @@ import android.opengl.GLES30;
 
 public class OrbitalTextures {
 
-    private static final int RADIAL_TEXTURE_SIZE = 1024;
-    private static final int AZIMUTHAL_TEXTURE_SIZE = 256;
-
     private AssetManager assets;
 
     private Orbital orbital;
 
-    private Texture radialTexture;
     private Texture azimuthalTexture;
     private Texture quadratureTexture;
+    private Texture radialTexture;
 
     private boolean bReal;
     private float fBrightness;
@@ -42,47 +39,50 @@ public class OrbitalTextures {
     public void loadOrbital(Orbital newOrbital) {
         if (newOrbital.notEquals(orbital)) {
             orbital = newOrbital;
-            fM = (float) orbital.M;
 
             RadialFunction radialFunction = orbital.getRadialFunction();
-
-            // Multiply by 2 because the wave function is squared
-            fRadialExponent = 2.0f * (float) radialFunction.getExponentialConstant();
-            fRadialPower = 2.0f * radialFunction.getPowerOfR();
-
-            bReal = orbital.real;
-
-            // Load new azimuthal texture
-            float[] azimuthalData = MyGL.functionToBuffer2(orbital.getAzimuthalFunction(),
-                    0.0, Math.PI, AZIMUTHAL_TEXTURE_SIZE);
-            azimuthalTexture.bindToTexture2DAndSetImage(AZIMUTHAL_TEXTURE_SIZE, 1, azimuthalData);
-            iAzimuthalSteps = AZIMUTHAL_TEXTURE_SIZE;
-            fInverseAzimuthalStepSize = AZIMUTHAL_TEXTURE_SIZE / 3.14159265359f;
+            AzimuthalFunction azimuthalFunction = orbital.getAzimuthalFunction();
+            Quadrature quadrature = orbital.getQuadrature();
 
             // Load new quadrature texture
-            Quadrature quadrature = orbital.getQuadrature();
-            iOrder = quadrature.getOrder();
+            int order = quadrature.getOrder();
             float[] quadratureData = new QuadratureData(assets, quadrature).get();
-            iQuadratureSteps = quadrature.getSteps();
-            quadratureTexture.bindToTexture2DAndSetImage(iOrder, iQuadratureSteps, quadratureData);
+            int quadratureSteps = quadrature.getSteps();
+            quadratureTexture.bindToTexture2DAndSetImage(order, quadratureSteps, quadratureData);
 
             // Calculate radius info
-            float quadratureRadius = (float) orbital.getRadialFunction().getMaximumRadius();
-            fInverseQuadratureStepSize = iQuadratureSteps / quadratureRadius;
+            float quadratureRadius = (float) radialFunction.getMaximumRadius();
             float maxLateral = quadratureData[quadratureData.length - 2];
             float maximumRadius = (float) Math.sqrt(quadratureRadius * quadratureRadius
                     + maxLateral * maxLateral);
-            fBrightness = quadratureRadius * quadratureRadius / 2.0f;
 
             // Load new radial texture
-            float[] radialData
-                    = MyGL.functionToBuffer2(orbital.getRadialFunction().getOscillatingPart(),
+            final int RADIAL_TEXTURE_SIZE = 1024;
+            float[] radialData = MyGL.functionToBuffer2(radialFunction.getOscillatingPart(),
                     0.0, maximumRadius, RADIAL_TEXTURE_SIZE);
             radialTexture.bindToTexture2DAndSetImage(RADIAL_TEXTURE_SIZE, 1, radialData);
-            iRadialSteps = RADIAL_TEXTURE_SIZE;
-            fInverseRadialStepSize = iRadialSteps / maximumRadius;
+
+            // Load new azimuthal texture
+            final int AZIMUTHAL_TEXTURE_SIZE = 256;
+            float[] azimuthalData = MyGL.functionToBuffer2(azimuthalFunction,
+                    0.0, Math.PI, AZIMUTHAL_TEXTURE_SIZE);
+            azimuthalTexture.bindToTexture2DAndSetImage(AZIMUTHAL_TEXTURE_SIZE, 1, azimuthalData);
 
             MyGL.checkGLES();
+
+            bReal = orbital.real;
+            fBrightness = quadratureRadius * quadratureRadius / 2.0f;
+            fInverseAzimuthalStepSize = AZIMUTHAL_TEXTURE_SIZE / 3.14159265359f;
+            fInverseQuadratureStepSize = quadratureSteps / quadratureRadius;
+            fInverseRadialStepSize = RADIAL_TEXTURE_SIZE / maximumRadius;
+            fM = (float) orbital.M;
+            // Multiply by 2 because the wave function is squared
+            fRadialExponent = 2.0f * (float) radialFunction.getExponentialConstant();
+            fRadialPower = 2.0f * radialFunction.getPowerOfR();
+            iAzimuthalSteps = AZIMUTHAL_TEXTURE_SIZE;
+            iOrder = order;
+            iQuadratureSteps = quadratureSteps;
+            iRadialSteps = RADIAL_TEXTURE_SIZE;
         }
     }
 

@@ -1,7 +1,6 @@
 package com.gputreats.orbitalexplorer;
 
 import android.content.res.AssetManager;
-import android.util.Log;
 
 import java.io.BufferedInputStream;
 import java.io.DataInputStream;

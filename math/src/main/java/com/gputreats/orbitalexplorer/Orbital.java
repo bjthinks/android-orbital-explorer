@@ -5,7 +5,7 @@ public class Orbital {
     public final int Z, N, L, M;
     public final boolean real, color;
     private RadialFunction radialFunction;
-    private Function azimuthalFunction;
+    private AzimuthalFunction azimuthalFunction;
     private Quadrature quadrature;
 
     public Orbital(int Z_, int N_, int L_, int M_, boolean real_, boolean color_) {
@@ -29,7 +29,7 @@ public class Orbital {
         return radialFunction;
     }
 
-    public Function getAzimuthalFunction() {
+    public AzimuthalFunction getAzimuthalFunction() {
         return azimuthalFunction;
     }
 
