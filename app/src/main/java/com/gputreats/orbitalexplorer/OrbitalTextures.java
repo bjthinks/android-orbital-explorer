@@ -28,7 +28,9 @@ public class OrbitalTextures {
 
     public OrbitalTextures(AssetManager a) {
         assets = a;
+    }
 
+    public void onSurfaceCreated() {
         radialTexture     = new Texture(GLES30.GL_RG,   GLES30.GL_FLOAT, GLES30.GL_RG32F);
         azimuthalTexture  = new Texture(GLES30.GL_RG,   GLES30.GL_FLOAT, GLES30.GL_RG32F);
         quadratureTexture = new Texture(GLES30.GL_RGBA, GLES30.GL_FLOAT, GLES30.GL_RGBA32F);

@@ -27,6 +27,7 @@ public class Integrator extends RenderStage {
         MyGL.checkGLES();
 
         orbitalTextures = new OrbitalTextures(assetManager);
+        orbitalTextures.onSurfaceCreated();
 
         // Create textures to render to.
         // The following parameters have to match a row of Table 3.2 in the
