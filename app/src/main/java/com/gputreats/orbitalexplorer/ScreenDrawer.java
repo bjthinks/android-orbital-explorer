@@ -9,18 +9,18 @@ import java.nio.ByteBuffer;
 
 public class ScreenDrawer extends RenderStage {
 
-    AssetManager assetManager;
+    AssetManager assets;
 
     private Program programColor, programMono;
 
     public ScreenDrawer(Context context) {
-        assetManager = context.getAssets();
+        assets = context.getAssets();
     }
 
     public void onSurfaceCreated() throws OpenGLException {
         MyGL.checkGLES();
-        programColor = new Program(assetManager, "6", "5");
-        programMono = new Program(assetManager, "8", "7");
+        programColor = new Program(assets, "6", "5");
+        programMono = new Program(assets, "8", "7");
     }
 
     private int inputWidth, inputHeight;

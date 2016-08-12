@@ -10,10 +10,10 @@ public class Program {
         return id;
     }
 
-    public Program(AssetManager assetManager, String vertexFilename, String fragmentFilename) {
-        Shader vertex = new Shader(assetManager, vertexFilename, GLES30.GL_VERTEX_SHADER);
+    public Program(AssetManager assets, String vertexFilename, String fragmentFilename) {
+        Shader vertex = new Shader(assets, vertexFilename, GLES30.GL_VERTEX_SHADER);
         MyGL.checkGLES();
-        Shader fragment = new Shader(assetManager, fragmentFilename, GLES30.GL_FRAGMENT_SHADER);
+        Shader fragment = new Shader(assets, fragmentFilename, GLES30.GL_FRAGMENT_SHADER);
         MyGL.checkGLES();
         id = GLES30.glCreateProgram();
         MyGL.checkGLES();

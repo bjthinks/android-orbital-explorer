@@ -6,7 +6,7 @@ import android.opengl.GLES30;
 
 public class Integrator extends RenderStage {
 
-    AssetManager assetManager;
+    AssetManager assets;
 
     private Program programColor, programMono;
 
@@ -16,7 +16,7 @@ public class Integrator extends RenderStage {
     private boolean outputTextureResized;
 
     Integrator(Context context) {
-        assetManager = context.getAssets();
+        assets = context.getAssets();
         outputTextureResized = true;
     }
 
@@ -38,8 +38,8 @@ public class Integrator extends RenderStage {
         outputTextureMono = new Texture(GLES30.GL_RED_INTEGER, GLES30.GL_SHORT, GLES30.GL_R16I);
         framebufferMono = new Framebuffer(outputTextureMono);
 
-        programColor = new Program(assetManager, "2", "1");
-        programMono = new Program(assetManager, "4", "3");
+        programColor = new Program(assets, "2", "1");
+        programMono = new Program(assets, "4", "3");
     }
 
     public void resize(int w, int h) throws OpenGLException {
