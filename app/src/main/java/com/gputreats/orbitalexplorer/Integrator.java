@@ -31,22 +31,12 @@ public class Integrator extends RenderStage {
         // according to Table 3.13 (in the absence of extensions).
 
         // COLOR rendering
-
         outputTextureColor = new Texture(GLES30.GL_RGBA_INTEGER, GLES30.GL_SHORT, GLES30.GL_RGBA16I);
-
-        framebufferColor = new Framebuffer();
-        MyGL.checkGLES();
-        framebufferColor.bindAndSetTexture(outputTextureColor);
-        MyGL.checkGLES();
+        framebufferColor = new Framebuffer(outputTextureColor);
 
         // MONO rendering
-
         outputTextureMono = new Texture(GLES30.GL_RED_INTEGER, GLES30.GL_SHORT, GLES30.GL_R16I);
-
-        framebufferMono = new Framebuffer();
-        MyGL.checkGLES();
-        framebufferMono.bindAndSetTexture(outputTextureMono);
-        MyGL.checkGLES();
+        framebufferMono = new Framebuffer(outputTextureMono);
 
         programColor = new Program(assetManager, "2", "1");
         programMono = new Program(assetManager, "4", "3");
