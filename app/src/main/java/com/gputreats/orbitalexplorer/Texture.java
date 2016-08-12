@@ -20,13 +20,24 @@ public class Texture {
         GLES30.glGenTextures(1, temp, 0);
         id = temp[0];
 
+        // Bind the texture and set its initial size to 1x1
+        bindToTexture2DAndResize(1, 1);
+
         // Fixed functionality filtering is too limited in its acceptable data types,
-        // so we filter manually in all cases
-        bindToTexture2D();
+        // so we need to disable it for our textures (otherwise texture lookups fail).
         GLES30.glTexParameteri(GLES30.GL_TEXTURE_2D,
                 GLES30.GL_TEXTURE_MIN_FILTER, GLES30.GL_NEAREST);
         GLES30.glTexParameteri(GLES30.GL_TEXTURE_2D,
                 GLES30.GL_TEXTURE_MAG_FILTER, GLES30.GL_NEAREST);
+
+        // For all of our textures, we want no wrapping. This is irrelevant for texelFetch(),
+        // so it's just future-proofing.
+        GLES30.glTexParameteri(GLES30.GL_TEXTURE_2D,
+                GLES30.GL_TEXTURE_WRAP_S, GLES30.GL_CLAMP_TO_EDGE);
+        GLES30.glTexParameteri(GLES30.GL_TEXTURE_2D,
+                GLES30.GL_TEXTURE_WRAP_T, GLES30.GL_CLAMP_TO_EDGE);
+
+        MyGL.checkGLES();
     }
 
     public void bindToTexture2D() {

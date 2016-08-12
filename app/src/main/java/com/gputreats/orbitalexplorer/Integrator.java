@@ -33,16 +33,6 @@ public class Integrator extends RenderStage {
         // COLOR rendering
 
         outputTextureColor = new Texture(GLES30.GL_RGBA_INTEGER, GLES30.GL_SHORT, GLES30.GL_RGBA16I);
-        MyGL.checkGLES();
-        outputTextureColor.bindToTexture2DAndResize(1, 1);
-        MyGL.checkGLES();
-
-        GLES30.glTexParameteri(GLES30.GL_TEXTURE_2D,
-                GLES30.GL_TEXTURE_WRAP_S, GLES30.GL_CLAMP_TO_EDGE);
-        MyGL.checkGLES();
-        GLES30.glTexParameteri(GLES30.GL_TEXTURE_2D,
-                GLES30.GL_TEXTURE_WRAP_T, GLES30.GL_CLAMP_TO_EDGE);
-        MyGL.checkGLES();
 
         framebufferColor = new Framebuffer();
         MyGL.checkGLES();
@@ -52,16 +42,6 @@ public class Integrator extends RenderStage {
         // MONO rendering
 
         outputTextureMono = new Texture(GLES30.GL_RED_INTEGER, GLES30.GL_SHORT, GLES30.GL_R16I);
-        MyGL.checkGLES();
-        outputTextureMono.bindToTexture2DAndResize(1, 1);
-        MyGL.checkGLES();
-
-        GLES30.glTexParameteri(GLES30.GL_TEXTURE_2D,
-                GLES30.GL_TEXTURE_WRAP_S, GLES30.GL_CLAMP_TO_EDGE);
-        MyGL.checkGLES();
-        GLES30.glTexParameteri(GLES30.GL_TEXTURE_2D,
-                GLES30.GL_TEXTURE_WRAP_T, GLES30.GL_CLAMP_TO_EDGE);
-        MyGL.checkGLES();
 
         framebufferMono = new Framebuffer();
         MyGL.checkGLES();
