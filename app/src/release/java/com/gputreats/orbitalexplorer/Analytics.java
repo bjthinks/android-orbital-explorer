@@ -36,7 +36,7 @@ public final class Analytics {
         for (int i = 0; i < 3 && i < stackTrace.length; ++i) {
             traceStr += " ";
             StackTraceElement level = stackTrace[i];
-            traceStr += level.getFileName() + "," + level.getLineNumber();
+            traceStr += level.getFileName() + ":" + level.getLineNumber();
         }
 
         reportFatalError(traceStr);
