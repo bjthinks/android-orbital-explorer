@@ -6,7 +6,7 @@ import android.opengl.GLES30;
 
 public class Integrator extends RenderStage {
 
-    AssetManager assets;
+    private AssetManager assets;
 
     private Program programColor, programMono;
 
