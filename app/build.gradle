@@ -20,6 +20,7 @@ android {
     }
     buildTypes {
         release {
+            // TODO fix this
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
