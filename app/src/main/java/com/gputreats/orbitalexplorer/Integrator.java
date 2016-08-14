@@ -96,6 +96,8 @@ class Integrator extends RenderStage {
 
             GLES30.glDrawArrays(GLES30.GL_TRIANGLE_FAN, 0, 4);
             GLES30.glDisableVertexAttribArray(inPositionHandle);
+
+            framebuffer.unbindFromAttachmentPoint();
         }
 
         MyGL.checkGLES();

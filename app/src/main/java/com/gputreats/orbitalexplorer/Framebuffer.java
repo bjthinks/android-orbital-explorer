@@ -7,6 +7,7 @@ import android.opengl.GLES30;
 class Framebuffer {
 
     private int framebufferId;
+    private int oldFramebuffer[] = new int[1];
 
     Framebuffer(Texture texture) {
         // Generate framebuffer
@@ -23,10 +24,17 @@ class Framebuffer {
         if (status != GLES30.GL_FRAMEBUFFER_COMPLETE)
             throw new OpenGLException("Framebuffer not complete");
 
+        unbindFromAttachmentPoint();
+
         MyGL.checkGLES();
     }
 
     void bindToAttachmentPoint() {
+        GLES30.glGetIntegerv(GLES30.GL_DRAW_FRAMEBUFFER_BINDING, oldFramebuffer, 0);
         GLES30.glBindFramebuffer(GLES30.GL_FRAMEBUFFER, framebufferId);
+    }
+
+    void unbindFromAttachmentPoint() {
+        GLES30.glBindFramebuffer(GLES30.GL_FRAMEBUFFER, oldFramebuffer[0]);
     }
 }
