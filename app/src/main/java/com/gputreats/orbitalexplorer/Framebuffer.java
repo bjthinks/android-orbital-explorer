@@ -4,11 +4,11 @@ package com.gputreats.orbitalexplorer;
 
 import android.opengl.GLES30;
 
-public class Framebuffer {
+class Framebuffer {
 
     private int framebufferId;
 
-    public Framebuffer(Texture texture) {
+    Framebuffer(Texture texture) {
         // Generate framebuffer
         int temp[] = new int[1];
         GLES30.glGenFramebuffers(1, temp, 0);
@@ -26,7 +26,7 @@ public class Framebuffer {
         MyGL.checkGLES();
     }
 
-    public void bindToAttachmentPoint() {
+    void bindToAttachmentPoint() {
         GLES30.glBindFramebuffer(GLES30.GL_FRAMEBUFFER, framebufferId);
     }
 }

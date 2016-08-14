@@ -6,11 +6,11 @@ import java.io.BufferedInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
 
-public class QuadratureData {
+class QuadratureData {
 
     private float[] data;
 
-    public QuadratureData(AssetManager assets, Quadrature quadrature) {
+    QuadratureData(AssetManager assets, Quadrature quadrature) {
         int order = quadrature.getOrder();
         int steps = quadrature.getSteps();
         data = new float[4 * order * steps];
@@ -53,7 +53,7 @@ public class QuadratureData {
         }
     }
 
-    public float[] get() {
+    float[] get() {
         return data;
     }
 }

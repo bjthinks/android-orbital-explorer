@@ -7,17 +7,17 @@ import android.os.Message;
 
 import java.nio.ByteBuffer;
 
-public class ScreenDrawer extends RenderStage {
+class ScreenDrawer extends RenderStage {
 
-    AssetManager assets;
+    private AssetManager assets;
 
     private Program programColor, programMono;
 
-    public ScreenDrawer(Context context) {
+    ScreenDrawer(Context context) {
         assets = context.getAssets();
     }
 
-    public void onSurfaceCreated() throws OpenGLException {
+    void onSurfaceCreated() throws OpenGLException {
         MyGL.checkGLES();
         programColor = new Program(assets, "6", "5");
         programMono = new Program(assets, "8", "7");
@@ -26,14 +26,14 @@ public class ScreenDrawer extends RenderStage {
     private int inputWidth, inputHeight;
     private int width, height;
 
-    public void resize(int newInputWidth, int newInputHeight, int newWidth, int newHeight) {
+    void resize(int newInputWidth, int newInputHeight, int newWidth, int newHeight) {
         inputWidth = newInputWidth;
         inputHeight = newInputHeight;
         width = newWidth;
         height = newHeight;
     }
 
-    public void render(Texture texture, RenderState.FrozenState frozenState) throws OpenGLException {
+    void render(Texture texture, RenderState.FrozenState frozenState) throws OpenGLException {
 
         MyGL.checkGLES();
 

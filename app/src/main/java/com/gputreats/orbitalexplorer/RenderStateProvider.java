@@ -1,5 +1,5 @@
 package com.gputreats.orbitalexplorer;
 
-public interface RenderStateProvider {
+interface RenderStateProvider {
     RenderState provideRenderState();
 }

@@ -4,10 +4,10 @@ import android.opengl.Matrix;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class Camera implements Parcelable {
+class Camera implements Parcelable {
 
-    static final double r2 = Math.sqrt(0.5);
-    static final Quaternion alignedRotations[] = {
+    private static final double r2 = Math.sqrt(0.5);
+    private static final Quaternion alignedRotations[] = {
             new Quaternion( 1,  0,  0,  0),
             new Quaternion(-1,  0,  0,  0),
             new Quaternion( 0,  1,  0,  0),
@@ -58,10 +58,9 @@ public class Camera implements Parcelable {
             new Quaternion(-.5, -.5, -.5, -.5)
     };
 
-    public Camera() {
-    }
+    Camera() {}
 
-    public Camera(double cameraDistance_, Quaternion totalRotation_) {
+    private Camera(double cameraDistance_, Quaternion totalRotation_) {
         cameraDistance = cameraDistance_;
         totalRotation = totalRotation_;
     }
@@ -95,7 +94,7 @@ public class Camera implements Parcelable {
     private static final double MAX_CAMERA_DISTANCE = 280.0;
 
     // Two finger zoom by an incremental size ratio of f
-    public void zoom(double f) {
+    void zoom(double f) {
         cameraDistance /= f;
         if (cameraDistance < MIN_CAMERA_DISTANCE)
             cameraDistance = MIN_CAMERA_DISTANCE;
@@ -110,7 +109,7 @@ public class Camera implements Parcelable {
 
     // One finger drag by an increment of (x,y) pixels
     // x and y are multiples of the (mean) screen size
-    public void drag(double x, double y) {
+    void drag(double x, double y) {
         // Finger moves right --> positive rotation about y axis
         Quaternion y_rotation = Quaternion.rotation(Math.PI * x, Y_HAT);
         // Finger moves up --> negative rotation about x axis
@@ -121,7 +120,7 @@ public class Camera implements Parcelable {
     }
 
     // Two finger twist by an angle increment of theta
-    public void twist(double theta) {
+    void twist(double theta) {
         Quaternion z_rotation = Quaternion.rotation(theta, Z_HAT);
         totalRotation = z_rotation.multiply(totalRotation);
         totalRotation = totalRotation.normalize();
@@ -139,7 +138,7 @@ public class Camera implements Parcelable {
     // Absolute amount of speed lost per second
     private static final double FLING_SLOWDOWN_CONSTANT = MAX_FLING_SPEED / MAX_FLING_TIME;
 
-    public void fling(double x, double y) {
+    void fling(double x, double y) {
         // x and y are multiples of the mean screen size per second
         flingVelocity = new Vector2(x, y);
         double flingSpeed = flingVelocity.norm();
@@ -149,14 +148,14 @@ public class Camera implements Parcelable {
         lastFlingTime = System.currentTimeMillis();
     }
 
-    public boolean stopFling() {
+    boolean stopFling() {
         flingVelocity = new Vector2(0.0, 0.0);
         boolean r = stillFlinging;
         stillFlinging = false;
         return r;
     }
 
-    public boolean continueFling() {
+    boolean continueFling() {
         if (stillFlinging) {
             long now = System.currentTimeMillis();
             long deltaMillis = now - lastFlingTime;
@@ -177,7 +176,7 @@ public class Camera implements Parcelable {
         return stillFlinging;
     }
 
-    public void snapToAxis() {
+    void snapToAxis() {
         int best = -1;
         double bestDistance = 1e9;
         for (int i = 0; i < alignedRotations.length; ++i) {
@@ -191,7 +190,7 @@ public class Camera implements Parcelable {
             totalRotation = alignedRotations[best];
     }
 
-    public float[] computeInverseShaderTransform(double aspectRatio) {
+    float[] computeInverseShaderTransform(double aspectRatio) {
         float ratio = (float) Math.sqrt(aspectRatio);
         float near = (float) cameraDistance;
         float far = (float) (cameraDistance + 1.0);
@@ -220,9 +219,5 @@ public class Camera implements Parcelable {
         Matrix.invertM(inverseTransform, 0, shaderTransform, 0);
 
         return inverseTransform;
-    }
-
-    public double getCameraDistance() {
-        return cameraDistance;
     }
 }

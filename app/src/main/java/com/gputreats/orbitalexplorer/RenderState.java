@@ -6,7 +6,7 @@ import android.os.Message;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class RenderState implements Parcelable {
+class RenderState implements Parcelable {
 
     private Handler renderExceptionHandler;
     private OrbitalView orbitalView;
@@ -18,7 +18,7 @@ public class RenderState implements Parcelable {
     private boolean screenGrabRequested;
     private Handler screenGrabHandler;
 
-    public RenderState() {
+    RenderState() {
         camera = new Camera();
         cameraChanged = true;
         orbital = new Orbital(1, 4, 2, 1, false, true);
@@ -28,17 +28,17 @@ public class RenderState implements Parcelable {
 
     // These happen BEFORE the render thread starts up
 
-    public void setRenderExceptionHandler(Handler h) {
+    void setRenderExceptionHandler(Handler h) {
         renderExceptionHandler = h;
     }
 
-    public void setOrbitalView(OrbitalView ov) {
+    void setOrbitalView(OrbitalView ov) {
         orbitalView = ov;
     }
 
     // This happens AFTER the render thread starts up
 
-    public void postRenderThreadSetup() {
+    void postRenderThreadSetup() {
         if (!orbital.color) {
             orbitalView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
             orbitalView.requestRender();
@@ -88,11 +88,11 @@ public class RenderState implements Parcelable {
     };
 
     // Main thread interface
-    public synchronized Orbital getOrbital() {
+    synchronized Orbital getOrbital() {
         return orbital;
     }
 
-    public synchronized void setOrbital(int Z, int N, int L, int M, boolean real, boolean color) {
+    synchronized void setOrbital(int Z, int N, int L, int M, boolean real, boolean color) {
         if (orbital == null || Z != orbital.Z || N != orbital.N || L != orbital.L
                 || M != orbital.M || real != orbital.real || color != orbital.color) {
             Analytics.reportEvent("change", "("
@@ -114,46 +114,46 @@ public class RenderState implements Parcelable {
         }
     }
 
-    public synchronized boolean cameraStopFling() {
+    synchronized boolean cameraStopFling() {
         return camera.stopFling();
     }
 
-    public synchronized void cameraDrag(double dx, double dy) {
+    synchronized void cameraDrag(double dx, double dy) {
         camera.drag(dx, dy);
         cameraChanged = true;
         if (!orbital.color)
             orbitalView.requestRender();
     }
 
-    public synchronized void cameraTwist(double angle) {
+    synchronized void cameraTwist(double angle) {
         camera.twist(angle);
         cameraChanged = true;
         if (!orbital.color)
             orbitalView.requestRender();
     }
 
-    public synchronized void cameraZoom(double factor) {
+    synchronized void cameraZoom(double factor) {
         camera.zoom(factor);
         cameraChanged = true;
         if (!orbital.color)
             orbitalView.requestRender();
     }
 
-    public synchronized void cameraFling(double vx, double vy) {
+    synchronized void cameraFling(double vx, double vy) {
         camera.fling(vx, vy);
         cameraChanged = true;
         if (!orbital.color)
             orbitalView.requestRender();
     }
 
-    public synchronized void snapCameraToAxis() {
+    synchronized void snapCameraToAxis() {
         camera.stopFling();
         camera.snapToAxis();
         cameraChanged = true;
         orbitalView.requestRender();
     }
 
-    public synchronized void requestScreenGrab(Handler handler) {
+    synchronized void requestScreenGrab(Handler handler) {
         screenGrabRequested = true;
         screenGrabHandler = handler;
         if (!orbital.color)
@@ -162,7 +162,7 @@ public class RenderState implements Parcelable {
 
     // Render thread getter
 
-    public synchronized FrozenState freeze(double aspectRatio) {
+    synchronized FrozenState freeze(double aspectRatio) {
         FrozenState fs = new FrozenState();
 
         boolean stillFlinging = camera.continueFling();
@@ -170,7 +170,6 @@ public class RenderState implements Parcelable {
             orbitalView.requestRender();
 
         fs.inverseTransform = camera.computeInverseShaderTransform(aspectRatio);
-        fs.cameraDistance = camera.getCameraDistance();
         fs.orbital = orbital;
         fs.needToIntegrate = orbitalChanged || cameraChanged || stillFlinging;
         fs.screenGrabRequested = screenGrabRequested;
@@ -184,18 +183,17 @@ public class RenderState implements Parcelable {
         return fs;
     }
 
-    static public class FrozenState {
-        public float[] inverseTransform;
-        public double cameraDistance;
-        public Orbital orbital;
-        public boolean needToIntegrate;
-        public boolean screenGrabRequested;
-        public Handler screenGrabHandler;
+    static class FrozenState {
+        float[] inverseTransform;
+        Orbital orbital;
+        boolean needToIntegrate;
+        boolean screenGrabRequested;
+        Handler screenGrabHandler;
     }
 
     // Render thread error handling
 
-    public synchronized void reportRenderException(RuntimeException e) {
+    synchronized void reportRenderException(RuntimeException e) {
         Message.obtain(renderExceptionHandler, 0, e).sendToTarget();
     }
 }

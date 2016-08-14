@@ -3,14 +3,14 @@ package com.gputreats.orbitalexplorer;
 import android.content.res.AssetManager;
 import android.opengl.GLES30;
 
-public class Program {
+class Program {
 
     private int id;
-    public int getId() {
+    int getId() {
         return id;
     }
 
-    public Program(AssetManager assets, String vertexFilename, String fragmentFilename) {
+    Program(AssetManager assets, String vertexFilename, String fragmentFilename) {
         Shader vertex = new Shader(assets, vertexFilename, GLES30.GL_VERTEX_SHADER);
         MyGL.checkGLES();
         Shader fragment = new Shader(assets, fragmentFilename, GLES30.GL_FRAGMENT_SHADER);

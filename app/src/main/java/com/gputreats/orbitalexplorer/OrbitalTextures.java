@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.res.AssetManager;
 import android.opengl.GLES30;
 
-public class OrbitalTextures {
+class OrbitalTextures {
 
     private AssetManager assets;
 
@@ -27,11 +27,11 @@ public class OrbitalTextures {
     private int iQuadratureSteps;
     private int iRadialSteps;
 
-    public OrbitalTextures(Context context) {
+    OrbitalTextures(Context context) {
         assets = context.getAssets();
     }
 
-    public void onSurfaceCreated() {
+    void onSurfaceCreated() {
         radialTexture     = new Texture(GLES30.GL_RG,   GLES30.GL_FLOAT, GLES30.GL_RG32F);
         azimuthalTexture  = new Texture(GLES30.GL_RG,   GLES30.GL_FLOAT, GLES30.GL_RG32F);
         quadratureTexture = new Texture(GLES30.GL_RGBA, GLES30.GL_FLOAT, GLES30.GL_RGBA32F);
@@ -39,7 +39,7 @@ public class OrbitalTextures {
         MyGL.checkGLES();
     }
 
-    public void loadOrbital(Orbital newOrbital) {
+    void loadOrbital(Orbital newOrbital) {
         if (newOrbital.notEquals(orbital)) {
             orbital = newOrbital;
 
@@ -89,7 +89,7 @@ public class OrbitalTextures {
         }
     }
 
-    public void bindForRendering(Program program) {
+    void bindForRendering(Program program) {
         GLES30.glActiveTexture(GLES30.GL_TEXTURE0);
         radialTexture.bindToTexture2D();
         program.setUniform1i("radial", 0);

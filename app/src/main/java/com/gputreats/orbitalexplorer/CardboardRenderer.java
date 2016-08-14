@@ -7,7 +7,7 @@ import com.google.vr.sdk.base.Viewport;
 
 import javax.microedition.khronos.egl.EGLConfig;
 
-public class CardboardRenderer implements GvrView.StereoRenderer {
+class CardboardRenderer implements GvrView.StereoRenderer {
 
     @Override
     public void onSurfaceCreated(EGLConfig config) {

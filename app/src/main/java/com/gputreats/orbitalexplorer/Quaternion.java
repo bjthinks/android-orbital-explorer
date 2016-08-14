@@ -3,7 +3,7 @@ package com.gputreats.orbitalexplorer;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class Quaternion implements Parcelable {
+class Quaternion implements Parcelable {
 
     @Override
     public int describeContents() {
@@ -31,16 +31,16 @@ public class Quaternion implements Parcelable {
         }
     };
 
-    public final double r, i, j, k;
+    private final double r, i, j, k;
 
-    public Quaternion(double real, double imaginary, double jmaginary, double kmaginary) {
+    Quaternion(double real, double imaginary, double jmaginary, double kmaginary) {
         r = real;
         i = imaginary;
         j = jmaginary;
         k = kmaginary;
     }
 
-    public Quaternion(double real, Vector3 unreal) {
+    private Quaternion(double real, Vector3 unreal) {
         r = real;
         i = unreal.getX();
         j = unreal.getY();
@@ -54,15 +54,15 @@ public class Quaternion implements Parcelable {
         k = 0;
     } */
 
-    public Quaternion add(Quaternion y) {
+    private Quaternion add(Quaternion y) {
         return new Quaternion(r + y.r, i + y.i, j + y.j, k + y.k);
     }
 
-    public Quaternion subtract(Quaternion y) {
+    private Quaternion subtract(Quaternion y) {
         return add(y.multiply(-1.0));
     }
 
-    public Quaternion multiply(Quaternion y) {
+    Quaternion multiply(Quaternion y) {
         return new Quaternion(
                 r * y.r - i * y.i - j * y.j - k * y.k,
                 r * y.i + i * y.r + j * y.k - k * y.j,
@@ -70,34 +70,34 @@ public class Quaternion implements Parcelable {
                 r * y.k + i * y.j - j * y.i + k * y.r);
     }
 
-    public Quaternion multiply(double c) {
+    private Quaternion multiply(double c) {
         return new Quaternion(r * c, i * c, j * c, k * c);
     }
 
-    public Quaternion divide(double c) {
+    private Quaternion divide(double c) {
         return multiply(1.0 / c);
     }
 
-    public double norm() {
+    private double norm() {
         return Math.sqrt(r * r + i * i + j * j + k * k);
     }
 
-    public Quaternion normalize() {
+    Quaternion normalize() {
         return divide(norm());
     }
 
-    public double dist(Quaternion y) {
+    double dist(Quaternion y) {
         return subtract(y).norm();
     }
 
-    public static Quaternion rotation(double angle, Vector3 v) {
+    static Quaternion rotation(double angle, Vector3 v) {
         v = v.normalize();
         double s = Math.sin(angle / 2);
         double c = Math.cos(angle / 2);
         return new Quaternion(c, v.multiply(s));
     }
 
-    public float[] asRotationMatrix() {
+    float[] asRotationMatrix() {
         float[] result = new float[16];
         result[0] = (float) (r*r + i*i - j*j - k*k);
         result[1] = (float) (2*r*k + 2*i*j);

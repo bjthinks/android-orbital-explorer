@@ -6,12 +6,12 @@ import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 
-public final class Analytics {
+final class Analytics {
 
     private Analytics() {}
 
     private static Tracker tracker;
-    public static void init(Context context) {
+    static void init(Context context) {
 
         // For testing
         GoogleAnalytics.getInstance(context).setDryRun(true);
@@ -20,19 +20,19 @@ public final class Analytics {
         tracker.enableAdvertisingIdCollection(true);
     }
 
-    public static void setScreenName(String screen) {
+    static void setScreenName(String screen) {
         tracker.setScreenName(screen);
         tracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 
-    public static void reportEvent(String category, String action) {
+    static void reportEvent(String category, String action) {
         tracker.send(new HitBuilders.EventBuilder()
                 .setCategory(category)
                 .setAction(action)
                 .build());
     }
 
-    public static void reportException(Throwable exception) {
+    static void reportException(Throwable exception) {
 
         String traceStr = exception.toString();
         StackTraceElement[] stackTrace = exception.getStackTrace();
@@ -45,7 +45,7 @@ public final class Analytics {
         reportFatalError(traceStr);
     }
 
-    public static void reportFatalError(String error) {
+    static void reportFatalError(String error) {
         tracker.send(new HitBuilders.ExceptionBuilder()
                 .setDescription(error)
                 .setFatal(true)

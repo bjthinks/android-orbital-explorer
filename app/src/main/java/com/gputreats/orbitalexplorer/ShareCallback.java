@@ -19,10 +19,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 
-public class ShareCallback implements Handler.Callback {
+class ShareCallback implements Handler.Callback {
 
     private Activity activity;
-    public ShareCallback(Activity a) {
+    ShareCallback(Activity a) {
         activity = a;
     }
 

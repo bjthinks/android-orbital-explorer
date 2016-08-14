@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.res.AssetManager;
 import android.opengl.GLES30;
 
-public class Integrator extends RenderStage {
+class Integrator extends RenderStage {
 
     private AssetManager assets;
 
@@ -20,7 +20,7 @@ public class Integrator extends RenderStage {
         outputTextureResized = true;
     }
 
-    public void onSurfaceCreated() throws OpenGLException {
+    void onSurfaceCreated() throws OpenGLException {
 
         MyGL.checkGLES();
 
@@ -42,7 +42,7 @@ public class Integrator extends RenderStage {
         programMono = new Program(assets, "4", "3");
     }
 
-    public void resize(int w, int h) throws OpenGLException {
+    void resize(int w, int h) throws OpenGLException {
         width = w;
         height = h;
         outputTextureResized = true;
@@ -54,7 +54,7 @@ public class Integrator extends RenderStage {
         MyGL.checkGLES();
     }
 
-    public Texture render(RenderState.FrozenState frozenState, OrbitalTextures orbitalTextures)
+    Texture render(RenderState.FrozenState frozenState, OrbitalTextures orbitalTextures)
             throws OpenGLException {
 
         MyGL.checkGLES();

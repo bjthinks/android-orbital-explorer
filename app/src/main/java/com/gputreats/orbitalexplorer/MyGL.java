@@ -2,18 +2,32 @@ package com.gputreats.orbitalexplorer;
 
 import android.opengl.GLES30;
 
-public final class MyGL {
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.nio.FloatBuffer;
+
+final class MyGL {
 
     private MyGL() {}
 
-    protected static void checkGLES() throws OpenGLException {
+    static void checkGLES() throws OpenGLException {
         int error = GLES30.glGetError();
         if (error != 0)
             throw new OpenGLException(error);
     }
 
-    // A misc data manipulation
-    protected static float[] functionToBuffer2(Function f, double start, double end, int N) {
+    // Misc data manipulations for creating textures
+
+    static FloatBuffer floatArrayToBuffer(float[] array) {
+        ByteBuffer bb = ByteBuffer.allocateDirect(array.length * 4);
+        bb.order(ByteOrder.nativeOrder());
+        FloatBuffer fb = bb.asFloatBuffer();
+        fb.put(array);
+        fb.position(0);
+        return fb;
+    }
+
+    static float[] functionToBuffer2(Function f, double start, double end, int N) {
         float data[] = new float[2 * N];
         double stepSize = (end - start) / N;
         double x = start;

@@ -6,7 +6,7 @@ import android.opengl.GLSurfaceView;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
-public class OrbitalRenderer implements GLSurfaceView.Renderer {
+class OrbitalRenderer implements GLSurfaceView.Renderer {
 
     private int screenDpi;
     private OrbitalTextures orbitalTextures;
@@ -16,7 +16,7 @@ public class OrbitalRenderer implements GLSurfaceView.Renderer {
 
     // Main thread
 
-    public OrbitalRenderer(Context context) {
+    OrbitalRenderer(Context context) {
         try {
             renderState = ((RenderStateProvider) context).provideRenderState();
         } catch (ClassCastException e) {

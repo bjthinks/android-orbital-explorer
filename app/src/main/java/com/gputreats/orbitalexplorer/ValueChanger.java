@@ -46,27 +46,27 @@ public class ValueChanger extends LinearLayout {
         text = (TextView) findViewById(R.id.integerchanger_value);
     }
 
-    public void setText(String t) {
+    void setText(String t) {
         text.setText(t);
     }
 
-    public void setInteger(int i) {
+    void setInteger(int i) {
         text.setText(String.format(Locale.US, "%d", i));
     }
 
-    public void setUpTint(int c) {
+    void setUpTint(int c) {
         upArrow.setColorFilter(c);
     }
 
-    public void setDownTint(int c) {
+    void setDownTint(int c) {
         downArrow.setColorFilter(c);
     }
 
-    public void setOnUpListener(OnClickListener ocl) {
+    void setOnUpListener(OnClickListener ocl) {
         upArrow.setOnClickListener(ocl);
     }
 
-    public void setOnDownListener(OnClickListener ocl) {
+    void setOnDownListener(OnClickListener ocl) {
         downArrow.setOnClickListener(ocl);
     }
 }

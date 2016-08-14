@@ -154,7 +154,7 @@ public class MainActivity extends AppCompatActivity implements RenderStateProvid
     // FULL SCREEN MODE
     //
 
-    public void setFullscreen(boolean f) {
+    private void setFullscreen(boolean f) {
         if (f) {
             decorView.setSystemUiVisibility(
                     View.SYSTEM_UI_FLAG_LAYOUT_STABLE |
@@ -243,7 +243,7 @@ public class MainActivity extends AppCompatActivity implements RenderStateProvid
     }
 
     @Override
-    public void onActivityResult(int request, int result, Intent data) {
+    protected void onActivityResult(int request, int result, Intent data) {
         File file = new File(getCacheDir(), "screens/" + request + ".jpg");
         // TODO fix lint error
         file.delete();

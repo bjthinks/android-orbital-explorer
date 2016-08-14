@@ -2,12 +2,12 @@ package com.gputreats.orbitalexplorer;
 
 import android.util.Log;
 
-public final class FPS {
+final class FPS {
     private FPS() {}
 
-    static private long lastFPSTimeMillis = 0;
-    static private int framesSinceLastFPS = 0;
-    public static void frame() {
+    private static long lastFPSTimeMillis = 0;
+    private static int framesSinceLastFPS = 0;
+    static void frame() {
         long now = System.currentTimeMillis();
         long millisBetweenRenders = now - lastFPSTimeMillis;
         if (millisBetweenRenders >= 1000) {
