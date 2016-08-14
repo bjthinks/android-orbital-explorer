@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.res.AssetManager;
 import android.opengl.GLES30;
 
+import java.util.Arrays;
+
 class Integrator extends RenderStage {
 
     private AssetManager assets;
@@ -54,16 +56,19 @@ class Integrator extends RenderStage {
         MyGL.checkGLES();
     }
 
-    Texture render(RenderState.FrozenState frozenState, OrbitalTextures orbitalTextures)
+    private float[] inverseTransform = new float[16];
+    Texture render(OrbitalTextures orbitalTextures,
+                   float[] newInverseTransform, boolean needToIntegrate)
             throws OpenGLException {
 
         MyGL.checkGLES();
 
-        float[] inverseTransform = frozenState.inverseTransform;
-        Orbital orbital = frozenState.orbital;
-        boolean needToIntegrate = frozenState.needToIntegrate;
+        if (!Arrays.equals(inverseTransform, newInverseTransform)) {
+            needToIntegrate = true;
+            inverseTransform = newInverseTransform;
+        }
 
-        boolean color = orbital.color;
+        boolean color = orbitalTextures.getColor();
         Program program = color ? programColor : programMono;
 
         if (needToIntegrate || outputTextureResized) {

@@ -9,15 +9,15 @@ public class CardboardView extends GvrView {
 
     public CardboardView(Context context) {
         super(context);
-        setup();
+        setup(context);
     }
 
     public CardboardView(Context context, AttributeSet attribs) {
         super(context, attribs);
-        setup();
+        setup(context);
     }
 
-    void setup() {
-        setRenderer(new CardboardRenderer());
+    void setup(Context context) {
+        setRenderer(new CardboardRenderer(context));
     }
 }

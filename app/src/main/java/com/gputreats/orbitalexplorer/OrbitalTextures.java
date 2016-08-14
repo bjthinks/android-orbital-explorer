@@ -117,4 +117,8 @@ class OrbitalTextures {
 
         MyGL.checkGLES();
     }
+
+    boolean getColor() {
+        return orbital.color;
+    }
 }

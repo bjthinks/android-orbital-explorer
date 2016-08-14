@@ -45,7 +45,6 @@ class OrbitalRenderer implements GLSurfaceView.Renderer {
     // Rendering thread
 
     private float aspectRatio = 1.0f;
-
     @Override
     public void onSurfaceChanged(GL10 unused, int width, int height) {
         try {
@@ -69,7 +68,8 @@ class OrbitalRenderer implements GLSurfaceView.Renderer {
             FPS.frame();
             RenderState.FrozenState frozenState = renderState.freeze(aspectRatio);
             orbitalTextures.loadOrbital(frozenState.orbital);
-            Texture integratorOutput = integrator.render(frozenState, orbitalTextures);
+            Texture integratorOutput = integrator.render(orbitalTextures,
+                    frozenState.inverseTransform, frozenState.needToIntegrate);
             screenDrawer.render(integratorOutput, frozenState);
         } catch (RuntimeException e) {
             renderState.reportRenderException(e);
