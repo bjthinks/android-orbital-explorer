@@ -6,6 +6,8 @@ import android.opengl.GLES30;
 import android.os.Handler;
 import android.os.Message;
 
+import com.google.vr.sdk.base.Viewport;
+
 import java.nio.ByteBuffer;
 
 class ScreenDrawer extends RenderStage {
@@ -34,14 +36,18 @@ class ScreenDrawer extends RenderStage {
         height = newHeight;
     }
 
-    void render(OrbitalTextures orbitalTextures, Texture texture, Handler screenGrabHandler)
+    void render(OrbitalTextures orbitalTextures, Texture texture, Handler screenGrabHandler,
+                Viewport viewport)
             throws OpenGLException {
 
         MyGL.checkGLES();
 
         Program program = orbitalTextures.getColor() ? programColor : programMono;
 
-        GLES30.glViewport(0, 0, width, height);
+        if (viewport != null)
+            GLES30.glViewport(viewport.x, viewport.y, viewport.width, viewport.height);
+        else
+            GLES30.glViewport(0, 0, width, height);
         program.use();
 
         GLES30.glActiveTexture(GLES30.GL_TEXTURE0);
