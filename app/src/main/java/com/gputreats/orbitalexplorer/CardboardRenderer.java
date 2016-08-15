@@ -70,7 +70,7 @@ class CardboardRenderer implements GvrView.StereoRenderer {
 
         Texture integratorOutput = integrator.render(orbitalTextures,
                 inverseTransform, /* TODO */ true);
-        screenDrawer.render(integratorOutput, /* FIXME */ 4, orbitalTextures.getColor(), null);
+        screenDrawer.render(orbitalTextures, integratorOutput, null);
     }
 
     @Override

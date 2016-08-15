@@ -89,7 +89,7 @@ class OrbitalTextures {
         }
     }
 
-    void bindForRendering(Program program) {
+    void setupForIntegration(Program program) {
         GLES30.glActiveTexture(GLES30.GL_TEXTURE0);
         radialTexture.bindToTexture2D();
         program.setUniform1i("radial", 0);
@@ -120,5 +120,9 @@ class OrbitalTextures {
 
     boolean getColor() {
         return orbital.color;
+    }
+
+    int getN() {
+        return orbital.N;
     }
 }

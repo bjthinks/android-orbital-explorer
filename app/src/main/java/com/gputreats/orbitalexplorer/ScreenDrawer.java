@@ -34,12 +34,12 @@ class ScreenDrawer extends RenderStage {
         height = newHeight;
     }
 
-    void render(Texture texture, int N, boolean color, Handler screenGrabHandler)
+    void render(OrbitalTextures orbitalTextures, Texture texture, Handler screenGrabHandler)
             throws OpenGLException {
 
         MyGL.checkGLES();
 
-        Program program = color ? programColor : programMono;
+        Program program = orbitalTextures.getColor() ? programColor : programMono;
 
         GLES30.glViewport(0, 0, width, height);
         program.use();
@@ -55,6 +55,7 @@ class ScreenDrawer extends RenderStage {
                 inputWidth - 1, inputHeight - 1);
 
         float[] rot = new float[4];
+        int N = orbitalTextures.getN();
         long period = N * N * 1000; // ms
         double t = 2. * Math.PI * (double) (System.currentTimeMillis() % period) / (double) period;
         rot[0] = (float) Math.cos(t);  rot[2] = (float) -Math.sin(t);
