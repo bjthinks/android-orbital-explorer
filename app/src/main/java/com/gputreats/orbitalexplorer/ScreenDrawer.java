@@ -3,6 +3,7 @@ package com.gputreats.orbitalexplorer;
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.opengl.GLES30;
+import android.os.Handler;
 import android.os.Message;
 
 import java.nio.ByteBuffer;
@@ -33,11 +34,11 @@ class ScreenDrawer extends RenderStage {
         height = newHeight;
     }
 
-    void render(Texture texture, RenderState.FrozenState frozenState) throws OpenGLException {
+    void render(Texture texture, int N, boolean color, Handler screenGrabHandler)
+            throws OpenGLException {
 
         MyGL.checkGLES();
 
-        boolean color = frozenState.orbital.color;
         Program program = color ? programColor : programMono;
 
         GLES30.glViewport(0, 0, width, height);
@@ -54,7 +55,6 @@ class ScreenDrawer extends RenderStage {
                 inputWidth - 1, inputHeight - 1);
 
         float[] rot = new float[4];
-        int N = frozenState.orbital.N;
         long period = N * N * 1000; // ms
         double t = 2. * Math.PI * (double) (System.currentTimeMillis() % period) / (double) period;
         rot[0] = (float) Math.cos(t);  rot[2] = (float) -Math.sin(t);
@@ -69,10 +69,10 @@ class ScreenDrawer extends RenderStage {
         GLES30.glDrawArrays(GLES30.GL_TRIANGLE_FAN, 0, 4);
         GLES30.glDisableVertexAttribArray(inPositionHandle);
 
-        if (frozenState.screenGrabRequested) {
+        if (screenGrabHandler != null) {
             ByteBuffer buf = ByteBuffer.allocate(width * height * 4);
             GLES30.glReadPixels(0, 0, width, height, GLES30.GL_RGBA, GLES30.GL_UNSIGNED_BYTE, buf);
-            Message.obtain(frozenState.screenGrabHandler, 0, width, height, buf).sendToTarget();
+            Message.obtain(screenGrabHandler, 0, width, height, buf).sendToTarget();
         }
 
         MyGL.checkGLES();
