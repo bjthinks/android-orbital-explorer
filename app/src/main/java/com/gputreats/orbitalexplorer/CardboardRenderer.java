@@ -61,7 +61,7 @@ class CardboardRenderer implements GvrView.StereoRenderer {
         if (type == Eye.Type.LEFT)
             integrator = integratorLeft;
         else // RIGHT or MONOCULAR
-            integrator = integratorRight;
+            integrator = integratorLeft;
 
         float[] projectionMatrix = eye.getPerspective(1.0f, 2.0f);
         float[] eyeViewMatrix = eye.getEyeView();
