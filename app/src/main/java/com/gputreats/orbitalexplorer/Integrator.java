@@ -91,8 +91,8 @@ class Integrator extends RenderStage {
 
             orbitalTextures.setupForIntegration(program);
 
-            int mvpMatrixHandle = program.getUniformLocation("inverseTransform");
-            GLES30.glUniformMatrix4fv(mvpMatrixHandle, 1, false, inverseTransform, 0);
+            int inverseTransformHandle = program.getUniformLocation("inverseTransform");
+            GLES30.glUniformMatrix4fv(inverseTransformHandle, 1, false, inverseTransform, 0);
 
             int inPositionHandle;
             inPositionHandle = GLES30.glGetAttribLocation(program.getId(), "inPosition");
