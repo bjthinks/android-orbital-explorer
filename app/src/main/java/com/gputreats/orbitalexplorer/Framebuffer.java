@@ -31,10 +31,10 @@ class Framebuffer {
 
     void bindToAttachmentPoint() {
         GLES30.glGetIntegerv(GLES30.GL_DRAW_FRAMEBUFFER_BINDING, oldFramebuffer, 0);
-        GLES30.glBindFramebuffer(GLES30.GL_FRAMEBUFFER, framebufferId);
+        GLES30.glBindFramebuffer(GLES30.GL_DRAW_FRAMEBUFFER, framebufferId);
     }
 
     void unbindFromAttachmentPoint() {
-        GLES30.glBindFramebuffer(GLES30.GL_FRAMEBUFFER, oldFramebuffer[0]);
+        GLES30.glBindFramebuffer(GLES30.GL_DRAW_FRAMEBUFFER, oldFramebuffer[0]);
     }
 }
