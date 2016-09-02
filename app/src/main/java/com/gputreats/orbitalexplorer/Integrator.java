@@ -65,7 +65,7 @@ class Integrator extends RenderStage {
 
         if (!Arrays.equals(inverseTransform, newInverseTransform)) {
             needToIntegrate = true;
-            inverseTransform = newInverseTransform;
+            inverseTransform = Arrays.copyOf(newInverseTransform, newInverseTransform.length);
         }
 
         boolean color = orbitalTextures.getColor();
