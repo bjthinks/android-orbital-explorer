@@ -18,6 +18,7 @@ public class CardboardView extends GvrView {
     }
 
     void setup(Context context) {
+        setEGLContextClientVersion(3);
         setRenderer(new CardboardRenderer(context));
     }
 }
