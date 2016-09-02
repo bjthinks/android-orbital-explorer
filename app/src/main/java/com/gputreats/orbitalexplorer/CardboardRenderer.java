@@ -56,6 +56,7 @@ class CardboardRenderer implements GvrView.StereoRenderer {
     @Override
     public void onDrawEye(Eye eye) {
         int type = eye.getType();
+
         Integrator integrator;
         if (type == Eye.Type.LEFT)
             integrator = integratorLeft;
@@ -63,17 +64,21 @@ class CardboardRenderer implements GvrView.StereoRenderer {
             integrator = integratorRight;
 
         float[] projectionMatrix = eye.getPerspective(1.0f, 2.0f);
-
+        float[] eyeViewMatrix = eye.getEyeView();
         float[] viewMatrix = new float[16];
-        Matrix.setLookAtM(viewMatrix, 0, 0, 0, -50.0f, 0f, 0f, 0f, 0f, 1.0f, 0f);
+        Matrix.setLookAtM(viewMatrix, 0,
+                // eye
+                -50f, 0f, 0f,
+                // center
+                0f, 0f, 0f,
+                // up
+                0f, 0f, 1f);
 
-        float[] viewProjMatrix = new float[16];
-        Matrix.multiplyMM(viewProjMatrix, 0, projectionMatrix, 0, viewMatrix, 0);
-
-        float[] eyeView = eye.getEyeView();
+        float[] temp = new float[16];
+        Matrix.multiplyMM(temp, 0, projectionMatrix, 0, eyeViewMatrix, 0);
 
         float[] transform = new float[16];
-        Matrix.multiplyMM(transform, 0, viewProjMatrix, 0, eyeView, 0);
+        Matrix.multiplyMM(transform, 0, temp, 0, viewMatrix, 0);
 
         float inverseTransform[] = new float[16];
         Matrix.invertM(inverseTransform, 0, transform, 0);
