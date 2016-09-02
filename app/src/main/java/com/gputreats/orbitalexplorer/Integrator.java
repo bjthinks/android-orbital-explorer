@@ -94,8 +94,7 @@ class Integrator extends RenderStage {
             int inverseTransformHandle = program.getUniformLocation("inverseTransform");
             GLES30.glUniformMatrix4fv(inverseTransformHandle, 1, false, inverseTransform, 0);
 
-            int inPositionHandle;
-            inPositionHandle = GLES30.glGetAttribLocation(program.getId(), "inPosition");
+            int inPositionHandle = GLES30.glGetAttribLocation(program.getId(), "inPosition");
             GLES30.glEnableVertexAttribArray(inPositionHandle);
             GLES30.glVertexAttribPointer(inPositionHandle, 2, GLES30.GL_FLOAT, false, 8,
                     screenRectangle);
