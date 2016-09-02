@@ -43,13 +43,13 @@ class ScreenDrawer extends RenderStage {
         MyGL.checkGLES();
 
         Program program = orbitalTextures.getColor() ? programColor : programMono;
+        program.use();
 
         if (viewport != null) {
             GLES30.glViewport(viewport.x, viewport.y, viewport.width, viewport.height);
         } else {
             GLES30.glViewport(0, 0, width, height);
         }
-        program.use();
 
         GLES30.glActiveTexture(GLES30.GL_TEXTURE0);
         texture.bindToTexture2D();

@@ -74,6 +74,8 @@ class Integrator extends RenderStage {
             outputTextureResized = false; // Also needed for e.g. orientation changes
 
             Program program = color ? programColor : programMono;
+            program.use();
+
             Framebuffer framebuffer = color ? framebufferColor : framebufferMono;
             framebuffer.bindToAttachmentPoint();
             GLES30.glViewport(0, 0, width, height);
@@ -81,8 +83,6 @@ class Integrator extends RenderStage {
             // TODO does ditching this improve anything?
             final int zeroes[] = {0, 0, 0, 0};
             GLES30.glClearBufferiv(GLES30.GL_COLOR, 0, zeroes, 0);
-
-            program.use();
 
             orbitalTextures.setupForIntegration(program);
 
