@@ -12,8 +12,8 @@ final class FPS {
         long millisBetweenRenders = now - lastFPSTimeMillis;
         if (millisBetweenRenders >= 1000) {
             lastFPSTimeMillis = now;
-            long fps4 = 4000 * framesSinceLastFPS / millisBetweenRenders;
-            Log.d("FPS", Float.toString(fps4 / 4.0f));
+            long fps4 = 10000 * framesSinceLastFPS / millisBetweenRenders;
+            Log.d("FPS", Float.toString(fps4 / 10f));
             framesSinceLastFPS = 0;
         }
         ++framesSinceLastFPS;
