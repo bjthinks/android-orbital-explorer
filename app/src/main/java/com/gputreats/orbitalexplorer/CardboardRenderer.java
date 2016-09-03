@@ -2,7 +2,6 @@ package com.gputreats.orbitalexplorer;
 
 import android.content.Context;
 import android.opengl.Matrix;
-import android.util.Log;
 
 import com.google.vr.sdk.base.Eye;
 import com.google.vr.sdk.base.GvrView;
