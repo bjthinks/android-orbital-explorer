@@ -193,10 +193,10 @@ public class MainActivity extends AppCompatActivity implements RenderStateProvid
         Intent intent;
         switch (item.getItemId()) {
 
-            case R.id.menuSnap:
+            /*case R.id.menuSnap:
                 Analytics.reportEvent("menu", "snap");
                 renderState.snapCameraToAxis();
-                break;
+                break;*/
 
             case R.id.menuFullscreen:
                 Analytics.reportEvent("menu", "full");

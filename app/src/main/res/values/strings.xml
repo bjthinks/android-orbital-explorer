@@ -3,7 +3,6 @@
     <string name="apology">The electrons have gone missing.</string>
     <string name="apologySubtext">How embarrassing. Orbital Explorer isn\'t working on this Android device. Problems like this are likely to be fixed in a future version.</string>
 
-    <string name="menuSnap">Align Image</string>
     <string name="menuFullscreen">Fullscreen</string>
     <string name="menuShare">Share Image</string>
     <string name="menuCardboard">Cardboard</string>
