@@ -7,10 +7,10 @@ class RenderStage {
     FloatBuffer screenRectangle;
     RenderStage() {
         float squareCoordinates[] = {
-                -1.0f, -1.0f,
-                -1.0f,  1.0f,
-                1.0f,  1.0f,
-                1.0f, -1.0f,
+                -1, -1,
+                -1,  1,
+                 1,  1,
+                 1, -1,
         };
         screenRectangle = MyGL.floatArrayToBuffer(squareCoordinates);
     }

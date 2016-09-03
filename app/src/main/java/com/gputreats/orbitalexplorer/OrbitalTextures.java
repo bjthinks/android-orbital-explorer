@@ -74,14 +74,14 @@ class OrbitalTextures {
             MyGL.checkGLES();
 
             bReal = orbital.real;
-            fBrightness = quadratureRadius * quadratureRadius / 2.0f;
+            fBrightness = quadratureRadius * quadratureRadius / 2f;
             fInverseAzimuthalStepSize = AZIMUTHAL_TEXTURE_SIZE / 3.14159265359f;
             fInverseQuadratureStepSize = quadratureSteps / quadratureRadius;
             fInverseRadialStepSize = RADIAL_TEXTURE_SIZE / maximumRadius;
             fM = (float) orbital.M;
             // Multiply by 2 because the wave function is squared
-            fRadialExponent = 2.0f * (float) radialFunction.getExponentialConstant();
-            fRadialPower = 2.0f * radialFunction.getPowerOfR();
+            fRadialExponent = 2 * (float) radialFunction.getExponentialConstant();
+            fRadialPower = 2 * radialFunction.getPowerOfR();
             iAzimuthalSteps = AZIMUTHAL_TEXTURE_SIZE;
             iOrder = order;
             iQuadratureSteps = quadratureSteps;

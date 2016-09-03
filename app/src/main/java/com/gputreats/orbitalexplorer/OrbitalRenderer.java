@@ -44,7 +44,7 @@ class OrbitalRenderer implements GLSurfaceView.Renderer {
 
     // Rendering thread
 
-    private float aspectRatio = 1.0f;
+    private float aspectRatio = 1;
     @Override
     public void onSurfaceChanged(GL10 unused, int width, int height) {
         try {
