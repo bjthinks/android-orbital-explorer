@@ -125,4 +125,8 @@ class OrbitalTextures {
     int getN() {
         return orbital.N;
     }
+
+    float getRadius() {
+        return (float) orbital.getRadialFunction().getMaximumRadius();
+    }
 }

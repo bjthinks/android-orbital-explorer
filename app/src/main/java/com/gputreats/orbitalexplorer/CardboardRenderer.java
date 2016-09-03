@@ -47,9 +47,11 @@ class CardboardRenderer implements GvrView.StereoRenderer {
         screenDrawer.resize(integrationWidth, integrationHeight, width, height);
     }
 
+    private HeadTransform head;
     @Override
     public void onNewFrame(HeadTransform headTransform) {
         orbitalTextures.loadOrbital(orbital);
+        head = headTransform;
     }
 
     @Override
@@ -62,22 +64,34 @@ class CardboardRenderer implements GvrView.StereoRenderer {
         else // RIGHT or MONOCULAR
             integrator = integratorRight;
 
-        float[] projectionMatrix = eye.getPerspective(1.0f, 2.0f);
+        float[] scaleMatrix = new float[16];
+        float scaleFactor = 1f / (4f * orbitalTextures.getRadius());
+        scaleMatrix[0] = scaleFactor;
+        scaleMatrix[5] = scaleFactor;
+        scaleMatrix[10] = scaleFactor;
+        scaleMatrix[15] = 1;
+
+        float[] translateMatrix = new float[16];
+        float[] headForward = new float[3];
+        head.getForwardVector(headForward, 0);
+        translateMatrix[0] = 1;
+        translateMatrix[5] = 1;
+        translateMatrix[10] = 1;
+        translateMatrix[15] = 1;
+        translateMatrix[12] = headForward[0] / 2f;
+        translateMatrix[13] = headForward[1] / 2f;
+        translateMatrix[14] = headForward[2] / 2f;
+
+        float temp1[] = new float[16];
+        Matrix.multiplyMM(temp1, 0, translateMatrix, 0, scaleMatrix, 0);
+
         float[] eyeViewMatrix = eye.getEyeView();
-        float[] viewMatrix = new float[16];
-        Matrix.setLookAtM(viewMatrix, 0,
-                // eye
-                -50f, 0f, 0f,
-                // center
-                0f, 0f, 0f,
-                // up
-                0f, 0f, 1f);
+        float[] temp2 = new float[16];
+        Matrix.multiplyMM(temp2, 0, eyeViewMatrix, 0, temp1, 0);
 
-        float[] temp = new float[16];
-        Matrix.multiplyMM(temp, 0, projectionMatrix, 0, eyeViewMatrix, 0);
-
+        float[] projectionMatrix = eye.getPerspective(1f, 2f);
         float[] transform = new float[16];
-        Matrix.multiplyMM(transform, 0, temp, 0, viewMatrix, 0);
+        Matrix.multiplyMM(transform, 0, projectionMatrix, 0, temp2, 0);
 
         float inverseTransform[] = new float[16];
         Matrix.invertM(inverseTransform, 0, transform, 0);
