@@ -197,6 +197,12 @@ public class OrbitalView extends GLSurfaceView {
         }
 
         @Override
+        public boolean onDoubleTap(MotionEvent event) {
+            renderState.snapCameraToAxis();
+            return true;
+        }
+
+        @Override
         public boolean onFling(MotionEvent event1, MotionEvent event2,
                                float velocityX, float velocityY) {
             double meanSize = Math.sqrt(getWidth() * getHeight());
