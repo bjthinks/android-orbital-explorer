@@ -21,7 +21,7 @@ class CardboardRenderer implements GvrView.StereoRenderer {
 
     CardboardRenderer(Context context) {
         screenDpi = context.getResources().getDisplayMetrics().densityDpi;
-        orbital = new Orbital(1, 3, 2, 2, false, true);
+        orbital = ((CardboardActivity) context).getOrbital();
         orbitalTextures = new OrbitalTextures(context);
         integratorLeft = new Integrator(context);
         integratorRight = new Integrator(context);
