@@ -84,7 +84,7 @@ class CardboardRenderer implements GvrView.StereoRenderer {
         scaleMatrix[15] = 1;
 
         float distanceToNucleus = 1.5f;
-        float halfEyeDistance = 0.1f;
+        float halfEyeDistance = 0.15f;
         float[] translateMatrix = new float[16];
         translateMatrix[0] = 1;
         translateMatrix[5] = 1;
