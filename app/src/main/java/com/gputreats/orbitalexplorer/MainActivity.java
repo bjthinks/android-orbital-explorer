@@ -209,6 +209,7 @@ public class MainActivity extends AppCompatActivity implements RenderStateProvid
                 break;
 
             case R.id.menuCardboard:
+                Analytics.reportEvent("menu", "cardboard");
                 intent = new Intent(this, CardboardActivity.class);
                 Orbital orbital = renderState.getOrbital();
                 intent.putExtra("Z", orbital.Z);

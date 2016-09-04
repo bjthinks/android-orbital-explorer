@@ -23,6 +23,12 @@ public class CardboardActivity extends GvrActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        Analytics.setScreenName("Cardboard");
+    }
+
+    @Override
     public void onCardboardTrigger() {
         Log.d("CardboardActivity", "Trigger");
     }
