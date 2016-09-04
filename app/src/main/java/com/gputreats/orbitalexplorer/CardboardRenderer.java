@@ -59,35 +59,51 @@ class CardboardRenderer implements GvrView.StereoRenderer {
         int type = eye.getType();
 
         Integrator integrator;
-        if (type == Eye.Type.LEFT)
+
+        float[] forward = new float[3];
+        float[] right = new float[3];
+        head.getForwardVector(forward, 0);
+        head.getRightVector(right, 0);
+
+        float[] lateral = new float[3];
+        if (type == Eye.Type.LEFT) {
             integrator = integratorLeft;
-        else // RIGHT or MONOCULAR
+            lateral = right;
+        } else { // RIGHT or MONOCULAR
             integrator = integratorRight;
+            lateral = new float[3];
+            for (int i = 0; i < 3; ++i)
+                lateral[i] = -right[i];
+        }
 
         float[] scaleMatrix = new float[16];
-        float scaleFactor = 1f / (4f * orbitalTextures.getRadius());
+        float scaleFactor = 1f / orbitalTextures.getRadius();
         scaleMatrix[0] = scaleFactor;
         scaleMatrix[5] = scaleFactor;
         scaleMatrix[10] = scaleFactor;
         scaleMatrix[15] = 1;
 
+        float distanceToNucleus = 1.5f;
+        float halfEyeDistance = 0.1f;
         float[] translateMatrix = new float[16];
-        float[] headForward = new float[3];
-        head.getForwardVector(headForward, 0);
         translateMatrix[0] = 1;
         translateMatrix[5] = 1;
         translateMatrix[10] = 1;
         translateMatrix[15] = 1;
-        translateMatrix[12] = headForward[0] / 2f;
-        translateMatrix[13] = headForward[1] / 2f;
-        translateMatrix[14] = headForward[2] / 2f;
+        translateMatrix[12] = distanceToNucleus * forward[0] + halfEyeDistance * lateral[0];
+        translateMatrix[13] = distanceToNucleus * forward[1] + halfEyeDistance * lateral[1];
+        translateMatrix[14] = distanceToNucleus * forward[2] + halfEyeDistance * lateral[2];
 
         float temp1[] = new float[16];
         Matrix.multiplyMM(temp1, 0, translateMatrix, 0, scaleMatrix, 0);
 
-        float[] eyeViewMatrix = eye.getEyeView();
+        float[] headViewMatrix = head.getHeadView();
+        // TODO needs cleanup, not really right API call
+        headViewMatrix[12] = 0;
+        headViewMatrix[13] = 0;
+        headViewMatrix[14] = 0;
         float[] temp2 = new float[16];
-        Matrix.multiplyMM(temp2, 0, eyeViewMatrix, 0, temp1, 0);
+        Matrix.multiplyMM(temp2, 0, headViewMatrix, 0, temp1, 0);
 
         float[] projectionMatrix = eye.getPerspective(1f, 2f);
         float[] transform = new float[16];
