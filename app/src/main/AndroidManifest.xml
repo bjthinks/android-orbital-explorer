@@ -44,7 +44,6 @@
             </intent-filter>
         </activity>
 
-        <!-- TODO audit this -->
         <activity
             android:name=".CardboardActivity"
             android:label="Cardboard"
