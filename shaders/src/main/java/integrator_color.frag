@@ -45,11 +45,8 @@ float azimuthalPart(float theta) {
     return mix(textureValue.x, textureValue.y, interpolationValue);
 }
 
-vec2 quadratureData(float distanceToOrigin, int point) {
-    float positionInTexture = distanceToOrigin * fInverseQuadratureStepSize;
+vec2 quadratureData(float positionInTexture, int point) {
     int texturePosition = int(trunc(positionInTexture));
-    if (texturePosition >= iQuadratureSteps)
-        return vec2(0.0);
     vec4 textureValue = texelFetch(quadrature, ivec2(point, texturePosition), 0);
     float interpolationValue = fract(positionInTexture);
     return mix(textureValue.xy, textureValue.zw, interpolationValue);
@@ -119,11 +116,14 @@ void main() {
     vec3 center = near - dot(near, ray) * ray;
     float distanceToOrigin = length(center);
 
+    float positionInTexture = distanceToOrigin * fInverseQuadratureStepSize;
     vec3 total = vec3(0);
-    vec2 q;
-    for (int i = 0; i < iOrder; ++i) {
-        q = quadratureData(distanceToOrigin, i);
-        total += q.y * integrand_pair(center, q.x * ray);
+    if (int(trunc(positionInTexture)) < iQuadratureSteps) {
+        vec2 q;
+        for (int i = 0; i < iOrder; ++i) {
+            q = quadratureData(positionInTexture, i);
+            total += q.y * integrand_pair(center, q.x * ray);
+        }
     }
 
     if (total.z > 0.0) {
