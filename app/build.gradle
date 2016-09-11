@@ -12,6 +12,7 @@ android {
         versionName "1.0.2"
         jackOptions {
             enabled true
+            return true
         }
     }
     compileOptions {
@@ -24,6 +25,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    return true
 }
 
 dependencies {
