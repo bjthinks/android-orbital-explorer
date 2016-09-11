@@ -33,6 +33,7 @@
     </style>
 
     <style name="AuxTheme" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:background">@color/black</item>
         <item name="colorPrimary">@color/dark</item>
         <item name="colorControlNormal">@color/white</item>
     </style>
