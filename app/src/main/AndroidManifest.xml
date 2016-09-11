@@ -29,7 +29,7 @@
     // TODO fix lint error
     <application
         android:name=".OrbitalApplication"
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/appName"
         android:theme="@style/MainTheme">
