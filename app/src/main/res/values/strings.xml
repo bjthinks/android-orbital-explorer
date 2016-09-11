@@ -17,5 +17,6 @@
 
     <string name="up">Up</string>
     <string name="down">Down</string>
+    <string name="colormono">Color / Mono</string>
     <string name="error">Error</string>
 </resources>

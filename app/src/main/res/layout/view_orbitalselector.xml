@@ -58,6 +58,7 @@
                 android:layout_height="50dp"
                 android:scaleType="center"
                 android:src="@drawable/ic_palette_white_24dp"
+                android:contentDescription="@string/colormono"
                 style="@style/ButtonStyle" />
 
         </LinearLayout>
