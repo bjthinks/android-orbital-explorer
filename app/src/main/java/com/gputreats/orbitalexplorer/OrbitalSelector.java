@@ -410,6 +410,7 @@ public class OrbitalSelector extends LinearLayout {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             foo = Html.fromHtml(name, Html.FROM_HTML_MODE_LEGACY);
         } else {
+            //noinspection deprecation
             foo = Html.fromHtml(name);
         }
         orbitalName.setText(foo);
