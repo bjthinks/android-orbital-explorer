@@ -1,5 +1,6 @@
 package com.gputreats.orbitalexplorer;
 
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -29,6 +30,7 @@ public class HelpActivity extends AppCompatActivity {
 
         WebView webview = (WebView) findViewById(R.id.help_webview);
         if (webview != null) {
+            webview.setBackgroundColor(Color.BLACK);
             webview.getSettings().setDefaultTextEncodingName("utf-8");
             String url;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
