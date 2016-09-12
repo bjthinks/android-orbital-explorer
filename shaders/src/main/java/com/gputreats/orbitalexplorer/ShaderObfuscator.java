@@ -19,7 +19,7 @@ final class ShaderObfuscator {
                 new BufferedOutputStream(new FileOutputStream(outfilename));
         int b = instream.read();
         // TODO import VERSION_CODE somehow via gradle
-        int c = outfile.charAt(0) + 100 * 102;
+        int c = (int) outfile.charAt(0) + 100 * 102;
         Spew spew = new Spew(c, c);
         while (b != -1) {
             outstream.write(b ^ spew.get());

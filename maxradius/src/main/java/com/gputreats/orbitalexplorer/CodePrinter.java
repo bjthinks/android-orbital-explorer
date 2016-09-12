@@ -27,7 +27,7 @@ class CodePrinter {
     }
 
     void printNumber(double x) {
-        line("                    " + x + ",");
+        line("                    " + x + ',');
     }
 
     void printSeparator() {

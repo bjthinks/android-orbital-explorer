@@ -12,7 +12,7 @@ final class GeneralizedLaguerrePolynomial {
         Polynomial result = new Polynomial();
         for (int i = 0; i <= n; ++i) {
             double coeff = MyMath.binomial(n + a, n - i) / MyMath.factorial(i);
-            if (i % 2 == 1)
+            if ((i & 1) == 1)
                 coeff = -coeff;
             result = result.add(Polynomial.variableToThe(i).multiply(coeff));
         }

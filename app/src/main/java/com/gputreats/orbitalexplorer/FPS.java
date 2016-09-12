@@ -5,11 +5,11 @@ import android.util.Log;
 final class FPS {
 
     private long lastFPSTimeMillis;
-    private int framesSinceLastFPS;
+    private long framesSinceLastFPS;
 
     FPS() {
         lastFPSTimeMillis = System.currentTimeMillis();
-        framesSinceLastFPS = 0;
+        framesSinceLastFPS = 0L;
     }
 
     void frame() {
@@ -18,9 +18,9 @@ final class FPS {
         long millisBetweenRenders = now - lastFPSTimeMillis;
         if (millisBetweenRenders >= 1000L) {
             lastFPSTimeMillis = now;
-            long fps4 = 10000L * framesSinceLastFPS / millisBetweenRenders;
-            Log.d("FPS", Float.toString(fps4 / 10.0f));
-            framesSinceLastFPS = 0;
+            long fps10 = 10000L * framesSinceLastFPS / millisBetweenRenders;
+            Log.d("FPS", Float.toString((float) fps10 / 10.0f));
+            framesSinceLastFPS = 0L;
         }
     }
 }

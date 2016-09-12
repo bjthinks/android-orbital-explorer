@@ -99,16 +99,16 @@ public class Polynomial implements Function {
         return result;
     }
 
-    public Polynomial add(double c) {
-        return add(new Polynomial(c));
+    public Polynomial add(double k) {
+        return add(new Polynomial(k));
     }
 
-    public Polynomial subtract(double c) {
-        return add(-c);
+    public Polynomial subtract(double k) {
+        return add(-k);
     }
 
-    public Polynomial multiply(double c) {
-        return multiply(new Polynomial(c));
+    public Polynomial multiply(double k) {
+        return multiply(new Polynomial(k));
     }
 
     public Polynomial derivative() {

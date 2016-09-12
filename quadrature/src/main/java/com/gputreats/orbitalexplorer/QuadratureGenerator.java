@@ -47,7 +47,7 @@ final class QuadratureGenerator {
                                 = (float) (GQ.getWeight(j) / weightFunction.eval(GQ.getNode(j)));
                     }
                 }
-                writeAsset("color-" + N + "-" + L, quadratureWeights);
+                writeAsset("color-" + N + '-' + L, quadratureWeights);
             }
         }
 
@@ -84,7 +84,7 @@ final class QuadratureGenerator {
                                 / simpleWeightFunction.eval(GQ.getNode(j)));
                     }
                 }
-                writeAsset("mono-" + N + "-" + L, quadratureWeights);
+                writeAsset("mono-" + N + '-' + L, quadratureWeights);
             }
         }
     }

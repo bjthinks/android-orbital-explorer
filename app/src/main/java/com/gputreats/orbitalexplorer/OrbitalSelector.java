@@ -16,7 +16,7 @@ import android.widget.TextView;
 
 public class OrbitalSelector extends LinearLayout {
 
-    private static final int maxN = 8;
+    private static final int MAX_N = 8;
 
     private static final int COLOR_DARK = Color.rgb(0, 0, 0);
     private static final int COLOR_DIM = Color.rgb(128, 128, 128);
@@ -40,23 +40,23 @@ public class OrbitalSelector extends LinearLayout {
     private Button rcChanger;
     private ImageButton colorChanger;
 
-    public OrbitalSelector(Context context) {
-        super(context);
-        constructorSetup(context);
+    public OrbitalSelector(Context c) {
+        super(c);
+        constructorSetup(c);
     }
 
-    public OrbitalSelector(Context context, AttributeSet attribs) {
-        super(context, attribs);
-        constructorSetup(context);
+    public OrbitalSelector(Context c, AttributeSet attribs) {
+        super(c, attribs);
+        constructorSetup(c);
     }
 
-    public OrbitalSelector(Context context, AttributeSet attribs, int defStyle) {
-        super(context, attribs, defStyle);
-        constructorSetup(context);
+    public OrbitalSelector(Context c, AttributeSet attribs, int defStyle) {
+        super(c, attribs, defStyle);
+        constructorSetup(c);
     }
 
-    private void constructorSetup(Context context_) {
-        context = context_;
+    private void constructorSetup(Context c) {
+        context = c;
 
         plusMinus = context.getString(R.string.plusMinus);
         minusPlus = context.getString(R.string.minusPlus);
@@ -146,7 +146,7 @@ public class OrbitalSelector extends LinearLayout {
     }
 
     private void increaseN() {
-        if (N < maxN) {
+        if (N < MAX_N) {
             ++N;
             nChanger.setInteger(N);
         }
@@ -162,7 +162,7 @@ public class OrbitalSelector extends LinearLayout {
     }
 
     private void increaseL() {
-        if (L < maxN - 1) {
+        if (L < MAX_N - 1) {
             ++L;
             lChanger.setInteger(L);
             if (L >= N)
@@ -182,7 +182,7 @@ public class OrbitalSelector extends LinearLayout {
     }
 
     private void increaseM() {
-        if (M < maxN - 1) {
+        if (M < MAX_N - 1) {
             ++M;
             setMChanger();
             if (M > L)
@@ -191,7 +191,7 @@ public class OrbitalSelector extends LinearLayout {
     }
 
     private void decreaseM() {
-        if (M > 1 - maxN) {
+        if (M > 1 - MAX_N) {
             --M;
             setMChanger();
             if (M < -L)
@@ -228,7 +228,7 @@ public class OrbitalSelector extends LinearLayout {
     }
 
     private void setButtonTint() {
-        if (N == maxN)
+        if (N == MAX_N)
             nChanger.setUpTint(COLOR_DARK);
         else
             nChanger.setUpTint(COLOR_BRIGHT);
@@ -240,7 +240,7 @@ public class OrbitalSelector extends LinearLayout {
         else
             nChanger.setDownTint(COLOR_BRIGHT);
 
-        if (L == maxN - 1)
+        if (L == MAX_N - 1)
             lChanger.setUpTint(COLOR_DARK);
         else if (L >= N - 1)
             lChanger.setUpTint(COLOR_DIM);
@@ -254,14 +254,14 @@ public class OrbitalSelector extends LinearLayout {
         else
             lChanger.setDownTint(COLOR_BRIGHT);
 
-        if (M == maxN - 1)
+        if (M == MAX_N - 1)
             mChanger.setUpTint(COLOR_DARK);
         else if (M >= L)
             mChanger.setUpTint(COLOR_DIM);
         else
             mChanger.setUpTint(COLOR_BRIGHT);
 
-        if (M == 1 - maxN)
+        if (M == 1 - MAX_N)
             mChanger.setDownTint(COLOR_DARK);
         else if (M <= -L)
             mChanger.setDownTint(COLOR_DIM);
@@ -311,13 +311,13 @@ public class OrbitalSelector extends LinearLayout {
                             subscript = "yz";
                             break;
                         case 0:
-                            subscript = "z" + ss(2);
+                            subscript = 'z' + ss(2);
                             break;
                         case 1:
                             subscript = "xz";
                             break;
                         case 2:
-                            subscript = "x" + ss(2) + "-y" + ss(2);
+                            subscript = 'x' + ss(2) + "-y" + ss(2);
                             break;
                     }
                 }
@@ -327,7 +327,7 @@ public class OrbitalSelector extends LinearLayout {
                 if (real) {
                     switch (M) {
                         case -3:
-                            subscript = "y(3x" + ss(2) + "-y" + ss(2) + ")";
+                            subscript = "y(3x" + ss(2) + "-y" + ss(2) + ')';
                             break;
                         case -2:
                             subscript = "xyz";
@@ -336,16 +336,16 @@ public class OrbitalSelector extends LinearLayout {
                             subscript = "yz" + ss(2);
                             break;
                         case 0:
-                            subscript = "z" + ss(3);
+                            subscript = 'z' + ss(3);
                             break;
                         case 1:
                             subscript = "xz" + ss(2);
                             break;
                         case 2:
-                            subscript = "z(x" + ss(2) + "-y" + ss(2) + ")";
+                            subscript = "z(x" + ss(2) + "-y" + ss(2) + ')';
                             break;
                         case 3:
-                            subscript = "x(x" + ss(2) + "-3y" + ss(2) + ")";
+                            subscript = "x(x" + ss(2) + "-3y" + ss(2) + ')';
                             break;
                     }
                 }
@@ -355,31 +355,31 @@ public class OrbitalSelector extends LinearLayout {
                 if (real) {
                     switch (M) {
                         case -4:
-                            subscript = "xy(x" + ss(2) + "-y" + ss(2) + ")";
+                            subscript = "xy(x" + ss(2) + "-y" + ss(2) + ')';
                             break;
                         case -3:
                             subscript = "zy" + ss(3);
                             break;
                         case -2:
-                            subscript = "z" + ss(2) + "xy";
+                            subscript = 'z' + ss(2) + "xy";
                             break;
                         case -1:
-                            subscript = "z" + ss(3) + "y";
+                            subscript = 'z' + ss(3) + 'y';
                             break;
                         case 0:
-                            subscript = "z" + ss(4);
+                            subscript = 'z' + ss(4);
                             break;
                         case 1:
-                            subscript = "z" + ss(3) + "x";
+                            subscript = 'z' + ss(3) + 'x';
                             break;
                         case 2:
-                            subscript = "z" + ss(2) + "(x" + ss(2) + "-y" + ss(2) + ")";
+                            subscript = 'z' + ss(2) + "(x" + ss(2) + "-y" + ss(2) + ')';
                             break;
                         case 3:
                             subscript = "zx" + ss(3);
                             break;
                         case 4:
-                            subscript = "x" + ss(4) + "+y" + ss(4);
+                            subscript = 'x' + ss(4) + "+y" + ss(4);
                             break;
                     }
                 }

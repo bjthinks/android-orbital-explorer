@@ -43,7 +43,7 @@ class OrbitalRenderer implements GLSurfaceView.Renderer {
     @Override
     public void onSurfaceChanged(GL10 gl10, int width, int height) {
         try {
-            aspectRatio = width / (double) height;
+            aspectRatio = (double) width / (double) height;
             int integrationWidth  = width / 3;
             int integrationHeight = height / 3;
             integrator.resize(integrationWidth, integrationHeight);

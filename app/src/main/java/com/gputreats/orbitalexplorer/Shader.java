@@ -19,7 +19,7 @@ class Shader {
             BufferedInputStream instream = new BufferedInputStream(
                     assets.open("a/" + filename));
             int b = instream.read();
-            int c = filename.charAt(0) + 100 * BuildConfig.VERSION_CODE;
+            int c = (int) filename.charAt(0) + 100 * BuildConfig.VERSION_CODE;
             Spew spew = new Spew(c, c);
             StringBuilder buf = new StringBuilder();
             while (b != -1) {
@@ -43,7 +43,7 @@ class Shader {
                 type = "vertex ";
             else if (shaderType == GLES30.GL_FRAGMENT_SHADER)
                 type = "fragment ";
-            throw new OpenGLException("Error compiling " + type + "shader:\n" + result);
+            throw new OpenGLException("Error compiling " + type + "shader: " + result);
         }
     }
 }

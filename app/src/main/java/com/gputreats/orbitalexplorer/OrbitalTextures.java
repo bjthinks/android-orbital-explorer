@@ -75,13 +75,13 @@ class OrbitalTextures {
 
             bReal = orbital.real;
             fBrightness = quadratureRadius * quadratureRadius / 2.0f;
-            fInverseAzimuthalStepSize = azimuthalTextureSize / 3.14159265359f;
-            fInverseQuadratureStepSize = quadratureSteps / quadratureRadius;
-            fInverseRadialStepSize = radialTextureSize / maximumRadius;
+            fInverseAzimuthalStepSize = (float) azimuthalTextureSize / 3.14159265359f;
+            fInverseQuadratureStepSize = (float) quadratureSteps / quadratureRadius;
+            fInverseRadialStepSize = (float) radialTextureSize / maximumRadius;
             fM = (float) orbital.M;
             // Multiply by 2 because the wave function is squared
-            fRadialExponent = 2.0f * (float) radialFunction.getExponentialConstant();
-            fRadialPower = 2.0f * radialFunction.getPowerOfR();
+            fRadialExponent = (float) (2.0 * radialFunction.getExponentialConstant());
+            fRadialPower = (float) (2 * radialFunction.getPowerOfR());
             iAzimuthalSteps = azimuthalTextureSize;
             iOrder = order;
             iQuadratureSteps = quadratureSteps;

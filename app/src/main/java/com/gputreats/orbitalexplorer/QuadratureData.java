@@ -17,7 +17,7 @@ class QuadratureData {
 
         String filename = "data/";
         filename += quadrature.color ? "color" : "mono";
-        filename += "-" + quadrature.N + "-" + quadrature.L;
+        filename += "-" + quadrature.N + '-' + quadrature.L;
 
         DataInputStream stream;
         try {
