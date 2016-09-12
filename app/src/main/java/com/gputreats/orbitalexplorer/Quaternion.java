@@ -12,21 +12,21 @@ class Quaternion implements Parcelable {
     }
 
     @Override
-    public void writeToParcel(Parcel out, int flags) {
-        out.writeDouble(r);
-        out.writeDouble(i);
-        out.writeDouble(j);
-        out.writeDouble(k);
+    public void writeToParcel(Parcel parcel, int flags) {
+        parcel.writeDouble(r);
+        parcel.writeDouble(i);
+        parcel.writeDouble(j);
+        parcel.writeDouble(k);
     }
 
     @SuppressWarnings({"AnonymousInnerClassWithTooManyMethods", "AnonymousInnerClass"})
     public static final Parcelable.Creator<Quaternion> CREATOR
             = new Parcelable.Creator<Quaternion>() {
         @Override
-        public Quaternion createFromParcel(Parcel in) {
+        public Quaternion createFromParcel(Parcel parcel) {
             return new Quaternion(
-                    in.readDouble(), in.readDouble(),
-                    in.readDouble(), in.readDouble());
+                    parcel.readDouble(), parcel.readDouble(),
+                    parcel.readDouble(), parcel.readDouble());
         }
         @Override
         public Quaternion[] newArray(int size) {
@@ -94,24 +94,24 @@ class Quaternion implements Parcelable {
     }
 
     static Quaternion rotation(double angle, Vector3 v) {
-        double s = Math.sin(angle / 2);
-        double c = Math.cos(angle / 2);
+        double s = Math.sin(angle / 2.0);
+        double c = Math.cos(angle / 2.0);
         return new Quaternion(c, v.normalize().multiply(s));
     }
 
     float[] asRotationMatrix() {
         float[] result = new float[16];
-        result[0] = (float) (r*r + i*i - j*j - k*k);
-        result[1] = (float) (2*r*k + 2*i*j);
-        result[2] = (float) (-2*r*j + 2*i*k);
+        result[0] = (float) (r * r + i * i - j * j - k * k);
+        result[1] = (float) (2.0 * r * k + 2.0 * i * j);
+        result[2] = (float) (-2.0 * r * j + 2.0 * i * k);
         result[3] = 0.0f;
-        result[4] = (float) (-2*r*k + 2*i*j);
-        result[5] = (float) (r*r - i*i + j*j - k*k);
-        result[6] = (float) (2*r*i + 2*j*k);
+        result[4] = (float) (-2.0 * r * k + 2.0 * i * j);
+        result[5] = (float) (r * r - i * i + j * j - k * k);
+        result[6] = (float) (2.0 * r * i + 2.0 * j * k);
         result[7] = 0.0f;
-        result[8] = (float) (2*r*j + 2*i*k);
-        result[9] = (float) (-2*r*i + 2*j*k);
-        result[10] = (float) (r*r - i*i - j*j + k*k);
+        result[8] = (float) (2.0 * r * j + 2.0 * i * k);
+        result[9] = (float) (-2.0 * r * i + 2.0 * j * k);
+        result[10] = (float) (r * r - i * i - j * j + k * k);
         result[11] = 0.0f;
         result[12] = 0.0f;
         result[13] = 0.0f;

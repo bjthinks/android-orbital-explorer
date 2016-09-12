@@ -49,10 +49,10 @@ class ShareCallback implements Handler.Callback {
         paint.setColor(Color.rgb(255, 255, 255));
         paint.setTextAlign(Paint.Align.CENTER);
         float density = activity.getResources().getDisplayMetrics().density;
-        paint.setTextSize(20 * density); // ~20dp
-        canvas.drawText("Orbital Explorer", width / 2, height - 20 * density, paint);
+        paint.setTextSize(20.0f * density); // ~20dp
+        canvas.drawText("Orbital Explorer", width / 2.0f, height - 20.0f * density, paint);
 
-        int name = (int) (System.currentTimeMillis() % 0x10000);
+        int name = (int) (System.currentTimeMillis() % 0x10000L);
         File file = new File(activity.getCacheDir(), "screens/" + name + ".jpg");
         FileOutputStream fileOutputStream;
         try {

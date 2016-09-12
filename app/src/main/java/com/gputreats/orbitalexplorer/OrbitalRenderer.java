@@ -27,7 +27,7 @@ class OrbitalRenderer implements GLSurfaceView.Renderer {
     // Rendering thread
 
     @Override
-    public void onSurfaceCreated(GL10 unused, EGLConfig config) {
+    public void onSurfaceCreated(GL10 gl10, EGLConfig eglConfig) {
         try {
             orbitalTextures.onSurfaceCreated();
             integrator.onSurfaceCreated();
@@ -41,7 +41,7 @@ class OrbitalRenderer implements GLSurfaceView.Renderer {
 
     private double aspectRatio = 1.0;
     @Override
-    public void onSurfaceChanged(GL10 unused, int width, int height) {
+    public void onSurfaceChanged(GL10 gl10, int width, int height) {
         try {
             aspectRatio = width / (double) height;
             int integrationWidth  = width / 3;
@@ -56,7 +56,7 @@ class OrbitalRenderer implements GLSurfaceView.Renderer {
     // Rendering thread
 
     @Override
-    public void onDrawFrame(GL10 unused) {
+    public void onDrawFrame(GL10 gl10) {
         try {
             if (BuildConfig.DEBUG)
                 fps.frame();

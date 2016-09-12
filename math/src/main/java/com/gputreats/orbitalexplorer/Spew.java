@@ -6,7 +6,7 @@ class Spew {
     Spew(long a_, long b_) {
         a = a_;
         b = b_;
-        if (a == 0 && b == 0)
+        if (a == 0L && b == 0L)
             throw new RuntimeException();
         for (int i = 0; i < 37; ++i)
             get();

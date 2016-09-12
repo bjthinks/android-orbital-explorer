@@ -119,7 +119,7 @@ public class Polynomial implements Function {
 
         result.c = new double[c.length - 1];
         for (int i = 1; i < c.length; ++i)
-            result.c[i - 1] = c[i] * (float) i;
+            result.c[i - 1] = c[i] * (double) i;
 
         return result;
     }

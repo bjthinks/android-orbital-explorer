@@ -169,7 +169,7 @@ class Camera implements Parcelable {
             double deltaTime = ((double) deltaMillis) / 1000.0;
             lastFlingTime = now;
 
-            flingVelocity = flingVelocity.multiply(1 - Math.min(1.0, FLING_SLOWDOWN_LINEAR * deltaTime));
+            flingVelocity = flingVelocity.multiply(1.0 - Math.min(1.0, FLING_SLOWDOWN_LINEAR * deltaTime));
             if (flingVelocity.norm() < FLING_SLOWDOWN_CONSTANT * deltaTime) {
                 stopFling();
             } else {
@@ -210,7 +210,8 @@ class Camera implements Parcelable {
                 near, far);
 
         float[] viewMatrix = new float[16];
-        Matrix.setLookAtM(viewMatrix, 0, 0, 0, (float) (-cameraDistance), 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
+        Matrix.setLookAtM(viewMatrix, 0, 0.0f, 0.0f, (float) (-cameraDistance),
+                0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
 
         float[] viewProjMatrix = new float[16];
         Matrix.multiplyMM(viewProjMatrix, 0, projectionMatrix, 0, viewMatrix, 0);

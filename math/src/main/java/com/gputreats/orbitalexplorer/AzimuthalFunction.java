@@ -19,7 +19,7 @@ public class AzimuthalFunction implements Function {
         cosThetaPolynomial = LegendrePolynomial.generate(L);
         for (int i = 0; i < absM; ++i)
             cosThetaPolynomial = cosThetaPolynomial.derivative();
-        double constant = Math.sqrt((2.0 * L + 1) / 2.0);
+        double constant = Math.sqrt((2.0 * L + 1.0) / 2.0);
         constant *= Math.sqrt(MyMath.factorial(L - absM) / MyMath.factorial(L + absM));
         cosThetaPolynomial = cosThetaPolynomial.multiply(constant);
         sinThetaPower = absM;

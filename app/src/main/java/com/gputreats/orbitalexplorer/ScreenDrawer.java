@@ -63,7 +63,7 @@ class ScreenDrawer extends RenderStage {
 
         float[] rot = new float[4];
         int N = orbitalTextures.getN();
-        long period = N * N * 1000; // ms
+        long period = N * N * 1000L; // ms
         double t = 2.0 * Math.PI * (double) (System.currentTimeMillis() % period) / (double) period;
         rot[0] = (float) Math.cos(t);  rot[2] = (float) -Math.sin(t);
         rot[1] = (float) Math.sin(t);  rot[3] = (float) Math.cos(t);

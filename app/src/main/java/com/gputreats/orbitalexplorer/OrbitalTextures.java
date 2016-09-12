@@ -80,8 +80,8 @@ class OrbitalTextures {
             fInverseRadialStepSize = RADIAL_TEXTURE_SIZE / maximumRadius;
             fM = (float) orbital.M;
             // Multiply by 2 because the wave function is squared
-            fRadialExponent = 2 * (float) radialFunction.getExponentialConstant();
-            fRadialPower = 2 * radialFunction.getPowerOfR();
+            fRadialExponent = 2.0f * (float) radialFunction.getExponentialConstant();
+            fRadialPower = 2.0f * radialFunction.getPowerOfR();
             iAzimuthalSteps = AZIMUTHAL_TEXTURE_SIZE;
             iOrder = order;
             iQuadratureSteps = quadratureSteps;
