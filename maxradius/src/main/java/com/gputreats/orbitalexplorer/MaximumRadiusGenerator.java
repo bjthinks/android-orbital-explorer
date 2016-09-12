@@ -9,14 +9,16 @@ final class MaximumRadiusGenerator {
     private static double computeRadius(int N, int L) {
         RadialFunction rf = new RadialFunction(1, N, L);
         Function f = new Product(new Product(rf, rf), new Power(1));
-        double total = f.eval(0.0) / 16.0;
-        for (double r = 0.125; r <= 1000.0; r += 0.125)
-            total += f.eval(r) / 8.0;
-        double m = 1000.0;
-        double mtot = f.eval(m) / 8.0;
+        double stepSize = 0.125;
+        double maxRadius = 1000.0;
+        double total = f.eval(0.0) * (stepSize / 2.0);
+        for (double r = stepSize; r <= maxRadius; r += stepSize)
+            total += f.eval(r) * stepSize;
+        double m = maxRadius;
+        double mtot = f.eval(m) * stepSize;
         while (Math.abs(mtot) < 1.0e-4 * Math.abs(total)) {
-            m -= 0.125;
-            mtot += f.eval(m) / 8.0;
+            m -= stepSize;
+            mtot += f.eval(m) * stepSize;
         }
         return m;
     }

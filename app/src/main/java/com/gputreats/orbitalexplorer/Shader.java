@@ -13,7 +13,7 @@ class Shader {
         return id;
     }
 
-    Shader(AssetManager assets, String filename, int shaderType) throws OpenGLException {
+    Shader(AssetManager assets, String filename, int shaderType) {
         String shaderSource;
         try {
             BufferedInputStream instream = new BufferedInputStream(

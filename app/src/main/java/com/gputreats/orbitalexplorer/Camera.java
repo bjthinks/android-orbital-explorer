@@ -169,12 +169,14 @@ class Camera implements Parcelable {
             double deltaTime = (double) deltaMillis / 1000.0;
             lastFlingTime = now;
 
-            flingVelocity = flingVelocity.multiply(1.0 - Math.min(1.0, FLING_SLOWDOWN_LINEAR * deltaTime));
+            flingVelocity = flingVelocity.multiply(1.0
+                    - Math.min(1.0, FLING_SLOWDOWN_LINEAR * deltaTime));
             if (flingVelocity.norm() < FLING_SLOWDOWN_CONSTANT * deltaTime) {
                 stopFling();
             } else {
                 Vector2 flingDirection = flingVelocity.normalize();
-                Vector2 velocityReduction = flingDirection.multiply(FLING_SLOWDOWN_CONSTANT * deltaTime);
+                Vector2 velocityReduction =
+                        flingDirection.multiply(FLING_SLOWDOWN_CONSTANT * deltaTime);
                 flingVelocity = flingVelocity.subtract(velocityReduction);
                 drag(flingVelocity.getX() * deltaTime, flingVelocity.getY() * deltaTime);
             }

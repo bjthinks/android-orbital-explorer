@@ -20,7 +20,7 @@ class ScreenDrawer extends RenderStage {
         assets = context.getAssets();
     }
 
-    void onSurfaceCreated() throws OpenGLException {
+    void onSurfaceCreated() {
         MyGL.checkGLES();
         programColor = new Program(assets, "6", "5");
         programMono = new Program(assets, "8", "7");
@@ -37,8 +37,7 @@ class ScreenDrawer extends RenderStage {
     }
 
     void render(OrbitalTextures orbitalTextures, Texture texture, Handler screenGrabHandler,
-                Viewport viewport)
-            throws OpenGLException {
+                Viewport viewport) {
 
         MyGL.checkGLES();
 

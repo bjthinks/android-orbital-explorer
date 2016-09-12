@@ -10,7 +10,7 @@ final class MyGL {
 
     private MyGL() {}
 
-    static void checkGLES() throws OpenGLException {
+    static void checkGLES() {
         int error = GLES30.glGetError();
         if (error != 0)
             throw new OpenGLException(error);

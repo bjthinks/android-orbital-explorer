@@ -60,32 +60,32 @@ class OrbitalTextures {
                     + maxLateral * maxLateral);
 
             // Load new radial texture
-            final int RADIAL_TEXTURE_SIZE = 1024;
+            final int radialTextureSize = 1024;
             float[] radialData = MyGL.functionToBuffer2(radialFunction.getOscillatingPart(),
-                    0.0, maximumRadius, RADIAL_TEXTURE_SIZE);
-            radialTexture.bindToTexture2DAndSetImage(RADIAL_TEXTURE_SIZE, 1, radialData);
+                    0.0, maximumRadius, radialTextureSize);
+            radialTexture.bindToTexture2DAndSetImage(radialTextureSize, 1, radialData);
 
             // Load new azimuthal texture
-            final int AZIMUTHAL_TEXTURE_SIZE = 256;
+            final int azimuthalTextureSize = 256;
             float[] azimuthalData = MyGL.functionToBuffer2(azimuthalFunction,
-                    0.0, Math.PI, AZIMUTHAL_TEXTURE_SIZE);
-            azimuthalTexture.bindToTexture2DAndSetImage(AZIMUTHAL_TEXTURE_SIZE, 1, azimuthalData);
+                    0.0, Math.PI, azimuthalTextureSize);
+            azimuthalTexture.bindToTexture2DAndSetImage(azimuthalTextureSize, 1, azimuthalData);
 
             MyGL.checkGLES();
 
             bReal = orbital.real;
             fBrightness = quadratureRadius * quadratureRadius / 2.0f;
-            fInverseAzimuthalStepSize = AZIMUTHAL_TEXTURE_SIZE / 3.14159265359f;
+            fInverseAzimuthalStepSize = azimuthalTextureSize / 3.14159265359f;
             fInverseQuadratureStepSize = quadratureSteps / quadratureRadius;
-            fInverseRadialStepSize = RADIAL_TEXTURE_SIZE / maximumRadius;
+            fInverseRadialStepSize = radialTextureSize / maximumRadius;
             fM = (float) orbital.M;
             // Multiply by 2 because the wave function is squared
             fRadialExponent = 2.0f * (float) radialFunction.getExponentialConstant();
             fRadialPower = 2.0f * radialFunction.getPowerOfR();
-            iAzimuthalSteps = AZIMUTHAL_TEXTURE_SIZE;
+            iAzimuthalSteps = azimuthalTextureSize;
             iOrder = order;
             iQuadratureSteps = quadratureSteps;
-            iRadialSteps = RADIAL_TEXTURE_SIZE;
+            iRadialSteps = radialTextureSize;
         }
     }
 

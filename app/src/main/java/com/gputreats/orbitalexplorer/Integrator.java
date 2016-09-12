@@ -22,7 +22,7 @@ class Integrator extends RenderStage {
         outputTextureResized = true;
     }
 
-    void onSurfaceCreated() throws OpenGLException {
+    void onSurfaceCreated() {
 
         MyGL.checkGLES();
 
@@ -33,7 +33,8 @@ class Integrator extends RenderStage {
         // according to Table 3.13 (in the absence of extensions).
 
         // COLOR rendering
-        outputTextureColor = new Texture(GLES30.GL_RGBA_INTEGER, GLES30.GL_SHORT, GLES30.GL_RGBA16I);
+        outputTextureColor =
+                new Texture(GLES30.GL_RGBA_INTEGER, GLES30.GL_SHORT, GLES30.GL_RGBA16I);
         framebufferColor = new Framebuffer(outputTextureColor);
 
         // MONO rendering
@@ -44,7 +45,7 @@ class Integrator extends RenderStage {
         programMono = new Program(assets, "4", "3");
     }
 
-    void resize(int w, int h) throws OpenGLException {
+    void resize(int w, int h) {
         width = w;
         height = h;
         outputTextureResized = true;
@@ -58,8 +59,7 @@ class Integrator extends RenderStage {
 
     private float[] inverseTransform = new float[16];
     Texture render(OrbitalTextures orbitalTextures,
-                   float[] newInverseTransform, boolean needToIntegrate)
-            throws OpenGLException {
+                   float[] newInverseTransform, boolean needToIntegrate) {
 
         MyGL.checkGLES();
 

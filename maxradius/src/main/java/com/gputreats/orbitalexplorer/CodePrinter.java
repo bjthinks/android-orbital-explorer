@@ -18,11 +18,11 @@ class CodePrinter {
     void printPreface() {
         line("package com.gputreats.orbitalexplorer;");
         line("");
-        line("public final class MaximumRadiusTable {");
+        line("final class MaximumRadiusTable {");
         line("");
         line("    private MaximumRadiusTable() {}");
         line("");
-        line("    private static final double[][] maximumRadiusTable = {");
+        line("    private static final double[][] MAXIMUM_RADIUS_TABLE = {");
         line("            {");
     }
 

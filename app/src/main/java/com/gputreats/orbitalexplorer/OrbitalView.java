@@ -48,32 +48,32 @@ public class OrbitalView extends GLSurfaceView {
     private boolean stoppedFling;
 
     @Override
-    public boolean onTouchEvent(MotionEvent e) {
+    public boolean onTouchEvent(MotionEvent event) {
 
-        tapFlingDetector.onTouchEvent(e);
+        tapFlingDetector.onTouchEvent(event);
 
-        switch (e.getActionMasked()) {
+        switch (event.getActionMasked()) {
 
             case MotionEvent.ACTION_DOWN:
                 // One bear in the bed
-                firstPointerID = e.getPointerId(0);
-                oneFingerEvent(e, false);
+                firstPointerID = event.getPointerId(0);
+                oneFingerEvent(event, false);
                 stoppedFling = renderState.cameraStopFling();
                 break;
 
             case MotionEvent.ACTION_POINTER_DOWN:
                 // Two or more bears in the bed
-                if (e.getPointerCount() == 2) {
-                    secondPointerID = e.getPointerId(e.getActionIndex());
-                    twoFingerEvent(e, false);
+                if (event.getPointerCount() == 2) {
+                    secondPointerID = event.getPointerId(event.getActionIndex());
+                    twoFingerEvent(event, false);
                 }
                 break;
 
             case MotionEvent.ACTION_MOVE:
-                if (e.getPointerCount() == 1)
-                    oneFingerEvent(e, true);
-                else if (e.getPointerCount() == 2)
-                    twoFingerEvent(e, true);
+                if (event.getPointerCount() == 1)
+                    oneFingerEvent(event, true);
+                else if (event.getPointerCount() == 2)
+                    twoFingerEvent(event, true);
                 break;
 
             case MotionEvent.ACTION_UP:
@@ -81,30 +81,29 @@ public class OrbitalView extends GLSurfaceView {
                 firstPointerID = MotionEvent.INVALID_POINTER_ID;
                 break;
 
-            case MotionEvent.ACTION_POINTER_UP: {
+            case MotionEvent.ACTION_POINTER_UP:
                 // One falling out but at least one will remain
                 // Which bear is falling out?
-                int goneIndex = e.getActionIndex();
+                int goneIndex = event.getActionIndex();
 
-                if (e.getPointerCount() == 3) {
+                if (event.getPointerCount() == 3) {
                     // So they all rolled over and one fell out
                     int remainingIndex = 0;
                     if (remainingIndex == goneIndex) remainingIndex++;
-                    firstPointerID = e.getPointerId(remainingIndex++);
+                    firstPointerID = event.getPointerId(remainingIndex++);
                     if (remainingIndex == goneIndex) remainingIndex++;
-                    secondPointerID = e.getPointerId(remainingIndex);
-                    twoFingerEvent(e, false);
-                } else if (e.getPointerCount() == 2) {
+                    secondPointerID = event.getPointerId(remainingIndex);
+                    twoFingerEvent(event, false);
+                } else if (event.getPointerCount() == 2) {
                     // So they all rolled over and one fell out
                     int remainingIndex = 0;
                     if (remainingIndex == goneIndex) remainingIndex++;
-                    firstPointerID = e.getPointerId(remainingIndex);
+                    firstPointerID = event.getPointerId(remainingIndex);
                     secondPointerID = MotionEvent.INVALID_POINTER_ID;
-                    oneFingerEvent(e, false);
+                    oneFingerEvent(event, false);
                 }
 
                 break;
-            }
 
             case MotionEvent.ACTION_CANCEL:
                 // They all fell out, maybe because someone broke into the
