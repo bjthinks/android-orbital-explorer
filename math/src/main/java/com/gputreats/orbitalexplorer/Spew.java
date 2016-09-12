@@ -12,7 +12,7 @@ class Spew {
             get();
     }
 
-    public int get() {
+    public final int get() {
         long x = a;
         long y = b;
         a = y;

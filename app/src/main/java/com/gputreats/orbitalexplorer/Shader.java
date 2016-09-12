@@ -28,7 +28,7 @@ class Shader {
             }
             instream.close();
             shaderSource = buf.toString();
-        } catch (IOException e) {
+        } catch (IOException ignored) {
             throw new RuntimeException("Error reading shader: " + filename);
         }
         id = GLES30.glCreateShader(shaderType);

@@ -25,7 +25,7 @@ class QuadratureData {
         DataInputStream stream;
         try {
             stream = new DataInputStream(new BufferedInputStream(assets.open(filename)));
-        } catch (IOException e) {
+        } catch (IOException ignored) {
             throw new RuntimeException("Error opening asset: " + filename);
         }
         try {
@@ -43,12 +43,12 @@ class QuadratureData {
                     }
                 }
             }
-        } catch (IOException e) {
+        } catch (IOException ignored) {
             throw new RuntimeException("Error reading from asset: " + filename);
         }
         try {
             stream.close();
-        } catch (IOException e) {
+        } catch (IOException ignored) {
             throw new RuntimeException("Error closing asset: " + filename);
         }
     }

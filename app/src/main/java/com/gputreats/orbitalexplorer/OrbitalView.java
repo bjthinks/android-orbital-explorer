@@ -30,13 +30,7 @@ public class OrbitalView extends GLSurfaceView {
 
         tapFlingDetector = new GestureDetector(context, new TapFlingListener());
 
-        try {
-            renderState = ((RenderStateProvider) context).provideRenderState();
-        } catch (ClassCastException e) {
-            throw new ClassCastException(context.toString()
-                    + " must implement RenderStateProvider");
-        }
-
+        renderState = ((RenderStateProvider) context).provideRenderState();
         renderState.setOrbitalView(this);
 
         // Start the rendering thread

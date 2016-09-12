@@ -57,7 +57,7 @@ class ShareCallback implements Handler.Callback {
         FileOutputStream fileOutputStream;
         try {
             fileOutputStream = new FileOutputStream(file);
-        } catch (FileNotFoundException e) {
+        } catch (FileNotFoundException ignored) {
             File parent = file.getParentFile();
             if (!parent.mkdirs()) {
                 shareError(name);
@@ -65,7 +65,7 @@ class ShareCallback implements Handler.Callback {
             }
             try {
                 fileOutputStream = new FileOutputStream(file);
-            } catch (FileNotFoundException ee) {
+            } catch (FileNotFoundException ignore) {
                 shareError(name);
                 return true;
             }
@@ -76,7 +76,7 @@ class ShareCallback implements Handler.Callback {
         }
         try {
             fileOutputStream.close();
-        } catch (IOException e) {
+        } catch (IOException ignored) {
             shareError(name);
             return true;
         }
@@ -89,7 +89,7 @@ class ShareCallback implements Handler.Callback {
         intent.putExtra(Intent.EXTRA_STREAM, shareUri);
         intent.setType("image/jpeg");
         if (activity.getPackageManager()
-                .queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY).size() == 0) {
+                .queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY).isEmpty()) {
             shareError(name);
             return true;
         }

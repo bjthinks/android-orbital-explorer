@@ -70,12 +70,7 @@ public class OrbitalSelector extends LinearLayout {
             complexNumbers = "C";
         }
 
-        try {
-            renderState = ((RenderStateProvider) context).provideRenderState();
-        } catch (ClassCastException e) {
-            throw new ClassCastException(context.toString()
-                    + " must implement RenderStateProvider");
-        }
+        renderState = ((RenderStateProvider) context).provideRenderState();
         Orbital previouslyDisplayedOrbital = renderState.getOrbital();
         N = previouslyDisplayedOrbital.N;
         L = previouslyDisplayedOrbital.L;
