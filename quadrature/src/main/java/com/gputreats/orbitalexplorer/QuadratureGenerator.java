@@ -7,7 +7,7 @@ import java.io.IOException;
 
 class QuadratureGenerator {
 
-    private void writeAsset(String assetname, float data[])
+    private static void writeAsset(String assetname, float[] data)
             throws IOException {
         DataOutputStream stream
                 = new DataOutputStream(new BufferedOutputStream(
@@ -17,7 +17,7 @@ class QuadratureGenerator {
         stream.close();
     }
 
-    private void go() throws IOException {
+    private static void go() throws IOException {
         // Color
         for (int N = 1; N <= 8; ++N) {
             for (int L = 0; L < N; ++L) {
@@ -87,7 +87,7 @@ class QuadratureGenerator {
         }
     }
 
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         QuadratureGenerator q = new QuadratureGenerator();
         try {
             q.go();

@@ -7,11 +7,11 @@ import android.opengl.GLES30;
 class Framebuffer {
 
     private final int framebufferId;
-    private final int oldFramebuffer[] = new int[1];
+    private final int[] oldFramebuffer = new int[1];
 
     Framebuffer(Texture texture) {
         // Generate framebuffer
-        int temp[] = new int[1];
+        int[] temp = new int[1];
         GLES30.glGenFramebuffers(1, temp, 0);
         framebufferId = temp[0];
 

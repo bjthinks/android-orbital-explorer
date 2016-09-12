@@ -4,7 +4,7 @@ import java.io.IOException;
 
 class MaximumRadiusGenerator {
 
-    private double computeRadius(int N, int L) {
+    private static double computeRadius(int N, int L) {
         RadialFunction rf = new RadialFunction(1, N, L);
         Function f = new Product(new Product(rf, rf), new Power(1));
         double total = f.eval(0.0) / 16.0;
@@ -19,7 +19,7 @@ class MaximumRadiusGenerator {
         return m;
     }
 
-    private void go() throws IOException {
+    private static void go() throws IOException {
         String filename =
                 "math/src/main/java/com/gputreats/orbitalexplorer/MaximumRadiusTable.java";
         CodePrinter codePrinter = new CodePrinter(filename);
@@ -33,7 +33,7 @@ class MaximumRadiusGenerator {
         codePrinter.printSuffix();
     }
 
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         MaximumRadiusGenerator m = new MaximumRadiusGenerator();
         try {
             m.go();

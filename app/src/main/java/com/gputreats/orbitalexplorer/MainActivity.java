@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity implements RenderStateProvid
     private Toolbar toolbar;
     private OrbitalSelector orbitalSelector;
     private OrbitalView orbitalView;
-    private boolean fullScreenMode = false;
+    private boolean fullScreenMode;
 
     @Override
     public RenderState provideRenderState() {
@@ -67,11 +67,8 @@ public class MainActivity extends AppCompatActivity implements RenderStateProvid
         // inflate an OrbitalView, which will ask its context (i.e. this object) for
         // the renderState.
 
-        if (savedState != null) {
-            renderState = savedState.getParcelable(RENDER_STATE_KEY);
-        } else {
-            renderState = new RenderState();
-        }
+        renderState = savedState != null
+                ? savedState.getParcelable(RENDER_STATE_KEY) : new RenderState();
 
         renderState.setRenderExceptionHandler(new Handler(new RenderExceptionCallback()));
 
@@ -138,7 +135,7 @@ public class MainActivity extends AppCompatActivity implements RenderStateProvid
     // RENDER THREAD ERROR HANDLING
     //
 
-    private boolean renderExceptionAlreadyReported = false;
+    private boolean renderExceptionAlreadyReported;
     private class RenderExceptionCallback implements Handler.Callback {
         @Override
         public boolean handleMessage(Message m) {

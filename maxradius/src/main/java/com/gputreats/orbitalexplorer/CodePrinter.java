@@ -5,7 +5,7 @@ import java.io.PrintWriter;
 
 class CodePrinter {
 
-    private PrintWriter writer;
+    private final PrintWriter writer;
 
     CodePrinter(String filename) throws IOException {
         writer = new PrintWriter(filename, "UTF-8");
@@ -22,7 +22,7 @@ class CodePrinter {
         line("");
         line("    private MaximumRadiusTable() {}");
         line("");
-        line("    private static final double maximumRadiusTable[][] = {");
+        line("    private static final double[][] maximumRadiusTable = {");
         line("            {");
     }
 

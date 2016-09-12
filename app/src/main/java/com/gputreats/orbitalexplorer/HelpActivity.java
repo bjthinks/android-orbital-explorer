@@ -32,12 +32,8 @@ public class HelpActivity extends AppCompatActivity {
         if (webview != null) {
             webview.setBackgroundColor(Color.BLACK);
             webview.getSettings().setDefaultTextEncodingName("utf-8");
-            String url;
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                url = extras.getString("url");
-            } else {
-                url = extras.getString("url-v19");
-            }
+            String url = extras.getString(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
+                    ? "url" : "url-v19");
             webview.loadUrl(url);
         }
     }

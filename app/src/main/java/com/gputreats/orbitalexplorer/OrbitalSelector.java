@@ -223,11 +223,7 @@ public class OrbitalSelector extends LinearLayout {
 
     private void setColor(boolean newColor) {
         color = newColor;
-        int d;
-        if (color)
-            d = R.drawable.ic_palette_white_24dp;
-        else
-            d = R.drawable.bnw;
+        int d = color ? R.drawable.ic_palette_white_24dp : R.drawable.bnw;
         colorChanger.setImageDrawable(ContextCompat.getDrawable(context, d));
     }
 

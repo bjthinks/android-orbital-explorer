@@ -12,6 +12,7 @@ class OrbitalRenderer implements GLSurfaceView.Renderer {
     private final Integrator integrator;
     private final ScreenDrawer screenDrawer;
     private final RenderState renderState;
+    private final FPS fps;
 
     // Main thread
 
@@ -20,6 +21,7 @@ class OrbitalRenderer implements GLSurfaceView.Renderer {
         orbitalTextures = new OrbitalTextures(context);
         integrator = new Integrator(context);
         screenDrawer = new ScreenDrawer(context);
+        fps = new FPS();
     }
 
     // Rendering thread
@@ -56,7 +58,8 @@ class OrbitalRenderer implements GLSurfaceView.Renderer {
     @Override
     public void onDrawFrame(GL10 unused) {
         try {
-            FPS.frame();
+            if (BuildConfig.DEBUG)
+                fps.frame();
             RenderState.FrozenState frozenState = renderState.freeze(aspectRatio);
             orbitalTextures.loadOrbital(frozenState.orbital);
             Texture integratorOutput = integrator.render(orbitalTextures,

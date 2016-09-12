@@ -32,19 +32,6 @@ final class Analytics {
                 .build());
     }
 
-    static void reportException(Throwable exception) {
-
-        String traceStr = exception.toString();
-        StackTraceElement[] stackTrace = exception.getStackTrace();
-        for (int i = 0; i < 3 && i < stackTrace.length; ++i) {
-            traceStr += " ";
-            StackTraceElement level = stackTrace[i];
-            traceStr += level.getFileName() + ":" + level.getLineNumber();
-        }
-
-        reportFatalError(traceStr);
-    }
-
     static void reportFatalError(String error) {
         tracker.send(new HitBuilders.ExceptionBuilder()
                 .setDescription(error)

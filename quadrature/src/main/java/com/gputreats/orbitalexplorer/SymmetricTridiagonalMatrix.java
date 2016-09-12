@@ -57,10 +57,7 @@ class SymmetricTridiagonalMatrix {
             double d = Math.sqrt((a - c) * (a - c) + 4.0 * b * b);
             double lambda1 = (a + c + d) / 2.0;
             double lambda2 = (a + c - d) / 2.0;
-            if (Math.abs(lambda1) > Math.abs(lambda2))
-                lambda = lambda1;
-            else
-                lambda = lambda2;
+            lambda = Math.abs(lambda1) > Math.abs(lambda2) ? lambda1 : lambda2;
         }
 
         double badElement = 0.0;

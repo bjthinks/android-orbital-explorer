@@ -47,6 +47,7 @@ class RenderState implements Parcelable {
 
     // Parcelable stuff
 
+    @SuppressWarnings("MethodReturnAlwaysConstant")
     @Override
     public int describeContents() {
         return 0;
@@ -63,7 +64,7 @@ class RenderState implements Parcelable {
         out.writeInt(orbital.color ? 1 : 0);
     }
 
-    @SuppressWarnings("AnonymousInnerClassWithTooManyMethods")
+    @SuppressWarnings({"AnonymousInnerClassWithTooManyMethods", "AnonymousInnerClass"})
     public static final Parcelable.Creator<RenderState> CREATOR
             = new Parcelable.Creator<RenderState>() {
         @Override

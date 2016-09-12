@@ -8,7 +8,7 @@ import java.io.IOException;
 
 class ShaderObfuscator {
 
-    private void obfuscate(String infile, String outfile) throws IOException {
+    private static void obfuscate(String infile, String outfile) throws IOException {
         String infilename = "shaders/src/main/java/" + infile;
         String outfilename = "app/src/main/assets/a/" + outfile;
         BufferedInputStream instream =
@@ -20,14 +20,14 @@ class ShaderObfuscator {
         int c = outfile.charAt(0) + 100 * 102;
         Spew spew = new Spew(c, c);
         while (b != -1) {
-            outstream.write(b ^ (spew.get() & 255));
+            outstream.write(b ^ spew.get());
             b = instream.read();
         }
         instream.close();
         outstream.close();
     }
 
-    private void go() throws IOException {
+    private static void go() throws IOException {
         obfuscate("integrator_color.frag",   "1");
         obfuscate("integrator_color.vert",   "2");
         obfuscate("integrator_mono.frag",    "3");
@@ -38,7 +38,7 @@ class ShaderObfuscator {
         obfuscate("screendrawer_mono.vert",  "8");
     }
 
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         ShaderObfuscator s = new ShaderObfuscator();
         try {
             s.go();

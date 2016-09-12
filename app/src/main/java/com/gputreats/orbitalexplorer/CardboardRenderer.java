@@ -58,13 +58,12 @@ class CardboardRenderer implements GvrView.StereoRenderer {
     public void onDrawEye(Eye eye) {
         int type = eye.getType();
 
-        Integrator integrator;
-
         float[] forward = new float[3];
-        float[] right = new float[3];
         head.getForwardVector(forward, 0);
+        float[] right = new float[3];
         head.getRightVector(right, 0);
 
+        Integrator integrator;
         float[] lateral;
         if (type == Eye.Type.LEFT) {
             integrator = integratorLeft;
@@ -83,18 +82,18 @@ class CardboardRenderer implements GvrView.StereoRenderer {
         scaleMatrix[10] = scaleFactor;
         scaleMatrix[15] = 1.0f;
 
-        float distanceToNucleus = 2.0f;
-        float halfEyeDistance = 0.2f;
         float[] translateMatrix = new float[16];
         translateMatrix[0] = 1.0f;
         translateMatrix[5] = 1.0f;
         translateMatrix[10] = 1.0f;
         translateMatrix[15] = 1.0f;
+        float distanceToNucleus = 2.0f;
+        float halfEyeDistance = 0.2f;
         translateMatrix[12] = distanceToNucleus * forward[0] + halfEyeDistance * lateral[0];
         translateMatrix[13] = distanceToNucleus * forward[1] + halfEyeDistance * lateral[1];
         translateMatrix[14] = distanceToNucleus * forward[2] + halfEyeDistance * lateral[2];
 
-        float temp1[] = new float[16];
+        float[] temp1 = new float[16];
         Matrix.multiplyMM(temp1, 0, translateMatrix, 0, scaleMatrix, 0);
 
         float[] headViewMatrix = head.getHeadView();
@@ -109,7 +108,7 @@ class CardboardRenderer implements GvrView.StereoRenderer {
         float[] transform = new float[16];
         Matrix.multiplyMM(transform, 0, projectionMatrix, 0, temp2, 0);
 
-        float inverseTransform[] = new float[16];
+        float[] inverseTransform = new float[16];
         Matrix.invertM(inverseTransform, 0, transform, 0);
 
         Texture integratorOutput = integrator.render(orbitalTextures,

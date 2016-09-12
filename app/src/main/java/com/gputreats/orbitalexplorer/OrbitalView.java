@@ -39,13 +39,13 @@ public class OrbitalView extends GLSurfaceView {
         renderState.postRenderThreadSetup();
     }
 
-    private Runnable onSingleTapUp = null;
+    private Runnable onSingleTapUp;
     void setOnSingleTapUp(Runnable r) { onSingleTapUp = r; }
 
     private int firstPointerID = MotionEvent.INVALID_POINTER_ID;
     private int secondPointerID = MotionEvent.INVALID_POINTER_ID;
 
-    private boolean stoppedFling = false;
+    private boolean stoppedFling;
 
     @Override
     public boolean onTouchEvent(MotionEvent e) {
@@ -178,6 +178,7 @@ public class OrbitalView extends GLSurfaceView {
 
     private class TapFlingListener extends GestureDetector.SimpleOnGestureListener {
 
+        @SuppressWarnings("MethodReturnAlwaysConstant")
         @Override
         public boolean onDown(MotionEvent event) {
             return true;

@@ -8,7 +8,7 @@ import java.io.IOException;
 
 class Shader {
 
-    private int id;
+    private final int id;
     public int getId() {
         return id;
     }

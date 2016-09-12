@@ -16,10 +16,7 @@ class QuadratureData {
         data = new float[4 * order * steps];
 
         String filename = "data/";
-        if (quadrature.color)
-            filename += "color";
-        else
-            filename += "mono";
+        filename += quadrature.color ? "color" : "mono";
         filename += "-" + quadrature.N + "-" + quadrature.L;
 
         DataInputStream stream;

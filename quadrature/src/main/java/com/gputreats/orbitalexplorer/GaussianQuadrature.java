@@ -37,9 +37,9 @@ class GaussianQuadrature {
          * TODO PROBLEM: which makes the following logic numerically unstable.
          */
 
-        double a[] = new double[N];
-        double b[] = new double[N];
-        double C[][] = new double[N + 1][2 * N + 1];
+        double[] a = new double[N];
+        double[] b = new double[N];
+        double[][] C = new double[N + 1][2 * N + 1];
         System.arraycopy(moments, 0, C[0], 0, 2 * N + 1);
         //for (int j = 0; j < 2 * N + 1; ++j)
             //C[0][j] = moments[j];

@@ -86,7 +86,7 @@ class Integrator extends RenderStage {
             GLES30.glViewport(0, 0, width, height);
 
             // TODO does ditching this improve anything?
-            final int zeroes[] = {0, 0, 0, 0};
+            final int[] zeroes = {0, 0, 0, 0};
             GLES30.glClearBufferiv(GLES30.GL_COLOR, 0, zeroes, 0);
 
             orbitalTextures.setupForIntegration(program);

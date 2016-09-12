@@ -7,7 +7,7 @@ import android.os.Parcelable;
 class Camera implements Parcelable {
 
     private static final double SQRT2 = Math.sqrt(0.5);
-    private static final Quaternion ALIGNED_ROTATIONS[] = {
+    private static final Quaternion[] ALIGNED_ROTATIONS = {
             new Quaternion( 1.0,  0.0,  0.0,  0.0),
             new Quaternion(-1.0,  0.0,  0.0,  0.0),
             new Quaternion( 0.0,  1.0,  0.0,  0.0),
@@ -60,11 +60,12 @@ class Camera implements Parcelable {
 
     Camera() {}
 
-    private Camera(double cameraDistance_, Quaternion totalRotation_) {
-        cameraDistance = cameraDistance_;
-        totalRotation = totalRotation_;
+    private Camera(double cameraDistanceIn, Quaternion totalRotationIn) {
+        cameraDistance = cameraDistanceIn;
+        totalRotation = totalRotationIn;
     }
 
+    @SuppressWarnings("MethodReturnAlwaysConstant")
     @Override
     public int describeContents() {
         return 0;
@@ -76,7 +77,7 @@ class Camera implements Parcelable {
         out.writeParcelable(totalRotation, flags);
     }
 
-    @SuppressWarnings("AnonymousInnerClassWithTooManyMethods")
+    @SuppressWarnings({"AnonymousInnerClassWithTooManyMethods", "AnonymousInnerClass"})
     public static final Parcelable.Creator<Camera> CREATOR
             = new Parcelable.Creator<Camera>() {
         @Override
@@ -91,23 +92,27 @@ class Camera implements Parcelable {
         }
     };
 
-    private double cameraDistance = 60.0;
     private static final double MIN_CAMERA_DISTANCE = 1.5;
     private static final double MAX_CAMERA_DISTANCE = 280.0;
+    private static final double INITIAL_CAMERA_DISTANCE = 60.0;
+
+    private double cameraDistance = INITIAL_CAMERA_DISTANCE;
 
     // Two finger zoom by an incremental size ratio of f
-    void zoom(double f) {
-        cameraDistance /= f;
+    void zoom(double factor) {
+        cameraDistance /= factor;
         if (cameraDistance < MIN_CAMERA_DISTANCE)
             cameraDistance = MIN_CAMERA_DISTANCE;
         if (cameraDistance > MAX_CAMERA_DISTANCE)
             cameraDistance = MAX_CAMERA_DISTANCE;
     }
 
-    private Quaternion totalRotation = Quaternion.rotation(Math.PI / 2.0, X_HAT);
-    private static final Vector3 X_HAT = new Vector3(1, 0, 0);
-    private static final Vector3 Y_HAT = new Vector3(0, 1, 0);
-    private static final Vector3 Z_HAT = new Vector3(0, 0, 1);
+    private static final Vector3 X_HAT = new Vector3(1.0, 0.0, 0.0);
+    private static final Vector3 Y_HAT = new Vector3(0.0, 1.0, 0.0);
+    private static final Vector3 Z_HAT = new Vector3(0.0, 0.0, 1.0);
+    private static final Quaternion INITIAL_ROTATION = Quaternion.rotation(Math.PI / 2.0, X_HAT);
+
+    private Quaternion totalRotation = INITIAL_ROTATION;
 
     // One finger drag by an increment of (x,y) pixels
     // x and y are multiples of the (mean) screen size
@@ -129,7 +134,7 @@ class Camera implements Parcelable {
     }
 
     private Vector2 flingVelocity = new Vector2(0.0, 0.0);
-    private boolean stillFlinging = false;
+    private boolean stillFlinging;
     private long lastFlingTime;
     // Maximum half-turns per second
     private static final double MAX_FLING_SPEED = 6.0;

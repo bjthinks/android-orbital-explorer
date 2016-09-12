@@ -4,7 +4,7 @@ public class Polynomial implements Function {
 
     // Invariant: c is not null, and leading coeff is not 0.
     // The zero polynomial has c.length == 0 and degree -1.
-    private double c[];
+    private double[] c;
 
     public Polynomial() {
         c = new double[0];

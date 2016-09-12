@@ -6,7 +6,6 @@ final class Romberg {
 
     // Integrate a function from 0 to +infinity
     public static double integrate(Function f) {
-        double[] lessAccurateEstimate;
         int n = 1;
         double[] moreAccurateEstimate = new double[n];
         double stepSize = 1.0;
@@ -14,7 +13,7 @@ final class Romberg {
 
         do {
             ++n;
-            lessAccurateEstimate = moreAccurateEstimate;
+            double[] lessAccurateEstimate = moreAccurateEstimate;
             moreAccurateEstimate = new double[n];
             stepSize *= 0.5;
             moreAccurateEstimate[0] = trapezoidalEstimate(f, stepSize);
@@ -35,13 +34,12 @@ final class Romberg {
     // Heuristically guesses when to stop by noticing when the accumulated total
     // doesn't change for multiple trapezoids in a row.
     private static double trapezoidalEstimate(Function f, double stepSize) {
-        double priorResult;
         double nextResult = 0.5 * f.eval(0.0);
         int i = 0;
         int numberOfConsecutiveIdenticalResults = 0;
 
         do {
-            priorResult = nextResult;
+            double priorResult = nextResult;
             nextResult += f.eval(stepSize * (double) ++i);
             if (priorResult == nextResult)
                 ++numberOfConsecutiveIdenticalResults;

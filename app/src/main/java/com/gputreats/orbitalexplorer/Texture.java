@@ -16,7 +16,7 @@ class Texture {
         type = type_;
         internalFormat = internalFormat_;
 
-        int temp[] = new int[1];
+        int[] temp = new int[1];
         GLES30.glGenTextures(1, temp, 0);
         id = temp[0];
 
