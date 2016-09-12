@@ -23,7 +23,7 @@ class Shader {
             Spew spew = new Spew(c, c);
             StringBuilder buf = new StringBuilder();
             while (b != -1) {
-                buf.append((char) (b ^ (spew.get() & 255)));
+                buf.append((char) (b ^ spew.get() & 255));
                 b = instream.read();
             }
             instream.close();

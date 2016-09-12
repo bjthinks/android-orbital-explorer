@@ -76,8 +76,8 @@ class RenderState implements Parcelable {
             int N = in.readInt();
             int L = in.readInt();
             int M = in.readInt();
-            boolean real = (in.readInt() != 0);
-            boolean color = (in.readInt() != 0);
+            boolean real = in.readInt() != 0;
+            boolean color = in.readInt() != 0;
             result.orbital = new Orbital(Z, N, L, M, real, color);
             result.orbitalChanged = true;
             result.screenGrabRequested = false;

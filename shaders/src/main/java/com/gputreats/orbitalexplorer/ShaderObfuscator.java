@@ -6,7 +6,9 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-class ShaderObfuscator {
+final class ShaderObfuscator {
+
+    private ShaderObfuscator() {}
 
     private static void obfuscate(String infile, String outfile) throws IOException {
         String infilename = "shaders/src/main/java/" + infile;
@@ -27,21 +29,16 @@ class ShaderObfuscator {
         outstream.close();
     }
 
-    private static void go() throws IOException {
-        obfuscate("integrator_color.frag",   "1");
-        obfuscate("integrator_color.vert",   "2");
-        obfuscate("integrator_mono.frag",    "3");
-        obfuscate("integrator_mono.vert",    "4");
-        obfuscate("screendrawer_color.frag", "5");
-        obfuscate("screendrawer_color.vert", "6");
-        obfuscate("screendrawer_mono.frag",  "7");
-        obfuscate("screendrawer_mono.vert",  "8");
-    }
-
     public static void main(String[] args) {
-        ShaderObfuscator s = new ShaderObfuscator();
         try {
-            s.go();
+            obfuscate("integrator_color.frag",   "1");
+            obfuscate("integrator_color.vert",   "2");
+            obfuscate("integrator_mono.frag",    "3");
+            obfuscate("integrator_mono.vert",    "4");
+            obfuscate("screendrawer_color.frag", "5");
+            obfuscate("screendrawer_color.vert", "6");
+            obfuscate("screendrawer_mono.frag",  "7");
+            obfuscate("screendrawer_mono.vert",  "8");
         } catch (Exception e) {
             System.err.print(e.getLocalizedMessage());
             System.exit(1);

@@ -17,7 +17,7 @@ class Spew {
         long y = b;
         a = y;
         x ^= x << 23;
-        b = x ^ y ^ (x >>> 17) ^ (y >>> 26);
+        b = x ^ y ^ x >>> 17 ^ y >>> 26;
         return (int) (b + y);
     }
 }

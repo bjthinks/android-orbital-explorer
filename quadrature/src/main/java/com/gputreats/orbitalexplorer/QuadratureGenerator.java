@@ -5,7 +5,9 @@ import java.io.DataOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-class QuadratureGenerator {
+final class QuadratureGenerator {
+
+    private QuadratureGenerator() {}
 
     private static void writeAsset(String assetname, float[] data)
             throws IOException {
@@ -88,9 +90,8 @@ class QuadratureGenerator {
     }
 
     public static void main(String[] args) {
-        QuadratureGenerator q = new QuadratureGenerator();
         try {
-            q.go();
+            go();
         } catch (Exception e) {
             System.err.print(e.getLocalizedMessage());
             System.exit(1);

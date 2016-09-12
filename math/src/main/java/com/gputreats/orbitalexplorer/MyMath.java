@@ -4,36 +4,39 @@ final class MyMath {
 
     private MyMath() {}
 
-    public static double binomial(int n, int k) {
+    static double binomial(int n, int k) {
         return factorial(n) / factorial(k) / factorial(n - k);
     }
 
-    public static double factorial(int n) {
+    static double factorial(int n) {
         if (n < 0)
             throw new IllegalArgumentException("Factorial of negative number");
 
         double result = 1.0;
 
         for (int i = 2; i <= n; ++i)
-            result *= i;
+            result *= (double) i;
 
         return result;
     }
 
     // A faster version of Math.pow() when the exponent is a small positive integer
-    public static double fastpow(double base, int exponent) {
-        if (exponent < 0)
+    static double fastpow(double base, int exponent) {
+        double b = base;
+        int e = exponent;
+
+        if (e < 0)
             throw new IllegalArgumentException("fastpow with a negative exponent");
 
-        double result = 1.0;
+        double r = 1.0;
 
-        while (exponent > 0) {
-            if ((exponent & 1) != 0)
-                result *= base;
-            exponent >>= 1;
-            base *= base;
+        while (e > 0) {
+            if ((e & 1) != 0)
+                r *= b;
+            e >>= 1;
+            b *= b;
         }
 
-        return result;
+        return r;
     }
 }

@@ -203,7 +203,7 @@ public class OrbitalSelector extends LinearLayout {
         if (real && M > 0)
             mChanger.setText(plusMinus + M);
         else if (real && M < 0)
-            mChanger.setText(minusPlus + (-M));
+            mChanger.setText(minusPlus + -M);
         else
             mChanger.setInteger(M);
 
@@ -213,8 +213,8 @@ public class OrbitalSelector extends LinearLayout {
             rcChanger.setTextColor(COLOR_BRIGHT);
     }
 
-    private void setReal(boolean realOrbital_) {
-        real = realOrbital_;
+    private void setReal(boolean realOrbital) {
+        real = realOrbital;
         if (real)
             rcChanger.setText(realNumbers);
         else

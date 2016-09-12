@@ -36,9 +36,9 @@ class ShareCallback implements Handler.Callback {
             for (int col = 0; col < width; ++col) {
                 int cell = row * width + col;
                 colors[(height - 1 - row) * width + col] = 0xff000000
-                        | ((imageArray[4 * cell] & 0xff) << 16)
-                        | ((imageArray[4 * cell + 1] & 0xff) << 8)
-                        | (imageArray[4 * cell + 2] & 0xff);
+                        | (imageArray[4 * cell] & 0xff) << 16
+                        | (imageArray[4 * cell + 1] & 0xff) << 8
+                        | imageArray[4 * cell + 2] & 0xff;
             }
         }
         Bitmap bitmap = Bitmap.createBitmap(colors, width, height, Bitmap.Config.ARGB_8888);

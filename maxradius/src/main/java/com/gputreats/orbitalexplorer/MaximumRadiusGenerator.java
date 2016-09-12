@@ -2,7 +2,9 @@ package com.gputreats.orbitalexplorer;
 
 import java.io.IOException;
 
-class MaximumRadiusGenerator {
+final class MaximumRadiusGenerator {
+
+    private MaximumRadiusGenerator() {}
 
     private static double computeRadius(int N, int L) {
         RadialFunction rf = new RadialFunction(1, N, L);
@@ -34,9 +36,8 @@ class MaximumRadiusGenerator {
     }
 
     public static void main(String[] args) {
-        MaximumRadiusGenerator m = new MaximumRadiusGenerator();
         try {
-            m.go();
+            go();
         } catch (Exception e) {
             System.err.print(e.getLocalizedMessage());
             System.exit(1);

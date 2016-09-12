@@ -166,7 +166,7 @@ class Camera implements Parcelable {
         if (stillFlinging) {
             long now = System.currentTimeMillis();
             long deltaMillis = now - lastFlingTime;
-            double deltaTime = ((double) deltaMillis) / 1000.0;
+            double deltaTime = (double) deltaMillis / 1000.0;
             lastFlingTime = now;
 
             flingVelocity = flingVelocity.multiply(1.0 - Math.min(1.0, FLING_SLOWDOWN_LINEAR * deltaTime));
@@ -210,7 +210,7 @@ class Camera implements Parcelable {
                 near, far);
 
         float[] viewMatrix = new float[16];
-        Matrix.setLookAtM(viewMatrix, 0, 0.0f, 0.0f, (float) (-cameraDistance),
+        Matrix.setLookAtM(viewMatrix, 0, 0.0f, 0.0f, (float) -cameraDistance,
                 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
 
         float[] viewProjMatrix = new float[16];
