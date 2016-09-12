@@ -18,9 +18,9 @@ public class OrbitalSelector extends LinearLayout {
 
     private static final int maxN = 8;
 
-    private static final int dark = Color.rgb(0, 0, 0);
-    private static final int dim = Color.rgb(128, 128, 128);
-    private static final int bright = Color.rgb(255, 255, 255);
+    private static final int COLOR_DARK = Color.rgb(0, 0, 0);
+    private static final int COLOR_DIM = Color.rgb(128, 128, 128);
+    private static final int COLOR_BRIGHT = Color.rgb(255, 255, 255);
 
     private RenderState renderState;
 
@@ -213,9 +213,9 @@ public class OrbitalSelector extends LinearLayout {
             mChanger.setInteger(M);
 
         if (M == 0)
-            rcChanger.setTextColor(dim);
+            rcChanger.setTextColor(COLOR_DIM);
         else
-            rcChanger.setTextColor(bright);
+            rcChanger.setTextColor(COLOR_BRIGHT);
     }
 
     private void setReal(boolean realOrbital_) {
@@ -238,44 +238,44 @@ public class OrbitalSelector extends LinearLayout {
 
     private void setButtonTint() {
         if (N == maxN)
-            nChanger.setUpTint(dark);
+            nChanger.setUpTint(COLOR_DARK);
         else
-            nChanger.setUpTint(bright);
+            nChanger.setUpTint(COLOR_BRIGHT);
 
         if (N == 1)
-            nChanger.setDownTint(dark);
+            nChanger.setDownTint(COLOR_DARK);
         else if (N <= L + 1)
-            nChanger.setDownTint(dim);
+            nChanger.setDownTint(COLOR_DIM);
         else
-            nChanger.setDownTint(bright);
+            nChanger.setDownTint(COLOR_BRIGHT);
 
         if (L == maxN - 1)
-            lChanger.setUpTint(dark);
+            lChanger.setUpTint(COLOR_DARK);
         else if (L >= N - 1)
-            lChanger.setUpTint(dim);
+            lChanger.setUpTint(COLOR_DIM);
         else
-            lChanger.setUpTint(bright);
+            lChanger.setUpTint(COLOR_BRIGHT);
 
         if (L == 0)
-            lChanger.setDownTint(dark);
+            lChanger.setDownTint(COLOR_DARK);
         else if (L <= Math.abs(M))
-            lChanger.setDownTint(dim);
+            lChanger.setDownTint(COLOR_DIM);
         else
-            lChanger.setDownTint(bright);
+            lChanger.setDownTint(COLOR_BRIGHT);
 
         if (M == maxN - 1)
-            mChanger.setUpTint(dark);
+            mChanger.setUpTint(COLOR_DARK);
         else if (M >= L)
-            mChanger.setUpTint(dim);
+            mChanger.setUpTint(COLOR_DIM);
         else
-            mChanger.setUpTint(bright);
+            mChanger.setUpTint(COLOR_BRIGHT);
 
         if (M == 1 - maxN)
-            mChanger.setDownTint(dark);
+            mChanger.setDownTint(COLOR_DARK);
         else if (M <= -L)
-            mChanger.setDownTint(dim);
+            mChanger.setDownTint(COLOR_DIM);
         else
-            mChanger.setDownTint(bright);
+            mChanger.setDownTint(COLOR_BRIGHT);
     }
 
     private void setOrbitalName() {

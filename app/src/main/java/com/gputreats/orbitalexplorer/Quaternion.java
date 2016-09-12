@@ -27,6 +27,7 @@ class Quaternion implements Parcelable {
                     in.readDouble(), in.readDouble(),
                     in.readDouble(), in.readDouble());
         }
+        @Override
         public Quaternion[] newArray(int size) {
             return new Quaternion[size];
         }

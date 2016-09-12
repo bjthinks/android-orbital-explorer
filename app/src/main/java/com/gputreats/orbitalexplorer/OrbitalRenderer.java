@@ -8,20 +8,15 @@ import javax.microedition.khronos.opengles.GL10;
 
 class OrbitalRenderer implements GLSurfaceView.Renderer {
 
-    private OrbitalTextures orbitalTextures;
-    private Integrator integrator;
-    private ScreenDrawer screenDrawer;
-    private RenderState renderState;
+    private final OrbitalTextures orbitalTextures;
+    private final Integrator integrator;
+    private final ScreenDrawer screenDrawer;
+    private final RenderState renderState;
 
     // Main thread
 
     OrbitalRenderer(Context context) {
-        try {
-            renderState = ((RenderStateProvider) context).provideRenderState();
-        } catch (ClassCastException e) {
-            throw new ClassCastException(context.toString()
-                    + " must implement RenderStateProvider");
-        }
+        renderState = ((RenderStateProvider) context).provideRenderState();
         orbitalTextures = new OrbitalTextures(context);
         integrator = new Integrator(context);
         screenDrawer = new ScreenDrawer(context);
@@ -42,11 +37,11 @@ class OrbitalRenderer implements GLSurfaceView.Renderer {
 
     // Rendering thread
 
-    private float aspectRatio = 1.0f;
+    private double aspectRatio = 1.0;
     @Override
     public void onSurfaceChanged(GL10 unused, int width, int height) {
         try {
-            aspectRatio = (float) width / (float) height;
+            aspectRatio = width / (double) height;
             int integrationWidth  = width / 3;
             int integrationHeight = height / 3;
             integrator.resize(integrationWidth, integrationHeight);

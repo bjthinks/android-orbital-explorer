@@ -34,6 +34,7 @@ public class Polynomial implements Function {
         return variableToThe(1);
     } */
 
+    @Override
     public double eval(double x) {
         double result = 0.0;
         for (int i = c.length - 1; i >= 0; --i) {
@@ -138,7 +139,7 @@ public class Polynomial implements Function {
         return result;
     }
 
-    @Override
+    /* @Override
     public String toString() {
         String result = "";
         for (int d = c.length - 1; d >= 0; --d)
@@ -154,7 +155,7 @@ public class Polynomial implements Function {
         return result;
     }
 
-    /* public static void test() {
+    public static void test() {
         String TAG = "Polynomial";
         Log.d(TAG, "Testing");
         TAG += " FAIL";

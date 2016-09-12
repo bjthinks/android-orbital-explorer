@@ -13,6 +13,7 @@ public class WeightFunction implements Function {
         distanceFromOrigin = distanceFromOrigin_;
     }
 
+    @Override
     public double eval(double x) {
 
         double r = Math.sqrt(distanceFromOrigin * distanceFromOrigin + x * x);

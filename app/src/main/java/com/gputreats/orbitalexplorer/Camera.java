@@ -6,8 +6,8 @@ import android.os.Parcelable;
 
 class Camera implements Parcelable {
 
-    private static final double r2 = Math.sqrt(0.5);
-    private static final Quaternion alignedRotations[] = {
+    private static final double SQRT2 = Math.sqrt(0.5);
+    private static final Quaternion ALIGNED_ROTATIONS[] = {
             new Quaternion( 1.0,  0.0,  0.0,  0.0),
             new Quaternion(-1.0,  0.0,  0.0,  0.0),
             new Quaternion( 0.0,  1.0,  0.0,  0.0),
@@ -16,30 +16,30 @@ class Camera implements Parcelable {
             new Quaternion( 0.0,  0.0, -1.0,  0.0),
             new Quaternion( 0.0,  0.0,  0.0,  1.0),
             new Quaternion( 0.0,  0.0,  0.0, -1.0),
-            new Quaternion( r2,  r2, 0.0, 0.0),
-            new Quaternion( r2, -r2, 0.0, 0.0),
-            new Quaternion(-r2,  r2, 0.0, 0.0),
-            new Quaternion(-r2, -r2, 0.0, 0.0),
-            new Quaternion( r2, 0.0,  r2, 0.0),
-            new Quaternion( r2, 0.0, -r2, 0.0),
-            new Quaternion(-r2, 0.0,  r2, 0.0),
-            new Quaternion(-r2, 0.0, -r2, 0.0),
-            new Quaternion( r2, 0.0, 0.0,  r2),
-            new Quaternion( r2, 0.0, 0.0, -r2),
-            new Quaternion(-r2, 0.0, 0.0,  r2),
-            new Quaternion(-r2, 0.0, 0.0, -r2),
-            new Quaternion(0.0,  r2,  r2, 0.0),
-            new Quaternion(0.0,  r2, -r2, 0.0),
-            new Quaternion(0.0, -r2,  r2, 0.0),
-            new Quaternion(0.0, -r2, -r2, 0.0),
-            new Quaternion(0.0,  r2, 0.0,  r2),
-            new Quaternion(0.0,  r2, 0.0, -r2),
-            new Quaternion(0.0, -r2, 0.0,  r2),
-            new Quaternion(0.0, -r2, 0.0, -r2),
-            new Quaternion(0.0, 0.0,  r2,  r2),
-            new Quaternion(0.0, 0.0,  r2, -r2),
-            new Quaternion(0.0, 0.0, -r2,  r2),
-            new Quaternion(0.0, 0.0, -r2, -r2),
+            new Quaternion( SQRT2,  SQRT2, 0.0, 0.0),
+            new Quaternion( SQRT2, -SQRT2, 0.0, 0.0),
+            new Quaternion(-SQRT2,  SQRT2, 0.0, 0.0),
+            new Quaternion(-SQRT2, -SQRT2, 0.0, 0.0),
+            new Quaternion( SQRT2, 0.0,  SQRT2, 0.0),
+            new Quaternion( SQRT2, 0.0, -SQRT2, 0.0),
+            new Quaternion(-SQRT2, 0.0,  SQRT2, 0.0),
+            new Quaternion(-SQRT2, 0.0, -SQRT2, 0.0),
+            new Quaternion( SQRT2, 0.0, 0.0,  SQRT2),
+            new Quaternion( SQRT2, 0.0, 0.0, -SQRT2),
+            new Quaternion(-SQRT2, 0.0, 0.0,  SQRT2),
+            new Quaternion(-SQRT2, 0.0, 0.0, -SQRT2),
+            new Quaternion(0.0,  SQRT2,  SQRT2, 0.0),
+            new Quaternion(0.0,  SQRT2, -SQRT2, 0.0),
+            new Quaternion(0.0, -SQRT2,  SQRT2, 0.0),
+            new Quaternion(0.0, -SQRT2, -SQRT2, 0.0),
+            new Quaternion(0.0,  SQRT2, 0.0,  SQRT2),
+            new Quaternion(0.0,  SQRT2, 0.0, -SQRT2),
+            new Quaternion(0.0, -SQRT2, 0.0,  SQRT2),
+            new Quaternion(0.0, -SQRT2, 0.0, -SQRT2),
+            new Quaternion(0.0, 0.0,  SQRT2,  SQRT2),
+            new Quaternion(0.0, 0.0,  SQRT2, -SQRT2),
+            new Quaternion(0.0, 0.0, -SQRT2,  SQRT2),
+            new Quaternion(0.0, 0.0, -SQRT2, -SQRT2),
             new Quaternion( 0.5,  0.5,  0.5,  0.5),
             new Quaternion( 0.5,  0.5,  0.5, -0.5),
             new Quaternion( 0.5,  0.5, -0.5,  0.5),
@@ -85,6 +85,7 @@ class Camera implements Parcelable {
                     in.readParcelable(Quaternion.class.getClassLoader()));
         }
 
+        @Override
         public Camera[] newArray(int size) {
             return new Camera[size];
         }
@@ -180,15 +181,15 @@ class Camera implements Parcelable {
     void snapToAxis() {
         int best = -1;
         double bestDistance = 1.0e9;
-        for (int i = 0; i < alignedRotations.length; ++i) {
-            double d = totalRotation.dist(alignedRotations[i]);
+        for (int i = 0; i < ALIGNED_ROTATIONS.length; ++i) {
+            double d = totalRotation.dist(ALIGNED_ROTATIONS[i]);
             if (d < bestDistance) {
                 bestDistance = d;
                 best = i;
             }
         }
         if (best >= 0)
-            totalRotation = alignedRotations[best];
+            totalRotation = ALIGNED_ROTATIONS[best];
     }
 
     float[] computeInverseShaderTransform(double aspectRatio) {

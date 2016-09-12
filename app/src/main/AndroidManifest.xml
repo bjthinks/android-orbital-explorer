@@ -48,6 +48,7 @@
         <activity
             android:name=".CardboardActivity"
             android:label="Cardboard"
+            android:parentActivityName=".MainActivity"
             android:screenOrientation="landscape"
             android:configChanges="orientation|keyboardHidden|screenSize">
             <intent-filter>
@@ -67,10 +68,6 @@
             android:name=".ErrorActivity"
             android:label="Error"
             android:theme="@style/MainTheme">
-            <intent-filter>
-                <action android:name="com.gputreats.orbitalexplorer.SHOW_ERROR" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
         </activity>
 
         <!-- Image sharing -->

@@ -54,6 +54,7 @@ public class RadialFunction implements Function {
         return oscillatingPart;
     }
 
+    @Override
     public double eval(double r) {
         return oscillatingPart.eval(r)
                 * Math.pow(r, powerOfR)
