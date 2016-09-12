@@ -21,7 +21,7 @@ import java.nio.ByteBuffer;
 
 class ShareCallback implements Handler.Callback {
 
-    private Activity activity;
+    private final Activity activity;
     ShareCallback(Activity a) {
         activity = a;
     }
@@ -102,7 +102,7 @@ class ShareCallback implements Handler.Callback {
     private void shareError(int name) {
         Toast.makeText(activity, "Unable to share", Toast.LENGTH_SHORT).show();
         File file = new File(activity.getCacheDir(), "screens/" + name + ".jpg");
-        // TODO fix lint error
+        //noinspection ResultOfMethodCallIgnored
         file.delete();
     }
 }

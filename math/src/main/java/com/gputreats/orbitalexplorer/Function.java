@@ -1,5 +1,5 @@
 package com.gputreats.orbitalexplorer;
 
-public interface Function {
+interface Function {
     double eval(double x);
 }

@@ -63,6 +63,7 @@ class RenderState implements Parcelable {
         out.writeInt(orbital.color ? 1 : 0);
     }
 
+    @SuppressWarnings("AnonymousInnerClassWithTooManyMethods")
     public static final Parcelable.Creator<RenderState> CREATOR
             = new Parcelable.Creator<RenderState>() {
         @Override

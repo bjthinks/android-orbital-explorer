@@ -16,10 +16,10 @@ package com.gputreats.orbitalexplorer;
 
 public class RadialFunction implements Function {
 
-    private double exponentialConstant;
-    private int powerOfR;
-    private Polynomial oscillatingPart;
-    private double maximumRadius;
+    private final double exponentialConstant;
+    private final int powerOfR;
+    private final Polynomial oscillatingPart;
+    private final double maximumRadius;
 
     public RadialFunction(int Z, int N, int L) {
         double dZ = (double) Z;

@@ -46,7 +46,7 @@ public class ValueChanger extends LinearLayout {
         text = (TextView) findViewById(R.id.integerchanger_value);
     }
 
-    void setText(String t) {
+    void setText(CharSequence t) {
         text.setText(t);
     }
 

@@ -253,7 +253,7 @@ public class MainActivity extends AppCompatActivity implements RenderStateProvid
     @Override
     protected void onActivityResult(int request, int result, Intent data) {
         File file = new File(getCacheDir(), "screens/" + request + ".jpg");
-        // TODO fix lint error
+        //noinspection ResultOfMethodCallIgnored
         file.delete();
     }
 }

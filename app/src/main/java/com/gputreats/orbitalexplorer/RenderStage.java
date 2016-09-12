@@ -4,7 +4,7 @@ import java.nio.FloatBuffer;
 
 class RenderStage {
 
-    FloatBuffer screenRectangle;
+    final FloatBuffer screenRectangle;
     RenderStage() {
         float squareCoordinates[] = {
                 -1, -1,

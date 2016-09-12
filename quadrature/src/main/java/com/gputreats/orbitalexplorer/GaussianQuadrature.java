@@ -4,19 +4,19 @@ package com.gputreats.orbitalexplorer;
  * Given a weight function W and a positive integer N, compute the nodes and weights for
  * an N-point Gaussian quadrature rule.
  */
-public class GaussianQuadrature {
+class GaussianQuadrature {
 
-    private double[] node, weight;
+    private final double[] node, weight;
 
-    public double getNode(int i) {
+    double getNode(int i) {
         return node[i];
     }
 
-    public double getWeight(int i) {
+    double getWeight(int i) {
         return weight[i];
     }
 
-    public GaussianQuadrature(Function W, int N) {
+    GaussianQuadrature(Function W, int N) {
 
         /*
          * STEP I: Compute the first 2N + 1 moments of the weight function.

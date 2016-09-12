@@ -8,7 +8,7 @@ import java.io.IOException;
 
 class QuadratureData {
 
-    private float[] data;
+    private final float[] data;
 
     QuadratureData(AssetManager assets, Quadrature quadrature) {
         int order = quadrature.getOrder();

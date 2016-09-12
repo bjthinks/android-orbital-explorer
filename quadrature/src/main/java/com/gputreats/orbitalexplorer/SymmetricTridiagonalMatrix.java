@@ -1,13 +1,13 @@
 package com.gputreats.orbitalexplorer;
 
-public class SymmetricTridiagonalMatrix {
+class SymmetricTridiagonalMatrix {
 
-    int N;
-    double[] diagonal;
-    double[] offDiagonal;
-    double[] eigenvectorFirstComponent;
+    private final int N;
+    private final double[] diagonal;
+    private final double[] offDiagonal;
+    private final double[] eigenvectorFirstComponent;
 
-    public SymmetricTridiagonalMatrix(int N_) {
+    SymmetricTridiagonalMatrix(int N_) {
         N = N_;
         diagonal = new double[N_];
         offDiagonal = new double[N_ - 1];
@@ -37,7 +37,7 @@ public class SymmetricTridiagonalMatrix {
         while (n > 1) {
             QRReductionStep(n);
             ++fail;
-            while (n > 1 && Math.abs(offDiagonal[n - 2]) < 1e-15 * Math.abs(diagonal[n - 1])) {
+            while (n > 1 && Math.abs(offDiagonal[n - 2]) < 1.0e-15 * Math.abs(diagonal[n - 1])) {
                 --n;
                 fail = 0;
             }

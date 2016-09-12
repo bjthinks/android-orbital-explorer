@@ -6,7 +6,7 @@ import android.opengl.GLES30;
 
 class OrbitalTextures {
 
-    private AssetManager assets;
+    private final AssetManager assets;
 
     private Orbital orbital;
 
@@ -74,7 +74,7 @@ class OrbitalTextures {
             MyGL.checkGLES();
 
             bReal = orbital.real;
-            fBrightness = quadratureRadius * quadratureRadius / 2f;
+            fBrightness = quadratureRadius * quadratureRadius / 2.0f;
             fInverseAzimuthalStepSize = AZIMUTHAL_TEXTURE_SIZE / 3.14159265359f;
             fInverseQuadratureStepSize = quadratureSteps / quadratureRadius;
             fInverseRadialStepSize = RADIAL_TEXTURE_SIZE / maximumRadius;

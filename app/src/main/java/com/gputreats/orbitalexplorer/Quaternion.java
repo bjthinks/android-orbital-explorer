@@ -18,6 +18,7 @@ class Quaternion implements Parcelable {
         out.writeDouble(k);
     }
 
+    @SuppressWarnings("AnonymousInnerClassWithTooManyMethods")
     public static final Parcelable.Creator<Quaternion> CREATOR
             = new Parcelable.Creator<Quaternion>() {
         @Override
@@ -91,10 +92,9 @@ class Quaternion implements Parcelable {
     }
 
     static Quaternion rotation(double angle, Vector3 v) {
-        v = v.normalize();
         double s = Math.sin(angle / 2);
         double c = Math.cos(angle / 2);
-        return new Quaternion(c, v.multiply(s));
+        return new Quaternion(c, v.normalize().multiply(s));
     }
 
     float[] asRotationMatrix() {
@@ -102,19 +102,19 @@ class Quaternion implements Parcelable {
         result[0] = (float) (r*r + i*i - j*j - k*k);
         result[1] = (float) (2*r*k + 2*i*j);
         result[2] = (float) (-2*r*j + 2*i*k);
-        result[3] = 0f;
+        result[3] = 0.0f;
         result[4] = (float) (-2*r*k + 2*i*j);
         result[5] = (float) (r*r - i*i + j*j - k*k);
         result[6] = (float) (2*r*i + 2*j*k);
-        result[7] = 0f;
+        result[7] = 0.0f;
         result[8] = (float) (2*r*j + 2*i*k);
         result[9] = (float) (-2*r*i + 2*j*k);
         result[10] = (float) (r*r - i*i - j*j + k*k);
-        result[11] = 0f;
-        result[12] = 0f;
-        result[13] = 0f;
-        result[14] = 0f;
-        result[15] = 1f;
+        result[11] = 0.0f;
+        result[12] = 0.0f;
+        result[13] = 0.0f;
+        result[14] = 0.0f;
+        result[15] = 1.0f;
         return result;
     }
 }

@@ -11,7 +11,7 @@ public class Polynomial implements Function {
     }
 
     public Polynomial(double cc) {
-        if (cc == 0.)
+        if (cc == 0.0)
             c = new double[0];
         else {
             c = new double[1];
@@ -26,7 +26,7 @@ public class Polynomial implements Function {
     public static Polynomial variableToThe(int power) {
         Polynomial x = new Polynomial();
         x.c = new double[power + 1];
-        x.c[power] = 1.;
+        x.c[power] = 1.0;
         return x;
     }
 
@@ -35,7 +35,7 @@ public class Polynomial implements Function {
     } */
 
     public double eval(double x) {
-        double result = 0.;
+        double result = 0.0;
         for (int i = c.length - 1; i >= 0; --i) {
             result *= x;
             result += c[i];
@@ -57,7 +57,7 @@ public class Polynomial implements Function {
             needToDoAdditionUpTo = rhs.c.length;
         } else {
             int len = c.length;
-            while (len > 0 && c[len - 1] + rhs.c[len - 1] == 0.)
+            while (len > 0 && c[len - 1] + rhs.c[len - 1] == 0.0)
                 --len;
             result.c = new double[len];
             needToDoAdditionUpTo = len;

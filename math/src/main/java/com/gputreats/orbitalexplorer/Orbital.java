@@ -1,14 +1,14 @@
 package com.gputreats.orbitalexplorer;
 
-public class Orbital {
+class Orbital {
 
     public final int Z, N, L, M;
     public final boolean real, color;
-    private RadialFunction radialFunction;
-    private AzimuthalFunction azimuthalFunction;
-    private Quadrature quadrature;
+    private final RadialFunction radialFunction;
+    private final AzimuthalFunction azimuthalFunction;
+    private final Quadrature quadrature;
 
-    public Orbital(int Z_, int N_, int L_, int M_, boolean real_, boolean color_) {
+    Orbital(int Z_, int N_, int L_, int M_, boolean real_, boolean color_) {
         Z = Z_;
         N = N_;
         L = L_;

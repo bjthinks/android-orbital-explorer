@@ -1,6 +1,6 @@
 package com.gputreats.orbitalexplorer;
 
-public final class LegendrePolynomial {
+final class LegendrePolynomial {
 
     private LegendrePolynomial() {}
 

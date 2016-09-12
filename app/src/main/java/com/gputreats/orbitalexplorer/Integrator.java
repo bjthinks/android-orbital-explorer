@@ -8,7 +8,7 @@ import java.util.Arrays;
 
 class Integrator extends RenderStage {
 
-    private AssetManager assets;
+    private final AssetManager assets;
 
     private Program programColor, programMono;
 

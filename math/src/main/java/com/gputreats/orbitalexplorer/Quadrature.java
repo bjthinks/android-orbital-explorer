@@ -4,8 +4,8 @@ public class Quadrature {
 
     public final int N, L;
     public final boolean color;
-    private int order;
-    private int steps;
+    private final int order;
+    private final int steps;
 
     public Quadrature(int N_, int L_, boolean color_) {
         N = N_;

@@ -2,7 +2,7 @@ package com.gputreats.orbitalexplorer;
 
 public class Power implements Function {
 
-    private int p;
+    private final int p;
 
     public Power(int pp) {
         p = pp;

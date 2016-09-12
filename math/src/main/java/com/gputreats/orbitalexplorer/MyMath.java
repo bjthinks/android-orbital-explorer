@@ -1,6 +1,6 @@
 package com.gputreats.orbitalexplorer;
 
-public final class MyMath {
+final class MyMath {
 
     private MyMath() {}
 
@@ -12,7 +12,7 @@ public final class MyMath {
         if (n < 0)
             throw new IllegalArgumentException("Factorial of negative number");
 
-        double result = 1;
+        double result = 1.0;
 
         for (int i = 2; i <= n; ++i)
             result *= i;

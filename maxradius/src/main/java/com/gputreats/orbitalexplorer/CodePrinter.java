@@ -3,11 +3,11 @@ package com.gputreats.orbitalexplorer;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-public class CodePrinter {
+class CodePrinter {
 
     private PrintWriter writer;
 
-    public CodePrinter(String filename) throws IOException {
+    CodePrinter(String filename) throws IOException {
         writer = new PrintWriter(filename, "UTF-8");
     }
 
@@ -15,25 +15,27 @@ public class CodePrinter {
         writer.println(s);
     }
 
-    public void printPreface() {
+    void printPreface() {
         line("package com.gputreats.orbitalexplorer;");
         line("");
-        line("public class MaximumRadiusTable {");
+        line("public final class MaximumRadiusTable {");
         line("");
-        line("    private static double maximumRadiusTable[][] = {");
+        line("    private MaximumRadiusTable() {}");
+        line("");
+        line("    private static final double maximumRadiusTable[][] = {");
         line("            {");
     }
 
-    public void printNumber(double x) {
+    void printNumber(double x) {
         line("                    " + x + ",");
     }
 
-    public void printSeparator() {
+    void printSeparator() {
         line("            },");
         line("            {");
     }
 
-    public void printSuffix() {
+    void printSuffix() {
         line("            }");
         line("    };");
         line("");

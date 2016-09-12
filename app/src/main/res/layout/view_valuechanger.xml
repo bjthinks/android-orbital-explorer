@@ -1,4 +1,5 @@
-<merge xmlns:android="http://schemas.android.com/apk/res/android">
+<merge xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android">
     <ImageButton
         android:id="@+id/integerchanger_uparrow"
         android:layout_width="@dimen/buttonSize"
@@ -12,7 +13,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
-        android:textSize="24sp" />
+        android:textSize="24sp"
+        tools:ignore="SelectableText" />
     <ImageButton
         android:id="@+id/integerchanger_downarrow"
         android:layout_width="@dimen/buttonSize"

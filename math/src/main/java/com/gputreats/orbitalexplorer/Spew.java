@@ -1,9 +1,9 @@
 package com.gputreats.orbitalexplorer;
 
-public class Spew {
-    long a, b;
+class Spew {
+    private long a, b;
 
-    public Spew(long a_, long b_) {
+    Spew(long a_, long b_) {
         a = a_;
         b = b_;
         if (a == 0 && b == 0)

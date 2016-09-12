@@ -1,6 +1,6 @@
 package com.gputreats.orbitalexplorer;
 
-public final class Romberg {
+final class Romberg {
 
     private Romberg() {}
 

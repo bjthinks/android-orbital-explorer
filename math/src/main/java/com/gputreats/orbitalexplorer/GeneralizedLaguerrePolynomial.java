@@ -1,6 +1,6 @@
 package com.gputreats.orbitalexplorer;
 
-public final class GeneralizedLaguerrePolynomial {
+final class GeneralizedLaguerrePolynomial {
 
     private GeneralizedLaguerrePolynomial() {}
 
@@ -8,7 +8,7 @@ public final class GeneralizedLaguerrePolynomial {
      * GeneralizedLaguerrePolynomial.generate(n, a) gives the polynomial
      * L_n^a(x), as per the definition on Wikipedia.
      */
-    public static Polynomial generate(int n, int a) {
+    static Polynomial generate(int n, int a) {
         Polynomial result = new Polynomial();
         for (int i = 0; i <= n; ++i) {
             double coeff = MyMath.binomial(n + a, n - i) / MyMath.factorial(i);

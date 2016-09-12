@@ -22,7 +22,7 @@ public class OrbitalSelector extends LinearLayout {
     private static final int dim = Color.rgb(128, 128, 128);
     private static final int bright = Color.rgb(255, 255, 255);
 
-    RenderState renderState;
+    private RenderState renderState;
 
     private Context context;
     private String plusMinus, minusPlus, realNumbers, complexNumbers;

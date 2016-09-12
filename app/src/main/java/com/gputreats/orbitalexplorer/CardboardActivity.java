@@ -7,7 +7,7 @@ import com.google.vr.sdk.base.GvrActivity;
 
 public class CardboardActivity extends GvrActivity {
 
-    Orbital orbital;
+    private Orbital orbital;
 
     @Override
     protected void onCreate(Bundle savedState) {
@@ -33,7 +33,7 @@ public class CardboardActivity extends GvrActivity {
         Log.d("CardboardActivity", "Trigger");
     }
 
-    public Orbital getOrbital() {
+    Orbital getOrbital() {
         return orbital;
     }
 }

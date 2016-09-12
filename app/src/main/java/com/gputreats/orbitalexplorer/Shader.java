@@ -6,14 +6,14 @@ import android.opengl.GLES30;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 
-public class Shader {
+class Shader {
 
     private int id;
     public int getId() {
         return id;
     }
 
-    public Shader(AssetManager assets, String filename, int shaderType) throws OpenGLException {
+    Shader(AssetManager assets, String filename, int shaderType) throws OpenGLException {
         String shaderSource;
         try {
             BufferedInputStream instream = new BufferedInputStream(

@@ -11,7 +11,7 @@ package com.gputreats.orbitalexplorer;
 
 public class AzimuthalFunction implements Function {
 
-    private int sinThetaPower;
+    private final int sinThetaPower;
     private Polynomial cosThetaPolynomial;
 
     public AzimuthalFunction(int L, int M) {

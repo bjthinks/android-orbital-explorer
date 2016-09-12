@@ -5,7 +5,7 @@ import android.opengl.GLES30;
 
 class Program {
 
-    private int id;
+    private final int id;
     int getId() {
         return id;
     }

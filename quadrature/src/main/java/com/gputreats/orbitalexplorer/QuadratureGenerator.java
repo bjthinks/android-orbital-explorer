@@ -5,7 +5,7 @@ import java.io.DataOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-public class QuadratureGenerator {
+class QuadratureGenerator {
 
     private void writeAsset(String assetname, float data[])
             throws IOException {
@@ -70,7 +70,7 @@ public class QuadratureGenerator {
                             = new WeightFunction(exponentialConstant,
                             new Product(Polynomial.variableToThe(powerOfR), oscillatingPart),
                             distanceFromOrigin);
-                    WeightFunction simpleWeightFunction = new WeightFunction(exponentialConstant,
+                    Function simpleWeightFunction = new WeightFunction(exponentialConstant,
                             Polynomial.variableToThe(powerOfR), distanceFromOrigin);
                     GaussianQuadrature GQ = new GaussianQuadrature(weightFunction, order);
 
