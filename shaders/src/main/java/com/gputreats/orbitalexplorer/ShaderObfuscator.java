@@ -6,9 +6,8 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-final class ShaderObfuscator {
-
-    private ShaderObfuscator() {}
+enum ShaderObfuscator {
+    ;
 
     private static void obfuscate(String infile, String outfile) throws IOException {
         String infilename = "shaders/src/main/java/" + infile;

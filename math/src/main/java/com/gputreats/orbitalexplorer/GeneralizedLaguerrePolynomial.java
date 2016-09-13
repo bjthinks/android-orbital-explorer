@@ -1,8 +1,7 @@
 package com.gputreats.orbitalexplorer;
 
-final class GeneralizedLaguerrePolynomial {
-
-    private GeneralizedLaguerrePolynomial() {}
+enum GeneralizedLaguerrePolynomial {
+    ;
 
     /**
      * GeneralizedLaguerrePolynomial.generate(n, a) gives the polynomial

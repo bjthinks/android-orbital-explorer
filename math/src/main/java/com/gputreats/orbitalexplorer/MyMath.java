@@ -1,8 +1,7 @@
 package com.gputreats.orbitalexplorer;
 
-final class MyMath {
-
-    private MyMath() {}
+enum MyMath {
+    ;
 
     static double binomial(int n, int k) {
         return factorial(n) / factorial(k) / factorial(n - k);

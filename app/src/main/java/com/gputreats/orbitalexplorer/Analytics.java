@@ -1,38 +1,24 @@
 package com.gputreats.orbitalexplorer;
 
-import android.content.Context;
-
-import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
 
-final class Analytics {
-
-    private Analytics() {}
-
-    private static Tracker tracker;
-    static void init(Context context) {
-        GoogleAnalytics ga = GoogleAnalytics.getInstance(context);
-        if (BuildConfig.DEBUG)
-            ga.setDryRun(true);
-        tracker = ga.newTracker(R.xml.global_tracker);
-        tracker.enableAdvertisingIdCollection(true);
-    }
+enum Analytics {
+    ;
 
     static void setScreenName(String screen) {
-        tracker.setScreenName(screen);
-        tracker.send(new HitBuilders.ScreenViewBuilder().build());
+        OrbitalApplication.tracker.setScreenName(screen);
+        OrbitalApplication.tracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 
     static void reportEvent(String category, String action) {
-        tracker.send(new HitBuilders.EventBuilder()
+        OrbitalApplication.tracker.send(new HitBuilders.EventBuilder()
                 .setCategory(category)
                 .setAction(action)
                 .build());
     }
 
     static void reportFatalError(String error) {
-        tracker.send(new HitBuilders.ExceptionBuilder()
+        OrbitalApplication.tracker.send(new HitBuilders.ExceptionBuilder()
                 .setDescription(error)
                 .setFatal(true)
                 .build());

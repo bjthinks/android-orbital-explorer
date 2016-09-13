@@ -6,9 +6,8 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
-final class MyGL {
-
-    private MyGL() {}
+enum MyGL {
+    ;
 
     static void checkGLES() {
         int error = GLES30.glGetError();

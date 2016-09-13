@@ -1,8 +1,7 @@
 package com.gputreats.orbitalexplorer;
 
-final class LegendrePolynomial {
-
-    private LegendrePolynomial() {}
+enum LegendrePolynomial {
+    ;
 
     /**
      * LegendrePolynomial.generate(n) gives the polynomial

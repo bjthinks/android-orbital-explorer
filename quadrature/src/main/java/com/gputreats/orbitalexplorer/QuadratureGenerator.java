@@ -5,9 +5,8 @@ import java.io.DataOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-final class QuadratureGenerator {
-
-    private QuadratureGenerator() {}
+enum QuadratureGenerator {
+    ;
 
     private static void writeAsset(String assetname, float[] data)
             throws IOException {

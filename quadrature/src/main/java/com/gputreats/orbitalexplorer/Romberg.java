@@ -1,8 +1,7 @@
 package com.gputreats.orbitalexplorer;
 
-final class Romberg {
-
-    private Romberg() {}
+enum Romberg {
+    ;
 
     // Integrate a function from 0 to +infinity
     public static double integrate(Function f) {
