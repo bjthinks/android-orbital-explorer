@@ -13,8 +13,8 @@ public class HelpActivity extends AppCompatActivity {
     private String title;
 
     @Override
-    protected void onCreate(Bundle savedState) {
-        super.onCreate(savedState);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
         Bundle extras = getIntent().getExtras();
 

@@ -10,8 +10,8 @@ public class CardboardActivity extends GvrActivity {
     private Orbital orbital;
 
     @Override
-    protected void onCreate(Bundle savedState) {
-        super.onCreate(savedState);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
         Bundle extras = getIntent().getExtras();
         orbital = new Orbital(extras.getInt("Z"), extras.getInt("N"), extras.getInt("L"),

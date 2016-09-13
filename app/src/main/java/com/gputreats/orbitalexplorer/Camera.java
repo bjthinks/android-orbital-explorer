@@ -85,7 +85,6 @@ class Camera implements Parcelable {
             return new Camera(in.readDouble(),
                     in.readParcelable(Quaternion.class.getClassLoader()));
         }
-
         @Override
         public Camera[] newArray(int size) {
             return new Camera[size];

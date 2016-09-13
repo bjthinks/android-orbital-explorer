@@ -28,7 +28,7 @@ class CardboardRenderer implements GvrView.StereoRenderer {
     }
 
     @Override
-    public void onSurfaceCreated(EGLConfig config) {
+    public void onSurfaceCreated(EGLConfig eglConfig) {
         orbitalTextures.onSurfaceCreated();
         integratorLeft.onSurfaceCreated();
         integratorRight.onSurfaceCreated();

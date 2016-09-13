@@ -1,13 +1,13 @@
 package com.gputreats.orbitalexplorer;
 
-public class Quadrature {
+class Quadrature {
 
     public final int N, L;
     public final boolean color;
     private final int order;
     private final int steps;
 
-    public Quadrature(int N_, int L_, boolean color_) {
+    Quadrature(int N_, int L_, boolean color_) {
         N = N_;
         L = L_;
         color = color_;
@@ -27,11 +27,11 @@ public class Quadrature {
         steps = color ? 64 : 1024;
     }
 
-    public int getOrder() {
+    int getOrder() {
         return order;
     }
 
-    public int getSteps() {
+    int getSteps() {
         return steps;
     }
 }

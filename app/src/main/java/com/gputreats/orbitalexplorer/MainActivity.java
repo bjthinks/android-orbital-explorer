@@ -35,11 +35,11 @@ public class MainActivity extends AppCompatActivity implements RenderStateProvid
     //
 
     @Override
-    protected void onCreate(Bundle savedState) {
-        super.onCreate(savedState);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
         if (hasGLES30())
-            startApp(savedState);
+            startApp(savedInstanceState);
         else
             showDriverError();
     }
@@ -138,10 +138,10 @@ public class MainActivity extends AppCompatActivity implements RenderStateProvid
     private boolean renderExceptionAlreadyReported;
     private class RenderExceptionCallback implements Handler.Callback {
         @Override
-        public boolean handleMessage(Message m) {
+        public boolean handleMessage(Message message) {
             if (!renderExceptionAlreadyReported) {
                 renderExceptionAlreadyReported = true;
-                throw (RuntimeException) m.obj;
+                throw (RuntimeException) message.obj;
             }
             return true;
         }
@@ -190,11 +190,6 @@ public class MainActivity extends AppCompatActivity implements RenderStateProvid
         Intent intent;
         switch (item.getItemId()) {
 
-            /*case R.id.menuSnap:
-                Analytics.reportEvent("menu", "snap");
-                renderState.snapCameraToAxis();
-                break;*/
-
             case R.id.menuFullscreen:
                 Analytics.reportEvent("menu", "full");
                 setFullscreen(true);
@@ -242,14 +237,16 @@ public class MainActivity extends AppCompatActivity implements RenderStateProvid
                 intent.putExtra("title", getString(R.string.menuHelp));
                 startActivity(intent);
                 break;
-        }
 
-        return super.onOptionsItemSelected(item);
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+        return true;
     }
 
     @Override
-    protected void onActivityResult(int request, int result, Intent data) {
-        File file = new File(getCacheDir(), "screens/" + request + ".jpg");
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        File file = new File(getCacheDir(), "screens/" + requestCode + ".jpg");
         //noinspection ResultOfMethodCallIgnored
         file.delete();
     }

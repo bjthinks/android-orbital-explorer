@@ -6,8 +6,8 @@ import android.os.Bundle;
 public class ErrorActivity extends Activity {
 
     @Override
-    protected void onCreate(Bundle savedState) {
-        super.onCreate(savedState);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_error);
     }
