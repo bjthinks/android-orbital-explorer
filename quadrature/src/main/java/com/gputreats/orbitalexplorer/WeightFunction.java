@@ -1,16 +1,16 @@
 package com.gputreats.orbitalexplorer;
 
-public class WeightFunction implements Function {
+class WeightFunction implements Function {
     private final double exponentialConstant;
     private final Function polynomialInR;
     private final double distanceFromOrigin;
 
-    public WeightFunction(double exponentialConstant_,
-                          Function polynomialInR_,
-                          double distanceFromOrigin_) {
-        exponentialConstant = exponentialConstant_;
-        polynomialInR = polynomialInR_;
-        distanceFromOrigin = distanceFromOrigin_;
+    WeightFunction(double inExponentialConstant,
+                   Function inPolynomialInR,
+                   double inDistanceFromOrigin) {
+        exponentialConstant = inExponentialConstant;
+        polynomialInR = inPolynomialInR;
+        distanceFromOrigin = inDistanceFromOrigin;
     }
 
     @Override

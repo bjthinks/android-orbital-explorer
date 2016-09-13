@@ -39,21 +39,21 @@ class GaussianQuadrature {
 
         double[] a = new double[N];
         double[] b = new double[N];
-        double[][] C = new double[N + 1][2 * N + 1];
-        System.arraycopy(moments, 0, C[0], 0, 2 * N + 1);
+        double[][] c = new double[N + 1][2 * N + 1];
+        System.arraycopy(moments, 0, c[0], 0, 2 * N + 1);
         //for (int j = 0; j < 2 * N + 1; ++j)
             //C[0][j] = moments[j];
-        a[0] = C[0][1] / C[0][0];
+        a[0] = c[0][1] / c[0][0];
         b[0] = 0.0;
         for (int i = 1; i < N + 1; ++i) {
             for (int j = i; j < 2 * N - i + 1; ++j) {
-                C[i][j] = C[i - 1][j + 1] - a[i - 1] * C[i - 1][j];
+                c[i][j] = c[i - 1][j + 1] - a[i - 1] * c[i - 1][j];
                 if (i > 1)
-                    C[i][j] -= b[i - 1] * C[i - 2][j];
+                    c[i][j] -= b[i - 1] * c[i - 2][j];
             }
             if (i < N) {
-                a[i] = C[i][i + 1] / C[i][i] - C[i - 1][i] / C[i - 1][i - 1];
-                b[i] = C[i][i] / C[i - 1][i - 1];
+                a[i] = c[i][i + 1] / c[i][i] - c[i - 1][i] / c[i - 1][i - 1];
+                b[i] = c[i][i] / c[i - 1][i - 1];
             }
         }
         // Now, (D * R)[i][j] = C[i][j]. Note that C has extra columns from the above
@@ -69,17 +69,17 @@ class GaussianQuadrature {
 
         // Transform C into U. We only need to do this for the diagonal and superdiagonal.
         for (int i = 0; i < N + 1; ++i) {
-            C[i][i] = Math.sqrt(C[i][i]);
+            c[i][i] = Math.sqrt(c[i][i]);
             if (i < N)
-                C[i][i + 1] /= C[i][i];
+                c[i][i + 1] /= c[i][i];
         }
         SymmetricTridiagonalMatrix J = new SymmetricTridiagonalMatrix(N);
-        J.setDiagonal(0, C[0][1] / C[0][0]);
+        J.setDiagonal(0, c[0][1] / c[0][0]);
         // TODO PROBLEM: Numerical instability causes the ratios below to have large error
         for (int i = 1; i < N; ++i)
-            J.setDiagonal(i, C[i][i + 1] / C[i][i] - C[i - 1][i] / C[i - 1][i - 1]);
+            J.setDiagonal(i, c[i][i + 1] / c[i][i] - c[i - 1][i] / c[i - 1][i - 1]);
         for (int i = 0; i < N - 1; ++i)
-            J.setOffDiagonal(i, C[i + 1][i + 1] / C[i][i]);
+            J.setOffDiagonal(i, c[i + 1][i + 1] / c[i][i]);
 
         /*
          * Step IV: Find the eigenvalues and first components of the eigenvectors of J.
@@ -87,7 +87,7 @@ class GaussianQuadrature {
          * rule.
          */
 
-        J.QRReduce();
+        J.doQRReduce();
         node = new double[N];
         weight = new double[N];
         for (int i = 0; i < N; ++i) {

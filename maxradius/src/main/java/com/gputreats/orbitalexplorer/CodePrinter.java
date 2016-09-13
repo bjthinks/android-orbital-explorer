@@ -39,8 +39,8 @@ class CodePrinter {
         line("            }");
         line("    };");
         line("");
-        line("    public static double getMaximumRadius(int N, int L) {");
-        line("        return maximumRadiusTable[N][L];");
+        line("    static double getMaximumRadius(int qN, int qL) {");
+        line("        return MAXIMUM_RADIUS_TABLE[qN][qL];");
         line("    }");
         line("}");
         writer.close();

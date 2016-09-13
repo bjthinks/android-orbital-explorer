@@ -22,8 +22,8 @@ import java.nio.ByteBuffer;
 class ShareCallback implements Handler.Callback {
 
     private final Activity activity;
-    ShareCallback(Activity a) {
-        activity = a;
+    ShareCallback(Activity inActivity) {
+        activity = inActivity;
     }
 
     @Override

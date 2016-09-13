@@ -4,7 +4,7 @@ enum Romberg {
     ;
 
     // Integrate a function from 0 to +infinity
-    public static double integrate(Function f) {
+    static double integrate(Function f) {
         int n = 1;
         double[] moreAccurateEstimate = new double[n];
         double stepSize = 1.0;

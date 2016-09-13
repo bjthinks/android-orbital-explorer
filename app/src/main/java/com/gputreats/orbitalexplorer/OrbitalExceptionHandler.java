@@ -7,8 +7,8 @@ class OrbitalExceptionHandler implements Thread.UncaughtExceptionHandler {
 
     private final Context context;
 
-    OrbitalExceptionHandler(Context c) {
-        context = c;
+    OrbitalExceptionHandler(Context inContext) {
+        context = inContext;
     }
 
     @Override

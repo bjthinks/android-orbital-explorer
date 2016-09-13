@@ -78,7 +78,7 @@ class OrbitalTextures {
             fInverseAzimuthalStepSize = (float) azimuthalTextureSize / 3.14159265359f;
             fInverseQuadratureStepSize = (float) quadratureSteps / quadratureRadius;
             fInverseRadialStepSize = (float) radialTextureSize / maximumRadius;
-            fM = (float) orbital.M;
+            fM = (float) orbital.qM;
             // Multiply by 2 because the wave function is squared
             fRadialExponent = (float) (2.0 * radialFunction.getExponentialConstant());
             fRadialPower = (float) (2 * radialFunction.getPowerOfR());
@@ -123,7 +123,7 @@ class OrbitalTextures {
     }
 
     int getN() {
-        return orbital.N;
+        return orbital.qN;
     }
 
     float getRadius() {

@@ -7,35 +7,35 @@ class SymmetricTridiagonalMatrix {
     private final double[] offDiagonal;
     private final double[] eigenvectorFirstComponent;
 
-    SymmetricTridiagonalMatrix(int N_) {
-        N = N_;
-        diagonal = new double[N_];
-        offDiagonal = new double[N_ - 1];
-        eigenvectorFirstComponent = new double[N_];
+    SymmetricTridiagonalMatrix(int inN) {
+        N = inN;
+        diagonal = new double[N];
+        offDiagonal = new double[N - 1];
+        eigenvectorFirstComponent = new double[N];
         eigenvectorFirstComponent[0] = 1.0;
     }
 
-    public double getDiagonal(int i) {
+    double getDiagonal(int i) {
         return diagonal[i];
     }
 
-    public double getComponent(int i) {
+    double getComponent(int i) {
         return eigenvectorFirstComponent[i];
     }
 
-    public void setDiagonal(int i, double x) {
+    void setDiagonal(int i, double x) {
         diagonal[i] = x;
     }
 
-    public void setOffDiagonal(int i, double x) {
+    void setOffDiagonal(int i, double x) {
         offDiagonal[i] = x;
     }
 
-    public void QRReduce() {
+    void doQRReduce() {
         int n = N;
         int fail = 0;
         while (n > 1) {
-            QRReductionStep(n);
+            doQRReductionStep(n);
             ++fail;
             while (n > 1 && Math.abs(offDiagonal[n - 2]) < 1.0e-15 * Math.abs(diagonal[n - 1])) {
                 --n;
@@ -46,7 +46,7 @@ class SymmetricTridiagonalMatrix {
         }
     }
 
-    private void QRReductionStep(int n) {
+    private void doQRReductionStep(int n) {
         // Choose a "deflation" parameter lambda equal to the larger eigenvalue
         // of the lower-right 2x2 minor.
         double lambda;

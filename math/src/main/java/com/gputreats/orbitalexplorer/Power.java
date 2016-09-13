@@ -1,15 +1,15 @@
 package com.gputreats.orbitalexplorer;
 
-public class Power implements Function {
+class Power implements Function {
 
-    private final int p;
+    private final int power;
 
-    public Power(int pp) {
-        p = pp;
+    Power(int inPower) {
+        power = inPower;
     }
 
     @Override
     public double eval(double x) {
-        return MyMath.fastpow(x, p);
+        return MyMath.fastpow(x, power);
     }
 }

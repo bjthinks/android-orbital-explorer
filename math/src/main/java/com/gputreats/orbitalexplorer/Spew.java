@@ -3,9 +3,9 @@ package com.gputreats.orbitalexplorer;
 class Spew {
     private long a, b;
 
-    Spew(int a_, int b_) {
-        a = (long) a_;
-        b = (long) b_;
+    Spew(int inA, int inB) {
+        a = (long) inA;
+        b = (long) inB;
         if (a == 0L && b == 0L)
             throw new RuntimeException();
         for (int i = 0; i < 37; ++i)

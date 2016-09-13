@@ -9,20 +9,20 @@ package com.gputreats.orbitalexplorer;
  * cos(theta), which we do here.
  */
 
-public class AzimuthalFunction implements Function {
+class AzimuthalFunction implements Function {
 
-    private final int sinThetaPower;
+    private final double sinThetaPower;
     private Polynomial cosThetaPolynomial;
 
-    public AzimuthalFunction(int L, int M) {
-        int absM = Math.abs(M);
-        cosThetaPolynomial = LegendrePolynomial.generate(L);
+    AzimuthalFunction(int qL, int qM) {
+        int absM = Math.abs(qM);
+        cosThetaPolynomial = LegendrePolynomial.generate(qL);
         for (int i = 0; i < absM; ++i)
             cosThetaPolynomial = cosThetaPolynomial.derivative();
-        double constant = Math.sqrt((2.0 * L + 1.0) / 2.0);
-        constant *= Math.sqrt(MyMath.factorial(L - absM) / MyMath.factorial(L + absM));
+        double constant = Math.sqrt((double) (2 * qL + 1) / 2.0);
+        constant *= Math.sqrt(MyMath.factorial(qL - absM) / MyMath.factorial(qL + absM));
         cosThetaPolynomial = cosThetaPolynomial.multiply(constant);
-        sinThetaPower = absM;
+        sinThetaPower = (double) absM;
     }
 
     // Note that theta is "colatitude", i.e. 0 along (0, 0, 1), pi/2 when z=0,

@@ -56,10 +56,10 @@ class RenderState implements Parcelable {
     @Override
     public synchronized void writeToParcel(Parcel out, int flags) {
         out.writeParcelable(camera, flags);
-        out.writeInt(orbital.Z);
-        out.writeInt(orbital.N);
-        out.writeInt(orbital.L);
-        out.writeInt(orbital.M);
+        out.writeInt(orbital.qZ);
+        out.writeInt(orbital.qN);
+        out.writeInt(orbital.qL);
+        out.writeInt(orbital.qM);
         out.writeInt(orbital.real ? 1 : 0);
         out.writeInt(orbital.color ? 1 : 0);
     }

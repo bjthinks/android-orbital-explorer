@@ -11,10 +11,10 @@ class Texture {
         return id;
     }
 
-    Texture(int format_, int type_, int internalFormat_) {
-        format = format_;
-        type = type_;
-        internalFormat = internalFormat_;
+    Texture(int inFormat, int inType, int inInternalFormat) {
+        format = inFormat;
+        type = inType;
+        internalFormat = inInternalFormat;
 
         int[] temp = new int[1];
         GLES30.glGenTextures(1, temp, 0);

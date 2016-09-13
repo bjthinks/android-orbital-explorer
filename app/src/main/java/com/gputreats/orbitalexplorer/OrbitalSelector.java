@@ -40,23 +40,23 @@ public class OrbitalSelector extends LinearLayout {
     private Button rcChanger;
     private ImageButton colorChanger;
 
-    public OrbitalSelector(Context c) {
-        super(c);
-        constructorSetup(c);
+    public OrbitalSelector(Context inContext) {
+        super(inContext);
+        constructorSetup(inContext);
     }
 
-    public OrbitalSelector(Context c, AttributeSet attribs) {
-        super(c, attribs);
-        constructorSetup(c);
+    public OrbitalSelector(Context inContext, AttributeSet attribs) {
+        super(inContext, attribs);
+        constructorSetup(inContext);
     }
 
-    public OrbitalSelector(Context c, AttributeSet attribs, int defStyle) {
-        super(c, attribs, defStyle);
-        constructorSetup(c);
+    public OrbitalSelector(Context inContext, AttributeSet attribs, int defStyle) {
+        super(inContext, attribs, defStyle);
+        constructorSetup(inContext);
     }
 
-    private void constructorSetup(Context c) {
-        context = c;
+    private void constructorSetup(Context inContext) {
+        context = inContext;
 
         plusMinus = context.getString(R.string.plusMinus);
         minusPlus = context.getString(R.string.minusPlus);
@@ -72,9 +72,9 @@ public class OrbitalSelector extends LinearLayout {
 
         renderState = ((RenderStateProvider) context).provideRenderState();
         Orbital previouslyDisplayedOrbital = renderState.getOrbital();
-        N = previouslyDisplayedOrbital.N;
-        L = previouslyDisplayedOrbital.L;
-        M = previouslyDisplayedOrbital.M;
+        N = previouslyDisplayedOrbital.qN;
+        L = previouslyDisplayedOrbital.qL;
+        M = previouslyDisplayedOrbital.qM;
         real = previouslyDisplayedOrbital.real;
         color = previouslyDisplayedOrbital.color;
 

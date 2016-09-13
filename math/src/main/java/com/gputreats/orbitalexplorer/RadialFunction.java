@@ -14,43 +14,43 @@ package com.gputreats.orbitalexplorer;
  * Where L is a generalized (or "associated") Laguerre polynomial.
  */
 
-public class RadialFunction implements Function {
+class RadialFunction implements Function {
 
     private final double exponentialConstant;
     private final int powerOfR;
     private final Polynomial oscillatingPart;
     private final double maximumRadius;
 
-    public RadialFunction(int Z, int N, int L) {
-        double dZ = (double) Z;
-        double dN = (double) N;
+    RadialFunction(int inZ, int inN, int inL) {
+        double dZ = (double) inZ;
+        double dN = (double) inN;
 
         double radialScaleFactor = 2.0 * dZ / dN;
 
         exponentialConstant = -radialScaleFactor / 2.0;
 
-        powerOfR = L;
+        powerOfR = inL;
 
         double constantFactors = Math.pow(2.0 * dZ / dN, 1.5)
-                * Math.sqrt(MyMath.factorial(N - L - 1) / (2.0 * dN * MyMath.factorial(N + L)));
+                * Math.sqrt(MyMath.factorial(inN - inL - 1) / (2.0 * dN * MyMath.factorial(inN + inL)));
 
-        oscillatingPart = GeneralizedLaguerrePolynomial.generate(N - L - 1, 2 * L + 1)
+        oscillatingPart = GeneralizedLaguerrePolynomial.generate(inN - inL - 1, 2 * inL + 1)
                 .rescaleX(radialScaleFactor)
                 .multiply(Math.pow(radialScaleFactor, powerOfR))
                 .multiply(constantFactors);
 
-        maximumRadius = MaximumRadiusTable.getMaximumRadius(N, L);
+        maximumRadius = MaximumRadiusTable.getMaximumRadius(inN, inL);
     }
 
-    public double getExponentialConstant() {
+    double getExponentialConstant() {
         return exponentialConstant;
     }
 
-    public int getPowerOfR() {
+    int getPowerOfR() {
         return powerOfR;
     }
 
-    public Polynomial getOscillatingPart() {
+    Polynomial getOscillatingPart() {
         return oscillatingPart;
     }
 
@@ -61,8 +61,7 @@ public class RadialFunction implements Function {
                 * Math.exp(exponentialConstant * r);
     }
 
-    public double getMaximumRadius() {
+    double getMaximumRadius() {
         return maximumRadius;
     }
-
 }

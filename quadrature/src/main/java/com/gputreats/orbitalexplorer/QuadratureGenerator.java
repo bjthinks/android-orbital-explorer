@@ -20,14 +20,14 @@ enum QuadratureGenerator {
 
     private static void go() throws IOException {
         // Color
-        for (int N = 1; N <= 8; ++N) {
-            for (int L = 0; L < N; ++L) {
+        for (int qN = 1; qN <= 8; ++qN) {
+            for (int qL = 0; qL < qN; ++qL) {
 
-                RadialFunction radialFunction = new RadialFunction(1, N, L);
+                RadialFunction radialFunction = new RadialFunction(1, qN, qL);
                 double exponentialConstant = radialFunction.getExponentialConstant();
                 int powerOfR = radialFunction.getPowerOfR();
 
-                Quadrature quadrature = new Quadrature(N, L, true);
+                Quadrature quadrature = new Quadrature(qN, qL, true);
                 int order = quadrature.getOrder();
                 int steps = quadrature.getSteps();
 
@@ -37,29 +37,29 @@ enum QuadratureGenerator {
                             * (double) i / (double) steps;
                     WeightFunction weightFunction = new WeightFunction(exponentialConstant,
                             Polynomial.variableToThe(powerOfR), distanceFromOrigin);
-                    GaussianQuadrature GQ = new GaussianQuadrature(weightFunction, order);
+                    GaussianQuadrature gq = new GaussianQuadrature(weightFunction, order);
 
                     for (int j = 0; j < order; ++j) {
                         quadratureWeights[2 * order * i + 2 * j]
-                                = (float) GQ.getNode(j);
+                                = (float) gq.getNode(j);
                         quadratureWeights[2 * order * i + 2 * j + 1]
-                                = (float) (GQ.getWeight(j) / weightFunction.eval(GQ.getNode(j)));
+                                = (float) (gq.getWeight(j) / weightFunction.eval(gq.getNode(j)));
                     }
                 }
-                writeAsset("color-" + N + '-' + L, quadratureWeights);
+                writeAsset("color-" + qN + '-' + qL, quadratureWeights);
             }
         }
 
         // Mono
-        for (int N = 1; N <= 8; ++N) {
-            for (int L = 0; L < N; ++L) {
+        for (int qN = 1; qN <= 8; ++qN) {
+            for (int qL = 0; qL < qN; ++qL) {
 
-                RadialFunction radialFunction = new RadialFunction(1, N, L);
+                RadialFunction radialFunction = new RadialFunction(1, qN, qL);
                 double exponentialConstant = radialFunction.getExponentialConstant();
                 int powerOfR = radialFunction.getPowerOfR();
                 Polynomial oscillatingPart = radialFunction.getOscillatingPart();
 
-                Quadrature quadrature = new Quadrature(N, L, false);
+                Quadrature quadrature = new Quadrature(qN, qL, false);
                 int order = quadrature.getOrder();
                 int steps = quadrature.getSteps();
 
@@ -73,17 +73,17 @@ enum QuadratureGenerator {
                             distanceFromOrigin);
                     Function simpleWeightFunction = new WeightFunction(exponentialConstant,
                             Polynomial.variableToThe(powerOfR), distanceFromOrigin);
-                    GaussianQuadrature GQ = new GaussianQuadrature(weightFunction, order);
+                    GaussianQuadrature gq = new GaussianQuadrature(weightFunction, order);
 
                     for (int j = 0; j < order; ++j) {
                         quadratureWeights[2 * order * i + 2 * j]
-                                = (float) GQ.getNode(j);
+                                = (float) gq.getNode(j);
                         quadratureWeights[2 * order * i + 2 * j + 1]
-                                = (float) (GQ.getWeight(j)
-                                / simpleWeightFunction.eval(GQ.getNode(j)));
+                                = (float) (gq.getWeight(j)
+                                / simpleWeightFunction.eval(gq.getNode(j)));
                     }
                 }
-                writeAsset("mono-" + N + '-' + L, quadratureWeights);
+                writeAsset("mono-" + qN + '-' + qL, quadratureWeights);
             }
         }
     }

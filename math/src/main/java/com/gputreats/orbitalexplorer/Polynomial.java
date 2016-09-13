@@ -1,29 +1,29 @@
 package com.gputreats.orbitalexplorer;
 
-public class Polynomial implements Function {
+class Polynomial implements Function {
 
     // Invariant: c is not null, and leading coeff is not 0.
     // The zero polynomial has c.length == 0 and degree -1.
     private double[] c;
 
-    public Polynomial() {
+    Polynomial() {
         c = new double[0];
     }
 
-    public Polynomial(double cc) {
-        if (cc == 0.0)
+    Polynomial(double constant) {
+        if (constant == 0.0)
             c = new double[0];
         else {
             c = new double[1];
-            c[0] = cc;
+            c[0] = constant;
         }
     }
 
-    public int degree() {
+    int degree() {
         return c.length - 1;
     }
 
-    public static Polynomial variableToThe(int power) {
+    static Polynomial variableToThe(int power) {
         Polynomial x = new Polynomial();
         x.c = new double[power + 1];
         x.c[power] = 1.0;
@@ -44,7 +44,7 @@ public class Polynomial implements Function {
         return result;
     }
 
-    public Polynomial add(Polynomial rhs) {
+    Polynomial add(Polynomial rhs) {
         Polynomial result = new Polynomial();
 
         int needToDoAdditionUpTo;
@@ -81,7 +81,7 @@ public class Polynomial implements Function {
         return add(rhs.negate());
     } */
 
-    public Polynomial multiply(Polynomial rhs) {
+    Polynomial multiply(Polynomial rhs) {
         Polynomial result = new Polynomial();
         if (c.length == 0 || rhs.c.length == 0)
             return result;
@@ -92,26 +92,26 @@ public class Polynomial implements Function {
         return result;
     }
 
-    public Polynomial pow(int power) {
+    Polynomial pow(int power) {
         Polynomial result = new Polynomial(1.0);
         for (int i = 0; i < power; ++i)
             result = result.multiply(this);
         return result;
     }
 
-    public Polynomial add(double k) {
+    Polynomial add(double k) {
         return add(new Polynomial(k));
     }
 
-    public Polynomial subtract(double k) {
+    Polynomial subtract(double k) {
         return add(-k);
     }
 
-    public Polynomial multiply(double k) {
+    Polynomial multiply(double k) {
         return multiply(new Polynomial(k));
     }
 
-    public Polynomial derivative() {
+    Polynomial derivative() {
         Polynomial result = new Polynomial();
 
         if (c.length <= 1)
@@ -129,7 +129,7 @@ public class Polynomial implements Function {
     } */
 
     // From p(x) and k, compute p(k * x)
-    public Polynomial rescaleX(double k) {
+    Polynomial rescaleX(double k) {
         Polynomial result = new Polynomial();
         result.c = new double[c.length];
 

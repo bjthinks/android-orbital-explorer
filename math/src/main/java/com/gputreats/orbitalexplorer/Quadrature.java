@@ -7,10 +7,10 @@ class Quadrature {
     private final int order;
     private final int steps;
 
-    Quadrature(int N_, int L_, boolean color_) {
-        N = N_;
-        L = L_;
-        color = color_;
+    Quadrature(int inN, int inL, boolean inColor) {
+        N = inN;
+        L = inL;
+        color = inColor;
 
         // An important design choice is to make the quadrature order independent of M. This
         // lets us re-use quadrature nodes and weights for all orbitals with the same

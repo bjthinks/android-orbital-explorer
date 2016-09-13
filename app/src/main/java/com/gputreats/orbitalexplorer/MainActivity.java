@@ -204,10 +204,10 @@ public class MainActivity extends AppCompatActivity implements RenderStateProvid
                 Analytics.reportEvent("menu", "cardboard");
                 intent = new Intent(this, CardboardActivity.class);
                 Orbital orbital = renderState.getOrbital();
-                intent.putExtra("Z", orbital.Z);
-                intent.putExtra("N", orbital.N);
-                intent.putExtra("L", orbital.L);
-                intent.putExtra("M", orbital.M);
+                intent.putExtra("Z", orbital.qZ);
+                intent.putExtra("N", orbital.qN);
+                intent.putExtra("L", orbital.qL);
+                intent.putExtra("M", orbital.qM);
                 intent.putExtra("real", orbital.real);
                 intent.putExtra("color", orbital.color);
                 startActivity(intent);
