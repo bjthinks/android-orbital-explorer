@@ -50,6 +50,7 @@ class ShareCallback implements Handler.Callback {
         paint.setTextAlign(Paint.Align.CENTER);
         float density = activity.getResources().getDisplayMetrics().density;
         paint.setTextSize(20.0f * density); // ~20dp
+        // TODO fix string literal
         canvas.drawText("Orbital Explorer", width / 2.0f, height - 20.0f * density, paint);
 
         int name = (int) (System.currentTimeMillis() % 0x10000L);
@@ -93,6 +94,7 @@ class ShareCallback implements Handler.Callback {
             shareError(name);
             return true;
         }
+        // TODO fix string literal
         Intent chooser = Intent.createChooser(intent, "Share image with");
         activity.startActivityForResult(chooser, name);
 
@@ -100,6 +102,7 @@ class ShareCallback implements Handler.Callback {
     }
 
     private void shareError(int name) {
+        // TODO fix string literal
         Toast.makeText(activity, "Unable to share", Toast.LENGTH_SHORT).show();
         File file = new File(activity.getCacheDir(), "screens/" + name + ".jpg");
         //noinspection ResultOfMethodCallIgnored

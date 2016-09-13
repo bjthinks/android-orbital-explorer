@@ -30,7 +30,8 @@ public class CardboardActivity extends GvrActivity {
 
     @Override
     public void onCardboardTrigger() {
-        Log.d("CardboardActivity", "Trigger");
+        if (BuildConfig.DEBUG)
+            Log.d("CardboardActivity", "Trigger");
     }
 
     Orbital getOrbital() {
