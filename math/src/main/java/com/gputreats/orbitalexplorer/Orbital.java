@@ -2,6 +2,8 @@ package com.gputreats.orbitalexplorer;
 
 class Orbital {
 
+    static final int MAX_N = 8;
+
     final int qZ, qN, qL, qM;
     final boolean real, color;
     private final RadialFunction radialFunction;

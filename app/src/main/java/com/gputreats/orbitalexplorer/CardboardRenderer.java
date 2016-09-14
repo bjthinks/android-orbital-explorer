@@ -86,8 +86,8 @@ class CardboardRenderer implements GvrView.StereoRenderer {
         translateMatrix[5] = 1.0f;
         translateMatrix[10] = 1.0f;
         translateMatrix[15] = 1.0f;
-        float distanceToNucleus = 2.0f;
-        float halfEyeDistance = 0.2f;
+        final float distanceToNucleus = 2.0f;
+        final float halfEyeDistance = 0.2f;
         translateMatrix[12] = distanceToNucleus * forward[0] + halfEyeDistance * lateral[0];
         translateMatrix[13] = distanceToNucleus * forward[1] + halfEyeDistance * lateral[1];
         translateMatrix[14] = distanceToNucleus * forward[2] + halfEyeDistance * lateral[2];
@@ -103,7 +103,9 @@ class CardboardRenderer implements GvrView.StereoRenderer {
         float[] temp2 = new float[16];
         Matrix.multiplyMM(temp2, 0, headViewMatrix, 0, temp1, 0);
 
-        float[] projectionMatrix = eye.getPerspective(1.0f, 2.0f);
+        final float near = 1.0f;
+        final float far = 2.0f;
+        float[] projectionMatrix = eye.getPerspective(near, far);
         float[] transform = new float[16];
         Matrix.multiplyMM(transform, 0, projectionMatrix, 0, temp2, 0);
 

@@ -1,4 +1,5 @@
 package com.gputreats.orbitalexplorer;
-final class MaximumRadiusTable {
+enum MaximumRadiusTable {
+    ;
     static double getMaximumRadius(int qN, int qL) { return 1.0; }
 }

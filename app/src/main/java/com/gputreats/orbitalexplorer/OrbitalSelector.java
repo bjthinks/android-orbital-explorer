@@ -16,8 +16,6 @@ import android.widget.TextView;
 
 public class OrbitalSelector extends LinearLayout {
 
-    private static final int MAX_N = 8;
-
     private static final int COLOR_DARK = Color.rgb(0, 0, 0);
     private static final int COLOR_DIM = Color.rgb(128, 128, 128);
     private static final int COLOR_BRIGHT = Color.rgb(255, 255, 255);
@@ -146,7 +144,7 @@ public class OrbitalSelector extends LinearLayout {
     }
 
     private void increaseN() {
-        if (N < MAX_N) {
+        if (N < Orbital.MAX_N) {
             ++N;
             nChanger.setInteger(N);
         }
@@ -162,7 +160,7 @@ public class OrbitalSelector extends LinearLayout {
     }
 
     private void increaseL() {
-        if (L < MAX_N - 1) {
+        if (L < Orbital.MAX_N - 1) {
             ++L;
             lChanger.setInteger(L);
             if (L >= N)
@@ -182,7 +180,7 @@ public class OrbitalSelector extends LinearLayout {
     }
 
     private void increaseM() {
-        if (M < MAX_N - 1) {
+        if (M < Orbital.MAX_N - 1) {
             ++M;
             setMChanger();
             if (M > L)
@@ -191,7 +189,7 @@ public class OrbitalSelector extends LinearLayout {
     }
 
     private void decreaseM() {
-        if (M > 1 - MAX_N) {
+        if (M > 1 - Orbital.MAX_N) {
             --M;
             setMChanger();
             if (M < -L)
@@ -228,7 +226,7 @@ public class OrbitalSelector extends LinearLayout {
     }
 
     private void setButtonTint() {
-        if (N == MAX_N)
+        if (N == Orbital.MAX_N)
             nChanger.setUpTint(COLOR_DARK);
         else
             nChanger.setUpTint(COLOR_BRIGHT);
@@ -240,7 +238,7 @@ public class OrbitalSelector extends LinearLayout {
         else
             nChanger.setDownTint(COLOR_BRIGHT);
 
-        if (L == MAX_N - 1)
+        if (L == Orbital.MAX_N - 1)
             lChanger.setUpTint(COLOR_DARK);
         else if (L >= N - 1)
             lChanger.setUpTint(COLOR_DIM);
@@ -254,14 +252,14 @@ public class OrbitalSelector extends LinearLayout {
         else
             lChanger.setDownTint(COLOR_BRIGHT);
 
-        if (M == MAX_N - 1)
+        if (M == Orbital.MAX_N - 1)
             mChanger.setUpTint(COLOR_DARK);
         else if (M >= L)
             mChanger.setUpTint(COLOR_DIM);
         else
             mChanger.setUpTint(COLOR_BRIGHT);
 
-        if (M == 1 - MAX_N)
+        if (M == 1 - Orbital.MAX_N)
             mChanger.setDownTint(COLOR_DARK);
         else if (M <= -L)
             mChanger.setDownTint(COLOR_DIM);
