@@ -3,6 +3,7 @@ package com.gputreats.orbitalexplorer;
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.opengl.GLES30;
+import android.util.Log;
 
 import java.util.Arrays;
 
@@ -46,6 +47,9 @@ class Integrator extends RenderStage {
     }
 
     void resize(int w, int h) {
+        if (BuildConfig.DEBUG)
+            Log.d("Integrator", "Changing size to " + w + 'x' + h);
+
         width = w;
         height = h;
         outputTextureResized = true;

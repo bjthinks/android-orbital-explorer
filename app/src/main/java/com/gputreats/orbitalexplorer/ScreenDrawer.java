@@ -5,6 +5,7 @@ import android.content.res.AssetManager;
 import android.opengl.GLES30;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 
 import com.google.vr.sdk.base.Viewport;
 
@@ -30,6 +31,9 @@ class ScreenDrawer extends RenderStage {
     private int width, height;
 
     void resize(int newInputWidth, int newInputHeight, int newWidth, int newHeight) {
+        if (BuildConfig.DEBUG)
+            Log.d("ScreenDrawer", "Changing size to " + newWidth + 'x' + newHeight);
+
         inputWidth = newInputWidth;
         inputHeight = newInputHeight;
         width = newWidth;
