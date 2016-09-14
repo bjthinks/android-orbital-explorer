@@ -7,7 +7,7 @@ class Texture {
     private final int id;
     private final int format, type, internalFormat;
 
-    public int getId() {
+    int getId() {
         return id;
     }
 

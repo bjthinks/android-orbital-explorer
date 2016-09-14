@@ -25,18 +25,4 @@ enum MyGL {
         fb.position(0);
         return fb;
     }
-
-    static float[] functionToBuffer2(Function f, double start, double end, int n) {
-        float[] data = new float[2 * n];
-        double stepSize = (end - start) / (double) n;
-        double x = start;
-        float value = (float) f.eval(x);
-        for (int i = 0; i < n; ++i) {
-            data[2 * i] = value;
-            x += stepSize;
-            value = (float) f.eval(x);
-            data[2 * i + 1] = value;
-        }
-        return data;
-    }
 }

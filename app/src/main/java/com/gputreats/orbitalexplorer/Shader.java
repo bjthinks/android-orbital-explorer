@@ -9,7 +9,7 @@ import java.io.IOException;
 class Shader {
 
     private final int id;
-    public int getId() {
+    int getId() {
         return id;
     }
 

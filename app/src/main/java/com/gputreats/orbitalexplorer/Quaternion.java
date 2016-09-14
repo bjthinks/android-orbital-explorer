@@ -43,7 +43,7 @@ class Quaternion implements Parcelable {
         k = kmaginary;
     }
 
-    private Quaternion(double real, Vector3 unreal) {
+    Quaternion(double real, Vector3 unreal) {
         r = real;
         i = unreal.getX();
         j = unreal.getY();
@@ -91,12 +91,6 @@ class Quaternion implements Parcelable {
 
     double dist(Quaternion y) {
         return subtract(y).norm();
-    }
-
-    static Quaternion rotation(double angle, Vector3 v) {
-        double s = Math.sin(angle / 2.0);
-        double c = Math.cos(angle / 2.0);
-        return new Quaternion(c, v.normalize().multiply(s));
     }
 
     float[] asRotationMatrix() {

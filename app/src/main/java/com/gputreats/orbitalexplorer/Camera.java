@@ -109,7 +109,14 @@ class Camera implements Parcelable {
     private static final Vector3 X_HAT = new Vector3(1.0, 0.0, 0.0);
     private static final Vector3 Y_HAT = new Vector3(0.0, 1.0, 0.0);
     private static final Vector3 Z_HAT = new Vector3(0.0, 0.0, 1.0);
-    private static final Quaternion INITIAL_ROTATION = Quaternion.rotation(Math.PI / 2.0, X_HAT);
+
+    private static Quaternion rotation(double angle, Vector3 v) {
+        double s = Math.sin(angle / 2.0);
+        double c = Math.cos(angle / 2.0);
+        return new Quaternion(c, v.normalize().multiply(s));
+    }
+
+    private static final Quaternion INITIAL_ROTATION = rotation(Math.PI / 2.0, X_HAT);
 
     private Quaternion totalRotation = INITIAL_ROTATION;
 
@@ -117,18 +124,18 @@ class Camera implements Parcelable {
     // x and y are multiples of the (mean) screen size
     void drag(double x, double y) {
         // Finger moves right --> positive rotation about y axis
-        Quaternion y_rotation = Quaternion.rotation(Math.PI * x, Y_HAT);
+        Quaternion yRotation = rotation(Math.PI * x, Y_HAT);
         // Finger moves up --> negative rotation about x axis
-        Quaternion x_rotation = Quaternion.rotation(-Math.PI * y, X_HAT);
+        Quaternion xRotation = rotation(-Math.PI * y, X_HAT);
         // total = normalize(x_rot * y_rot * total)
-        totalRotation = x_rotation.multiply(y_rotation).multiply(totalRotation);
+        totalRotation = xRotation.multiply(yRotation).multiply(totalRotation);
         totalRotation = totalRotation.normalize();
     }
 
     // Two finger twist by an angle increment of theta
     void twist(double theta) {
-        Quaternion z_rotation = Quaternion.rotation(theta, Z_HAT);
-        totalRotation = z_rotation.multiply(totalRotation);
+        Quaternion zRotation = rotation(theta, Z_HAT);
+        totalRotation = zRotation.multiply(totalRotation);
         totalRotation = totalRotation.normalize();
     }
 

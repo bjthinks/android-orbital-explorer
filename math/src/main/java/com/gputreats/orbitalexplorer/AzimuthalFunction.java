@@ -16,7 +16,7 @@ class AzimuthalFunction implements Function {
 
     AzimuthalFunction(int qL, int qM) {
         int absM = Math.abs(qM);
-        cosThetaPolynomial = LegendrePolynomial.generate(qL);
+        cosThetaPolynomial = legendrePolynomial(qL);
         for (int i = 0; i < absM; ++i)
             cosThetaPolynomial = cosThetaPolynomial.derivative();
         double constant = Math.sqrt((double) (2 * qL + 1) / 2.0);
@@ -31,5 +31,18 @@ class AzimuthalFunction implements Function {
     public double eval(double theta) {
         return cosThetaPolynomial.eval(Math.cos(theta))
                 * MyMath.fastpow(Math.sin(theta), sinThetaPower);
+    }
+
+    /**
+     * legendrePolynomial gives the polynomial
+     * P_n(x) = (2^n n!)^-1 d^n/dx^n [(x^2-1)^n], as per the definition on Wikipedia.
+     */
+    private static Polynomial legendrePolynomial(int qL) {
+        Polynomial result = Polynomial.variableToThe(2).subtract(1.0).pow(qL);
+
+        for (int i = 0; i < qL; ++i)
+            result = result.derivative().multiply(1.0 / (double) (2 * (i + 1)));
+
+        return result;
     }
 }

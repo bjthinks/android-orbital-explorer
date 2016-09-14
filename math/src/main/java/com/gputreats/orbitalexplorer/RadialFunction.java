@@ -34,7 +34,7 @@ class RadialFunction implements Function {
         double constantFactors = Math.pow(2.0 * dZ / dN, 1.5)
                 * Math.sqrt(MyMath.factorial(inN - inL - 1) / (2.0 * dN * MyMath.factorial(inN + inL)));
 
-        oscillatingPart = GeneralizedLaguerrePolynomial.generate(inN - inL - 1, 2 * inL + 1)
+        oscillatingPart = generalizedLaguerrePolynomial(inN - inL - 1, 2 * inL + 1)
                 .rescaleX(radialScaleFactor)
                 .multiply(MyMath.fastpow(radialScaleFactor, powerOfR))
                 .multiply(constantFactors);
@@ -63,5 +63,24 @@ class RadialFunction implements Function {
 
     double getMaximumRadius() {
         return maximumRadius;
+    }
+
+    /**
+     * generalizedLaguerrePolynomial(n, a) gives the polynomial
+     * L_n^a(x), as per the definition on Wikipedia.
+     */
+    private static Polynomial generalizedLaguerrePolynomial(int n, int a) {
+        Polynomial result = new Polynomial();
+        for (int i = 0; i <= n; ++i) {
+            double coeff = binomial(n + a, n - i) / MyMath.factorial(i);
+            if ((i & 1) == 1)
+                coeff = -coeff;
+            result = result.add(Polynomial.variableToThe(i).multiply(coeff));
+        }
+        return result;
+    }
+
+    static double binomial(int n, int k) {
+        return MyMath.factorial(n) / MyMath.factorial(k) / MyMath.factorial(n - k);
     }
 }

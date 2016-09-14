@@ -59,7 +59,8 @@ class Integrator extends RenderStage {
 
     private float[] inverseTransform = new float[16];
     Texture render(OrbitalTextures orbitalTextures,
-                   float[] newInverseTransform, boolean needToIntegrate) {
+                   float[] newInverseTransform, boolean inNeedToIntegrate) {
+        boolean needToIntegrate = inNeedToIntegrate;
 
         MyGL.checkGLES();
 

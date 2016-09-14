@@ -61,13 +61,13 @@ class OrbitalTextures {
 
             // Load new radial texture
             final int radialTextureSize = 1024;
-            float[] radialData = MyGL.functionToBuffer2(radialFunction.getOscillatingPart(),
+            float[] radialData = functionToBuffer2(radialFunction.getOscillatingPart(),
                     0.0, maximumRadius, radialTextureSize);
             radialTexture.bindToTexture2DAndSetImage(radialTextureSize, 1, radialData);
 
             // Load new azimuthal texture
             final int azimuthalTextureSize = 256;
-            float[] azimuthalData = MyGL.functionToBuffer2(azimuthalFunction,
+            float[] azimuthalData = functionToBuffer2(azimuthalFunction,
                     0.0, Math.PI, azimuthalTextureSize);
             azimuthalTexture.bindToTexture2DAndSetImage(azimuthalTextureSize, 1, azimuthalData);
 
@@ -128,5 +128,19 @@ class OrbitalTextures {
 
     float getRadius() {
         return (float) orbital.getRadialFunction().getMaximumRadius();
+    }
+
+    private static float[] functionToBuffer2(Function f, double start, double end, int n) {
+        float[] data = new float[2 * n];
+        double stepSize = (end - start) / (double) n;
+        double x = start;
+        float value = (float) f.eval(x);
+        for (int i = 0; i < n; ++i) {
+            data[2 * i] = value;
+            x += stepSize;
+            value = (float) f.eval(x);
+            data[2 * i + 1] = value;
+        }
+        return data;
     }
 }

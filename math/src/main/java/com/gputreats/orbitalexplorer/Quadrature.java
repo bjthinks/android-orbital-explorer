@@ -2,8 +2,8 @@ package com.gputreats.orbitalexplorer;
 
 class Quadrature {
 
-    public final int N, L;
-    public final boolean color;
+    final int N, L;
+    final boolean color;
     private final int order;
     private final int steps;
 

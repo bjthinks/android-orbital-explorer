@@ -3,10 +3,6 @@ package com.gputreats.orbitalexplorer;
 enum MyMath {
     ;
 
-    static double binomial(int n, int k) {
-        return factorial(n) / factorial(k) / factorial(n - k);
-    }
-
     static double factorial(int n) {
         if (n < 0)
             throw new IllegalArgumentException("Factorial of negative number");
