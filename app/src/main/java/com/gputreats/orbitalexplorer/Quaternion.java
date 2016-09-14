@@ -12,21 +12,21 @@ class Quaternion implements Parcelable {
     }
 
     @Override
-    public void writeToParcel(Parcel parcel, int flags) {
-        parcel.writeDouble(r);
-        parcel.writeDouble(i);
-        parcel.writeDouble(j);
-        parcel.writeDouble(k);
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeDouble(r);
+        dest.writeDouble(i);
+        dest.writeDouble(j);
+        dest.writeDouble(k);
     }
 
     @SuppressWarnings({"AnonymousInnerClassWithTooManyMethods", "AnonymousInnerClass"})
     public static final Parcelable.Creator<Quaternion> CREATOR
             = new Parcelable.Creator<Quaternion>() {
         @Override
-        public Quaternion createFromParcel(Parcel parcel) {
+        public Quaternion createFromParcel(Parcel source) {
             return new Quaternion(
-                    parcel.readDouble(), parcel.readDouble(),
-                    parcel.readDouble(), parcel.readDouble());
+                    source.readDouble(), source.readDouble(),
+                    source.readDouble(), source.readDouble());
         }
         @Override
         public Quaternion[] newArray(int size) {

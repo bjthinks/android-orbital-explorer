@@ -72,18 +72,18 @@ class Camera implements Parcelable {
     }
 
     @Override
-    public void writeToParcel(Parcel out, int flags) {
-        out.writeDouble(cameraDistance);
-        out.writeParcelable(totalRotation, flags);
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeDouble(cameraDistance);
+        dest.writeParcelable(totalRotation, flags);
     }
 
     @SuppressWarnings({"AnonymousInnerClassWithTooManyMethods", "AnonymousInnerClass"})
     public static final Parcelable.Creator<Camera> CREATOR
             = new Parcelable.Creator<Camera>() {
         @Override
-        public Camera createFromParcel(Parcel in) {
-            return new Camera(in.readDouble(),
-                    in.readParcelable(Quaternion.class.getClassLoader()));
+        public Camera createFromParcel(Parcel source) {
+            return new Camera(source.readDouble(),
+                    source.readParcelable(Quaternion.class.getClassLoader()));
         }
         @Override
         public Camera[] newArray(int size) {

@@ -2,14 +2,14 @@ package com.gputreats.orbitalexplorer;
 
 class Quadrature {
 
-    final int N, L;
+    final int qN, qL;
     final boolean color;
     private final int order;
     private final int steps;
 
     Quadrature(int inN, int inL, boolean inColor) {
-        N = inN;
-        L = inL;
+        qN = inN;
+        qL = inL;
         color = inColor;
 
         // An important design choice is to make the quadrature order independent of M. This
@@ -22,7 +22,7 @@ class Quadrature {
         //         visible without direct comparison to N + 2
         // N + 2 = essentially perfect, visually identical to all higher orders for all but
         //         a few very specific corner cases
-        order = color ? N + 1 : L + 2;
+        order = color ? qN + 1 : qL + 2;
 
         steps = color ? 64 : 1024;
     }

@@ -4,9 +4,9 @@ class Product implements Function {
 
     private final Function f, g;
 
-    Product(Function ff, Function gg) {
-        f = ff;
-        g = gg;
+    Product(Function inF, Function inG) {
+        f = inF;
+        g = inG;
     }
 
     @Override

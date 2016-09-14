@@ -54,31 +54,31 @@ class RenderState implements Parcelable {
     }
 
     @Override
-    public synchronized void writeToParcel(Parcel out, int flags) {
-        out.writeParcelable(camera, flags);
-        out.writeInt(orbital.qZ);
-        out.writeInt(orbital.qN);
-        out.writeInt(orbital.qL);
-        out.writeInt(orbital.qM);
-        out.writeInt(orbital.real ? 1 : 0);
-        out.writeInt(orbital.color ? 1 : 0);
+    public synchronized void writeToParcel(Parcel dest, int flags) {
+        dest.writeParcelable(camera, flags);
+        dest.writeInt(orbital.qZ);
+        dest.writeInt(orbital.qN);
+        dest.writeInt(orbital.qL);
+        dest.writeInt(orbital.qM);
+        dest.writeInt(orbital.real ? 1 : 0);
+        dest.writeInt(orbital.color ? 1 : 0);
     }
 
     @SuppressWarnings({"AnonymousInnerClassWithTooManyMethods", "AnonymousInnerClass"})
     public static final Parcelable.Creator<RenderState> CREATOR
             = new Parcelable.Creator<RenderState>() {
         @Override
-        public RenderState createFromParcel(Parcel in) {
+        public RenderState createFromParcel(Parcel source) {
             RenderState result = new RenderState();
-            result.camera = in.readParcelable(Camera.class.getClassLoader());
+            result.camera = source.readParcelable(Camera.class.getClassLoader());
             result.cameraChanged = true;
-            int Z = in.readInt();
-            int N = in.readInt();
-            int L = in.readInt();
-            int M = in.readInt();
-            boolean real = in.readInt() != 0;
-            boolean color = in.readInt() != 0;
-            result.orbital = new Orbital(Z, N, L, M, real, color);
+            int qZ = source.readInt();
+            int qN = source.readInt();
+            int qL = source.readInt();
+            int qM = source.readInt();
+            boolean real = source.readInt() != 0;
+            boolean color = source.readInt() != 0;
+            result.orbital = new Orbital(qZ, qN, qL, qM, real, color);
             result.orbitalChanged = true;
             result.screenGrabRequested = false;
             return result;
@@ -94,16 +94,16 @@ class RenderState implements Parcelable {
         return orbital;
     }
 
-    synchronized void setOrbital(int Z, int N, int L, int M, boolean real, boolean color) {
-        Orbital newOrbital = new Orbital(Z, N, L, M, real, color);
+    synchronized void setOrbital(int qZ, int qN, int qL, int qM, boolean real, boolean color) {
+        Orbital newOrbital = new Orbital(qZ, qN, qL, qM, real, color);
         if (newOrbital.notEquals(orbital)) {
             Analytics.reportEvent("change", '('
-                    + Integer.toString(N) + ','
-                    + Integer.toString(L) + ','
-                    + Integer.toString(M) + ','
+                    + Integer.toString(qN) + ','
+                    + Integer.toString(qL) + ','
+                    + Integer.toString(qM) + ','
                     + Integer.toString(real ? 1 : 0) + ','
                     + Integer.toString(color ? 1 : 0) + ')');
-            orbital = new Orbital(Z, N, L, M, real, color);
+            orbital = new Orbital(qZ, qN, qL, qM, real, color);
             orbitalChanged = true;
             if (orbitalView != null) {
                 if (color)

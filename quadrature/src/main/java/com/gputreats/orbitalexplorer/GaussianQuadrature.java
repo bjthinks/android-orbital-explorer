@@ -1,8 +1,8 @@
 package com.gputreats.orbitalexplorer;
 
 /**
- * Given a weight function W and a positive integer N, compute the nodes and weights for
- * an N-point Gaussian quadrature rule.
+ * Given a weight function and a number of points, compute the nodes and weights for
+ * a Gaussian quadrature rule.
  */
 class GaussianQuadrature {
 
@@ -16,15 +16,15 @@ class GaussianQuadrature {
         return weight[i];
     }
 
-    GaussianQuadrature(Function W, int N) {
+    GaussianQuadrature(Function weightFunction, int points) {
 
         /*
          * STEP I: Compute the first 2N + 1 moments of the weight function.
          */
 
-        double[] moments = new double[2 * N + 1];
-        for (int i = 0; i < 2 * N + 1; ++i) {
-            Function integrand = new Product(new Power(i), W);
+        double[] moments = new double[2 * points + 1];
+        for (int i = 0; i < 2 * points + 1; ++i) {
+            Function integrand = new Product(new Power(i), weightFunction);
             moments[i] = Romberg.integrate(integrand);
         }
 
@@ -37,21 +37,21 @@ class GaussianQuadrature {
          * TODO PROBLEM: which makes the following logic numerically unstable.
          */
 
-        double[] a = new double[N];
-        double[] b = new double[N];
-        double[][] c = new double[N + 1][2 * N + 1];
-        System.arraycopy(moments, 0, c[0], 0, 2 * N + 1);
+        double[] a = new double[points];
+        double[] b = new double[points];
+        double[][] c = new double[points + 1][2 * points + 1];
+        System.arraycopy(moments, 0, c[0], 0, 2 * points + 1);
         //for (int j = 0; j < 2 * N + 1; ++j)
             //C[0][j] = moments[j];
         a[0] = c[0][1] / c[0][0];
         b[0] = 0.0;
-        for (int i = 1; i < N + 1; ++i) {
-            for (int j = i; j < 2 * N - i + 1; ++j) {
+        for (int i = 1; i < points + 1; ++i) {
+            for (int j = i; j < 2 * points - i + 1; ++j) {
                 c[i][j] = c[i - 1][j + 1] - a[i - 1] * c[i - 1][j];
                 if (i > 1)
                     c[i][j] -= b[i - 1] * c[i - 2][j];
             }
-            if (i < N) {
+            if (i < points) {
                 a[i] = c[i][i + 1] / c[i][i] - c[i - 1][i] / c[i - 1][i - 1];
                 b[i] = c[i][i] / c[i - 1][i - 1];
             }
@@ -68,17 +68,17 @@ class GaussianQuadrature {
          */
 
         // Transform C into U. We only need to do this for the diagonal and superdiagonal.
-        for (int i = 0; i < N + 1; ++i) {
+        for (int i = 0; i < points + 1; ++i) {
             c[i][i] = Math.sqrt(c[i][i]);
-            if (i < N)
+            if (i < points)
                 c[i][i + 1] /= c[i][i];
         }
-        SymmetricTridiagonalMatrix J = new SymmetricTridiagonalMatrix(N);
+        SymmetricTridiagonalMatrix J = new SymmetricTridiagonalMatrix(points);
         J.setDiagonal(0, c[0][1] / c[0][0]);
         // TODO PROBLEM: Numerical instability causes the ratios below to have large error
-        for (int i = 1; i < N; ++i)
+        for (int i = 1; i < points; ++i)
             J.setDiagonal(i, c[i][i + 1] / c[i][i] - c[i - 1][i] / c[i - 1][i - 1]);
-        for (int i = 0; i < N - 1; ++i)
+        for (int i = 0; i < points - 1; ++i)
             J.setOffDiagonal(i, c[i + 1][i + 1] / c[i][i]);
 
         /*
@@ -88,16 +88,16 @@ class GaussianQuadrature {
          */
 
         J.doQRReduce();
-        node = new double[N];
-        weight = new double[N];
-        for (int i = 0; i < N; ++i) {
+        node = new double[points];
+        weight = new double[points];
+        for (int i = 0; i < points; ++i) {
             node[i] = J.getDiagonal(i);
             weight[i] = MyMath.fastpow(J.getComponent(i), 2) * moments[0];
         }
 
         // The nodes and weights will be nearly sorted, and there aren't very many of them,
         // so we pass them through an insertion sort.
-        for (int i = 1; i < N; ++i) {
+        for (int i = 1; i < points; ++i) {
             for (int j = i; j > 0 && node[j - 1] > node[j]; --j) {
                 double tempNode = node[j];
                 node[j] = node[j - 1];

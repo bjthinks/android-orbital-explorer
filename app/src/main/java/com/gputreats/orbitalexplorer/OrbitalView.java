@@ -123,15 +123,15 @@ public class OrbitalView extends GLSurfaceView {
     private double previousX;
     private double previousY;
 
-    private void oneFingerEvent(MotionEvent e, boolean actionable) {
+    private void oneFingerEvent(MotionEvent event, boolean actionable) {
 
-        int pointerIndex = e.findPointerIndex(firstPointerID);
+        int pointerIndex = event.findPointerIndex(firstPointerID);
 
-        double x = e.getX(pointerIndex);
-        double y = e.getY(pointerIndex);
+        double x = (double) event.getX(pointerIndex);
+        double y = (double) event.getY(pointerIndex);
 
         if (actionable) {
-            double meanSize = Math.sqrt(getWidth() * getHeight());
+            double meanSize = Math.sqrt((double) (getWidth() * getHeight()));
             double dx = (x - previousX) / meanSize;
             double dy = (y - previousY) / meanSize;
             renderState.cameraDrag(dx, dy);
@@ -144,15 +144,15 @@ public class OrbitalView extends GLSurfaceView {
     private double previousDistance;
     private double previousAngle;
 
-    private void twoFingerEvent(MotionEvent e, boolean actionable) {
+    private void twoFingerEvent(MotionEvent event, boolean actionable) {
 
-        int firstPointerIndex  = e.findPointerIndex(firstPointerID);
-        int secondPointerIndex = e.findPointerIndex(secondPointerID);
+        int firstPointerIndex  = event.findPointerIndex(firstPointerID);
+        int secondPointerIndex = event.findPointerIndex(secondPointerID);
 
-        double x1 = e.getX(firstPointerIndex);
-        double y1 = e.getY(firstPointerIndex);
-        double x2 = e.getX(secondPointerIndex);
-        double y2 = e.getY(secondPointerIndex);
+        double x1 = (double) event.getX(firstPointerIndex);
+        double y1 = (double) event.getY(firstPointerIndex);
+        double x2 = (double) event.getX(secondPointerIndex);
+        double y2 = (double) event.getY(secondPointerIndex);
 
         double angle = Math.atan2(y2 - y1, x2 - x1);
         double distance = Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
@@ -199,8 +199,8 @@ public class OrbitalView extends GLSurfaceView {
         @Override
         public boolean onFling(MotionEvent event1, MotionEvent event2,
                                float velocityX, float velocityY) {
-            double meanSize = Math.sqrt(getWidth() * getHeight());
-            renderState.cameraFling(velocityX / meanSize, velocityY / meanSize);
+            double meanSize = Math.sqrt((double) (getWidth() * getHeight()));
+            renderState.cameraFling((double) velocityX / meanSize, (double) velocityY / meanSize);
 
             return true;
         }

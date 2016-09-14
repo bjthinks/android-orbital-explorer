@@ -2,16 +2,16 @@ package com.gputreats.orbitalexplorer;
 
 class SymmetricTridiagonalMatrix {
 
-    private final int N;
+    private final int size;
     private final double[] diagonal;
     private final double[] offDiagonal;
     private final double[] eigenvectorFirstComponent;
 
-    SymmetricTridiagonalMatrix(int inN) {
-        N = inN;
-        diagonal = new double[N];
-        offDiagonal = new double[N - 1];
-        eigenvectorFirstComponent = new double[N];
+    SymmetricTridiagonalMatrix(int inSize) {
+        size = inSize;
+        diagonal = new double[size];
+        offDiagonal = new double[size - 1];
+        eigenvectorFirstComponent = new double[size];
         eigenvectorFirstComponent[0] = 1.0;
     }
 
@@ -32,7 +32,7 @@ class SymmetricTridiagonalMatrix {
     }
 
     void doQRReduce() {
-        int n = N;
+        int n = size;
         int fail = 0;
         while (n > 1) {
             doQRReductionStep(n);

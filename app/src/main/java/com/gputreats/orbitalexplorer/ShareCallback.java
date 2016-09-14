@@ -51,7 +51,8 @@ class ShareCallback implements Handler.Callback {
         float density = activity.getResources().getDisplayMetrics().density;
         paint.setTextSize(20.0f * density); // ~20dp
         // TODO fix string literal
-        canvas.drawText("Orbital Explorer", width / 2.0f, height - 20.0f * density, paint);
+        canvas.drawText("Orbital Explorer", (float) width / 2.0f,
+                (float) height - 20.0f * density, paint);
 
         int name = (int) (System.currentTimeMillis() % 0x10000L);
         File file = new File(activity.getCacheDir(), "screens/" + name + ".jpg");

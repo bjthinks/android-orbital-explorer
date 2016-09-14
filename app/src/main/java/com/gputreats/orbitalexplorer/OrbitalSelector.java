@@ -25,9 +25,9 @@ public class OrbitalSelector extends LinearLayout {
     private Context context;
     private String plusMinus, minusPlus, realNumbers, complexNumbers;
 
-    private int N;
-    private int L;
-    private int M;
+    private int qN;
+    private int qL;
+    private int qM;
     private boolean real;
     private boolean color;
 
@@ -70,9 +70,9 @@ public class OrbitalSelector extends LinearLayout {
 
         renderState = ((RenderStateProvider) context).provideRenderState();
         Orbital previouslyDisplayedOrbital = renderState.getOrbital();
-        N = previouslyDisplayedOrbital.qN;
-        L = previouslyDisplayedOrbital.qL;
-        M = previouslyDisplayedOrbital.qM;
+        qN = previouslyDisplayedOrbital.qN;
+        qL = previouslyDisplayedOrbital.qL;
+        qM = previouslyDisplayedOrbital.qM;
         real = previouslyDisplayedOrbital.real;
         color = previouslyDisplayedOrbital.color;
 
@@ -94,8 +94,8 @@ public class OrbitalSelector extends LinearLayout {
         colorChanger = (ImageButton) findViewById(R.id.colorchanger);
 
         setOrbitalName();
-        nChanger.setInteger(N);
-        lChanger.setInteger(L);
+        nChanger.setInteger(qN);
+        lChanger.setInteger(qL);
         setMChanger();
         setReal(real);
         setColor(color);
@@ -140,72 +140,72 @@ public class OrbitalSelector extends LinearLayout {
     private void orbitalChanged() {
         setOrbitalName();
         setButtonTint();
-        renderState.setOrbital(1, N, L, M, real, color);
+        renderState.setOrbital(1, qN, qL, qM, real, color);
     }
 
     private void increaseN() {
-        if (N < Orbital.MAX_N) {
-            ++N;
-            nChanger.setInteger(N);
+        if (qN < Orbital.MAX_N) {
+            ++qN;
+            nChanger.setInteger(qN);
         }
     }
 
     private void decreaseN() {
-        if (N > 1) {
-            --N;
-            nChanger.setInteger(N);
-            if (L >= N)
+        if (qN > 1) {
+            --qN;
+            nChanger.setInteger(qN);
+            if (qL >= qN)
                 decreaseL();
         }
     }
 
     private void increaseL() {
-        if (L < Orbital.MAX_N - 1) {
-            ++L;
-            lChanger.setInteger(L);
-            if (L >= N)
+        if (qL < Orbital.MAX_N - 1) {
+            ++qL;
+            lChanger.setInteger(qL);
+            if (qL >= qN)
                 increaseN();
         }
     }
 
     private void decreaseL() {
-        if (L > 0) {
-            --L;
-            lChanger.setInteger(L);
-            if (M > L)
+        if (qL > 0) {
+            --qL;
+            lChanger.setInteger(qL);
+            if (qM > qL)
                 decreaseM();
-            else if (M < -L)
+            else if (qM < -qL)
                 increaseM();
         }
     }
 
     private void increaseM() {
-        if (M < Orbital.MAX_N - 1) {
-            ++M;
+        if (qM < Orbital.MAX_N - 1) {
+            ++qM;
             setMChanger();
-            if (M > L)
+            if (qM > qL)
                 increaseL();
         }
     }
 
     private void decreaseM() {
-        if (M > 1 - Orbital.MAX_N) {
-            --M;
+        if (qM > 1 - Orbital.MAX_N) {
+            --qM;
             setMChanger();
-            if (M < -L)
+            if (qM < -qL)
                 increaseL();
         }
     }
 
     private void setMChanger() {
-        if (real && M > 0)
-            mChanger.setText(plusMinus + M);
-        else if (real && M < 0)
-            mChanger.setText(minusPlus + -M);
+        if (real && qM > 0)
+            mChanger.setText(plusMinus + qM);
+        else if (real && qM < 0)
+            mChanger.setText(minusPlus + -qM);
         else
-            mChanger.setInteger(M);
+            mChanger.setInteger(qM);
 
-        if (M == 0)
+        if (qM == 0)
             rcChanger.setTextColor(COLOR_DIM);
         else
             rcChanger.setTextColor(COLOR_BRIGHT);
@@ -226,58 +226,58 @@ public class OrbitalSelector extends LinearLayout {
     }
 
     private void setButtonTint() {
-        if (N == Orbital.MAX_N)
+        if (qN == Orbital.MAX_N)
             nChanger.setUpTint(COLOR_DARK);
         else
             nChanger.setUpTint(COLOR_BRIGHT);
 
-        if (N == 1)
+        if (qN == 1)
             nChanger.setDownTint(COLOR_DARK);
-        else if (N <= L + 1)
+        else if (qN <= qL + 1)
             nChanger.setDownTint(COLOR_DIM);
         else
             nChanger.setDownTint(COLOR_BRIGHT);
 
-        if (L == Orbital.MAX_N - 1)
+        if (qL == Orbital.MAX_N - 1)
             lChanger.setUpTint(COLOR_DARK);
-        else if (L >= N - 1)
+        else if (qL >= qN - 1)
             lChanger.setUpTint(COLOR_DIM);
         else
             lChanger.setUpTint(COLOR_BRIGHT);
 
-        if (L == 0)
+        if (qL == 0)
             lChanger.setDownTint(COLOR_DARK);
-        else if (L <= Math.abs(M))
+        else if (qL <= Math.abs(qM))
             lChanger.setDownTint(COLOR_DIM);
         else
             lChanger.setDownTint(COLOR_BRIGHT);
 
-        if (M == Orbital.MAX_N - 1)
+        if (qM == Orbital.MAX_N - 1)
             mChanger.setUpTint(COLOR_DARK);
-        else if (M >= L)
+        else if (qM >= qL)
             mChanger.setUpTint(COLOR_DIM);
         else
             mChanger.setUpTint(COLOR_BRIGHT);
 
-        if (M == 1 - Orbital.MAX_N)
+        if (qM == 1 - Orbital.MAX_N)
             mChanger.setDownTint(COLOR_DARK);
-        else if (M <= -L)
+        else if (qM <= -qL)
             mChanger.setDownTint(COLOR_DIM);
         else
             mChanger.setDownTint(COLOR_BRIGHT);
     }
 
     private void setOrbitalName() {
-        String name = Integer.toString(N);
+        String name = Integer.toString(qN);
         String subscript = "";
         if (real) {
-            if (M > 0) subscript = plusMinus;
-            if (M < 0) subscript = minusPlus;
-            subscript += Math.abs(M);
+            if (qM > 0) subscript = plusMinus;
+            if (qM < 0) subscript = minusPlus;
+            subscript += Math.abs(qM);
         } else {
-            subscript = Integer.toString(M);
+            subscript = Integer.toString(qM);
         }
-        switch (L) {
+        switch (qL) {
             case 0:
                 name += "s";
                 subscript = "";
@@ -285,7 +285,7 @@ public class OrbitalSelector extends LinearLayout {
             case 1:
                 name += "p";
                 if (real) {
-                    switch (M) {
+                    switch (qM) {
                         case -1:
                             subscript = "y";
                             break;
@@ -301,7 +301,7 @@ public class OrbitalSelector extends LinearLayout {
             case 2:
                 name += "d";
                 if (real) {
-                    switch (M) {
+                    switch (qM) {
                         case -2:
                             subscript = "xy";
                             break;
@@ -323,7 +323,7 @@ public class OrbitalSelector extends LinearLayout {
             case 3:
                 name += "f";
                 if (real) {
-                    switch (M) {
+                    switch (qM) {
                         case -3:
                             subscript = "y(3x" + ss(2) + "-y" + ss(2) + ')';
                             break;
@@ -351,7 +351,7 @@ public class OrbitalSelector extends LinearLayout {
             case 4:
                 name += "g";
                 if (real) {
-                    switch (M) {
+                    switch (qM) {
                         case -4:
                             subscript = "xy(x" + ss(2) + "-y" + ss(2) + ')';
                             break;
@@ -392,18 +392,18 @@ public class OrbitalSelector extends LinearLayout {
                 name += "k";
                 break;
             default:
-                name += Integer.toString(L);
+                name += Integer.toString(qL);
         }
         name += "<sub>" + subscript + "</sub>";
-        Spanned foo;
+        Spanned formattedName;
         //noinspection IfMayBeConditional
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            foo = Html.fromHtml(name, Html.FROM_HTML_MODE_LEGACY);
+            formattedName = Html.fromHtml(name, Html.FROM_HTML_MODE_LEGACY);
         } else {
             //noinspection deprecation
-            foo = Html.fromHtml(name);
+            formattedName = Html.fromHtml(name);
         }
-        orbitalName.setText(foo);
+        orbitalName.setText(formattedName);
     }
 
     private static String ss(int x) {
