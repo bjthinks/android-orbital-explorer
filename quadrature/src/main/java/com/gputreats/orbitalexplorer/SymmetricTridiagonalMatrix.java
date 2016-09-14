@@ -42,7 +42,7 @@ class SymmetricTridiagonalMatrix {
                 fail = 0;
             }
             if (fail > 32)
-                throw new RuntimeException();
+                throw new RuntimeException("QR reduction failure");
         }
     }
 

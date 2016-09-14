@@ -7,7 +7,7 @@ class Spew {
         a = (long) inA;
         b = (long) inB;
         if (a == 0L && b == 0L)
-            throw new RuntimeException();
+            throw new RuntimeException("0");
         for (int i = 0; i < 37; ++i)
             get();
     }

@@ -185,14 +185,6 @@ class RenderState implements Parcelable {
         return fs;
     }
 
-    static class FrozenState {
-        float[] inverseTransform;
-        Orbital orbital;
-        boolean needToIntegrate;
-        boolean screenGrabRequested;
-        Handler screenGrabHandler;
-    }
-
     // Render thread error handling
 
     synchronized void reportRenderException(RuntimeException e) {
