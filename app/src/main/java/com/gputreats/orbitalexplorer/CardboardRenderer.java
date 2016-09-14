@@ -13,18 +13,18 @@ import javax.microedition.khronos.egl.EGLConfig;
 class CardboardRenderer implements GvrView.StereoRenderer {
 
     private final Orbital orbital;
-    private final int screenDpi;
     private final OrbitalTextures orbitalTextures;
     private final Integrator integratorLeft, integratorRight;
     private final ScreenDrawer screenDrawer;
+    private final FPS fps;
 
     CardboardRenderer(Context context) {
-        screenDpi = context.getResources().getDisplayMetrics().densityDpi;
         orbital = ((CardboardActivity) context).getOrbital();
         orbitalTextures = new OrbitalTextures(context);
         integratorLeft = new Integrator(context);
         integratorRight = new Integrator(context);
         screenDrawer = new ScreenDrawer(context);
+        fps = new FPS();
     }
 
     @Override
@@ -35,13 +35,10 @@ class CardboardRenderer implements GvrView.StereoRenderer {
         screenDrawer.onSurfaceCreated();
     }
 
-
     @Override
     public void onSurfaceChanged(int width, int height) {
-        double integrationDpi = 160.0;
-        double scaleDownFactor = integrationDpi / Math.max(integrationDpi, screenDpi);
-        int integrationWidth  = (int) (scaleDownFactor * width);
-        int integrationHeight = (int) (scaleDownFactor * height);
+        int integrationWidth  = width / 3;
+        int integrationHeight = height / 3;
         integratorLeft.resize(integrationWidth, integrationHeight);
         integratorRight.resize(integrationWidth, integrationHeight);
         screenDrawer.resize(integrationWidth, integrationHeight, width, height);
@@ -50,6 +47,8 @@ class CardboardRenderer implements GvrView.StereoRenderer {
     private HeadTransform head;
     @Override
     public void onNewFrame(HeadTransform headTransform) {
+        if (BuildConfig.DEBUG)
+            fps.frame();
         orbitalTextures.loadOrbital(orbital);
         head = headTransform;
     }
@@ -118,10 +117,8 @@ class CardboardRenderer implements GvrView.StereoRenderer {
     }
 
     @Override
-    public void onFinishFrame(Viewport viewport) {
-    }
+    public void onFinishFrame(Viewport viewport) {}
 
     @Override
-    public void onRendererShutdown() {
-    }
+    public void onRendererShutdown() {}
 }
