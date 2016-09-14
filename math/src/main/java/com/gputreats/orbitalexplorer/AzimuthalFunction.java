@@ -11,7 +11,7 @@ package com.gputreats.orbitalexplorer;
 
 class AzimuthalFunction implements Function {
 
-    private final double sinThetaPower;
+    private final int sinThetaPower;
     private Polynomial cosThetaPolynomial;
 
     AzimuthalFunction(int qL, int qM) {
@@ -22,7 +22,7 @@ class AzimuthalFunction implements Function {
         double constant = Math.sqrt((double) (2 * qL + 1) / 2.0);
         constant *= Math.sqrt(MyMath.factorial(qL - absM) / MyMath.factorial(qL + absM));
         cosThetaPolynomial = cosThetaPolynomial.multiply(constant);
-        sinThetaPower = (double) absM;
+        sinThetaPower = absM;
     }
 
     // Note that theta is "colatitude", i.e. 0 along (0, 0, 1), pi/2 when z=0,
@@ -30,6 +30,6 @@ class AzimuthalFunction implements Function {
     @Override
     public double eval(double theta) {
         return cosThetaPolynomial.eval(Math.cos(theta))
-                * Math.pow(Math.sin(theta), sinThetaPower);
+                * MyMath.fastpow(Math.sin(theta), sinThetaPower);
     }
 }

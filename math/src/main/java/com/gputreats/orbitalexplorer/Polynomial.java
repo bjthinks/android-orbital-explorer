@@ -134,7 +134,7 @@ class Polynomial implements Function {
         result.c = new double[c.length];
 
         for (int i = 0; i < c.length; ++i)
-            result.c[i] = c[i] * Math.pow(k, (double) i);
+            result.c[i] = c[i] * MyMath.fastpow(k, i);
 
         return result;
     }

@@ -92,7 +92,7 @@ class GaussianQuadrature {
         weight = new double[N];
         for (int i = 0; i < N; ++i) {
             node[i] = J.getDiagonal(i);
-            weight[i] = Math.pow(J.getComponent(i), 2.0) * moments[0];
+            weight[i] = MyMath.fastpow(J.getComponent(i), 2) * moments[0];
         }
 
         // The nodes and weights will be nearly sorted, and there aren't very many of them,

@@ -36,7 +36,7 @@ class RadialFunction implements Function {
 
         oscillatingPart = GeneralizedLaguerrePolynomial.generate(inN - inL - 1, 2 * inL + 1)
                 .rescaleX(radialScaleFactor)
-                .multiply(Math.pow(radialScaleFactor, powerOfR))
+                .multiply(MyMath.fastpow(radialScaleFactor, powerOfR))
                 .multiply(constantFactors);
 
         maximumRadius = MaximumRadiusTable.getMaximumRadius(inN, inL);
@@ -57,7 +57,7 @@ class RadialFunction implements Function {
     @Override
     public double eval(double r) {
         return oscillatingPart.eval(r)
-                * Math.pow(r, powerOfR)
+                * MyMath.fastpow(r, powerOfR)
                 * Math.exp(exponentialConstant * r);
     }
 
