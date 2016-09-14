@@ -5,9 +5,9 @@ import android.app.Application;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
 
-public class OrbitalApplication extends Application {
+class OrbitalApplication extends Application {
 
-    public static Tracker tracker;
+    static Tracker tracker;
 
     @Override
     public void onCreate() {

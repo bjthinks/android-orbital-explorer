@@ -80,7 +80,7 @@ class RadialFunction implements Function {
         return result;
     }
 
-    static double binomial(int n, int k) {
+    private static double binomial(int n, int k) {
         return MyMath.factorial(n) / MyMath.factorial(k) / MyMath.factorial(n - k);
     }
 }
