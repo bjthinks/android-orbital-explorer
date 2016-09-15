@@ -10,6 +10,7 @@ enum ShaderObfuscator {
     ;
 
     private static void obfuscate(String infile, String outfile) throws IOException {
+        final int buildVersion = 110;
         String infilename = "shaders/src/main/java/" + infile;
         String outfilename = "app/src/main/assets/a/" + outfile;
         BufferedInputStream instream =
@@ -18,7 +19,7 @@ enum ShaderObfuscator {
                 new BufferedOutputStream(new FileOutputStream(outfilename));
         int b = instream.read();
         // TODO import VERSION_CODE somehow via gradle
-        int c = (int) outfile.charAt(0) + 100 * 102;
+        int c = (int) outfile.charAt(0) + 100 * buildVersion;
         Spew spew = new Spew(c, c);
         while (b != -1) {
             outstream.write(b ^ spew.get());
