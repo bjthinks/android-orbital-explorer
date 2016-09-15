@@ -11,6 +11,14 @@
 
 -keepattributes SourceFile,LineNumberTable
 
+-keep class com.google.vr.**
+-keepclassmembers class com.google.vr.** { *; }
+-keep class com.google.vr.**$*
+-keepclassmembers class com.google.vr.**$* { *; }
+-keep class com.google.geo.render.**
+-keepclassmembers class com.google.geo.render.** { *; }
+-keep class com.google.vrtoolkit.cardboard.** { *; }
+
 # If your project uses WebView with JS, uncomment the following
 # and specify the fully qualified class name to the JavaScript interface
 # class:
