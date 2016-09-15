@@ -1,7 +1,7 @@
 <html>
 <head><link rel="stylesheet" type="text/css" href="style.css"></head>
 <body bgcolor="#000" text="#fff">
-<h2>Orbital Explorer</h2>
+<h2>Orbital Explorer <span id="v"></span></h2>
 <h3>Design & Programming</h3>
 <h4>Brian Johnson</h4>
 <h3>Special Thanks</h3>
@@ -9,4 +9,9 @@
 <h4>Paul Berry</h4>
 <h4>Steuard Jensen</h4>
 <h4>Chad Versace</h4>
+<script>
+var u=window.location.href;
+u=u.substring(u.indexOf('=')+1);
+document.getElementById("v").innerHTML=u;
+</script>
 </body></html>

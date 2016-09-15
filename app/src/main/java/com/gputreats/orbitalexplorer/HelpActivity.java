@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 
 public class HelpActivity extends AppCompatActivity {
@@ -31,10 +32,12 @@ public class HelpActivity extends AppCompatActivity {
         WebView webview = (WebView) findViewById(R.id.help_webview);
         if (webview != null) {
             webview.setBackgroundColor(Color.BLACK);
-            webview.getSettings().setDefaultTextEncodingName("utf-8");
+            WebSettings settings = webview.getSettings();
+            settings.setDefaultTextEncodingName("utf-8");
+            settings.setJavaScriptEnabled(true);
             String url = extras.getString(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
                     ? "url" : "url-v19");
-            webview.loadUrl(url);
+            webview.loadUrl(url + "?v=" + BuildConfig.VERSION_NAME);
         }
     }
 
