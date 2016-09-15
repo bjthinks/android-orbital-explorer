@@ -9,7 +9,7 @@ android {
         minSdkVersion 19
         targetSdkVersion 24
         versionCode 110
-        versionName "1.1.0"
+        versionName "1.1"
         jackOptions {
             enabled true
             true
