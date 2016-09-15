@@ -48,7 +48,7 @@ class Integrator extends RenderStage {
 
     void resize(int w, int h) {
         if (BuildConfig.DEBUG)
-            Log.d("Integrator", "Changing size to " + w + 'x' + h);
+            Log.i("Integrator", "Changing size to " + w + 'x' + h);
 
         width = w;
         height = h;

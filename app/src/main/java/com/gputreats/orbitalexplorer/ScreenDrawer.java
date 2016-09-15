@@ -32,7 +32,7 @@ class ScreenDrawer extends RenderStage {
 
     void resize(int newInputWidth, int newInputHeight, int newWidth, int newHeight) {
         if (BuildConfig.DEBUG)
-            Log.d("ScreenDrawer", "Changing size to " + newWidth + 'x' + newHeight);
+            Log.i("ScreenDrawer", "Changing size to " + newWidth + 'x' + newHeight);
 
         inputWidth = newInputWidth;
         inputHeight = newInputHeight;

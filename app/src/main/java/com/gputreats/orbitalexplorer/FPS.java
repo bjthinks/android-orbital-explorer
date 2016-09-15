@@ -8,19 +8,23 @@ final class FPS {
     private long framesSinceLastFPS;
 
     FPS() {
-        lastFPSTimeMillis = System.currentTimeMillis();
-        framesSinceLastFPS = 0L;
+        if (BuildConfig.DEBUG) {
+            lastFPSTimeMillis = System.currentTimeMillis();
+            framesSinceLastFPS = 0L;
+        }
     }
 
     void frame() {
-        ++framesSinceLastFPS;
-        long now = System.currentTimeMillis();
-        long millisBetweenRenders = now - lastFPSTimeMillis;
-        if (millisBetweenRenders >= 1000L) {
-            lastFPSTimeMillis = now;
-            long fps10 = 10000L * framesSinceLastFPS / millisBetweenRenders;
-            Log.d("FPS", Float.toString((float) fps10 / 10.0f));
-            framesSinceLastFPS = 0L;
+        if (BuildConfig.DEBUG) {
+            ++framesSinceLastFPS;
+            long now = System.currentTimeMillis();
+            long millisBetweenRenders = now - lastFPSTimeMillis;
+            if (millisBetweenRenders >= 1000L) {
+                lastFPSTimeMillis = now;
+                long fps10 = 10000L * framesSinceLastFPS / millisBetweenRenders;
+                Log.i("FPS", Float.toString((float) fps10 / 10.0f));
+                framesSinceLastFPS = 0L;
+            }
         }
     }
 }
