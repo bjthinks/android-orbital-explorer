@@ -19,6 +19,5 @@ public class OrbitalApplication extends Application {
             tracker = analytics.newTracker(R.xml.global_tracker);
             tracker.enableAdvertisingIdCollection(true);
         }
-        Thread.setDefaultUncaughtExceptionHandler(new OrbitalExceptionHandler(this));
     }
 }
