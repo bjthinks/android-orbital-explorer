@@ -1,7 +1,7 @@
 <resources>
     <string name="appName">Orbital Explorer</string>
-    <string name="apology">The electrons have gone missing.</string>
-    <string name="apologySubtext">How embarrassing. Orbital Explorer isn\'t working on this Android device. Problems like this are likely to be fixed in a future version.</string>
+    <string name="apology">Orbital Explorer doesn&#8217;t work with this device.</string>
+    <string name="apologySubtext">OpenGL ES 3.0 is required.</string>
 
     <string name="menuFullscreen">Fullscreen</string>
     <string name="menuShare">Share Image</string>
@@ -18,5 +18,5 @@
     <string name="up">Up</string>
     <string name="down">Down</string>
     <string name="colormono">Color / Mono</string>
-    <string name="error">Error</string>
+    <string name="error">Big exclamation point</string>
 </resources>

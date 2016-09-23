@@ -8,7 +8,6 @@ import android.os.Parcelable;
 
 class RenderState implements Parcelable {
 
-    private Handler renderExceptionHandler;
     private OrbitalView orbitalView;
 
     private Camera camera;
@@ -26,11 +25,7 @@ class RenderState implements Parcelable {
         screenGrabRequested = false;
     }
 
-    // These happen BEFORE the render thread starts up
-
-    synchronized void setRenderExceptionHandler(Handler h) {
-        renderExceptionHandler = h;
-    }
+    // This happens BEFORE the render thread starts up
 
     synchronized void setOrbitalView(OrbitalView ov) {
         orbitalView = ov;
@@ -183,11 +178,5 @@ class RenderState implements Parcelable {
         screenGrabHandler = null;
 
         return fs;
-    }
-
-    // Render thread error handling
-
-    synchronized void reportRenderException(RuntimeException e) {
-        Message.obtain(renderExceptionHandler, 0, e).sendToTarget();
     }
 }

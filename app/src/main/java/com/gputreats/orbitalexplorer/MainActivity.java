@@ -70,8 +70,6 @@ public class MainActivity extends AppCompatActivity implements RenderStateProvid
         renderState = savedState != null
                 ? savedState.getParcelable(RENDER_STATE_KEY) : new RenderState();
 
-        renderState.setRenderExceptionHandler(new Handler(new RenderExceptionCallback()));
-
         setContentView(R.layout.activity_main);
         decorView = getWindow().getDecorView();
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -129,22 +127,6 @@ public class MainActivity extends AppCompatActivity implements RenderStateProvid
             orbitalView.onResume();
 
         Analytics.setScreenName("Main");
-    }
-
-    //
-    // RENDER THREAD ERROR HANDLING
-    //
-
-    private boolean renderExceptionAlreadyReported;
-    private class RenderExceptionCallback implements Handler.Callback {
-        @Override
-        public boolean handleMessage(Message message) {
-            if (!renderExceptionAlreadyReported) {
-                renderExceptionAlreadyReported = true;
-                throw (RuntimeException) message.obj;
-            }
-            return true;
-        }
     }
 
     //

@@ -28,13 +28,9 @@ class OrbitalRenderer implements GLSurfaceView.Renderer {
 
     @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
-        try {
-            orbitalTextures.onSurfaceCreated();
-            integrator.onSurfaceCreated();
-            screenDrawer.onSurfaceCreated();
-        } catch (RuntimeException e) {
-            renderState.reportRenderException(e);
-        }
+        orbitalTextures.onSurfaceCreated();
+        integrator.onSurfaceCreated();
+        screenDrawer.onSurfaceCreated();
     }
 
     // Rendering thread
@@ -42,32 +38,24 @@ class OrbitalRenderer implements GLSurfaceView.Renderer {
     private double aspectRatio = 1.0;
     @Override
     public void onSurfaceChanged(GL10 gl, int width, int height) {
-        try {
-            aspectRatio = (double) width / (double) height;
-            int integrationWidth  = width / 3;
-            int integrationHeight = height / 3;
-            integrator.resize(integrationWidth, integrationHeight);
-            screenDrawer.resize(integrationWidth, integrationHeight, width, height);
-        } catch (RuntimeException e) {
-            renderState.reportRenderException(e);
-        }
+        aspectRatio = (double) width / (double) height;
+        int integrationWidth  = width / 3;
+        int integrationHeight = height / 3;
+        integrator.resize(integrationWidth, integrationHeight);
+        screenDrawer.resize(integrationWidth, integrationHeight, width, height);
     }
 
     // Rendering thread
 
     @Override
     public void onDrawFrame(GL10 gl) {
-        try {
-            if (BuildConfig.DEBUG)
-                fps.frame();
-            FrozenState frozenState = renderState.freeze(aspectRatio);
-            orbitalTextures.loadOrbital(frozenState.orbital);
-            Texture integratorOutput = integrator.render(orbitalTextures,
-                    frozenState.inverseTransform, frozenState.needToIntegrate);
-            screenDrawer.render(orbitalTextures, integratorOutput,
-                    frozenState.screenGrabRequested ? frozenState.screenGrabHandler : null, null);
-        } catch (RuntimeException e) {
-            renderState.reportRenderException(e);
-        }
+        if (BuildConfig.DEBUG)
+            fps.frame();
+        FrozenState frozenState = renderState.freeze(aspectRatio);
+        orbitalTextures.loadOrbital(frozenState.orbital);
+        Texture integratorOutput = integrator.render(orbitalTextures,
+                frozenState.inverseTransform, frozenState.needToIntegrate);
+        screenDrawer.render(orbitalTextures, integratorOutput,
+                frozenState.screenGrabRequested ? frozenState.screenGrabHandler : null, null);
     }
 }
