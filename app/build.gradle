@@ -8,8 +8,8 @@ android {
         applicationId "com.gputreats.orbitalexplorer"
         minSdkVersion 19
         targetSdkVersion 24
-        versionCode 110
-        versionName "1.1"
+        versionCode 111
+        versionName "1.1a"
         jackOptions {
             enabled true
             true
