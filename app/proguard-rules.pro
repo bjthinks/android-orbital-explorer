@@ -19,6 +19,10 @@
 -keepclassmembers class com.google.geo.render.** { *; }
 -keep class com.google.vrtoolkit.cardboard.** { *; }
 
+-keepclassmembers class * implements android.os.Parcelable {
+	public static final **CREATOR;
+}
+
 # If your project uses WebView with JS, uncomment the following
 # and specify the fully qualified class name to the JavaScript interface
 # class:
