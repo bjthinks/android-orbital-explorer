@@ -13,14 +13,14 @@ import javax.microedition.khronos.egl.EGLConfig;
 class CardboardRenderer implements GvrView.StereoRenderer {
 
     private final Orbital orbital;
-    private final OrbitalTextures orbitalTextures;
+    private final OrbitalData orbitalData;
     private final Integrator integratorLeft, integratorRight;
     private final ScreenDrawer screenDrawer;
     private final FPS fps;
 
     CardboardRenderer(Context context) {
         orbital = ((CardboardActivity) context).getOrbital();
-        orbitalTextures = new OrbitalTextures(context);
+        orbitalData = new OrbitalData(context);
         integratorLeft = new Integrator(context);
         integratorRight = new Integrator(context);
         screenDrawer = new ScreenDrawer(context);
@@ -29,7 +29,7 @@ class CardboardRenderer implements GvrView.StereoRenderer {
 
     @Override
     public void onSurfaceCreated(EGLConfig eglConfig) {
-        orbitalTextures.onSurfaceCreated();
+        orbitalData.onSurfaceCreated();
         integratorLeft.onSurfaceCreated();
         integratorRight.onSurfaceCreated();
         screenDrawer.onSurfaceCreated();
@@ -49,7 +49,7 @@ class CardboardRenderer implements GvrView.StereoRenderer {
     public void onNewFrame(HeadTransform headTransform) {
         if (BuildConfig.DEBUG)
             fps.frame();
-        orbitalTextures.loadOrbital(orbital);
+        orbitalData.loadOrbital(orbital);
         head = headTransform;
     }
 
@@ -75,7 +75,7 @@ class CardboardRenderer implements GvrView.StereoRenderer {
         }
 
         float[] scaleMatrix = new float[16];
-        float scaleFactor = 1.0f / orbitalTextures.getRadius();
+        float scaleFactor = 1.0f / orbitalData.getRadius();
         scaleMatrix[0] = scaleFactor;
         scaleMatrix[5] = scaleFactor;
         scaleMatrix[10] = scaleFactor;
@@ -87,7 +87,7 @@ class CardboardRenderer implements GvrView.StereoRenderer {
         translateMatrix[10] = 1.0f;
         translateMatrix[15] = 1.0f;
         final float distanceToNucleus = 2.0f;
-        final float halfEyeDistance = 0.2f;
+        final float halfEyeDistance = 0.1f;
         translateMatrix[12] = distanceToNucleus * forward[0] + halfEyeDistance * lateral[0];
         translateMatrix[13] = distanceToNucleus * forward[1] + halfEyeDistance * lateral[1];
         translateMatrix[14] = distanceToNucleus * forward[2] + halfEyeDistance * lateral[2];
@@ -112,10 +112,10 @@ class CardboardRenderer implements GvrView.StereoRenderer {
         float[] inverseTransform = new float[16];
         Matrix.invertM(inverseTransform, 0, transform, 0);
 
-        Texture integratorOutput = integrator.render(orbitalTextures,
+        Texture integratorOutput = integrator.render(orbitalData,
                 inverseTransform, /* TODO */ true);
 
-        screenDrawer.render(orbitalTextures, integratorOutput, null, eye.getViewport());
+        screenDrawer.render(orbitalData, integratorOutput, null, eye.getViewport());
     }
 
     @Override

@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.res.AssetManager;
 import android.opengl.GLES30;
 
-class OrbitalTextures {
+class OrbitalData {
 
     private final AssetManager assets;
 
@@ -27,7 +27,7 @@ class OrbitalTextures {
     private int iQuadratureSteps;
     private int iRadialSteps;
 
-    OrbitalTextures(Context context) {
+    OrbitalData(Context context) {
         assets = context.getAssets();
     }
 

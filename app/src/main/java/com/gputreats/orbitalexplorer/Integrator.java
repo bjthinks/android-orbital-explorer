@@ -62,7 +62,7 @@ class Integrator extends RenderStage {
     }
 
     private float[] inverseTransform = new float[16];
-    Texture render(OrbitalTextures orbitalTextures,
+    Texture render(OrbitalData orbitalData,
                    float[] newInverseTransform, boolean inNeedToIntegrate) {
         boolean needToIntegrate = inNeedToIntegrate;
 
@@ -73,7 +73,7 @@ class Integrator extends RenderStage {
             inverseTransform = Arrays.copyOf(newInverseTransform, newInverseTransform.length);
         }
 
-        boolean color = orbitalTextures.getColor();
+        boolean color = orbitalData.getColor();
 
         if (needToIntegrate || outputTextureResized) {
             outputTextureResized = false; // Also needed for e.g. orientation changes
@@ -94,7 +94,7 @@ class Integrator extends RenderStage {
             final int[] zeroes = {0, 0, 0, 0};
             GLES30.glClearBufferiv(GLES30.GL_COLOR, 0, zeroes, 0);
 
-            orbitalTextures.setupForIntegration(program);
+            orbitalData.setupForIntegration(program);
 
             int inverseTransformHandle = program.getUniformLocation("inverseTransform");
             GLES30.glUniformMatrix4fv(inverseTransformHandle, 1, false, inverseTransform, 0);

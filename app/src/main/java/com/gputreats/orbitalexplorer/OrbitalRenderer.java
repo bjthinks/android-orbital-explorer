@@ -8,7 +8,7 @@ import javax.microedition.khronos.opengles.GL10;
 
 class OrbitalRenderer implements GLSurfaceView.Renderer {
 
-    private final OrbitalTextures orbitalTextures;
+    private final OrbitalData orbitalData;
     private final Integrator integrator;
     private final ScreenDrawer screenDrawer;
     private final RenderState renderState;
@@ -18,7 +18,7 @@ class OrbitalRenderer implements GLSurfaceView.Renderer {
 
     OrbitalRenderer(Context context) {
         renderState = ((RenderStateProvider) context).provideRenderState();
-        orbitalTextures = new OrbitalTextures(context);
+        orbitalData = new OrbitalData(context);
         integrator = new Integrator(context);
         screenDrawer = new ScreenDrawer(context);
         fps = new FPS();
@@ -28,7 +28,7 @@ class OrbitalRenderer implements GLSurfaceView.Renderer {
 
     @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
-        orbitalTextures.onSurfaceCreated();
+        orbitalData.onSurfaceCreated();
         integrator.onSurfaceCreated();
         screenDrawer.onSurfaceCreated();
     }
@@ -52,10 +52,10 @@ class OrbitalRenderer implements GLSurfaceView.Renderer {
         if (BuildConfig.DEBUG)
             fps.frame();
         FrozenState frozenState = renderState.freeze(aspectRatio);
-        orbitalTextures.loadOrbital(frozenState.orbital);
-        Texture integratorOutput = integrator.render(orbitalTextures,
+        orbitalData.loadOrbital(frozenState.orbital);
+        Texture integratorOutput = integrator.render(orbitalData,
                 frozenState.inverseTransform, frozenState.needToIntegrate);
-        screenDrawer.render(orbitalTextures, integratorOutput,
+        screenDrawer.render(orbitalData, integratorOutput,
                 frozenState.screenGrabRequested ? frozenState.screenGrabHandler : null, null);
     }
 }
