@@ -1,8 +1,6 @@
 package com.gputreats.orbitalexplorer;
 
 import android.opengl.GLSurfaceView;
-import android.os.Handler;
-import android.os.Message;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -14,15 +12,12 @@ class RenderState implements Parcelable {
     private boolean cameraChanged;
     private Orbital orbital;
     private boolean orbitalChanged;
-    private boolean screenGrabRequested;
-    private Handler screenGrabHandler;
 
     RenderState() {
         camera = new Camera();
         cameraChanged = true;
         orbital = new Orbital(1, 4, 2, 1, false, true);
         orbitalChanged = true;
-        screenGrabRequested = false;
     }
 
     // This happens BEFORE the render thread starts up
@@ -75,7 +70,6 @@ class RenderState implements Parcelable {
             boolean color = source.readInt() != 0;
             result.orbital = new Orbital(qZ, qN, qL, qM, real, color);
             result.orbitalChanged = true;
-            result.screenGrabRequested = false;
             return result;
         }
         @Override
@@ -150,13 +144,6 @@ class RenderState implements Parcelable {
         orbitalView.requestRender();
     }
 
-    synchronized void requestScreenGrab(Handler handler) {
-        screenGrabRequested = true;
-        screenGrabHandler = handler;
-        if (!orbital.color)
-            orbitalView.requestRender();
-    }
-
     // Render thread getter
 
     synchronized FrozenState freeze(double aspectRatio) {
@@ -169,13 +156,9 @@ class RenderState implements Parcelable {
         fs.inverseTransform = camera.computeInverseShaderTransform(aspectRatio);
         fs.orbital = orbital;
         fs.needToIntegrate = orbitalChanged || cameraChanged || stillFlinging;
-        fs.screenGrabRequested = screenGrabRequested;
-        fs.screenGrabHandler = screenGrabHandler;
 
         orbitalChanged = false;
         cameraChanged = false;
-        screenGrabRequested = false;
-        screenGrabHandler = null;
 
         return fs;
     }

@@ -3,13 +3,9 @@ package com.gputreats.orbitalexplorer;
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.opengl.GLES30;
-import android.os.Handler;
-import android.os.Message;
 import android.util.Log;
 
 import com.google.vr.sdk.base.Viewport;
-
-import java.nio.ByteBuffer;
 
 class ScreenDrawer extends RenderStage {
 
@@ -40,8 +36,7 @@ class ScreenDrawer extends RenderStage {
         height = newHeight;
     }
 
-    void render(OrbitalData orbitalData, Texture texture, Handler screenGrabHandler,
-                Viewport viewport) {
+    void render(OrbitalData orbitalData, Texture texture, Viewport viewport) {
 
         MyGL.checkGLES();
 
@@ -79,12 +74,6 @@ class ScreenDrawer extends RenderStage {
 
         GLES30.glDrawArrays(GLES30.GL_TRIANGLE_FAN, 0, 4);
         GLES30.glDisableVertexAttribArray(inPositionHandle);
-
-        if (screenGrabHandler != null) {
-            ByteBuffer buf = ByteBuffer.allocate(width * height * 4);
-            GLES30.glReadPixels(0, 0, width, height, GLES30.GL_RGBA, GLES30.GL_UNSIGNED_BYTE, buf);
-            Message.obtain(screenGrabHandler, 0, width, height, buf).sendToTarget();
-        }
 
         MyGL.checkGLES();
     }

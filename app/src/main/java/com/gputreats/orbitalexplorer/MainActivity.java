@@ -6,15 +6,11 @@ import android.content.Intent;
 import android.content.pm.ConfigurationInfo;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-
-import java.io.File;
 
 public class MainActivity extends AppCompatActivity implements RenderStateProvider {
 
@@ -177,11 +173,6 @@ public class MainActivity extends AppCompatActivity implements RenderStateProvid
                 setFullscreen(true);
                 break;
 
-            case R.id.menuShare:
-                Analytics.reportEvent("menu", "share");
-                renderState.requestScreenGrab(new Handler(new ShareCallback(this)));
-                break;
-
             case R.id.menuCardboard:
                 Analytics.reportEvent("menu", "cardboard");
                 intent = new Intent(this, CardboardActivity.class);
@@ -224,12 +215,5 @@ public class MainActivity extends AppCompatActivity implements RenderStateProvid
                 return super.onOptionsItemSelected(item);
         }
         return true;
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        File file = new File(getCacheDir(), "screens/" + requestCode + ".jpg");
-        //noinspection ResultOfMethodCallIgnored
-        file.delete();
     }
 }

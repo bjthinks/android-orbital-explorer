@@ -9,12 +9,6 @@
         app:showAsAction="ifRoom" />
 
     <item
-        android:id="@+id/menuShare"
-        android:icon="@drawable/ic_share_white_24dp"
-        android:title="@string/menuShare"
-        app:showAsAction="ifRoom" />
-
-    <item
         android:id="@+id/menuCardboard"
         android:icon="@drawable/cardboard"
         android:title="@string/menuCardboard"
