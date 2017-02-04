@@ -12,6 +12,6 @@ class RenderStage {
                  1.0f,  1.0f,
                  1.0f, -1.0f,
         };
-        screenRectangle = MyGL.floatArrayToBuffer(squareCoordinates);
+        screenRectangle = FloatBufferFactory.make(squareCoordinates);
     }
 }

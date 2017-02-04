@@ -53,7 +53,7 @@ class Texture {
     void bindToTexture2DAndSetImage(int width, int height, float[] pixels) {
         bindToTexture2D();
         GLES30.glTexImage2D(GLES30.GL_TEXTURE_2D, 0, internalFormat,
-                width, height, 0, format, type, MyGL.floatArrayToBuffer(pixels));
+                width, height, 0, format, type, FloatBufferFactory.make(pixels));
     }
 
     /* void delete() {

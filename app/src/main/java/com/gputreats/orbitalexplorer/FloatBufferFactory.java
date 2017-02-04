@@ -1,8 +1,17 @@
 package com.gputreats.orbitalexplorer;
 
-/**
- * Created by bwj on 2/4/17.
- */
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.nio.FloatBuffer;
 
-final class FloatBufferFactory {
+enum FloatBufferFactory {
+    ;
+    static FloatBuffer make(float[] data) {
+        ByteBuffer byteBuffer = ByteBuffer.allocateDirect(data.length * 4);
+        byteBuffer.order(ByteOrder.nativeOrder());
+        FloatBuffer fb = byteBuffer.asFloatBuffer();
+        fb.put(data);
+        fb.position(0);
+        return fb;
+    }
 }
