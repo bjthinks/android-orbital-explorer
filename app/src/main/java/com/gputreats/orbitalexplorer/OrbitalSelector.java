@@ -396,7 +396,6 @@ public class OrbitalSelector extends LinearLayout {
         }
         name += "<sub>" + subscript + "</sub>";
         Spanned formattedName;
-        //noinspection IfMayBeConditional
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             formattedName = Html.fromHtml(name, Html.FROM_HTML_MODE_LEGACY);
         } else {
