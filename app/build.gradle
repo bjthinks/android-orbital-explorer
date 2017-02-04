@@ -9,6 +9,7 @@ android {
         minSdkVersion 19
         targetSdkVersion 24
         versionCode 111
+        // ALSO CHANGE IN assets/docs/about.html
         versionName "1.1a"
         jackOptions {
             enabled true

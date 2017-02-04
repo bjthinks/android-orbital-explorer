@@ -39,10 +39,9 @@ public class HelpActivity extends AppCompatActivity {
             webview.setBackgroundColor(Color.BLACK);
             WebSettings settings = webview.getSettings();
             settings.setDefaultTextEncodingName("utf-8");
-            settings.setJavaScriptEnabled(true);
             String url = extras.getString(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
                     ? "url" : "url-v19");
-            webview.loadUrl(url + "?v=" + BuildConfig.VERSION_NAME);
+            webview.loadUrl(url);
         }
     }
 
