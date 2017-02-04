@@ -177,7 +177,6 @@ public class OrbitalView extends GLSurfaceView {
 
     private class TapFlingListener extends GestureDetector.SimpleOnGestureListener {
 
-        @SuppressWarnings("MethodReturnAlwaysConstant")
         @Override
         public boolean onDown(MotionEvent event) {
             return true;

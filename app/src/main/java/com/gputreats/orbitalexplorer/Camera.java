@@ -65,7 +65,6 @@ class Camera implements Parcelable {
         totalRotation = totalRotationIn;
     }
 
-    @SuppressWarnings("MethodReturnAlwaysConstant")
     @Override
     public int describeContents() {
         return 0;
@@ -77,7 +76,6 @@ class Camera implements Parcelable {
         dest.writeParcelable(totalRotation, flags);
     }
 
-    @SuppressWarnings({"AnonymousInnerClassWithTooManyMethods", "AnonymousInnerClass"})
     public static final Parcelable.Creator<Camera> CREATOR
             = new Parcelable.Creator<Camera>() {
         @Override

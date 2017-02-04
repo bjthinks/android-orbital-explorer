@@ -5,7 +5,6 @@ import android.os.Parcelable;
 
 class Quaternion implements Parcelable {
 
-    @SuppressWarnings("MethodReturnAlwaysConstant")
     @Override
     public int describeContents() {
         return 0;
@@ -19,7 +18,6 @@ class Quaternion implements Parcelable {
         dest.writeDouble(k);
     }
 
-    @SuppressWarnings({"AnonymousInnerClassWithTooManyMethods", "AnonymousInnerClass"})
     public static final Parcelable.Creator<Quaternion> CREATOR
             = new Parcelable.Creator<Quaternion>() {
         @Override
