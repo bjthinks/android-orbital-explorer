@@ -96,7 +96,7 @@ class CardboardRenderer implements GvrView.StereoRenderer {
         Matrix.multiplyMM(temp1, 0, translateMatrix, 0, scaleMatrix, 0);
 
         float[] headViewMatrix = head.getHeadView();
-        // TODO needs cleanup, not really right API call
+        // Delete the translation, so we have a pure rotation
         headViewMatrix[12] = 0.0f;
         headViewMatrix[13] = 0.0f;
         headViewMatrix[14] = 0.0f;
