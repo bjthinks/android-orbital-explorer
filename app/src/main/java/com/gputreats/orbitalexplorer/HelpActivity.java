@@ -23,7 +23,11 @@ public class HelpActivity extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         title = extras.getString("title");
 
-        setSupportActionBar((Toolbar) findViewById(R.id.help_toolbar));
+        Toolbar toolbar = (Toolbar) findViewById(R.id.help_toolbar);
+        if (toolbar != null) {
+            toolbar.setContentInsetStartWithNavigation(0);
+        }
+        setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setTitle(title);
