@@ -188,8 +188,9 @@ public class MainActivity extends AppCompatActivity implements RenderStateProvid
 
             case R.id.menuStore:
                 Analytics.reportEvent("menu", "store");
-                intent = new Intent(Intent.ACTION_VIEW);
-                intent.setData(Uri.parse("market://details?id=com.gputreats.orbitalexplorer"));
+                Uri uri = Uri.parse("market://details?id=" + getPackageName());
+                intent = new Intent(Intent.ACTION_VIEW, uri);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                 startActivity(intent);
                 break;
 
