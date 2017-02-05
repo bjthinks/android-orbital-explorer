@@ -18,7 +18,6 @@ enum ShaderObfuscator {
         BufferedOutputStream outstream =
                 new BufferedOutputStream(new FileOutputStream(outfilename));
         int b = instream.read();
-        // TODO import VERSION_CODE somehow via gradle
         int c = (int) outfile.charAt(0) + 100 * buildVersion;
         Spew spew = new Spew(c, c);
         while (b != -1) {

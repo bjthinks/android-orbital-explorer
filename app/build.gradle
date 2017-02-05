@@ -8,6 +8,7 @@ android {
         applicationId "com.gputreats.orbitalexplorer"
         minSdkVersion 19
         targetSdkVersion 24
+        // ALSO CHANGE IN ShaderObfuscator.java
         versionCode 111
         // ALSO CHANGE IN assets/docs/about.html
         versionName "1.1a"
