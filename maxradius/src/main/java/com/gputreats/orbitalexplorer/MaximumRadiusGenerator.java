@@ -27,10 +27,10 @@ enum MaximumRadiusGenerator {
                 "math/src/main/java/com/gputreats/orbitalexplorer/MaximumRadiusTable.java";
         CodePrinter codePrinter = new CodePrinter(filename);
         codePrinter.printPreface();
-        for (int qN = 0; qN <= Orbital.MAX_N; ++qN) {
+        for (int qN = 0; qN <= BaseOrbital.MAX_N; ++qN) {
             for (int qL = 0; qL < qN; ++qL)
                 codePrinter.printNumber(computeRadius(qN, qL));
-            if (qN < Orbital.MAX_N)
+            if (qN < BaseOrbital.MAX_N)
                 codePrinter.printSeparator();
         }
         codePrinter.printSuffix();

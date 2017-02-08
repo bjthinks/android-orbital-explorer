@@ -20,7 +20,7 @@ enum QuadratureGenerator {
 
     private static void go() throws IOException {
         // Color
-        for (int qN = 1; qN <= Orbital.MAX_N; ++qN) {
+        for (int qN = 1; qN <= BaseOrbital.MAX_N; ++qN) {
             for (int qL = 0; qL < qN; ++qL) {
 
                 RadialFunction radialFunction = new RadialFunction(1, qN, qL);
@@ -51,7 +51,7 @@ enum QuadratureGenerator {
         }
 
         // Mono
-        for (int qN = 1; qN <= Orbital.MAX_N; ++qN) {
+        for (int qN = 1; qN <= BaseOrbital.MAX_N; ++qN) {
             for (int qL = 0; qL < qN; ++qL) {
 
                 RadialFunction radialFunction = new RadialFunction(1, qN, qL);

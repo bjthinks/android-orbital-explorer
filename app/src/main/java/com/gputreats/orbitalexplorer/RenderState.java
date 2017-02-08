@@ -41,12 +41,7 @@ class RenderState implements Parcelable {
     @Override
     public synchronized void writeToParcel(Parcel dest, int flags) {
         dest.writeParcelable(camera, flags);
-        dest.writeInt(orbital.qZ);
-        dest.writeInt(orbital.qN);
-        dest.writeInt(orbital.qL);
-        dest.writeInt(orbital.qM);
-        dest.writeInt(orbital.real ? 1 : 0);
-        dest.writeInt(orbital.color ? 1 : 0);
+        dest.writeParcelable(orbital, flags);
     }
 
     public static final Parcelable.Creator<RenderState> CREATOR
@@ -55,13 +50,7 @@ class RenderState implements Parcelable {
         public RenderState createFromParcel(Parcel source) {
             RenderState result = new RenderState();
             result.camera = source.readParcelable(Camera.class.getClassLoader());
-            int qZ = source.readInt();
-            int qN = source.readInt();
-            int qL = source.readInt();
-            int qM = source.readInt();
-            boolean real = source.readInt() != 0;
-            boolean color = source.readInt() != 0;
-            result.orbital = new Orbital(qZ, qN, qL, qM, real, color);
+            result.orbital = source.readParcelable(Orbital.class.getClassLoader());
             return result;
         }
         @Override

@@ -1,6 +1,6 @@
 package com.gputreats.orbitalexplorer;
 
-class Orbital {
+class BaseOrbital {
 
     static final int MAX_N = 8;
 
@@ -10,7 +10,7 @@ class Orbital {
     private final AzimuthalFunction azimuthalFunction;
     private final Quadrature quadrature;
 
-    Orbital(int inZ, int inN, int inL, int inM, boolean inReal, boolean inColor) {
+    BaseOrbital(int inZ, int inN, int inL, int inM, boolean inReal, boolean inColor) {
         qZ = inZ;
         qN = inN;
         qL = inL;
@@ -22,7 +22,7 @@ class Orbital {
         quadrature = new Quadrature(qN, qL, color);
     }
 
-    boolean notEquals(Orbital r) {
+    boolean notEquals(BaseOrbital r) {
         return r == null || qZ != r.qZ || qN != r.qN || qL != r.qL || qM != r.qM
                 || real != r.real || color != r.color;
     }
