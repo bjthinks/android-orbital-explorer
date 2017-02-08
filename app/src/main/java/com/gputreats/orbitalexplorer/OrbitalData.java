@@ -39,6 +39,10 @@ class OrbitalData {
         MyGL.checkGLES();
     }
 
+    Orbital getOrbital() {
+        return orbital;
+    }
+
     void loadOrbital(Orbital newOrbital) {
         if (newOrbital.notEquals(orbital)) {
             orbital = newOrbital;

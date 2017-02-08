@@ -53,8 +53,7 @@ class OrbitalRenderer implements GLSurfaceView.Renderer {
             fps.frame();
         FrozenState frozenState = renderState.freeze(aspectRatio);
         orbitalData.loadOrbital(frozenState.orbital);
-        Texture integratorOutput = integrator.render(orbitalData,
-                frozenState.inverseTransform, frozenState.needToIntegrate);
+        Texture integratorOutput = integrator.render(orbitalData, frozenState.inverseTransform);
         screenDrawer.render(orbitalData, integratorOutput, null);
     }
 }

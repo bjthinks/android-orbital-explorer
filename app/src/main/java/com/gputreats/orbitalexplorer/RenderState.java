@@ -9,15 +9,11 @@ class RenderState implements Parcelable {
     private OrbitalView orbitalView;
 
     private Camera camera;
-    private boolean cameraChanged;
     private Orbital orbital;
-    private boolean orbitalChanged;
 
     RenderState() {
         camera = new Camera();
-        cameraChanged = true;
         orbital = new Orbital(1, 4, 2, 1, false, true);
-        orbitalChanged = true;
     }
 
     // This happens BEFORE the render thread starts up
@@ -59,7 +55,6 @@ class RenderState implements Parcelable {
         public RenderState createFromParcel(Parcel source) {
             RenderState result = new RenderState();
             result.camera = source.readParcelable(Camera.class.getClassLoader());
-            result.cameraChanged = true;
             int qZ = source.readInt();
             int qN = source.readInt();
             int qL = source.readInt();
@@ -67,7 +62,6 @@ class RenderState implements Parcelable {
             boolean real = source.readInt() != 0;
             boolean color = source.readInt() != 0;
             result.orbital = new Orbital(qZ, qN, qL, qM, real, color);
-            result.orbitalChanged = true;
             return result;
         }
         @Override
@@ -91,7 +85,6 @@ class RenderState implements Parcelable {
                     + Integer.toString(real ? 1 : 0) + ','
                     + Integer.toString(color ? 1 : 0) + ')');
             orbital = new Orbital(qZ, qN, qL, qM, real, color);
-            orbitalChanged = true;
             if (orbitalView != null) {
                 if (color)
                     orbitalView.setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
@@ -109,28 +102,24 @@ class RenderState implements Parcelable {
 
     synchronized void cameraDrag(double dx, double dy) {
         camera.drag(dx, dy);
-        cameraChanged = true;
         if (!orbital.color)
             orbitalView.requestRender();
     }
 
     synchronized void cameraTwist(double angle) {
         camera.twist(angle);
-        cameraChanged = true;
         if (!orbital.color)
             orbitalView.requestRender();
     }
 
     synchronized void cameraZoom(double factor) {
         camera.zoom(factor);
-        cameraChanged = true;
         if (!orbital.color)
             orbitalView.requestRender();
     }
 
     synchronized void cameraFling(double vx, double vy) {
         camera.fling(vx, vy);
-        cameraChanged = true;
         if (!orbital.color)
             orbitalView.requestRender();
     }
@@ -138,7 +127,6 @@ class RenderState implements Parcelable {
     synchronized void snapCameraToAxis() {
         camera.stopFling();
         camera.snapToAxis();
-        cameraChanged = true;
         orbitalView.requestRender();
     }
 
@@ -153,10 +141,6 @@ class RenderState implements Parcelable {
 
         fs.inverseTransform = camera.computeInverseShaderTransform(aspectRatio);
         fs.orbital = orbital;
-        fs.needToIntegrate = orbitalChanged || cameraChanged || stillFlinging;
-
-        orbitalChanged = false;
-        cameraChanged = false;
 
         return fs;
     }

@@ -62,15 +62,20 @@ class Integrator extends RenderStage {
     }
 
     private float[] inverseTransform = new float[16];
-    Texture render(OrbitalData orbitalData,
-                   float[] newInverseTransform, boolean inNeedToIntegrate) {
-        boolean needToIntegrate = inNeedToIntegrate;
-
+    private Orbital orbital;
+    Texture render(OrbitalData orbitalData, float[] newInverseTransform) {
         MyGL.checkGLES();
+
+        boolean needToIntegrate = false;
 
         if (!Arrays.equals(inverseTransform, newInverseTransform)) {
             needToIntegrate = true;
             inverseTransform = Arrays.copyOf(newInverseTransform, newInverseTransform.length);
+        }
+
+        if (orbital == null || orbital.notEquals(orbitalData.getOrbital())) {
+            needToIntegrate = true;
+            orbital = orbitalData.getOrbital();
         }
 
         boolean color = orbitalData.getColor();

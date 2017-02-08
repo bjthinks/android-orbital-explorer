@@ -112,8 +112,7 @@ class CardboardRenderer implements GvrView.StereoRenderer {
         float[] inverseTransform = new float[16];
         Matrix.invertM(inverseTransform, 0, transform, 0);
 
-        Texture integratorOutput = integrator.render(orbitalData,
-                inverseTransform, /* TODO */ true);
+        Texture integratorOutput = integrator.render(orbitalData, inverseTransform);
 
         screenDrawer.render(orbitalData, integratorOutput, eye.getViewport());
     }
