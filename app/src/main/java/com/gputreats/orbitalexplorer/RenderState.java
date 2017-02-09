@@ -8,11 +8,9 @@ class RenderState implements Parcelable {
 
     private OrbitalView orbitalView;
 
-    private Camera camera;
-    private Orbital orbital;
+    public Orbital orbital;
 
     RenderState() {
-        camera = new Camera();
         orbital = new Orbital(1, 4, 2, 1, false, true);
     }
 
@@ -40,7 +38,6 @@ class RenderState implements Parcelable {
 
     @Override
     public synchronized void writeToParcel(Parcel dest, int flags) {
-        dest.writeParcelable(camera, flags);
         dest.writeParcelable(orbital, flags);
     }
 
@@ -49,7 +46,6 @@ class RenderState implements Parcelable {
         @Override
         public RenderState createFromParcel(Parcel source) {
             RenderState result = new RenderState();
-            result.camera = source.readParcelable(Camera.class.getClassLoader());
             result.orbital = source.readParcelable(Orbital.class.getClassLoader());
             return result;
         }
@@ -85,43 +81,9 @@ class RenderState implements Parcelable {
         }
     }
 
-    synchronized boolean cameraStopFling() {
-        return camera.stopFling();
-    }
-
-    synchronized void cameraDrag(double dx, double dy) {
-        camera.drag(dx, dy);
-        if (!orbital.color)
-            orbitalView.requestRender();
-    }
-
-    synchronized void cameraTwist(double angle) {
-        camera.twist(angle);
-        if (!orbital.color)
-            orbitalView.requestRender();
-    }
-
-    synchronized void cameraZoom(double factor) {
-        camera.zoom(factor);
-        if (!orbital.color)
-            orbitalView.requestRender();
-    }
-
-    synchronized void cameraFling(double vx, double vy) {
-        camera.fling(vx, vy);
-        if (!orbital.color)
-            orbitalView.requestRender();
-    }
-
-    synchronized void snapCameraToAxis() {
-        camera.stopFling();
-        camera.snapToAxis();
-        orbitalView.requestRender();
-    }
-
     // Render thread getter
 
-    synchronized FrozenState freeze(double aspectRatio) {
+    synchronized FrozenState freeze(double aspectRatio, Camera camera) {
         FrozenState fs = new FrozenState();
 
         boolean stillFlinging = camera.continueFling();
