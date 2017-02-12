@@ -38,7 +38,10 @@ public class OrbitalView extends GLSurfaceView {
         // Start the rendering thread
         setRenderer(new OrbitalRenderer(context));
 
-        renderState.postRenderThreadSetup();
+        if (!renderState.orbital.color) {
+            setRenderMode(RENDERMODE_WHEN_DIRTY);
+            requestRender();
+        }
     }
 
     private Runnable onSingleTapUp;

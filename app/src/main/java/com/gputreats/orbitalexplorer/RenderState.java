@@ -20,15 +20,6 @@ class RenderState implements Parcelable {
         orbitalView = ov;
     }
 
-    // This happens AFTER the render thread starts up
-
-    synchronized void postRenderThreadSetup() {
-        if (!orbital.color) {
-            orbitalView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
-            orbitalView.requestRender();
-        }
-    }
-
     // Parcelable stuff
 
     @Override
