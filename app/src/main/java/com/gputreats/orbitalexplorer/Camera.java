@@ -60,11 +60,6 @@ class Camera implements Parcelable {
 
     Camera() {}
 
-    private Camera(double cameraDistanceIn, Quaternion totalRotationIn) {
-        cameraDistance = cameraDistanceIn;
-        totalRotation = totalRotationIn;
-    }
-
     @Override
     public int describeContents() {
         return 0;
@@ -80,8 +75,10 @@ class Camera implements Parcelable {
             = new Parcelable.Creator<Camera>() {
         @Override
         public Camera createFromParcel(Parcel source) {
-            return new Camera(source.readDouble(),
-                    source.readParcelable(Quaternion.class.getClassLoader()));
+            Camera c = new Camera();
+            c.cameraDistance = source.readDouble();
+            c.totalRotation = source.readParcelable(Quaternion.class.getClassLoader());
+            return c;
         }
         @Override
         public Camera[] newArray(int size) {
