@@ -66,7 +66,7 @@ class Camera implements Parcelable {
     }
 
     @Override
-    public void writeToParcel(Parcel dest, int flags) {
+    public synchronized void writeToParcel(Parcel dest, int flags) {
         dest.writeDouble(cameraDistance);
         dest.writeParcelable(totalRotation, flags);
     }
@@ -93,7 +93,7 @@ class Camera implements Parcelable {
     private double cameraDistance = INITIAL_CAMERA_DISTANCE;
 
     // Two finger zoom by an incremental size ratio of f
-    void zoom(double factor) {
+    synchronized void zoom(double factor) {
         cameraDistance /= factor;
         if (cameraDistance < MIN_CAMERA_DISTANCE)
             cameraDistance = MIN_CAMERA_DISTANCE;
@@ -117,7 +117,7 @@ class Camera implements Parcelable {
 
     // One finger drag by an increment of (x,y) pixels
     // x and y are multiples of the (mean) screen size
-    void drag(double x, double y) {
+    synchronized void drag(double x, double y) {
         // Finger moves right --> positive rotation about y axis
         Quaternion yRotation = rotation(Math.PI * x, Y_HAT);
         // Finger moves up --> negative rotation about x axis
@@ -128,7 +128,7 @@ class Camera implements Parcelable {
     }
 
     // Two finger twist by an angle increment of theta
-    void twist(double theta) {
+    synchronized void twist(double theta) {
         Quaternion zRotation = rotation(theta, Z_HAT);
         totalRotation = zRotation.multiply(totalRotation);
         totalRotation = totalRotation.normalize();
@@ -146,7 +146,7 @@ class Camera implements Parcelable {
     // Absolute amount of speed lost per second
     private static final double FLING_SLOWDOWN_CONSTANT = MAX_FLING_SPEED / MAX_FLING_TIME;
 
-    void fling(double x, double y) {
+    synchronized void fling(double x, double y) {
         // x and y are multiples of the mean screen size per second
         flingVelocity = new Vector2(x, y);
         double flingSpeed = flingVelocity.norm();
@@ -156,14 +156,14 @@ class Camera implements Parcelable {
         lastFlingTime = System.currentTimeMillis();
     }
 
-    boolean stopFling() {
+    synchronized boolean stopFling() {
         flingVelocity = new Vector2(0.0, 0.0);
         boolean r = stillFlinging;
         stillFlinging = false;
         return r;
     }
 
-    boolean continueFling() {
+    synchronized boolean continueFling() {
         if (stillFlinging) {
             long now = System.currentTimeMillis();
             long deltaMillis = now - lastFlingTime;
@@ -186,7 +186,7 @@ class Camera implements Parcelable {
         return stillFlinging;
     }
 
-    void snapToAxis() {
+    synchronized void snapToAxis() {
         int best = -1;
         double bestDistance = 1.0e9;
         for (int i = 0; i < ALIGNED_ROTATIONS.length; ++i) {
@@ -200,7 +200,7 @@ class Camera implements Parcelable {
             totalRotation = ALIGNED_ROTATIONS[best];
     }
 
-    float[] computeInverseShaderTransform(double aspectRatio) {
+    synchronized float[] computeInverseShaderTransform(double aspectRatio) {
         float ratio = (float) Math.sqrt(aspectRatio);
         float near = (float) cameraDistance;
         float far = (float) (cameraDistance + 1.0);

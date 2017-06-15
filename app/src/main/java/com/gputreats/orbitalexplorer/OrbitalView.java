@@ -63,9 +63,7 @@ public class OrbitalView extends GLSurfaceView {
                 // One bear in the bed
                 firstPointerID = event.getPointerId(0);
                 oneFingerEvent(event, false);
-                synchronized (renderState) {
-                    stoppedFling = camera.stopFling();
-                }
+                stoppedFling = camera.stopFling();
                 break;
 
             case MotionEvent.ACTION_POINTER_DOWN:
@@ -141,10 +139,8 @@ public class OrbitalView extends GLSurfaceView {
             double meanSize = Math.sqrt((double) (getWidth() * getHeight()));
             double dx = (x - previousX) / meanSize;
             double dy = (y - previousY) / meanSize;
-            synchronized (renderState) {
-                camera.drag(dx, dy);
-                requestRender();
-            }
+            camera.drag(dx, dy);
+            requestRender();
         }
 
         previousX = x;
@@ -175,16 +171,12 @@ public class OrbitalView extends GLSurfaceView {
         if (actionable) {
 
             double angleDifference = angle - previousAngle;
-            synchronized (renderState) {
-                camera.twist(angleDifference);
-                requestRender();
-            }
+            camera.twist(angleDifference);
+            requestRender();
 
             double zoomFactor = distance / previousDistance;
-            synchronized (renderState) {
-                camera.zoom(zoomFactor);
-                requestRender();
-            }
+            camera.zoom(zoomFactor);
+            requestRender();
         }
 
         previousAngle = angle;
@@ -207,11 +199,9 @@ public class OrbitalView extends GLSurfaceView {
 
         @Override
         public boolean onDoubleTap(MotionEvent event) {
-            synchronized (renderState) {
-                camera.stopFling();
-                camera.snapToAxis();
-                requestRender();
-            }
+            camera.stopFling();
+            camera.snapToAxis();
+            requestRender();
             return true;
         }
 
@@ -219,10 +209,8 @@ public class OrbitalView extends GLSurfaceView {
         public boolean onFling(MotionEvent event1, MotionEvent event2,
                                float velocityX, float velocityY) {
             double meanSize = Math.sqrt((double) (getWidth() * getHeight()));
-            synchronized (renderState) {
-                camera.fling((double) velocityX / meanSize, (double) velocityY / meanSize);
-                requestRender();
-            }
+            camera.fling((double) velocityX / meanSize, (double) velocityY / meanSize);
+            requestRender();
 
             return true;
         }
