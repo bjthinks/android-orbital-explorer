@@ -74,9 +74,7 @@ class RenderState implements Parcelable {
 
     // Render thread getter
 
-    synchronized FrozenState freeze() {
-        FrozenState fs = new FrozenState();
-        fs.orbital = orbital;
-        return fs;
+    synchronized Orbital freeze() {
+        return orbital;
     }
 }
