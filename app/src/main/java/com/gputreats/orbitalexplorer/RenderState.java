@@ -74,16 +74,13 @@ class RenderState implements Parcelable {
 
     // Render thread getter
 
-    synchronized FrozenState freeze(double aspectRatio, Camera camera) {
-        FrozenState fs = new FrozenState();
-
+    synchronized FrozenState freeze(Camera camera) {
         boolean stillFlinging = camera.continueFling();
         if (stillFlinging && !orbital.color)
             orbitalView.requestRender();
 
-        fs.inverseTransform = camera.computeInverseShaderTransform(aspectRatio);
+        FrozenState fs = new FrozenState();
         fs.orbital = orbital;
-
         return fs;
     }
 }
