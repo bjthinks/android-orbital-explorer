@@ -36,7 +36,7 @@ public class OrbitalView extends GLSurfaceView {
         camera = ((RenderStateProvider) context).provideCamera();
 
         // Start the rendering thread
-        setRenderer(new OrbitalRenderer(context));
+        setRenderer(new OrbitalRenderer(context, this));
 
         if (!renderState.orbital.color) {
             setRenderMode(RENDERMODE_WHEN_DIRTY);
