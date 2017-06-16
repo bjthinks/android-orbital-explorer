@@ -235,6 +235,8 @@ public class OrbitalView extends GLSurfaceView {
         boolean stillFlinging = camera.continueFling();
         if (stillFlinging)
             requestRender();
+        // In between these two camera function calls, we hold no lock, so another
+        // thread can change the camera. This is ok.
         return camera.computeInverseShaderTransform(aspectRatio);
     }
 }
