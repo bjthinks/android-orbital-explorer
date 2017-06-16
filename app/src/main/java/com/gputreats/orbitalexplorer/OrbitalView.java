@@ -9,7 +9,6 @@ import android.view.MotionEvent;
 public class OrbitalView extends GLSurfaceView {
 
     private GestureDetector tapFlingDetector;
-    private RenderState renderState;
     private Camera camera;
 
     public OrbitalView(Context context) {
@@ -31,7 +30,7 @@ public class OrbitalView extends GLSurfaceView {
 
         tapFlingDetector = new GestureDetector(context, new TapFlingListener());
 
-        renderState = ((RenderStateProvider) context).provideRenderState();
+        RenderState renderState = ((RenderStateProvider) context).provideRenderState();
         renderState.setOrbitalView(this);
         camera = ((RenderStateProvider) context).provideCamera();
 
