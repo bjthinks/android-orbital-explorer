@@ -2,6 +2,8 @@ package com.gputreats.orbitalexplorer;
 
 import android.content.Context;
 import android.opengl.GLSurfaceView;
+import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.AttributeSet;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
@@ -32,7 +34,7 @@ public class OrbitalView extends GLSurfaceView {
 
         RenderState renderState = ((RenderStateProvider) context).provideRenderState();
         renderState.setOrbitalView(this);
-        camera = ((RenderStateProvider) context).provideCamera();
+        camera = new Camera();
 
         // Start the rendering thread
         setRenderer(new OrbitalRenderer(context, this));
@@ -41,6 +43,21 @@ public class OrbitalView extends GLSurfaceView {
             setRenderMode(RENDERMODE_WHEN_DIRTY);
             requestRender();
         }
+    }
+
+    @Override
+    public Parcelable onSaveInstanceState() {
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("superState", super.onSaveInstanceState());
+        bundle.putParcelable("camera", camera);
+        return bundle;
+    }
+
+    @Override
+    public void onRestoreInstanceState(Parcelable state) {
+        Bundle bundle = (Bundle) state;
+        camera = bundle.getParcelable("camera");
+        super.onRestoreInstanceState(bundle.getParcelable("superState"));
     }
 
     private Runnable onSingleTapUp;
@@ -53,7 +70,6 @@ public class OrbitalView extends GLSurfaceView {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-
         tapFlingDetector.onTouchEvent(event);
 
         switch (event.getActionMasked()) {
@@ -213,5 +229,12 @@ public class OrbitalView extends GLSurfaceView {
 
             return true;
         }
+    }
+
+    float[] getInverseTransform(double aspectRatio) {
+        boolean stillFlinging = camera.continueFling();
+        if (stillFlinging)
+            requestRender();
+        return camera.computeInverseShaderTransform(aspectRatio);
     }
 }

@@ -15,7 +15,6 @@ import android.view.View;
 public class MainActivity extends AppCompatActivity implements RenderStateProvider {
 
     private RenderState renderState;
-    private Camera camera;
     private View decorView;
     private Toolbar toolbar;
     private OrbitalSelector orbitalSelector;
@@ -26,9 +25,6 @@ public class MainActivity extends AppCompatActivity implements RenderStateProvid
     public RenderState provideRenderState() {
         return renderState;
     }
-
-    @Override
-    public Camera provideCamera() { return camera; }
 
     //
     // STARTUP -- CHECK OPENGL ES 3.0
@@ -69,8 +65,6 @@ public class MainActivity extends AppCompatActivity implements RenderStateProvid
 
         renderState = savedState != null
                 ? savedState.getParcelable(RENDER_STATE_KEY) : new RenderState();
-        camera = savedState != null
-                ? savedState.getParcelable(CAMERA_KEY) : new Camera();
 
         setContentView(R.layout.activity_main);
         decorView = getWindow().getDecorView();
@@ -106,14 +100,12 @@ public class MainActivity extends AppCompatActivity implements RenderStateProvid
     //
 
     private static final String RENDER_STATE_KEY = "renderState";
-    private static final String CAMERA_KEY = "camera";
 
     // This might happen before or after onPause(), but if it needs to be called,
     // it will always be called before onStop().
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         outState.putParcelable(RENDER_STATE_KEY, renderState);
-        outState.putParcelable(CAMERA_KEY, camera);
         super.onSaveInstanceState(outState);
     }
 
