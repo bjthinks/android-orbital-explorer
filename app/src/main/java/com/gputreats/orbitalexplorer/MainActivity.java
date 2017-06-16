@@ -50,7 +50,6 @@ public class MainActivity extends AppCompatActivity implements RenderStateProvid
 
     private void showDriverError() {
         setContentView(R.layout.activity_error);
-        Analytics.reportFatalError("GLES version check failed");
     }
 
     //
@@ -121,8 +120,6 @@ public class MainActivity extends AppCompatActivity implements RenderStateProvid
         super.onResume();
         if (orbitalView != null)
             orbitalView.onResume();
-
-        Analytics.setScreenName("Main");
     }
 
     //
@@ -169,12 +166,10 @@ public class MainActivity extends AppCompatActivity implements RenderStateProvid
         switch (item.getItemId()) {
 
             case R.id.menuFullscreen:
-                Analytics.reportEvent("menu", "full");
                 setFullscreen(true);
                 break;
 
             case R.id.menuCardboard:
-                Analytics.reportEvent("menu", "cardboard");
                 intent = new Intent(this, CardboardActivity.class);
                 Orbital orbital = renderState.getOrbital();
                 intent.putExtra("Z", orbital.qZ);
@@ -187,7 +182,6 @@ public class MainActivity extends AppCompatActivity implements RenderStateProvid
                 break;
 
             case R.id.menuStore:
-                Analytics.reportEvent("menu", "store");
                 Uri uri = Uri.parse("market://details?id=" + getPackageName());
                 intent = new Intent(Intent.ACTION_VIEW, uri);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
@@ -195,7 +189,6 @@ public class MainActivity extends AppCompatActivity implements RenderStateProvid
                 break;
 
             case R.id.menuAbout:
-                Analytics.reportEvent("menu", "about");
                 intent = new Intent(this, HelpActivity.class);
                 intent.putExtra("url",     "file:///android_asset/docs/about.html");
                 intent.putExtra("url-v19", "file:///android_asset/docs/about.html");
@@ -204,7 +197,6 @@ public class MainActivity extends AppCompatActivity implements RenderStateProvid
                 break;
 
             case R.id.menuHelp:
-                Analytics.reportEvent("menu", "help");
                 intent = new Intent(this, HelpActivity.class);
                 intent.putExtra("url",     "file:///android_asset/docs/help.html");
                 intent.putExtra("url-v19", "file:///android_asset/docs/help-v19.html");
