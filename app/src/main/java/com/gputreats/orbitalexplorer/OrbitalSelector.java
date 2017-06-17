@@ -2,6 +2,7 @@ package com.gputreats.orbitalexplorer;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.v4.content.ContextCompat;
 import android.text.Html;
@@ -22,8 +23,8 @@ public class OrbitalSelector extends LinearLayout {
 
     private RenderState renderState;
 
-    private Context context;
     private String plusMinus, minusPlus, realNumbers, complexNumbers;
+    private Drawable drawableColor, drawableMono;
 
     private int qN;
     private int qL;
@@ -38,24 +39,22 @@ public class OrbitalSelector extends LinearLayout {
     private Button rcChanger;
     private ImageButton colorChanger;
 
-    public OrbitalSelector(Context inContext) {
-        super(inContext);
-        constructorSetup(inContext);
+    public OrbitalSelector(Context context) {
+        super(context);
+        constructorSetup(context);
     }
 
-    public OrbitalSelector(Context inContext, AttributeSet attribs) {
-        super(inContext, attribs);
-        constructorSetup(inContext);
+    public OrbitalSelector(Context context, AttributeSet attribs) {
+        super(context, attribs);
+        constructorSetup(context);
     }
 
-    public OrbitalSelector(Context inContext, AttributeSet attribs, int defStyle) {
-        super(inContext, attribs, defStyle);
-        constructorSetup(inContext);
+    public OrbitalSelector(Context context, AttributeSet attribs, int defStyle) {
+        super(context, attribs, defStyle);
+        constructorSetup(context);
     }
 
-    private void constructorSetup(Context inContext) {
-        context = inContext;
-
+    private void constructorSetup(Context context) {
         plusMinus = context.getString(R.string.plusMinus);
         minusPlus = context.getString(R.string.minusPlus);
 
@@ -69,6 +68,9 @@ public class OrbitalSelector extends LinearLayout {
         }
 
         renderState = ((RenderStateProvider) context).provideRenderState();
+        drawableColor = ContextCompat.getDrawable(context, R.drawable.ic_palette_white_24dp);
+        drawableMono  = ContextCompat.getDrawable(context, R.drawable.bnw);
+
         Orbital previouslyDisplayedOrbital = renderState.getOrbital();
         qN = previouslyDisplayedOrbital.qN;
         qL = previouslyDisplayedOrbital.qL;
@@ -221,8 +223,7 @@ public class OrbitalSelector extends LinearLayout {
 
     private void setColor(boolean newColor) {
         color = newColor;
-        int d = color ? R.drawable.ic_palette_white_24dp : R.drawable.bnw;
-        colorChanger.setImageDrawable(ContextCompat.getDrawable(context, d));
+        colorChanger.setImageDrawable(color ? drawableColor : drawableMono);
     }
 
     private void setButtonTint() {
