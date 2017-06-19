@@ -178,7 +178,6 @@ public class MainActivity extends AppCompatActivity implements RenderStateProvid
                 intent.putExtra("M", orbital.qM);
                 intent.putExtra("real", orbital.real);
                 intent.putExtra("color", orbital.color);
-                startActivity(intent);
                 break;
 
             case R.id.menuStore:
