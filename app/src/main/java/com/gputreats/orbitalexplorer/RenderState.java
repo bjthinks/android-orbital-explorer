@@ -46,7 +46,6 @@ class RenderState implements Parcelable {
         }
     };
 
-    // Main thread interface
     synchronized Orbital getOrbital() {
         return orbital;
     }
@@ -64,11 +63,5 @@ class RenderState implements Parcelable {
                 }
             }
         }
-    }
-
-    // Render thread getter
-
-    synchronized Orbital freeze() {
-        return orbital;
     }
 }

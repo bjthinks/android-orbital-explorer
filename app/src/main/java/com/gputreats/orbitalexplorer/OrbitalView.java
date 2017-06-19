@@ -12,6 +12,7 @@ public class OrbitalView extends GLSurfaceView {
 
     private GestureDetector tapFlingDetector;
     private Camera camera;
+    private RenderState renderState;
 
     public OrbitalView(Context context) {
         super(context);
@@ -32,7 +33,7 @@ public class OrbitalView extends GLSurfaceView {
 
         tapFlingDetector = new GestureDetector(context, new TapFlingListener());
 
-        RenderState renderState = ((RenderStateProvider) context).provideRenderState();
+        renderState = ((RenderStateProvider) context).provideRenderState();
         renderState.setOrbitalView(this);
         camera = new Camera();
 
@@ -231,7 +232,15 @@ public class OrbitalView extends GLSurfaceView {
         }
     }
 
+    // Render thread calls these two functions
+
+    Orbital getOrbital() {
+        // RenderState is a thread-safe class
+        return renderState.getOrbital();
+    }
+
     float[] getInverseTransform(double aspectRatio) {
+        // Camera is a thread-safe class
         boolean stillFlinging = camera.continueFling();
         if (stillFlinging)
             requestRender();
