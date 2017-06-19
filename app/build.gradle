@@ -37,6 +37,3 @@ dependencies {
     compile project(':cardboard-base')
     compile project(':cardboard-common')
 }
-
-// Google Analytics
-apply plugin: 'com.google.gms.google-services'
