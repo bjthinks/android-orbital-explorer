@@ -170,14 +170,7 @@ public class MainActivity extends AppCompatActivity implements RenderStateProvid
                 break;
 
             case R.id.menuCardboard:
-                intent = new Intent(this, CardboardActivity.class);
                 Orbital orbital = renderState.getOrbital();
-                intent.putExtra("Z", orbital.qZ);
-                intent.putExtra("N", orbital.qN);
-                intent.putExtra("L", orbital.qL);
-                intent.putExtra("M", orbital.qM);
-                intent.putExtra("real", orbital.real);
-                intent.putExtra("color", orbital.color);
                 break;
 
             case R.id.menuStore:
