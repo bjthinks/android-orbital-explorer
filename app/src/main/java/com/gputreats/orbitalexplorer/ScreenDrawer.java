@@ -5,8 +5,6 @@ import android.content.res.AssetManager;
 import android.opengl.GLES30;
 import android.util.Log;
 
-import com.google.vr.sdk.base.Viewport;
-
 class ScreenDrawer extends RenderStage {
 
     private final AssetManager assets;
@@ -36,18 +34,14 @@ class ScreenDrawer extends RenderStage {
         height = newHeight;
     }
 
-    void render(OrbitalData orbitalData, Texture texture, Viewport viewport) {
+    void render(OrbitalData orbitalData, Texture texture) {
 
         MyGL.checkGLES();
 
         Program program = orbitalData.getColor() ? programColor : programMono;
         program.use();
 
-        if (viewport != null) {
-            GLES30.glViewport(viewport.x, viewport.y, viewport.width, viewport.height);
-        } else {
-            GLES30.glViewport(0, 0, width, height);
-        }
+        GLES30.glViewport(0, 0, width, height);
 
         GLES30.glActiveTexture(GLES30.GL_TEXTURE0);
         texture.bindToTexture2D();

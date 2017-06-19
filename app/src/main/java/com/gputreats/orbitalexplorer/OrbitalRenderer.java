@@ -58,6 +58,6 @@ class OrbitalRenderer implements GLSurfaceView.Renderer {
         orbitalData.loadOrbital(orbital);
         float[] inverseTransform = orbitalView.getInverseTransform(aspectRatio);
         Texture integratorOutput = integrator.render(orbitalData, inverseTransform);
-        screenDrawer.render(orbitalData, integratorOutput, null);
+        screenDrawer.render(orbitalData, integratorOutput);
     }
 }

@@ -11,14 +11,6 @@
 
 -keepattributes SourceFile,LineNumberTable
 
--keep class com.google.vr.**
--keepclassmembers class com.google.vr.** { *; }
--keep class com.google.vr.**$*
--keepclassmembers class com.google.vr.**$* { *; }
--keep class com.google.geo.render.**
--keepclassmembers class com.google.geo.render.** { *; }
--keep class com.google.vrtoolkit.cardboard.** { *; }
-
 -keepclassmembers class * implements android.os.Parcelable {
 	public static final **CREATOR;
 }
