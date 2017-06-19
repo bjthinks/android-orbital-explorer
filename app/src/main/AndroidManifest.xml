@@ -26,7 +26,6 @@
     <uses-permission android:name="android.permission.NFC"/>
 
     <application
-        android:name=".OrbitalApplication"
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/appName"
