@@ -8,7 +8,7 @@ class RenderState implements Parcelable {
 
     private OrbitalView orbitalView;
 
-    public Orbital orbital;
+    Orbital orbital;
 
     RenderState() {
         orbital = new Orbital(1, 4, 2, 1, false, true);

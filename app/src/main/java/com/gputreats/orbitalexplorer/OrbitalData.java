@@ -130,10 +130,6 @@ class OrbitalData {
         return orbital.qN;
     }
 
-    float getRadius() {
-        return (float) orbital.getRadialFunction().getMaximumRadius();
-    }
-
     private static float[] functionToBuffer2(Function f, double start, double end, int n) {
         float[] data = new float[2 * n];
         double stepSize = (end - start) / (double) n;
