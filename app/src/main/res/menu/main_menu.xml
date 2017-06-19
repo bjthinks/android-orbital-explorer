@@ -9,12 +9,6 @@
         app:showAsAction="ifRoom" />
 
     <item
-        android:id="@+id/menuCardboard"
-        android:icon="@drawable/cardboard"
-        android:title="@string/menuCardboard"
-        app:showAsAction="ifRoom" />
-
-    <item
         android:id="@+id/menuStore"
         android:title="@string/menuStore"
         app:showAsAction="never" />

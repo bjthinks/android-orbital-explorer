@@ -4,7 +4,6 @@
     <string name="apologySubtext">OpenGL ES 3.0 is required.</string>
 
     <string name="menuFullscreen">Fullscreen</string>
-    <string name="menuCardboard">Cardboard</string>
     <string name="menuStore">Play Store</string>
     <string name="menuAbout">About</string>
     <string name="menuHelp">Help</string>

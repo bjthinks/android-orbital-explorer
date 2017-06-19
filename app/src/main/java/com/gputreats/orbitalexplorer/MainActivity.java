@@ -169,10 +169,6 @@ public class MainActivity extends AppCompatActivity implements RenderStateProvid
                 setFullscreen(true);
                 break;
 
-            case R.id.menuCardboard:
-                Orbital orbital = renderState.getOrbital();
-                break;
-
             case R.id.menuStore:
                 Uri uri = Uri.parse("market://details?id=" + getPackageName());
                 intent = new Intent(Intent.ACTION_VIEW, uri);
