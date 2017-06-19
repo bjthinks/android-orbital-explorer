@@ -1,6 +1,7 @@
 package com.gputreats.orbitalexplorer;
 
 import android.app.ActivityManager;
+import android.app.DialogFragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ConfigurationInfo;
@@ -170,10 +171,8 @@ public class MainActivity extends AppCompatActivity implements RenderStateProvid
                 break;
 
             case R.id.menuStore:
-                Uri uri = Uri.parse("market://details?id=" + getPackageName());
-                intent = new Intent(Intent.ACTION_VIEW, uri);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-                startActivity(intent);
+                DialogFragment confirm = new StoreConfirm();
+                confirm.show(getFragmentManager(), "StoreConfirm");
                 break;
 
             case R.id.menuAbout:
@@ -196,5 +195,12 @@ public class MainActivity extends AppCompatActivity implements RenderStateProvid
                 return super.onOptionsItemSelected(item);
         }
         return true;
+    }
+
+    void gotoPlayStore() {
+        Uri uri = Uri.parse("market://details?id=" + getPackageName());
+        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+        startActivity(intent);
     }
 }

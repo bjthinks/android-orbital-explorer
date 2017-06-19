@@ -4,9 +4,13 @@
     <string name="apologySubtext">OpenGL ES 3.0 is required.</string>
 
     <string name="menuFullscreen">Fullscreen</string>
-    <string name="menuStore">Play Store</string>
+    <string name="menuStore">Rate this</string>
     <string name="menuAbout">About</string>
     <string name="menuHelp">Help</string>
+
+    <string name="askStore">View this app on the Google Play Store?"</string>
+    <string name="askStoreYes">"OK"</string>
+    <string name="askStoreNo">"Cancel"</string>
 
     <string name="complexNumbers">\u2102</string>
     <string name="realNumbers">\u211d</string>
