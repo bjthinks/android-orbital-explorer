@@ -9,9 +9,9 @@ android {
         minSdkVersion 19
         targetSdkVersion 25
         // ALSO CHANGE IN ShaderObfuscator.java
-        versionCode 111
+        versionCode 120
         // ALSO CHANGE IN assets/docs/about.html
-        versionName "1.1a"
+        versionName "1.2"
         jackOptions {
             enabled true
             true
