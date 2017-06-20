@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity implements RenderStateProvid
         super.onCreate(savedInstanceState);
 
         if (hasGLES30())
-            startApp(savedInstanceState);
+            startApp();
         else
             showDriverError();
     }
@@ -57,14 +57,15 @@ public class MainActivity extends AppCompatActivity implements RenderStateProvid
     // INITIALIZATION
     //
 
-    private void startApp(Bundle savedState) {
+    private void startApp() {
+
+        // If savedState != null, can use savedState.getParcelable(String key)
 
         // Need to set renderState before calling setContentView, because that will
         // inflate an OrbitalView, which will ask its context (i.e. this object) for
         // the renderState.
 
-        renderState = savedState != null
-                ? savedState.getParcelable(RENDER_STATE_KEY) : new RenderState();
+        renderState = new RenderState();
 
         setContentView(R.layout.activity_main);
         decorView = getWindow().getDecorView();
@@ -99,13 +100,11 @@ public class MainActivity extends AppCompatActivity implements RenderStateProvid
     // LIFE CYCLE
     //
 
-    private static final String RENDER_STATE_KEY = "renderState";
-
     // This might happen before or after onPause(), but if it needs to be called,
     // it will always be called before onStop().
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        outState.putParcelable(RENDER_STATE_KEY, renderState);
+        // Use outState.putParcelable(String key, T value) here
         super.onSaveInstanceState(outState);
     }
 
