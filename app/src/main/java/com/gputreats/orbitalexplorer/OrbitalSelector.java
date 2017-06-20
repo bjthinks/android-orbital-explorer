@@ -142,7 +142,7 @@ public class OrbitalSelector extends LinearLayout {
     private void orbitalChanged() {
         setOrbitalName();
         setButtonTint();
-        renderState.setOrbital(1, qN, qL, qM, real, color);
+        renderState.setOrbital(new Orbital(1, qN, qL, qM, real, color));
     }
 
     private void increaseN() {

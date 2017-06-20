@@ -232,6 +232,17 @@ public class OrbitalView extends GLSurfaceView {
         }
     }
 
+    void setOrbital(Orbital newOrbital) {
+        Orbital orbital = newOrbital;
+
+        if (orbital.color)
+            setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
+        else {
+            setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
+            requestRender();
+        }
+    }
+
     // Render thread calls these two functions
 
     Orbital getOrbital() {
