@@ -12,7 +12,7 @@ public class OrbitalView extends GLSurfaceView {
 
     private GestureDetector tapFlingDetector;
     private Camera camera;
-    private RenderState renderState;
+    private OrbitalRenderer orbitalRenderer;
 
     public OrbitalView(Context context) {
         super(context);
@@ -33,17 +33,13 @@ public class OrbitalView extends GLSurfaceView {
 
         tapFlingDetector = new GestureDetector(context, new TapFlingListener());
 
-        renderState = ((RenderStateProvider) context).provideRenderState();
-        renderState.setOrbitalView(this);
         camera = new Camera();
 
         // Start the rendering thread
-        setRenderer(new OrbitalRenderer(context, this));
-
-        if (!renderState.orbital.color) {
-            setRenderMode(RENDERMODE_WHEN_DIRTY);
-            requestRender();
-        }
+        orbitalRenderer = new OrbitalRenderer(context, this);
+        setRenderer(orbitalRenderer);
+        // No orbital to render yet, so...
+        setRenderMode(RENDERMODE_WHEN_DIRTY);
     }
 
     @Override
@@ -59,6 +55,16 @@ public class OrbitalView extends GLSurfaceView {
         Bundle bundle = (Bundle) state;
         camera = bundle.getParcelable("camera");
         super.onRestoreInstanceState(bundle.getParcelable("superState"));
+    }
+
+    void onOrbitalChanged(Orbital newOrbital) {
+        orbitalRenderer.onOrbitalChanged(newOrbital);
+        if (newOrbital.color)
+            setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
+        else {
+            setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
+            requestRender();
+        }
     }
 
     private Runnable onSingleTapUp;
@@ -232,23 +238,7 @@ public class OrbitalView extends GLSurfaceView {
         }
     }
 
-    void setOrbital(Orbital newOrbital) {
-        Orbital orbital = newOrbital;
-
-        if (orbital.color)
-            setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
-        else {
-            setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
-            requestRender();
-        }
-    }
-
-    // Render thread calls these two functions
-
-    Orbital getOrbital() {
-        // RenderState is a thread-safe class
-        return renderState.getOrbital();
-    }
+    // Render thread calls this function
 
     float[] getInverseTransform(double aspectRatio) {
         // Camera is a thread-safe class

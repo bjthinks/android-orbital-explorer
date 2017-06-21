@@ -13,19 +13,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-public class MainActivity extends AppCompatActivity implements RenderStateProvider {
+public class MainActivity extends AppCompatActivity {
 
-    private RenderState renderState;
     private View decorView;
     private Toolbar toolbar;
     private OrbitalSelector orbitalSelector;
     private OrbitalView orbitalView;
     private boolean fullScreenMode;
-
-    @Override
-    public RenderState provideRenderState() {
-        return renderState;
-    }
 
     //
     // STARTUP -- CHECK OPENGL ES 3.0
@@ -65,8 +59,6 @@ public class MainActivity extends AppCompatActivity implements RenderStateProvid
         // inflate an OrbitalView, which will ask its context (i.e. this object) for
         // the renderState.
 
-        renderState = new RenderState();
-
         setContentView(R.layout.activity_main);
         decorView = getWindow().getDecorView();
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -94,6 +86,8 @@ public class MainActivity extends AppCompatActivity implements RenderStateProvid
         setSupportActionBar(toolbar);
 
         setFullscreen(false);
+
+        orbitalSelector.setOrbitalView(orbitalView);
     }
 
     //

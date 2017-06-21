@@ -4,10 +4,13 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.content.ContextCompat;
 import android.text.Html;
 import android.text.Spanned;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -21,7 +24,7 @@ public class OrbitalSelector extends LinearLayout {
     private static final int COLOR_DIM = Color.rgb(128, 128, 128);
     private static final int COLOR_BRIGHT = Color.rgb(255, 255, 255);
 
-    private RenderState renderState;
+    private OrbitalView orbitalView;
 
     private String plusMinus, minusPlus, realNumbers, complexNumbers;
     private Drawable drawableColor, drawableMono;
@@ -67,22 +70,47 @@ public class OrbitalSelector extends LinearLayout {
             complexNumbers = "C";
         }
 
-        renderState = ((RenderStateProvider) context).provideRenderState();
         drawableColor = ContextCompat.getDrawable(context, R.drawable.ic_palette_white_24dp);
         drawableMono  = ContextCompat.getDrawable(context, R.drawable.bnw);
 
-        Orbital previouslyDisplayedOrbital = renderState.getOrbital();
-        qN = previouslyDisplayedOrbital.qN;
-        qL = previouslyDisplayedOrbital.qL;
-        qM = previouslyDisplayedOrbital.qM;
-        real = previouslyDisplayedOrbital.real;
-        color = previouslyDisplayedOrbital.color;
+        qN = 4;
+        qL = 2;
+        qM = 1;
+        real = false;
+        color = true;
 
         LayoutInflater inflater
                 = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         inflater.inflate(R.layout.view_orbitalselector, this);
         requestLayout();
     }
+
+    @Override
+    public Parcelable onSaveInstanceState() {
+        Log.d("OrbitalSelector", "SAVING STATE");
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("superState", super.onSaveInstanceState());
+        bundle.putInt("qN", qN);
+        bundle.putInt("qL", qL);
+        bundle.putInt("qM", qM);
+        bundle.putBoolean("real", real);
+        bundle.putBoolean("color", color);
+        return bundle;
+    }
+
+    @Override
+    public void onRestoreInstanceState(Parcelable state) {
+        Log.d("OrbitalSelector", "RESTORING STATE");
+        Bundle bundle = (Bundle) state;
+        super.onRestoreInstanceState(bundle.getParcelable("superState"));
+        qN = bundle.getInt("qN");
+        qL = bundle.getInt("qL");
+        qM = bundle.getInt("qM");
+        real = bundle.getBoolean("real");
+        color = bundle.getBoolean("color");
+        orbitalChanged();
+    }
+
 
     @Override
     protected void onFinishInflate() {
@@ -95,13 +123,7 @@ public class OrbitalSelector extends LinearLayout {
         rcChanger = (Button) findViewById(R.id.rcchanger);
         colorChanger = (ImageButton) findViewById(R.id.colorchanger);
 
-        setOrbitalName();
-        nChanger.setInteger(qN);
-        lChanger.setInteger(qL);
-        setMChanger();
-        setReal(real);
-        setColor(color);
-        setButtonTint();
+        orbitalChanged();
 
         nChanger.setOnUpListener((View v) -> {
                 increaseN();
@@ -127,10 +149,8 @@ public class OrbitalSelector extends LinearLayout {
                 decreaseM();
                 orbitalChanged();
         });
-
         rcChanger.setOnClickListener((View v) -> {
                 setReal(!real);
-                setMChanger();
                 orbitalChanged();
         });
         colorChanger.setOnClickListener((View v) -> {
@@ -139,23 +159,15 @@ public class OrbitalSelector extends LinearLayout {
         });
     }
 
-    private void orbitalChanged() {
-        setOrbitalName();
-        setButtonTint();
-        renderState.setOrbital(new Orbital(1, qN, qL, qM, real, color));
-    }
-
     private void increaseN() {
         if (qN < Orbital.MAX_N) {
             ++qN;
-            nChanger.setInteger(qN);
         }
     }
 
     private void decreaseN() {
         if (qN > 1) {
             --qN;
-            nChanger.setInteger(qN);
             if (qL >= qN)
                 decreaseL();
         }
@@ -164,7 +176,6 @@ public class OrbitalSelector extends LinearLayout {
     private void increaseL() {
         if (qL < Orbital.MAX_N - 1) {
             ++qL;
-            lChanger.setInteger(qL);
             if (qL >= qN)
                 increaseN();
         }
@@ -173,7 +184,6 @@ public class OrbitalSelector extends LinearLayout {
     private void decreaseL() {
         if (qL > 0) {
             --qL;
-            lChanger.setInteger(qL);
             if (qM > qL)
                 decreaseM();
             else if (qM < -qL)
@@ -184,7 +194,6 @@ public class OrbitalSelector extends LinearLayout {
     private void increaseM() {
         if (qM < Orbital.MAX_N - 1) {
             ++qM;
-            setMChanger();
             if (qM > qL)
                 increaseL();
         }
@@ -193,10 +202,27 @@ public class OrbitalSelector extends LinearLayout {
     private void decreaseM() {
         if (qM > 1 - Orbital.MAX_N) {
             --qM;
-            setMChanger();
             if (qM < -qL)
                 increaseL();
         }
+    }
+
+    void setOrbitalView(OrbitalView ov) {
+        orbitalView = ov;
+        orbitalChanged();
+    }
+
+    private void orbitalChanged() {
+        nChanger.setInteger(qN);
+        lChanger.setInteger(qL);
+        setMChanger();
+        setReal(real);
+        setColor(color);
+        setButtonTint();
+        setOrbitalName();
+
+        if (orbitalView != null)
+            orbitalView.onOrbitalChanged(new Orbital(1, qN, qL, qM, real, color));
     }
 
     private void setMChanger() {

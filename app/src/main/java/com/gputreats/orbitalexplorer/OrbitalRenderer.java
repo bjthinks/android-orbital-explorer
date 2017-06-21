@@ -8,6 +8,7 @@ import javax.microedition.khronos.opengles.GL10;
 
 class OrbitalRenderer implements GLSurfaceView.Renderer {
 
+    private Orbital orbital;
     private final OrbitalData orbitalData;
     private final Integrator integrator;
     private final ScreenDrawer screenDrawer;
@@ -22,6 +23,12 @@ class OrbitalRenderer implements GLSurfaceView.Renderer {
         screenDrawer = new ScreenDrawer(context);
         orbitalView = ov;
         fps = new FPS();
+    }
+
+    // Main thread
+
+    synchronized void onOrbitalChanged(Orbital newOrbital) {
+        orbital = newOrbital;
     }
 
     // Rendering thread
@@ -49,12 +56,17 @@ class OrbitalRenderer implements GLSurfaceView.Renderer {
 
     @Override
     public void onDrawFrame(GL10 gl) {
-        if (BuildConfig.DEBUG)
-            fps.frame();
-        Orbital orbital = orbitalView.getOrbital();
-        orbitalData.loadOrbital(orbital);
-        float[] inverseTransform = orbitalView.getInverseTransform(aspectRatio);
-        Texture integratorOutput = integrator.render(orbitalData, inverseTransform);
-        screenDrawer.render(orbitalData, integratorOutput);
+        Orbital orbitalTemp;
+        synchronized (this) {
+            orbitalTemp = orbital;
+        }
+        if (orbitalTemp != null) {
+            if (BuildConfig.DEBUG)
+                fps.frame();
+            orbitalData.loadOrbital(orbitalTemp);
+            float[] inverseTransform = orbitalView.getInverseTransform(aspectRatio);
+            Texture integratorOutput = integrator.render(orbitalData, inverseTransform);
+            screenDrawer.render(orbitalData, integratorOutput);
+        }
     }
 }
