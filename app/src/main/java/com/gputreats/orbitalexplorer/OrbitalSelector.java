@@ -10,7 +10,6 @@ import android.support.v4.content.ContextCompat;
 import android.text.Html;
 import android.text.Spanned;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -82,12 +81,54 @@ public class OrbitalSelector extends LinearLayout {
         LayoutInflater inflater
                 = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         inflater.inflate(R.layout.view_orbitalselector, this);
+
         requestLayout();
+
+        orbitalName = (TextView) findViewById(R.id.orbitalname);
+        nChanger = (ValueChanger) findViewById(R.id.nchanger);
+        lChanger = (ValueChanger) findViewById(R.id.lchanger);
+        mChanger = (ValueChanger) findViewById(R.id.mchanger);
+        rcChanger = (Button) findViewById(R.id.rcchanger);
+        colorChanger = (ImageButton) findViewById(R.id.colorchanger);
+
+        nChanger.setOnUpListener((View v) -> {
+            increaseN();
+            orbitalChanged();
+        });
+        nChanger.setOnDownListener((View v) -> {
+            decreaseN();
+            orbitalChanged();
+        });
+        lChanger.setOnUpListener((View x) -> {
+            increaseL();
+            orbitalChanged();
+        });
+        lChanger.setOnDownListener((View v) -> {
+            decreaseL();
+            orbitalChanged();
+        });
+        mChanger.setOnUpListener((View v) -> {
+            increaseM();
+            orbitalChanged();
+        });
+        mChanger.setOnDownListener((View v) -> {
+            decreaseM();
+            orbitalChanged();
+        });
+        rcChanger.setOnClickListener((View v) -> {
+            setReal(!real);
+            orbitalChanged();
+        });
+        colorChanger.setOnClickListener((View v) -> {
+            setColor(!color);
+            orbitalChanged();
+        });
+
+        orbitalChanged();
     }
 
     @Override
     public Parcelable onSaveInstanceState() {
-        Log.d("OrbitalSelector", "SAVING STATE");
         Bundle bundle = new Bundle();
         bundle.putParcelable("superState", super.onSaveInstanceState());
         bundle.putInt("qN", qN);
@@ -100,7 +141,6 @@ public class OrbitalSelector extends LinearLayout {
 
     @Override
     public void onRestoreInstanceState(Parcelable state) {
-        Log.d("OrbitalSelector", "RESTORING STATE");
         Bundle bundle = (Bundle) state;
         super.onRestoreInstanceState(bundle.getParcelable("superState"));
         qN = bundle.getInt("qN");
@@ -109,54 +149,6 @@ public class OrbitalSelector extends LinearLayout {
         real = bundle.getBoolean("real");
         color = bundle.getBoolean("color");
         orbitalChanged();
-    }
-
-
-    @Override
-    protected void onFinishInflate() {
-        super.onFinishInflate();
-
-        orbitalName = (TextView) findViewById(R.id.orbitalname);
-        nChanger = (ValueChanger) findViewById(R.id.nchanger);
-        lChanger = (ValueChanger) findViewById(R.id.lchanger);
-        mChanger = (ValueChanger) findViewById(R.id.mchanger);
-        rcChanger = (Button) findViewById(R.id.rcchanger);
-        colorChanger = (ImageButton) findViewById(R.id.colorchanger);
-
-        orbitalChanged();
-
-        nChanger.setOnUpListener((View v) -> {
-                increaseN();
-                orbitalChanged();
-        });
-        nChanger.setOnDownListener((View v) -> {
-                decreaseN();
-                orbitalChanged();
-        });
-        lChanger.setOnUpListener((View x) -> {
-                increaseL();
-                orbitalChanged();
-        });
-        lChanger.setOnDownListener((View v) -> {
-                decreaseL();
-                orbitalChanged();
-        });
-        mChanger.setOnUpListener((View v) -> {
-                increaseM();
-                orbitalChanged();
-        });
-        mChanger.setOnDownListener((View v) -> {
-                decreaseM();
-                orbitalChanged();
-        });
-        rcChanger.setOnClickListener((View v) -> {
-                setReal(!real);
-                orbitalChanged();
-        });
-        colorChanger.setOnClickListener((View v) -> {
-                setColor(!color);
-                orbitalChanged();
-        });
     }
 
     private void increaseN() {

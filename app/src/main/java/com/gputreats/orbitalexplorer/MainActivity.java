@@ -96,11 +96,11 @@ public class MainActivity extends AppCompatActivity {
 
     // This might happen before or after onPause(), but if it needs to be called,
     // it will always be called before onStop().
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        // Use outState.putParcelable(String key, T value) here
-        super.onSaveInstanceState(outState);
-    }
+    // @Override
+    // protected void onSaveInstanceState(Bundle outState) {
+    //     // Use outState.putParcelable(String key, T value) here
+    //     super.onSaveInstanceState(outState);
+    // }
 
     @Override
     protected void onPause() {
