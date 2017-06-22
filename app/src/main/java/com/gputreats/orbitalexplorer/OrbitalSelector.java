@@ -116,11 +116,11 @@ public class OrbitalSelector extends LinearLayout {
             orbitalChanged();
         });
         rcChanger.setOnClickListener((View v) -> {
-            setReal(!real);
+            real = !real;
             orbitalChanged();
         });
         colorChanger.setOnClickListener((View v) -> {
-            setColor(!color);
+            color = !color;
             orbitalChanged();
         });
 
@@ -208,8 +208,8 @@ public class OrbitalSelector extends LinearLayout {
         nChanger.setInteger(qN);
         lChanger.setInteger(qL);
         setMChanger();
-        setReal(real);
-        setColor(color);
+        setReal();
+        setColor();
         setButtonTint();
         setOrbitalName();
 
@@ -231,16 +231,14 @@ public class OrbitalSelector extends LinearLayout {
             rcChanger.setTextColor(COLOR_BRIGHT);
     }
 
-    private void setReal(boolean realOrbital) {
-        real = realOrbital;
+    private void setReal() {
         if (real)
             rcChanger.setText(realNumbers);
         else
             rcChanger.setText(complexNumbers);
     }
 
-    private void setColor(boolean newColor) {
-        color = newColor;
+    private void setColor() {
         colorChanger.setImageDrawable(color ? drawableColor : drawableMono);
     }
 
