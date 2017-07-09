@@ -40,10 +40,10 @@ class Shader {
             String result = GLES30.glGetShaderInfoLog(id);
             String type = "";
             if (shaderType == GLES30.GL_VERTEX_SHADER)
-                type = "vertex ";
+                type = "vertex";
             else if (shaderType == GLES30.GL_FRAGMENT_SHADER)
-                type = "fragment ";
-            throw new OpenGLException("Error compiling " + type + "shader: " + result);
+                type = "fragment";
+            throw new OpenGLException("Error compiling " + type + " shader: " + result);
         }
     }
 }
