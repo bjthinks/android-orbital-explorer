@@ -84,12 +84,12 @@ public class OrbitalSelector extends LinearLayout {
 
         requestLayout();
 
-        orbitalName = (TextView) findViewById(R.id.orbitalname);
-        nChanger = (ValueChanger) findViewById(R.id.nchanger);
-        lChanger = (ValueChanger) findViewById(R.id.lchanger);
-        mChanger = (ValueChanger) findViewById(R.id.mchanger);
-        rcChanger = (Button) findViewById(R.id.rcchanger);
-        colorChanger = (ImageButton) findViewById(R.id.colorchanger);
+        orbitalName = findViewById(R.id.orbitalname);
+        nChanger = findViewById(R.id.nchanger);
+        lChanger = findViewById(R.id.lchanger);
+        mChanger = findViewById(R.id.mchanger);
+        rcChanger = findViewById(R.id.rcchanger);
+        colorChanger = findViewById(R.id.colorchanger);
 
         nChanger.setOnUpListener((View v) -> {
             increaseN();

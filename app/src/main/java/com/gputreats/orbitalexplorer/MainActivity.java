@@ -61,9 +61,9 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
         decorView = getWindow().getDecorView();
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        orbitalSelector = (OrbitalSelector) findViewById(R.id.orbitalselector);
-        orbitalView = (OrbitalView) findViewById(R.id.orbitalview);
+        toolbar = findViewById(R.id.toolbar);
+        orbitalSelector = findViewById(R.id.orbitalselector);
+        orbitalView = findViewById(R.id.orbitalview);
 
         orbitalView.setOnSingleTapUp(() -> setFullscreen(false));
 

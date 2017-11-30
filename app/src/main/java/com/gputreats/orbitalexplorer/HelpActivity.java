@@ -13,17 +13,15 @@ import android.webkit.WebView;
 
 public class HelpActivity extends AppCompatActivity {
 
-    private String title;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_help);
 
         Bundle extras = getIntent().getExtras();
-        title = extras.getString("title");
+        String title = extras.getString("title");
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.help_toolbar);
+        Toolbar toolbar = findViewById(R.id.help_toolbar);
         if (toolbar != null) {
             toolbar.setContentInsetStartWithNavigation(0);
         }
@@ -34,7 +32,7 @@ public class HelpActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        WebView webview = (WebView) findViewById(R.id.help_webview);
+        WebView webview = findViewById(R.id.help_webview);
         if (webview != null) {
             webview.setBackgroundColor(Color.BLACK);
             WebSettings settings = webview.getSettings();

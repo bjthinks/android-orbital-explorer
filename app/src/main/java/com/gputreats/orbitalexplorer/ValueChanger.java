@@ -41,9 +41,9 @@ public class ValueChanger extends LinearLayout {
     protected void onFinishInflate() {
         super.onFinishInflate();
 
-        upArrow = (ImageButton) findViewById(R.id.integerchanger_uparrow);
-        downArrow = (ImageButton) findViewById(R.id.integerchanger_downarrow);
-        text = (TextView) findViewById(R.id.integerchanger_value);
+        upArrow = findViewById(R.id.integerchanger_uparrow);
+        downArrow = findViewById(R.id.integerchanger_downarrow);
+        text = findViewById(R.id.integerchanger_value);
     }
 
     void setText(CharSequence t) {
