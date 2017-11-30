@@ -26,13 +26,17 @@ public class OrbitalSelector extends LinearLayout {
     private OrbitalView orbitalView;
 
     private String plusMinus, minusPlus, realNumbers, complexNumbers;
-    private Drawable drawableColor, drawableMono;
+    private Drawable drawableMono, drawableColor, drawablePaused;
 
     private int qN;
     private int qL;
     private int qM;
     private boolean real;
-    private boolean color;
+    private int colorMode;
+    private static final int COLOR_MODE_MONO = 0;
+    private static final int COLOR_MODE_COLOR = 1;
+    private static final int COLOR_MODE_PAUSED = 2;
+    private static final int NUM_COLOR_MODES = 3;
 
     private TextView orbitalName;
     private ValueChanger nChanger;
@@ -69,14 +73,15 @@ public class OrbitalSelector extends LinearLayout {
             complexNumbers = "C";
         }
 
-        drawableColor = ContextCompat.getDrawable(context, R.drawable.ic_palette_white_24dp);
-        drawableMono  = ContextCompat.getDrawable(context, R.drawable.bnw);
+        drawableMono   = ContextCompat.getDrawable(context, R.drawable.bnw);
+        drawableColor  = ContextCompat.getDrawable(context, R.drawable.ic_palette_white_24dp);
+        drawablePaused = ContextCompat.getDrawable(context, R.drawable.ic_pause_white_24dp);
 
         qN = 4;
         qL = 2;
         qM = 1;
         real = false;
-        color = true;
+        colorMode = COLOR_MODE_COLOR;
 
         LayoutInflater inflater
                 = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -120,7 +125,9 @@ public class OrbitalSelector extends LinearLayout {
             orbitalChanged();
         });
         colorChanger.setOnClickListener((View v) -> {
-            color = !color;
+            colorMode = colorMode + 1;
+            if (colorMode == NUM_COLOR_MODES)
+                colorMode = 0;
             orbitalChanged();
         });
 
@@ -135,7 +142,7 @@ public class OrbitalSelector extends LinearLayout {
         bundle.putInt("qL", qL);
         bundle.putInt("qM", qM);
         bundle.putBoolean("real", real);
-        bundle.putBoolean("color", color);
+        bundle.putInt("colorMode", colorMode);
         return bundle;
     }
 
@@ -147,7 +154,7 @@ public class OrbitalSelector extends LinearLayout {
         qL = bundle.getInt("qL");
         qM = bundle.getInt("qM");
         real = bundle.getBoolean("real");
-        color = bundle.getBoolean("color");
+        colorMode = bundle.getInt("colorMode");
         orbitalChanged();
     }
 
@@ -214,7 +221,7 @@ public class OrbitalSelector extends LinearLayout {
         setOrbitalName();
 
         if (orbitalView != null)
-            orbitalView.onOrbitalChanged(new Orbital(1, qN, qL, qM, real, color));
+            orbitalView.onOrbitalChanged(new Orbital(1, qN, qL, qM, real, colorMode > 0));
     }
 
     private void setMChanger() {
@@ -239,7 +246,20 @@ public class OrbitalSelector extends LinearLayout {
     }
 
     private void setColor() {
-        colorChanger.setImageDrawable(color ? drawableColor : drawableMono);
+        Drawable drawable;
+        switch (colorMode) {
+            case COLOR_MODE_MONO:
+            default:
+                drawable = drawableMono;
+                break;
+            case COLOR_MODE_COLOR:
+                drawable = drawableColor;
+                break;
+            case COLOR_MODE_PAUSED:
+                drawable = drawablePaused;
+                break;
+        }
+        colorChanger.setImageDrawable(drawable);
     }
 
     private void setButtonTint() {
