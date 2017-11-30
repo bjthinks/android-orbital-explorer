@@ -1,26 +1,19 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.3"
+    compileSdkVersion 26
 
     defaultConfig {
         applicationId "com.gputreats.orbitalexplorer"
         minSdkVersion 19
-        targetSdkVersion 25
+        targetSdkVersion 26
         // ALSO CHANGE IN ShaderObfuscator.java
         versionCode 120
         // ALSO CHANGE IN assets/docs/about.html
         versionName "1.2"
-        jackOptions {
-            enabled true
-            true
-        }
     }
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
+    android.compileOptions.sourceCompatibility 1.8
+    android.compileOptions.targetCompatibility 1.8
     buildTypes {
         release {
             minifyEnabled true
@@ -32,6 +25,6 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'com.android.support:appcompat-v7:25.3.1'
+    compile 'com.android.support:appcompat-v7:26.1.0'
     compile project(':math')
 }
