@@ -57,9 +57,9 @@ public class OrbitalView extends GLSurfaceView {
         super.onRestoreInstanceState(bundle.getParcelable("superState"));
     }
 
-    void onOrbitalChanged(Orbital newOrbital) {
-        orbitalRenderer.onOrbitalChanged(newOrbital);
-        if (newOrbital.color)
+    void onOrbitalChanged(Orbital newOrbital, long freezeTime) {
+        orbitalRenderer.onOrbitalChanged(newOrbital, freezeTime);
+        if (newOrbital.color && freezeTime == 0)
             setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
         else {
             setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
