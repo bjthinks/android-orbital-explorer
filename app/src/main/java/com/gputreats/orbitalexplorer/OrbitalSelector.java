@@ -33,6 +33,7 @@ public class OrbitalSelector extends LinearLayout {
     private int qM;
     private boolean real;
     private int colorMode;
+    private long frozenTime;
     private static final int COLOR_MODE_MONO = 0;
     private static final int COLOR_MODE_COLOR = 1;
     private static final int COLOR_MODE_PAUSED = 2;
@@ -82,6 +83,7 @@ public class OrbitalSelector extends LinearLayout {
         qM = 1;
         real = false;
         colorMode = COLOR_MODE_COLOR;
+        frozenTime = 0;
 
         LayoutInflater inflater
                 = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -128,6 +130,10 @@ public class OrbitalSelector extends LinearLayout {
             colorMode = colorMode + 1;
             if (colorMode == NUM_COLOR_MODES)
                 colorMode = 0;
+            if (colorMode == COLOR_MODE_PAUSED)
+                frozenTime = System.currentTimeMillis();
+            else
+                frozenTime = 0;
             orbitalChanged();
         });
 
@@ -143,6 +149,7 @@ public class OrbitalSelector extends LinearLayout {
         bundle.putInt("qM", qM);
         bundle.putBoolean("real", real);
         bundle.putInt("colorMode", colorMode);
+        bundle.putLong("frozenTime", frozenTime);
         return bundle;
     }
 
@@ -155,6 +162,7 @@ public class OrbitalSelector extends LinearLayout {
         qM = bundle.getInt("qM");
         real = bundle.getBoolean("real");
         colorMode = bundle.getInt("colorMode");
+        frozenTime = bundle.getLong("frozenTime");
         orbitalChanged();
     }
 
@@ -221,7 +229,8 @@ public class OrbitalSelector extends LinearLayout {
         setOrbitalName();
 
         if (orbitalView != null)
-            orbitalView.onOrbitalChanged(new Orbital(1, qN, qL, qM, real, colorMode > 0));
+            orbitalView.onOrbitalChanged(new Orbital(1, qN, qL, qM, real, colorMode > 0),
+                    colorMode == COLOR_MODE_PAUSED ? frozenTime : 0);
     }
 
     private void setMChanger() {
