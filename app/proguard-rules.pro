@@ -11,10 +11,6 @@
 
 -keepattributes SourceFile,LineNumberTable
 
--keepclassmembers class * implements android.os.Parcelable {
-	public static final **CREATOR;
-}
-
 # If your project uses WebView with JS, uncomment the following
 # and specify the fully qualified class name to the JavaScript interface
 # class:
