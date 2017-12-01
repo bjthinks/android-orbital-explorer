@@ -14,6 +14,7 @@ class OrbitalRenderer implements GLSurfaceView.Renderer {
     private final ScreenDrawer screenDrawer;
     private final OrbitalView orbitalView;
     private final FPS fps;
+    private long frozenTime;
 
     // Main thread
 
@@ -23,12 +24,14 @@ class OrbitalRenderer implements GLSurfaceView.Renderer {
         screenDrawer = new ScreenDrawer(context);
         orbitalView = ov;
         fps = new FPS();
+        frozenTime = 0;
     }
 
     // Main thread
 
-    synchronized void onOrbitalChanged(Orbital newOrbital) {
+    synchronized void onOrbitalChanged(Orbital newOrbital, long freezeTime) {
         orbital = newOrbital;
+        frozenTime = freezeTime;
     }
 
     // Rendering thread
@@ -66,7 +69,8 @@ class OrbitalRenderer implements GLSurfaceView.Renderer {
             orbitalData.loadOrbital(orbitalTemp);
             float[] inverseTransform = orbitalView.getInverseTransform(aspectRatio);
             Texture integratorOutput = integrator.render(orbitalData, inverseTransform);
-            screenDrawer.render(orbitalData, integratorOutput);
+            screenDrawer.render(orbitalData, integratorOutput,
+                    frozenTime > 0 ? frozenTime : System.currentTimeMillis());
         }
     }
 }

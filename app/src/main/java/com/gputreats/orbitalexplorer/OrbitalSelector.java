@@ -150,7 +150,7 @@ public class OrbitalSelector extends LinearLayout {
         bundle.putInt("qM", qM);
         bundle.putBoolean("real", real);
         bundle.putBoolean("color", color);
-        bundle.putLong("pause", pauseTime);
+        bundle.putLong("pauseTime", pauseTime);
         return bundle;
     }
 
@@ -231,7 +231,7 @@ public class OrbitalSelector extends LinearLayout {
         setOrbitalName();
 
         if (orbitalView != null)
-            orbitalView.onOrbitalChanged(new Orbital(1, qN, qL, qM, real, color));
+            orbitalView.onOrbitalChanged(new Orbital(1, qN, qL, qM, real, color), pauseTime);
     }
 
     private void setMChanger() {
