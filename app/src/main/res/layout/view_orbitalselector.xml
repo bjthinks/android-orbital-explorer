@@ -63,6 +63,15 @@
                 android:contentDescription="@string/colormono"
                 style="@style/ButtonStyle" />
 
+            <ImageButton
+                android:id="@+id/pausechanger"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:scaleType="center"
+                android:src="@drawable/ic_palette_white_24dp"
+                android:contentDescription="@string/pause"
+                style="@style/ButtonStyle" />
+
         </LinearLayout>
 
     </LinearLayout>

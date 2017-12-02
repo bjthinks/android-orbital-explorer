@@ -20,5 +20,6 @@
     <string name="up">Up</string>
     <string name="down">Down</string>
     <string name="colormono">Color / Mono</string>
+    <string name="pause">Pause</string>
     <string name="error">Big exclamation point</string>
 </resources>
