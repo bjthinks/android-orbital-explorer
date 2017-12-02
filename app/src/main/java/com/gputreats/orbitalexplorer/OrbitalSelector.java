@@ -241,11 +241,6 @@ public class OrbitalSelector extends LinearLayout {
             mChanger.setText(minusPlus + -qM);
         else
             mChanger.setInteger(qM);
-
-        if (qM == 0)
-            rcChanger.setTextColor(COLOR_DIM);
-        else
-            rcChanger.setTextColor(COLOR_BRIGHT);
     }
 
     private void setReal() {
@@ -303,6 +298,16 @@ public class OrbitalSelector extends LinearLayout {
             mChanger.setDownTint(COLOR_DIM);
         else
             mChanger.setDownTint(COLOR_BRIGHT);
+
+        if (qM == 0)
+            rcChanger.setTextColor(COLOR_DIM);
+        else
+            rcChanger.setTextColor(COLOR_BRIGHT);
+
+        if (color)
+            pauseChanger.setColorFilter(COLOR_BRIGHT);
+        else
+            pauseChanger.setColorFilter(COLOR_DIM);
     }
 
     private void setOrbitalName() {
