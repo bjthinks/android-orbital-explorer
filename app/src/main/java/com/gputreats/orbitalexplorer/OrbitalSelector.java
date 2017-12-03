@@ -255,7 +255,9 @@ public class OrbitalSelector extends LinearLayout {
     }
 
     private void setPause() {
-        pauseChanger.setImageDrawable(pauseTime == 0 ? drawablePlay : drawablePaused);
+        // Show pause icon if color is currently in motion (pauseTime == 0)
+        // and play icon if color is currently paused (pauseTime != 0)
+        pauseChanger.setImageDrawable(pauseTime == 0 ? drawablePaused : drawablePlay);
     }
 
     private void setButtonTint() {

@@ -68,7 +68,7 @@
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:scaleType="center"
-                android:src="@drawable/ic_play_arrow_white_24dp"
+                android:src="@drawable/ic_pause_white_24dp"
                 android:contentDescription="@string/pause"
                 style="@style/ButtonStyle" />
 
