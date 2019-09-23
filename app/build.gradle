@@ -1,12 +1,12 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 26
+    compileSdkVersion 29
 
     defaultConfig {
         applicationId "com.gputreats.orbitalexplorer"
         minSdkVersion 19
-        targetSdkVersion 26
+        targetSdkVersion 29
         // ALSO CHANGE IN ShaderObfuscator.java
         versionCode 120
         // ALSO CHANGE IN assets/docs/about.html
@@ -25,6 +25,6 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'com.android.support:appcompat-v7:26.1.0'
+    implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation project(':math')
 }
