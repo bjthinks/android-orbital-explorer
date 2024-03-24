@@ -1,6 +1,6 @@
 apply plugin: 'java'
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile project(':math')
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation project(':math')
 }

@@ -1,8 +1,8 @@
 apply plugin: 'com.android.application'
 
 android {
+    namespace "com.gputreats.orbitalexplorer"
     compileSdkVersion 29
-
     defaultConfig {
         applicationId "com.gputreats.orbitalexplorer"
         minSdkVersion 19
