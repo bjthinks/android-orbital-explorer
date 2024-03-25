@@ -17,7 +17,8 @@
             android:name=".MainActivity"
             android:label="@string/appName"
             android:theme="@style/MainTheme"
-            android:launchMode="singleTop">
+            android:launchMode="singleTop"
+            android:exported="false">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -28,7 +29,8 @@
             android:name=".HelpActivity"
             android:label="Help"
             android:parentActivityName=".MainActivity"
-            android:theme="@style/AuxTheme">
+            android:theme="@style/AuxTheme"
+            android:exported="false">
         </activity>
 
     </application>
