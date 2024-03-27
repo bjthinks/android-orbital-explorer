@@ -157,36 +157,28 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         Intent intent;
-        switch (item.getItemId()) {
 
-            case R.id.menuFullscreen:
-                setFullscreen(true);
-                break;
+        int id = item.getItemId();
+        if (id == R.id.menuFullscreen)
+            setFullscreen(true);
+        else if (id == R.id.menuStore) {
+            DialogFragment confirm = new StoreConfirm();
+            confirm.show(getFragmentManager(), "StoreConfirm");
+        } else if (id == R.id.menuAbout) {
+            intent = new Intent(this, HelpActivity.class);
+            intent.putExtra("url", "file:///android_asset/docs/about.html");
+            intent.putExtra("url-v19", "file:///android_asset/docs/about.html");
+            intent.putExtra("title", getString(R.string.menuAbout));
+            startActivity(intent);
+        } else if (id == R.id.menuHelp) {
+            intent = new Intent(this, HelpActivity.class);
+            intent.putExtra("url", "file:///android_asset/docs/help.html");
+            intent.putExtra("url-v19", "file:///android_asset/docs/help-v19.html");
+            intent.putExtra("title", getString(R.string.menuHelp));
+            startActivity(intent);
+        } else
+            return super.onOptionsItemSelected(item);
 
-            case R.id.menuStore:
-                DialogFragment confirm = new StoreConfirm();
-                confirm.show(getFragmentManager(), "StoreConfirm");
-                break;
-
-            case R.id.menuAbout:
-                intent = new Intent(this, HelpActivity.class);
-                intent.putExtra("url",     "file:///android_asset/docs/about.html");
-                intent.putExtra("url-v19", "file:///android_asset/docs/about.html");
-                intent.putExtra("title", getString(R.string.menuAbout));
-                startActivity(intent);
-                break;
-
-            case R.id.menuHelp:
-                intent = new Intent(this, HelpActivity.class);
-                intent.putExtra("url",     "file:///android_asset/docs/help.html");
-                intent.putExtra("url-v19", "file:///android_asset/docs/help-v19.html");
-                intent.putExtra("title", getString(R.string.menuHelp));
-                startActivity(intent);
-                break;
-
-            default:
-                return super.onOptionsItemSelected(item);
-        }
         return true;
     }
 
