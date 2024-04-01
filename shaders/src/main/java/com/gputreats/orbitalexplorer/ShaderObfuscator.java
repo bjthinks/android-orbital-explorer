@@ -10,7 +10,7 @@ enum ShaderObfuscator {
     ;
 
     private static void obfuscate(String infile, String outfile) throws IOException {
-        final int buildVersion = 131;
+        final int buildVersion = 132;
         String infilename = "shaders/src/main/java/" + infile;
         String outfilename = "app/src/main/assets/a/" + outfile;
         BufferedInputStream instream =
