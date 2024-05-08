@@ -48,20 +48,20 @@
 
             <Button
                 android:id="@+id/rcchanger"
+                style="@style/ButtonStyle"
                 android:layout_width="@dimen/buttonSize"
                 android:layout_height="@dimen/buttonSize"
                 android:text="@string/complexNumbers"
-                android:textSize="24sp"
-                style="@style/ButtonStyle" />
+                android:textSize="24sp" />
 
             <ImageButton
                 android:id="@+id/colorchanger"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:scaleType="center"
-                android:src="@drawable/ic_palette_white_24dp"
+                style="@style/ButtonStyle"
+                android:layout_width="@dimen/buttonSize"
+                android:layout_height="@dimen/buttonSize"
                 android:contentDescription="@string/colormono"
-                style="@style/ButtonStyle" />
+                android:scaleType="center"
+                android:src="@drawable/ic_palette_white_24dp" />
 
         </LinearLayout>
 
