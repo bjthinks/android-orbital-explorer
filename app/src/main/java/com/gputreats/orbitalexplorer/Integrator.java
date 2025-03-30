@@ -42,8 +42,10 @@ class Integrator extends RenderStage {
         outputTextureMono = new Texture(GLES30.GL_RED_INTEGER, GLES30.GL_SHORT, GLES30.GL_R16I);
         framebufferMono = new Framebuffer(outputTextureMono);
 
-        programColor = new Program(assets, "2", "1");
-        programMono = new Program(assets, "4", "3");
+        programColor = new Program(assets,
+                "integrator_color.vert", "integrator_color.frag");
+        programMono = new Program(assets,
+                "integrator_mono.vert", "integrator_mono.frag");
     }
 
     void resize(int w, int h) {

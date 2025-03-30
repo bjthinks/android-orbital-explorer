@@ -17,8 +17,10 @@ class ScreenDrawer extends RenderStage {
 
     void onSurfaceCreated() {
         MyGL.checkGLES();
-        programColor = new Program(assets, "6", "5");
-        programMono = new Program(assets, "8", "7");
+        programColor = new Program(assets,
+                "screendrawer_color.vert", "screendrawer_color.frag");
+        programMono = new Program(assets,
+                "screendrawer_mono.vert", "screendrawer_mono.frag");
     }
 
     private int inputWidth, inputHeight;

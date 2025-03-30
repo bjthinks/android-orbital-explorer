@@ -17,13 +17,12 @@ class Shader {
         String shaderSource;
         try {
             BufferedInputStream instream = new BufferedInputStream(
-                    assets.open("a/" + filename));
+                    assets.open("shaders/" + filename));
             int b = instream.read();
             int c = (int) filename.charAt(0) + 100 * BuildConfig.VERSION_CODE;
-            Spew spew = new Spew(c, c);
             StringBuilder buf = new StringBuilder();
             while (b != -1) {
-                buf.append((char) (b ^ spew.get() & 255));
+                buf.append((char) b);
                 b = instream.read();
             }
             instream.close();
