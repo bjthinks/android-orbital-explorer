@@ -59,7 +59,11 @@ float longitudinalPart(float phi) {
 
 float angularPart(vec3 x, float r) {
     float theta = acos(x.z / r); // 0 to pi
+    if (isnan(theta))
+        theta = 0.0;
     float phi = atan(x.y, x.x); // -pi to pi (always numerically safe)
+    if (isnan(phi))
+        phi = 0.0;
     return azimuthalPart(theta) * longitudinalPart(phi);
 }
 
