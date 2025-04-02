@@ -13,13 +13,19 @@ import android.webkit.WebView;
 
 public class HelpActivity extends AppCompatActivity {
 
+    private WebView webview;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_help);
 
+        String title;
         Bundle extras = getIntent().getExtras();
-        String title = extras.getString("title");
+        if (extras != null)
+            title = extras.getString("title");
+        else
+            title = "Help";
 
         Toolbar toolbar = findViewById(R.id.help_toolbar);
         if (toolbar != null) {
@@ -32,15 +38,29 @@ public class HelpActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        WebView webview = findViewById(R.id.help_webview);
+        webview = findViewById(R.id.help_webview);
         if (webview != null) {
-            webview.setBackgroundColor(Color.BLACK);
-            WebSettings settings = webview.getSettings();
-            settings.setDefaultTextEncodingName("utf-8");
-            String url = extras.getString(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
-                    ? "url" : "url-v19");
-            webview.loadUrl(url);
+            if (savedInstanceState != null) {
+                webview.restoreState(savedInstanceState);
+            } else {
+                webview.setBackgroundColor(Color.BLACK);
+                WebSettings settings = webview.getSettings();
+                settings.setDefaultTextEncodingName("utf-8");
+                String url;
+                if (extras != null)
+                    url = extras.getString(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
+                            ? "url" : "url-v19");
+                else
+                    url = "file:///android_asset/docs/help.html";
+                webview.loadUrl(url);
+            }
         }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        webview.saveState(outState);
     }
 
     @Override
