@@ -1,5 +1,5 @@
 .gradle
-.idea
+.idea/caches
 build
 captures
 local.properties
