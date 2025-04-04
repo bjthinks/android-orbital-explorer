@@ -54,7 +54,7 @@ void main() {
     vec3 linear_RGB = XYZ_to_linear_RGB * XYZ;
 
     if (any(greaterThan(linear_RGB, vec3(1))) || any(lessThan(linear_RGB, vec3(0))))
-        linear_RGB = vec3(1, 0, 1);
+        linear_RGB = vec3(0, 0, 0);
 
     // Need EGL 1.5 or EGL_KHR_gl_colorspace for automatic gamma
     color = srgb_gamma(linear_RGB);

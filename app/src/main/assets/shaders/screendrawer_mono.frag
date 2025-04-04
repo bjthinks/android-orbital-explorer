@@ -38,7 +38,7 @@ void main() {
 
     vec3 result;
     if (linear_brightness > 1.0 || linear_brightness < 0.0)
-        result = vec3(1, 0, 1);
+        result = vec3(0, 0, 0);
     else
         result = vec3(srgb_gamma(linear_brightness));
     color = result;
