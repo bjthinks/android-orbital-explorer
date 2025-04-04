@@ -8,9 +8,9 @@ android {
         minSdkVersion 19
         targetSdkVersion 34
         // ALSO CHANGE IN ShaderObfuscator.java
-        versionCode 132
+        versionCode 133
         // ALSO CHANGE IN assets/docs/about.html
-        versionName "1.3b"
+        versionName "1.3c"
     }
     android.compileOptions.sourceCompatibility 1.8
     android.compileOptions.targetCompatibility 1.8
