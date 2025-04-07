@@ -3,6 +3,7 @@ package com.gputreats.orbitalexplorer;
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.opengl.GLES30;
+import android.util.Log;
 
 class OrbitalData {
 
@@ -67,6 +68,19 @@ class OrbitalData {
             final int radialTextureSize = 1024;
             float[] radialData = functionToBuffer2(radialFunction.getOscillatingPart(),
                     0.0, (double) maximumRadius, radialTextureSize);
+            if (BuildConfig.DEBUG) {
+                Log.d("Rad", "Exponential constant = " +
+                        radialFunction.getExponentialConstant());
+                Log.d("Rad", "Power of r = " +
+                        radialFunction.getPowerOfR());
+                int m = 0;
+                for (int i = 0; i < 1024; ++i)
+                    if (radialData[i] > radialData[m])
+                        m = i;
+                Log.d("Rad", "Radial texture maximum value = " + m + " " + radialData[m]);
+                Log.d("Rad", "Maximum radius = " +
+                        radialFunction.getMaximumRadius());
+            }
             radialTexture.bindToTexture2DAndSetImage(radialTextureSize, 1, radialData);
 
             // Load new azimuthal texture
