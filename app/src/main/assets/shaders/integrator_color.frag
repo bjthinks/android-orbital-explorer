@@ -100,7 +100,11 @@ vec3 integrand_pair(vec3 center, vec3 offset) {
     len = length(result);
     total += len * vec3(radialSign * result, len);
 
-    float factor = pow(r * exp(r * fRadialExponent), fFactorPower);
+    float factor;
+    if (fFactorPower == 0.0)
+        factor = exp(r * fRadialExponent);
+    else
+        factor = pow(r * exp(r * fRadialExponent), fFactorPower);
     total *= (factor * radialValue) * (factor * radialValue);
     return total;
 }
