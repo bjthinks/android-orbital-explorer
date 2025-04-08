@@ -98,8 +98,8 @@ class OrbitalData {
             fInverseRadialStepSize = (float) radialTextureSize / maximumRadius;
             fM = (float) orbital.qM;
             // Multiply by 2 because the wave function is squared
-            fRadialExponent = (float) (2.0 * radialFunction.getExponentialConstant());
-            fRadialPower = (float) (2 * radialFunction.getPowerOfR());
+            fRadialExponent = (float) radialFunction.getExponentialConstant();
+            fRadialPower = (float) radialFunction.getPowerOfR();
             iAzimuthalSteps = azimuthalTextureSize;
             iOrder = order;
             iQuadratureSteps = quadratureSteps;

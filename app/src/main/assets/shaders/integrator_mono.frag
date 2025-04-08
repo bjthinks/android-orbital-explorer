@@ -79,7 +79,8 @@ float integrand_pair(vec3 center, vec3 offset) {
     result = angularPart(x, r);
     total += result * result;
 
-    total *= pow(r, fRadialPower) * exp(r * fRadialExponent);
+    float factor = pow(r, fRadialPower) * exp(r * fRadialExponent);
+    total *= factor * factor;
     return total;
 }
 
