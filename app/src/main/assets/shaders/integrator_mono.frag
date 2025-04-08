@@ -19,7 +19,7 @@ uniform float fInverseQuadratureStepSize;
 uniform float fInverseRadialStepSize; // unused
 uniform float fM;
 uniform float fRadialExponent;
-uniform float fRadialPower;
+uniform float fFactorPower;
 uniform int iAzimuthalSteps;
 uniform int iOrder;
 uniform int iQuadratureSteps;
@@ -79,7 +79,7 @@ float integrand_pair(vec3 center, vec3 offset) {
     result = angularPart(x, r);
     total += result * result;
 
-    float factor = pow(r, fRadialPower) * exp(r * fRadialExponent);
+    float factor = pow(r * exp(r * fRadialExponent), fFactorPower);
     total *= factor * factor;
     return total;
 }
