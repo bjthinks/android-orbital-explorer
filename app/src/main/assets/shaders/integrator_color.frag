@@ -18,6 +18,7 @@ uniform float fInverseAzimuthalStepSize;
 uniform float fInverseQuadratureStepSize;
 uniform float fInverseRadialStepSize;
 uniform float fM;
+uniform float fConstantFactors;
 uniform float fRadialScaleFactor;
 uniform float fRadialExponent;
 uniform float fRadialPower;
@@ -101,8 +102,8 @@ vec3 integrand_pair(vec3 center, vec3 offset) {
     len = length(result);
     total += len * vec3(radialSign * result, len);
 
-    total *= pow(r * fRadialScaleFactor, fRadialPower) * exp(r * fRadialExponent)
-        * radialValue * radialValue;
+    total *= fConstantFactors * pow(r * fRadialScaleFactor, fRadialPower)
+        * exp(r * fRadialExponent) * radialValue * radialValue;
     return total;
 }
 

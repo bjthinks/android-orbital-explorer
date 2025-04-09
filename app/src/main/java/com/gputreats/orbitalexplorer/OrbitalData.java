@@ -21,6 +21,7 @@ class OrbitalData {
     private float fInverseQuadratureStepSize;
     private float fInverseRadialStepSize;
     private float fM;
+    private float fConstantFactors;
     private float fRadialScaleFactor;
     private float fRadialExponent;
     private float fRadialPower;
@@ -70,6 +71,10 @@ class OrbitalData {
             float[] radialData = functionToBuffer2(radialFunction.getOscillatingPart(),
                     0.0, (double) maximumRadius, radialTextureSize);
             if (BuildConfig.DEBUG) {
+                Log.d("Rad", "Constant factors = " +
+                        radialFunction.getConstantFactors());
+                Log.d("Rad", "Radial scale factor = " +
+                        radialFunction.getRadialScaleFactor());
                 Log.d("Rad", "Exponential constant = " +
                         radialFunction.getExponentialConstant());
                 Log.d("Rad", "Power of r = " +
@@ -79,6 +84,8 @@ class OrbitalData {
                     if (radialData[i] > radialData[m])
                         m = i;
                 Log.d("Rad", "Radial texture maximum value = " + m + " " + radialData[m]);
+                Log.d("Rad", "Radial texture: " + radialData[128] + " "
+                    + radialData[384] + " " + radialData[640] + " " + radialData[896]);
                 Log.d("Rad", "Maximum radius = " +
                         radialFunction.getMaximumRadius());
             }
@@ -98,6 +105,7 @@ class OrbitalData {
             fInverseQuadratureStepSize = (float) quadratureSteps / quadratureRadius;
             fInverseRadialStepSize = (float) radialTextureSize / maximumRadius;
             fM = (float) orbital.qM;
+            fConstantFactors = (float) radialFunction.getConstantFactors();
             fRadialScaleFactor = (float) radialFunction.getRadialScaleFactor();
             // Multiply by 2 because the wave function is squared
             fRadialExponent = (float) (2.0 * radialFunction.getExponentialConstant());
@@ -128,6 +136,7 @@ class OrbitalData {
         program.setUniform1f("fInverseQuadratureStepSize", fInverseQuadratureStepSize);
         program.setUniform1f("fInverseRadialStepSize", fInverseRadialStepSize);
         program.setUniform1f("fM", fM);
+        program.setUniform1f("fConstantFactors", fConstantFactors);
         program.setUniform1f("fRadialScaleFactor", fRadialScaleFactor);
         program.setUniform1f("fRadialExponent", fRadialExponent);
         program.setUniform1f("fRadialPower", fRadialPower);
