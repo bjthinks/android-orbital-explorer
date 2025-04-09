@@ -70,25 +70,6 @@ class OrbitalData {
             final int radialTextureSize = 1024;
             float[] radialData = functionToBuffer2(radialFunction.getOscillatingPart(),
                     0.0, (double) maximumRadius, radialTextureSize);
-            if (BuildConfig.DEBUG) {
-                Log.d("Rad", "Constant factors = " +
-                        radialFunction.getConstantFactors());
-                Log.d("Rad", "Radial scale factor = " +
-                        radialFunction.getRadialScaleFactor());
-                Log.d("Rad", "Exponential constant = " +
-                        radialFunction.getExponentialConstant());
-                Log.d("Rad", "Power of r = " +
-                        radialFunction.getPowerOfR());
-                int m = 0;
-                for (int i = 0; i < 1024; ++i)
-                    if (radialData[i] > radialData[m])
-                        m = i;
-                Log.d("Rad", "Radial texture maximum value = " + m + " " + radialData[m]);
-                Log.d("Rad", "Radial texture: " + radialData[128] + " "
-                    + radialData[384] + " " + radialData[640] + " " + radialData[896]);
-                Log.d("Rad", "Maximum radius = " +
-                        radialFunction.getMaximumRadius());
-            }
             radialTexture.bindToTexture2DAndSetImage(radialTextureSize, 1, radialData);
 
             // Load new azimuthal texture
@@ -114,6 +95,27 @@ class OrbitalData {
             iOrder = order;
             iQuadratureSteps = quadratureSteps;
             iRadialSteps = radialTextureSize;
+
+            if (BuildConfig.DEBUG) {
+                Log.d("Rad", "---");
+                Log.d("Rad", "Constant factors = " +
+                        radialFunction.getConstantFactors());
+                Log.d("Rad", "Radial scale factor = " +
+                        radialFunction.getRadialScaleFactor());
+                Log.d("Rad", "Exponential constant = 2 * " +
+                        radialFunction.getExponentialConstant());
+                Log.d("Rad", "Power of r = 2 * " +
+                        radialFunction.getPowerOfR());
+                int m = 0;
+                for (int i = 0; i < 1024; ++i)
+                    if (radialData[i] > radialData[m])
+                        m = i;
+                Log.d("Rad", "Radial texture maximum value = " + m + " " + radialData[m]);
+                Log.d("Rad", "Radial texture: " + radialData[128] + " "
+                        + radialData[384] + " " + radialData[640] + " " + radialData[896]);
+                Log.d("Rad", "Maximum radius = " +
+                        radialFunction.getMaximumRadius());
+            }
         }
     }
 
