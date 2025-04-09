@@ -21,6 +21,7 @@ class OrbitalData {
     private float fInverseQuadratureStepSize;
     private float fInverseRadialStepSize;
     private float fM;
+    private float fRadialScaleFactor;
     private float fRadialExponent;
     private float fRadialPower;
     private int iAzimuthalSteps;
@@ -97,6 +98,7 @@ class OrbitalData {
             fInverseQuadratureStepSize = (float) quadratureSteps / quadratureRadius;
             fInverseRadialStepSize = (float) radialTextureSize / maximumRadius;
             fM = (float) orbital.qM;
+            fRadialScaleFactor = (float) radialFunction.getRadialScaleFactor();
             // Multiply by 2 because the wave function is squared
             fRadialExponent = (float) (2.0 * radialFunction.getExponentialConstant());
             fRadialPower = (float) (2 * radialFunction.getPowerOfR());
@@ -126,6 +128,7 @@ class OrbitalData {
         program.setUniform1f("fInverseQuadratureStepSize", fInverseQuadratureStepSize);
         program.setUniform1f("fInverseRadialStepSize", fInverseRadialStepSize);
         program.setUniform1f("fM", fM);
+        program.setUniform1f("fRadialScaleFactor", fRadialScaleFactor);
         program.setUniform1f("fRadialExponent", fRadialExponent);
         program.setUniform1f("fRadialPower", fRadialPower);
         program.setUniform1i("iAzimuthalSteps", iAzimuthalSteps);

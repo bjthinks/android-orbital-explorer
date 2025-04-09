@@ -16,6 +16,7 @@ package com.gputreats.orbitalexplorer;
 
 class RadialFunction implements Function {
 
+    private final double radialScaleFactor;
     private final double exponentialConstant;
     private final int powerOfR;
     private final Polynomial oscillatingPart;
@@ -25,7 +26,7 @@ class RadialFunction implements Function {
         double dZ = (double) inZ;
         double dN = (double) inN;
 
-        double radialScaleFactor = 2.0 * dZ / dN;
+        radialScaleFactor = 2.0 * dZ / dN;
 
         exponentialConstant = -radialScaleFactor / 2.0;
 
@@ -37,10 +38,13 @@ class RadialFunction implements Function {
 
         oscillatingPart = generalizedLaguerrePolynomial(inN - inL - 1, 2 * inL + 1)
                 .rescaleX(radialScaleFactor)
-                .multiply(MyMath.fastpow(radialScaleFactor, powerOfR))
                 .multiply(constantFactors);
 
         maximumRadius = MaximumRadiusTable.getMaximumRadius(inN, inL);
+    }
+
+    double getRadialScaleFactor() {
+        return radialScaleFactor;
     }
 
     double getExponentialConstant() {
@@ -58,7 +62,7 @@ class RadialFunction implements Function {
     @Override
     public double eval(double r) {
         return oscillatingPart.eval(r)
-                * MyMath.fastpow(r, powerOfR)
+                * MyMath.fastpow(r * radialScaleFactor, powerOfR)
                 * Math.exp(exponentialConstant * r);
     }
 
