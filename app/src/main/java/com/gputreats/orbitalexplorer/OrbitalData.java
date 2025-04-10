@@ -108,11 +108,13 @@ class OrbitalData {
                         radialFunction.getPowerOfR());
                 int m = 0;
                 for (int i = 0; i < 1024; ++i)
-                    if (radialData[i] > radialData[m])
+                    if (Math.abs(radialData[i]) > Math.abs(radialData[m]))
                         m = i;
                 Log.d("Rad", "Radial texture maximum value = " + m + " " + radialData[m]);
                 Log.d("Rad", "Radial texture: " + radialData[128] + " "
                         + radialData[384] + " " + radialData[640] + " " + radialData[896]);
+                Log.d("Rad", "Radial texture function: "
+                        + radialFunction.getOscillatingPart().toString());
                 Log.d("Rad", "Maximum radius = " +
                         radialFunction.getMaximumRadius());
             }
