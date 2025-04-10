@@ -104,10 +104,11 @@ vec3 integrand_pair(vec3 center, vec3 offset) {
 
     float factor;
     if (fFactorPower == 0.0)
-        factor = exp(r * fRadialExponent) * radialValue;
+        factor = fConstantFactors * exp(r * fRadialExponent) * radialValue;
     else
-        factor = pow(r * fRadialScaleFactor * exp(r * fRadialExponent), fFactorPower) * radialValue;
-    total *= fConstantFactors * factor * factor;
+        factor = fConstantFactors * pow(r * fRadialScaleFactor * exp(r * fRadialExponent),
+                                        fFactorPower) * radialValue;
+    total *= factor * factor;
 
     return total;
 }

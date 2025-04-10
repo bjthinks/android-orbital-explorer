@@ -105,9 +105,9 @@ class OrbitalData {
                         radialFunction.getConstantFactors());
                 Log.d("Rad", "Radial scale factor = " +
                         radialFunction.getRadialScaleFactor());
-                Log.d("Rad", "Exponential constant = 2 * " +
+                Log.d("Rad", "Exponential constant = " +
                         radialFunction.getExponentialConstant());
-                Log.d("Rad", "Power of r = 2 * " +
+                Log.d("Rad", "Power of r = " +
                         radialFunction.getPowerOfR());
                 int m = 0;
                 for (int i = 0; i < 1024; ++i)

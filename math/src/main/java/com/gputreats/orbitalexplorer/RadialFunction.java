@@ -27,9 +27,9 @@ class RadialFunction implements Function {
         double dZ = (double) inZ;
         double dN = (double) inN;
 
-        constantFactors = Math.pow(Math.pow(2.0 * dZ / dN, 1.5)
+        constantFactors = Math.pow(2.0 * dZ / dN, 1.5)
                 * Math.sqrt(MyMath.factorial(inN - inL - 1)
-                / (2.0 * dN * MyMath.factorial(inN + inL))), 2.0);
+                / (2.0 * dN * MyMath.factorial(inN + inL)));
 
         radialScaleFactor = 2.0 * dZ / dN;
 
