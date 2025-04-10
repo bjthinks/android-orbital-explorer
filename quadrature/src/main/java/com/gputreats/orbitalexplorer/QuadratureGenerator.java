@@ -24,6 +24,7 @@ enum QuadratureGenerator {
             for (int qL = 0; qL < qN; ++qL) {
 
                 RadialFunction radialFunction = new RadialFunction(1, qN, qL);
+                double radialScaleFactor = radialFunction.getRadialScaleFactor();
                 double exponentialConstant = radialFunction.getExponentialConstant();
                 int powerOfR = radialFunction.getPowerOfR();
 
@@ -36,7 +37,8 @@ enum QuadratureGenerator {
                     double distanceFromOrigin = radialFunction.getMaximumRadius()
                             * (double) i / (double) steps;
                     WeightFunction weightFunction = new WeightFunction(exponentialConstant,
-                            Polynomial.variableToThe(powerOfR), distanceFromOrigin);
+                            Polynomial.variableToThe(powerOfR).rescaleX(radialScaleFactor),
+                            distanceFromOrigin);
                     GaussianQuadrature gq = new GaussianQuadrature(weightFunction, order);
 
                     for (int j = 0; j < order; ++j) {
@@ -55,6 +57,7 @@ enum QuadratureGenerator {
             for (int qL = 0; qL < qN; ++qL) {
 
                 RadialFunction radialFunction = new RadialFunction(1, qN, qL);
+                double radialScaleFactor = radialFunction.getRadialScaleFactor();
                 double exponentialConstant = radialFunction.getExponentialConstant();
                 int powerOfR = radialFunction.getPowerOfR();
                 Polynomial oscillatingPart = radialFunction.getOscillatingPart();
@@ -69,10 +72,12 @@ enum QuadratureGenerator {
                             * (double) i / (double) steps;
                     WeightFunction weightFunction
                             = new WeightFunction(exponentialConstant,
-                            new Product(Polynomial.variableToThe(powerOfR), oscillatingPart),
-                            distanceFromOrigin);
+                            new Product(Polynomial.variableToThe(powerOfR)
+                                    .rescaleX(radialScaleFactor),
+                                    oscillatingPart), distanceFromOrigin);
                     Function simpleWeightFunction = new WeightFunction(exponentialConstant,
-                            Polynomial.variableToThe(powerOfR), distanceFromOrigin);
+                            Polynomial.variableToThe(powerOfR).rescaleX(radialScaleFactor),
+                            distanceFromOrigin);
                     GaussianQuadrature gq = new GaussianQuadrature(weightFunction, order);
 
                     for (int j = 0; j < order; ++j) {

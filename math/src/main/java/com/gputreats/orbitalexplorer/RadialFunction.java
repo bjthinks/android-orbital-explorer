@@ -16,6 +16,8 @@ package com.gputreats.orbitalexplorer;
 
 class RadialFunction implements Function {
 
+    private final double constantFactors;
+    private final double radialScaleFactor;
     private final double exponentialConstant;
     private final int powerOfR;
     private final Polynomial oscillatingPart;
@@ -25,22 +27,28 @@ class RadialFunction implements Function {
         double dZ = (double) inZ;
         double dN = (double) inN;
 
-        double radialScaleFactor = 2.0 * dZ / dN;
+        constantFactors = Math.pow(Math.pow(2.0 * dZ / dN, 1.5)
+                * Math.sqrt(MyMath.factorial(inN - inL - 1)
+                / (2.0 * dN * MyMath.factorial(inN + inL))), 2.0);
+
+        radialScaleFactor = 2.0 * dZ / dN;
 
         exponentialConstant = -radialScaleFactor / 2.0;
 
         powerOfR = inL;
 
-        double constantFactors = Math.pow(2.0 * dZ / dN, 1.5)
-                * Math.sqrt(MyMath.factorial(inN - inL - 1)
-                / (2.0 * dN * MyMath.factorial(inN + inL)));
-
         oscillatingPart = generalizedLaguerrePolynomial(inN - inL - 1, 2 * inL + 1)
-                .rescaleX(radialScaleFactor)
-                .multiply(MyMath.fastpow(radialScaleFactor, powerOfR))
-                .multiply(constantFactors);
+                .rescaleX(radialScaleFactor);
 
         maximumRadius = MaximumRadiusTable.getMaximumRadius(inN, inL);
+    }
+
+    double getConstantFactors() {
+        return constantFactors;
+    }
+
+    double getRadialScaleFactor() {
+        return radialScaleFactor;
     }
 
     double getExponentialConstant() {
@@ -57,8 +65,8 @@ class RadialFunction implements Function {
 
     @Override
     public double eval(double r) {
-        return oscillatingPart.eval(r)
-                * MyMath.fastpow(r, powerOfR)
+        return constantFactors * oscillatingPart.eval(r)
+                * MyMath.fastpow(r * radialScaleFactor, powerOfR)
                 * Math.exp(exponentialConstant * r);
     }
 

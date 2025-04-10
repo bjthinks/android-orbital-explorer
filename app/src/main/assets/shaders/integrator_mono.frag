@@ -18,6 +18,8 @@ uniform float fInverseAzimuthalStepSize;
 uniform float fInverseQuadratureStepSize;
 uniform float fInverseRadialStepSize; // unused
 uniform float fM;
+uniform float fConstantFactors;
+uniform float fRadialScaleFactor;
 uniform float fRadialExponent;
 uniform float fFactorPower;
 uniform int iAzimuthalSteps;
@@ -83,8 +85,9 @@ float integrand_pair(vec3 center, vec3 offset) {
     if (fFactorPower == 0.0)
         factor = exp(r * fRadialExponent);
     else
-        factor = pow(r * exp(r * fRadialExponent), fFactorPower);
-    total *= factor * factor;
+        factor = pow(r * fRadialScaleFactor * exp(r * fRadialExponent), fFactorPower);
+    total *= fConstantFactors * factor * factor;
+
     return total;
 }
 
