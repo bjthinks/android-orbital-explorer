@@ -47,6 +47,15 @@ enum QuadratureGenerator {
                         quadratureWeights[2 * order * i + 2 * j + 1]
                                 = (float) (gq.getWeight(j) / weightFunction.eval(gq.getNode(j)));
                     }
+                    if (i == 0 || i == steps) {
+                        System.out.println("Color N=" + qN + " L=" + qL + " step=" + i);
+                        for (int j = 0; j < order; ++j)
+                            System.out.print(gq.getNode(j) + " ");
+                        System.out.println();
+                        for (int j = 0; j < order; ++j)
+                            System.out.print(gq.getWeight(j) + " ");
+                        System.out.println();
+                    }
                 }
                 writeAsset("color-" + qN + '-' + qL, quadratureWeights);
             }
