@@ -58,24 +58,15 @@ enum QuadratureGenerator {
                     }
                 }
                 writeAsset("color-" + qN + '-' + qL, quadratureWeights);
-            }
-        }
 
-        // Mono
-        for (int qN = 1; qN <= BaseOrbital.MAX_N; ++qN) {
-            for (int qL = 0; qL < qN; ++qL) {
-
-                RadialFunction radialFunction = new RadialFunction(1, qN, qL);
-                double radialScaleFactor = radialFunction.getRadialScaleFactor();
-                double exponentialConstant = radialFunction.getExponentialConstant();
-                int powerOfR = radialFunction.getPowerOfR();
+                // Mono
                 Polynomial oscillatingPart = radialFunction.getOscillatingPart();
 
-                Quadrature quadrature = new Quadrature(qN, qL, false);
-                int order = quadrature.getOrder();
-                int steps = quadrature.getSteps();
+                quadrature = new Quadrature(qN, qL, false);
+                order = quadrature.getOrder();
+                steps = quadrature.getSteps();
 
-                float[] quadratureWeights = new float[2 * order * (steps + 1)];
+                quadratureWeights = new float[2 * order * (steps + 1)];
                 for (int i = 0; i <= steps; ++i) {
                     double distanceFromOrigin = radialFunction.getMaximumRadius()
                             * (double) i / (double) steps;
@@ -95,6 +86,15 @@ enum QuadratureGenerator {
                         quadratureWeights[2 * order * i + 2 * j + 1]
                                 = (float) (gq.getWeight(j)
                                 / simpleWeightFunction.eval(gq.getNode(j)));
+                    }
+                    if (i == 0 || i == steps) {
+                        System.out.println("Mono N=" + qN + " L=" + qL + " step=" + i);
+                        for (int j = 0; j < order; ++j)
+                            System.out.print(gq.getNode(j) + " ");
+                        System.out.println();
+                        for (int j = 0; j < order; ++j)
+                            System.out.print(gq.getWeight(j) + " ");
+                        System.out.println();
                     }
                 }
                 writeAsset("mono-" + qN + '-' + qL, quadratureWeights);
