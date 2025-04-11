@@ -7,10 +7,9 @@ android {
         applicationId "com.gputreats.orbitalexplorer"
         minSdkVersion 19
         targetSdkVersion 34
-        // ALSO CHANGE IN ShaderObfuscator.java
-        versionCode 133
+        versionCode 140
         // ALSO CHANGE IN assets/docs/about.html
-        versionName "1.3c"
+        versionName "1.4"
     }
     android.compileOptions.sourceCompatibility 1.8
     android.compileOptions.targetCompatibility 1.8
