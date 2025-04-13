@@ -37,7 +37,8 @@ void main() {
     vec2 white = vec2(0.19784, 0.46832);
 
     if (1 == 1) { // If color blind mode
-        vec2 copunctal = vec2(0.657860, 0.501321); // protanopic copunctal point
+        //vec2 copunctal = vec2(0.657860, 0.501321); // protanopic copunctal point
+        vec2 copunctal = vec2(-1.217391, 0.782608); // deuteranopic copunctal point
         vec2 white_confusion = white - copunctal;
         vec2 best_line = vec2(-white_confusion.y, white_confusion.x);
         // Project uv_prime onto best_line
