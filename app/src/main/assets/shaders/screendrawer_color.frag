@@ -34,7 +34,17 @@ void main() {
 
     vec2 uv_prime = (0.06 / 32767.0) * (colorRotation * total.xy);
 
-    uv_prime += vec2(0.19784, 0.46832); // white
+    vec2 white = vec2(0.19784, 0.46832);
+
+    if (1 == 1) { // If color blind mode
+        vec2 copunctal = vec2(0.657860, 0.501321); // protanopic copunctal point
+        vec2 white_confusion = white - copunctal;
+        vec2 best_line = vec2(-white_confusion.y, white_confusion.x);
+        // Project uv_prime onto best_line
+        uv_prime = (dot(uv_prime, best_line) / dot(best_line, best_line)) * best_line;
+    }
+
+    uv_prime += white;
 
     // Convert CIE (u',v') color coordinates (as per CIELUV) to (x,y)
     vec2 xy = vec2(9.0, 4.0) * uv_prime;
