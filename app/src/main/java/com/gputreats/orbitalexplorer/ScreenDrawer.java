@@ -63,6 +63,9 @@ class ScreenDrawer extends RenderStage {
         rot[1] = (float) Math.sin(t);  rot[3] = (float) Math.cos(t);
         GLES30.glUniformMatrix2fv(program.getUniformLocation("colorRotation"), 1, false, rot, 0);
 
+        // Handle color blindness
+        GLES30.glUniform1i(program.getUniformLocation("colorBlindMode"), 0);
+
         int inPositionHandle = program.getAttribLocation("inPosition");
         GLES30.glEnableVertexAttribArray(inPositionHandle);
         GLES30.glVertexAttribPointer(inPositionHandle, 2, GLES30.GL_FLOAT, false, 8,

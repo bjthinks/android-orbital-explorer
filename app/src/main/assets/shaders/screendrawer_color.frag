@@ -5,6 +5,7 @@ precision highp isampler2D;
 uniform isampler2D data;
 uniform ivec2 upperClamp; // = ivec2(texSize) - ivec2(1)
 uniform mat2 colorRotation;
+uniform int colorBlindMode; // 1, 2, 3 for red, green, and blue blindness
 in vec2 texCoord;
 out vec3 color;
 
@@ -36,14 +37,28 @@ void main() {
 
     vec2 white = vec2(0.19784, 0.46832);
 
-    if (1 == 1) { // If color blind mode
-        //vec2 copunctal = vec2(0.657860, 0.501321); // protanopic copunctal point
-        //vec2 copunctal = vec2(-1.217391, 0.782608); // deuteranopic copunctal point
-        vec2 copunctal = vec2(0.257336, 0); // tritanopic copunctal point
-        vec2 white_confusion = white - copunctal;
-        vec2 best_line = vec2(-white_confusion.y, white_confusion.x);
+    if (colorBlindMode != 0) { // If color blind mode
+        vec2 best_line;
+
+        if (colorBlindMode == 1) {
+            vec2 copunctal = vec2(0.657860, 0.501321); // protanopic copunctal point
+            vec2 white_confusion = white - copunctal;
+            best_line = vec2(-white_confusion.y, white_confusion.x);
+            best_line /= length(best_line);
+        } else if (colorBlindMode == 2) {
+            vec2 copunctal = vec2(-1.217391, 0.782608); // deuteranopic copunctal point
+            vec2 white_confusion = white - copunctal;
+            best_line = vec2(-white_confusion.y, white_confusion.x);
+            best_line /= length(best_line);
+        } else if (colorBlindMode == 3) {
+            vec2 copunctal = vec2(0.257336, 0); // tritanopic copunctal point
+            vec2 white_confusion = white - copunctal;
+            best_line = vec2(-white_confusion.y, white_confusion.x);
+            best_line /= length(best_line);
+        }
+
         // Project uv_prime onto best_line
-        uv_prime = (dot(uv_prime, best_line) / dot(best_line, best_line)) * best_line;
+        uv_prime = dot(uv_prime, best_line) * best_line;
     }
 
     uv_prime += white;
