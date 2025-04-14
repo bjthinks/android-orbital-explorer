@@ -26,6 +26,12 @@
         </activity>
 
         <activity
+            android:name=".SettingsActivity"
+            android:label="Settings"
+            android:theme="@style/AuxTheme" >
+        </activity>
+
+        <activity
             android:name=".HelpActivity"
             android:label="Help"
             android:parentActivityName=".MainActivity"

@@ -37,6 +37,8 @@
         <item name="colorPrimaryDark">@color/dark</item>
         <item name="android:navigationBarColor">@color/dark</item>
         <item name="colorControlNormal">@color/white</item>
+        <!-- Darken the Settings activity, which contains a ListView -->
+        <item name="android:listViewStyle">@style/ListStyle</item>
     </style>
 
     <style name="ListStyle" parent="Widget.AppCompat.ListView">

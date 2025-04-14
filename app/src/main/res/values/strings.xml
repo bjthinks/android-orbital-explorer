@@ -4,6 +4,7 @@
     <string name="apologySubtext">OpenGL ES 3.0 is required.</string>
 
     <string name="menuFullscreen">Fullscreen</string>
+    <string name="menuSettings">Settings</string>
     <string name="menuStore">Rate this</string>
     <string name="menuAbout">About</string>
     <string name="menuHelp">Help</string>
@@ -21,4 +22,6 @@
     <string name="down">Down</string>
     <string name="colormono">Color / Mono</string>
     <string name="error">Big exclamation point</string>
+
+    <!-- <string name="prefEnableColor_Title">Enable color</string> -->
 </resources>

@@ -161,7 +161,10 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
         if (id == R.id.menuFullscreen)
             setFullscreen(true);
-        else if (id == R.id.menuStore) {
+        else if (id == R.id.menuSettings) {
+            intent = new Intent(this, SettingsActivity.class);
+            startActivity(intent);
+        } else if (id == R.id.menuStore) {
             DialogFragment confirm = new StoreConfirm();
             confirm.show(getFragmentManager(), "StoreConfirm");
         } else if (id == R.id.menuAbout) {

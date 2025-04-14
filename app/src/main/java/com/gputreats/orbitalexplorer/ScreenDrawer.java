@@ -8,11 +8,13 @@ import android.util.Log;
 class ScreenDrawer extends RenderStage {
 
     private final AssetManager assets;
+    private final AppPreferences appPreferences;
 
     private Program programColor, programMono;
 
     ScreenDrawer(Context context) {
         assets = context.getAssets();
+        appPreferences = new AppPreferences(context);
     }
 
     void onSurfaceCreated() {
@@ -65,7 +67,7 @@ class ScreenDrawer extends RenderStage {
 
         // Handle color blindness
         GLES30.glUniform1i(program.getUniformLocation("colorBlindMode"),
-                (int) ((System.currentTimeMillis() / 1000) % 4));
+                appPreferences.getEnableColor() ? 0 : 3);
 
         int inPositionHandle = program.getAttribLocation("inPosition");
         GLES30.glEnableVertexAttribArray(inPositionHandle);
