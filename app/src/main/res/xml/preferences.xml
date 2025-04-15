@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <SwitchPreference
-        android:key="prefEnableColor"
-        android:title="Obsolete check box"
-        android:defaultValue="true" />
-
     <ListPreference
         android:key="prefColorBlind"
         android:title="@string/prefColorBlind_Title"
