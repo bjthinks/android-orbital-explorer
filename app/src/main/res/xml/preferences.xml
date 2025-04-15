@@ -11,6 +11,6 @@
         android:title="Title"
         android:entries="@array/colorBlindOptions"
         android:entryValues="@array/colorBlindValues"
-        android:defaultValue="1" />
+        android:defaultValue="0" />
 
 </PreferenceScreen>
