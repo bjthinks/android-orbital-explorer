@@ -6,4 +6,11 @@
         android:title="Obsolete check box"
         android:defaultValue="true" />
 
+    <ListPreference
+        android:key="prefColorBlind"
+        android:title="Title"
+        android:entries="@array/colorBlindOptions"
+        android:entryValues="@array/colorBlindValues"
+        android:defaultValue="1" />
+
 </PreferenceScreen>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="colorBlindOptions">
+        <item>"Normal (default)"</item>
+        <item>"Protanopia (red-blind)"</item>
+        <item>"Deuteranopia (green-blind)"</item>
+        <item>"Tritanopia (blue-blind)"</item>
+    </array>
+    <array name="colorBlindValues">
+        <item>"0"</item>
+        <item>"1"</item>
+        <item>"2"</item>
+        <item>"3"</item>
+    </array>
+</resources>
