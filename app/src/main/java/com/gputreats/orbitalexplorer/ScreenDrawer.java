@@ -67,7 +67,7 @@ class ScreenDrawer extends RenderStage {
 
         // Handle color blindness
         GLES30.glUniform1i(program.getUniformLocation("colorBlindMode"),
-                appPreferences.getEnableColor() ? 0 : 3);
+                appPreferences.getColorBlind());
 
         int inPositionHandle = program.getAttribLocation("inPosition");
         GLES30.glEnableVertexAttribArray(inPositionHandle);
