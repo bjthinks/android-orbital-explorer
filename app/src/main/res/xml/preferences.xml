@@ -9,6 +9,7 @@
     <ListPreference
         android:key="prefColorBlind"
         android:title="@string/prefColorBlind_Title"
+        android:summary="%s"
         android:entries="@array/colorBlindOptions"
         android:entryValues="@array/colorBlindValues"
         android:defaultValue="0" />
