@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <CheckBoxPreference
+        android:key="prefUltraQuality"
+        android:title="@string/prefUltraQuality_Title"
+        android:summary="@string/prefUltraQuality_Summary"
+        android:defaultValue="false" />
+
     <ListPreference
         android:key="prefColorBlind"
         android:title="@string/prefColorBlind_Title"

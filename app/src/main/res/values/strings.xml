@@ -23,5 +23,7 @@
     <string name="colormono">Color / Mono</string>
     <string name="error">Big exclamation point</string>
 
+    <string name="prefUltraQuality_Title">Ultra quality rendering</string>
+    <string name="prefUltraQuality_Summary">GPU intensive and recommended for screenshots</string>
     <string name="prefColorBlind_Title">Color blindness mode</string>
 </resources>
