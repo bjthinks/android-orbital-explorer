@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <array name="colorBlindOptions">
-        <item>"Normal (default)"</item>
+        <item>"Normal colors"</item>
         <item>"Protanopia (red-blind)"</item>
         <item>"Deuteranopia (green-blind)"</item>
         <item>"Tritanopia (blue-blind)"</item>

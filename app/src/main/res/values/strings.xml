@@ -23,5 +23,5 @@
     <string name="colormono">Color / Mono</string>
     <string name="error">Big exclamation point</string>
 
-    <string name="prefColorBlind_Title">Select color blind mode</string>
+    <string name="prefColorBlind_Title">Color blindness mode</string>
 </resources>
