@@ -9,6 +9,7 @@ import javax.microedition.khronos.opengles.GL10;
 class OrbitalRenderer implements GLSurfaceView.Renderer {
 
     private Orbital orbital;
+    private final AppPreferences appPreferences;
     private final OrbitalData orbitalData;
     private final Integrator integrator;
     private final ScreenDrawer screenDrawer;
@@ -18,6 +19,7 @@ class OrbitalRenderer implements GLSurfaceView.Renderer {
     // Main thread
 
     OrbitalRenderer(Context context, OrbitalView ov) {
+        appPreferences = new AppPreferences(context);
         orbitalData = new OrbitalData(context);
         integrator = new Integrator(context);
         screenDrawer = new ScreenDrawer(context);
@@ -46,8 +48,9 @@ class OrbitalRenderer implements GLSurfaceView.Renderer {
     @Override
     public void onSurfaceChanged(GL10 gl, int width, int height) {
         aspectRatio = (double) width / (double) height;
-        int integrationWidth  = width / 3;
-        int integrationHeight = height / 3;
+        int scaleDownFactor = appPreferences.getUltraQuality() ? 1 : 3;
+        int integrationWidth  = width / scaleDownFactor;
+        int integrationHeight = height / scaleDownFactor;
         integrator.resize(integrationWidth, integrationHeight);
         screenDrawer.resize(integrationWidth, integrationHeight, width, height);
     }
