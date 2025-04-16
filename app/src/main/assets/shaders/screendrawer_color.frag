@@ -40,6 +40,13 @@ void main() {
     if (colorBlindMode != 0) { // If color blind mode
         vec2 best_line;
 
+        // The (x, y) coordinates of the copunctal points, from which confusion
+        // lines emanate, are:
+        // Protanopia:   (x, y) = (0.747, 0.253)
+        // Deuteranopia: (x, y) = (1.4, -0.4)
+        // Tritanopia:   (x, y) = (0.171, 0)
+        // These have been converted to (u*, v*) coordinates below
+
         if (colorBlindMode == 1) {
             vec2 copunctal = vec2(0.657860, 0.501321); // protanopic copunctal point
             vec2 white_confusion = white - copunctal;
