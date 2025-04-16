@@ -4,9 +4,9 @@
     <string name="apologySubtext">OpenGL ES 3.0 is required.</string>
 
     <string name="menuFullscreen">Fullscreen</string>
-    <string name="menuSettings">Settings</string>
-    <string name="menuStore">Rate this</string>
     <string name="menuAbout">About</string>
+    <string name="menuSettings">Settings</string>
+    <string name="menuStore">Feedback</string>
     <string name="menuHelp">Help</string>
 
     <string name="askStore">View this app on the Google Play Store?"</string>
