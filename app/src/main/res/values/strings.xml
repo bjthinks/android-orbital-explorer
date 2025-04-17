@@ -25,5 +25,5 @@
 
     <string name="prefUltraQuality_Title">Ultra quality rendering</string>
     <string name="prefUltraQuality_Summary">Slow on older devices</string>
-    <string name="prefColorBlind_Title">Color blindness mode</string>
+    <string name="prefColorBlind_Title">Color blind mode</string>
 </resources>
