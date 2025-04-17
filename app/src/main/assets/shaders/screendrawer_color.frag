@@ -52,16 +52,19 @@ void main() {
             vec2 white_confusion = white - copunctal;
             best_line = vec2(-white_confusion.y, white_confusion.x);
             best_line /= length(best_line);
+            uv_prime *= 1.05;
         } else if (colorBlindMode == 2) {
             vec2 copunctal = vec2(-1.217391, 0.782608); // deuteranopic copunctal point
             vec2 white_confusion = white - copunctal;
             best_line = vec2(-white_confusion.y, white_confusion.x);
             best_line /= length(best_line);
+            uv_prime *= 1.04;
         } else if (colorBlindMode == 3) {
             vec2 copunctal = vec2(0.257336, 0); // tritanopic copunctal point
             vec2 white_confusion = white - copunctal;
             best_line = vec2(-white_confusion.y, white_confusion.x);
             best_line /= length(best_line);
+            uv_prime *= 1.01;
         }
 
         // Project uv_prime onto best_line
