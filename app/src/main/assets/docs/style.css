@@ -1,6 +1,7 @@
+body { background-color: #000; color: #fff; }
 h2 { text-align: center; margin: 1em 0; }
 h3 { text-align: center; margin: 1em 0; }
 h4 { text-align: center; margin: 0; font-weight: normal; }
 span.l { font-family: cursive; letter-spacing: 2px; }
-a { color: #8bf }
+a { color: #8bf; }
 ul { list-style-position: inside; padding: 0; }
