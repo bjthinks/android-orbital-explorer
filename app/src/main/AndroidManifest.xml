@@ -26,14 +26,16 @@
         </activity>
 
         <activity
-            android:name=".SettingsActivity"
-            android:label="Settings"
-            android:theme="@style/AuxTheme" >
+            android:name=".HelpActivity"
+            android:label="Help"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AuxTheme"
+            android:exported="false">
         </activity>
 
         <activity
-            android:name=".HelpActivity"
-            android:label="Help"
+            android:name=".SettingsActivity"
+            android:label="Settings"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AuxTheme"
             android:exported="false">
