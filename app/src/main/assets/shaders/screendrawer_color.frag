@@ -39,6 +39,7 @@ void main() {
 
     vec2 white = vec2(0.19784, 0.46832);
 
+    float maxScale;
     if (colorBlindMode != 0) { // If color blind mode
         vec2 best_line;
 
@@ -55,26 +56,31 @@ void main() {
             best_line = vec2(-white_confusion.y, white_confusion.x);
             best_line /= length(best_line);
             uv_prime *= 1.05;
+            maxScale = 1.36;
         } else if (colorBlindMode == 2) {
             vec2 copunctal = vec2(-1.217391, 0.782608); // deuteranopic copunctal point
             vec2 white_confusion = white - copunctal;
             best_line = vec2(-white_confusion.y, white_confusion.x);
             best_line /= length(best_line);
             uv_prime *= 1.04;
+            maxScale = 1.36;
         } else if (colorBlindMode == 3) {
             vec2 copunctal = vec2(0.257336, 0); // tritanopic copunctal point
             vec2 white_confusion = white - copunctal;
             best_line = vec2(-white_confusion.y, white_confusion.x);
             best_line /= length(best_line);
             uv_prime *= 1.01;
+            maxScale = 1.0;
         }
 
         // Project uv_prime onto best_line
         uv_prime = dot(uv_prime, best_line) * best_line;
-    }
+    } else
+        maxScale = 1.01;
 
     float Y = total.z * (0.5 / 32767.0);
     Y = texCoord.y / 2.0;
+    uv_prime *= maxScale + 2.0 * Y * (1.0 - maxScale);
     uv_prime += white;
 
     // Convert CIE (u',v') color coordinates (as per CIELUV) to (x,y)
