@@ -71,6 +71,7 @@ void main() {
         uv_prime = dot(uv_prime, best_line) * best_line;
     }
 
+    float Y = total.z * (0.5 / 32767.0);
     uv_prime += white;
 
     // Convert CIE (u',v') color coordinates (as per CIELUV) to (x,y)
@@ -81,7 +82,6 @@ void main() {
     vec3 xyz = vec3(xy, 1.0 - xy.x - xy.y);
 
     // Convert xyz to XYZ
-    float Y = total.z * (0.5 / 32767.0);
     vec3 XYZ = (Y / xyz.y) * xyz;
 
     // Convert XYZ to linear (i.e. pre-gamma) RGB values
