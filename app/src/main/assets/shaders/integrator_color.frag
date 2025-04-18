@@ -141,7 +141,7 @@ void main() {
 
     if (total.z > 0.0) {
         // Increase brightness
-        total *= fBrightness;
+        total *= fBrightness * 2.2;
 
         total.xy /= total.z;
         // Galaxy S6 can't do exp of a negative number correctly

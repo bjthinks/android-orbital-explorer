@@ -9,6 +9,17 @@ uniform int colorBlindMode; // 1, 2, 3 for red, green, and blue blindness
 in vec2 texCoord;
 out vec3 color;
 
+float LtoY(float L) {
+    float Y;
+    if (L <= 8.0)
+        Y = (3.0 / 29.0) * (3.0 / 29.0) * (3.0 / 29.0) * L;
+    else {
+        float temp = (L + 16.0) / 116.0;
+        Y = temp * temp * temp;
+    }
+    return Y;
+}
+
 vec3 srgb_gamma(vec3 linear) {
     return mix(linear * 12.92,
                1.055 * pow(linear, vec3(1.0 / 2.4)) - vec3(0.055),
@@ -76,9 +87,11 @@ void main() {
     } else
         maxScale = 1.01;
 
-    float Ytimes2 = total.z / 32767.0;
-    float Y = Ytimes2 * 0.5;
-    uv_prime *= maxScale + Ytimes2 * (1.0 - maxScale);
+    //float Y = 0.5 * (total.z / 32767.0);
+    float L = 100.0 * (total.z / 32767.0);
+    float Y = 0.5 * LtoY(L);
+
+    uv_prime *= maxScale + 2.0 * Y * (1.0 - maxScale);
     uv_prime += white;
 
     // Convert CIE (u',v') color coordinates (as per CIELUV) to (x,y)
