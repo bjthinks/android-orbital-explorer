@@ -33,9 +33,7 @@ void main() {
     // needs to be divided by 32767.0
     vec3 total = mix(mix(lb, rb, interp.x), mix(lt, rt, interp.x), interp.y);
 
-    float t = texCoord.x * 2.0 * 3.141592653589;
-    mat2 r = mat2(cos(t), sin(t), -sin(t), cos(t));
-    vec2 uv_prime = 0.06 * (r * vec2(1,0));
+    vec2 uv_prime = (0.06 / 32767.0) * (colorRotation * total.xy);
 
     vec2 white = vec2(0.19784, 0.46832);
 
@@ -78,9 +76,9 @@ void main() {
     } else
         maxScale = 1.01;
 
-    float Y = total.z * (0.5 / 32767.0);
-    Y = texCoord.y / 2.0;
-    uv_prime *= maxScale + 2.0 * Y * (1.0 - maxScale);
+    float Ytimes2 = total.z / 32767.0;
+    float Y = Ytimes2 * 0.5;
+    uv_prime *= maxScale + Ytimes2 * (1.0 - maxScale);
     uv_prime += white;
 
     // Convert CIE (u',v') color coordinates (as per CIELUV) to (x,y)
@@ -100,7 +98,7 @@ void main() {
     vec3 linear_RGB = XYZ_to_linear_RGB * XYZ;
 
     if (any(greaterThan(linear_RGB, vec3(1))) || any(lessThan(linear_RGB, vec3(0))))
-        linear_RGB = vec3(1, 0, 1);
+        linear_RGB = vec3(0, 0, 0);
 
     // Need EGL 1.5 or EGL_KHR_gl_colorspace for automatic gamma
     color = srgb_gamma(linear_RGB);
