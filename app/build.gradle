@@ -7,9 +7,9 @@ android {
         applicationId "com.gputreats.orbitalexplorer"
         minSdkVersion 19
         targetSdkVersion 34
-        versionCode 140
+        versionCode 150
         // ALSO CHANGE IN assets/docs/about.html
-        versionName "1.4"
+        versionName "1.5"
     }
     android.compileOptions.sourceCompatibility 1.8
     android.compileOptions.targetCompatibility 1.8
