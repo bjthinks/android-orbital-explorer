@@ -19,7 +19,6 @@ class Shader {
             BufferedInputStream instream = new BufferedInputStream(
                     assets.open("shaders/" + filename));
             int b = instream.read();
-            int c = (int) filename.charAt(0) + 100 * BuildConfig.VERSION_CODE;
             StringBuilder buf = new StringBuilder();
             while (b != -1) {
                 buf.append((char) b);
