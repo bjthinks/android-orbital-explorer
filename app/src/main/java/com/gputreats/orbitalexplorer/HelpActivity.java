@@ -1,13 +1,19 @@
 package com.gputreats.orbitalexplorer;
 
+import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Insets;
 import android.os.Build;
 import android.os.Bundle;
+import androidx.annotation.NonNull;
 import androidx.core.app.NavUtils;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.WindowInsets;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 
@@ -19,6 +25,23 @@ public class HelpActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_help);
+
+        // Handle insets and set the status bar color on Android 15+
+        Context context = this;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
+            findViewById(android.R.id.content)
+                    .setOnApplyWindowInsetsListener(new View.OnApplyWindowInsetsListener() {
+                        @NonNull
+                        @Override
+                        public WindowInsets onApplyWindowInsets(@NonNull View v, @NonNull WindowInsets insets) {
+                            Insets statusBarInsets = insets.getInsets(WindowInsets.Type.statusBars());
+                            Insets navBarInsets = insets.getInsets(WindowInsets.Type.navigationBars());
+                            v.setBackgroundColor(ContextCompat.getColor(context, R.color.dark));
+                            v.setPadding(navBarInsets.left, statusBarInsets.top, navBarInsets.right, 0);
+                            return insets;
+                        }
+                    });
+        }
 
         String title;
         Bundle extras = getIntent().getExtras();
