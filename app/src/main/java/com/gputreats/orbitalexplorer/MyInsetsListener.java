@@ -1,7 +1,6 @@
 package com.gputreats.orbitalexplorer;
 
 import static java.lang.Math.max;
-import android.content.Context;
 import android.graphics.Insets;
 import android.os.Build;
 import android.view.View;
@@ -9,15 +8,16 @@ import android.view.ViewGroup;
 import android.view.WindowInsets;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
-import androidx.core.content.ContextCompat;
 
 @RequiresApi(api = Build.VERSION_CODES.KITKAT_WATCH)
 public class MyInsetsListener implements View.OnApplyWindowInsetsListener {
 
     private final boolean doBottomInsets;
+    private final View bottomTransparency;
 
-    MyInsetsListener(boolean doBottomInsets_) {
+    MyInsetsListener(boolean doBottomInsets_, View bottomTransparency_) {
         doBottomInsets = doBottomInsets_;
+        bottomTransparency = bottomTransparency_;
     }
 
     @NonNull
@@ -33,6 +33,11 @@ public class MyInsetsListener implements View.OnApplyWindowInsetsListener {
             mlp.rightMargin = max(cutouts.right - bars.right, 0);
             mlp.bottomMargin = doBottomInsets ? max(cutouts.bottom - bars.bottom, 0) : 0;
             v.setLayoutParams(mlp);
+            if (bottomTransparency != null) {
+                ViewGroup.LayoutParams layoutParams = bottomTransparency.getLayoutParams();
+                layoutParams.height = bars.bottom;
+                bottomTransparency.setLayoutParams(layoutParams);
+            }
             return WindowInsets.CONSUMED;
         }
         return insets;

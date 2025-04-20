@@ -72,7 +72,8 @@ public class MainActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
             // Handle insets on Android 15+
             View view = findViewById(R.id.orbital_tools);
-            view.setOnApplyWindowInsetsListener(new MyInsetsListener(true));
+            view.setOnApplyWindowInsetsListener(
+                    new MyInsetsListener(true, null));
         }
         windowInsetsController = WindowCompat.getInsetsController(getWindow(), decorView);
 
