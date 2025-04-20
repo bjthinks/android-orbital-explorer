@@ -27,20 +27,9 @@ public class HelpActivity extends AppCompatActivity {
         setContentView(R.layout.activity_help);
 
         // Handle insets and set the status bar color on Android 15+
-        Context context = this;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
-            findViewById(android.R.id.content)
-                    .setOnApplyWindowInsetsListener(new View.OnApplyWindowInsetsListener() {
-                        @NonNull
-                        @Override
-                        public WindowInsets onApplyWindowInsets(@NonNull View v, @NonNull WindowInsets insets) {
-                            Insets statusBarInsets = insets.getInsets(WindowInsets.Type.statusBars());
-                            Insets navBarInsets = insets.getInsets(WindowInsets.Type.navigationBars());
-                            v.setBackgroundColor(ContextCompat.getColor(context, R.color.dark));
-                            v.setPadding(navBarInsets.left, statusBarInsets.top, navBarInsets.right, 0);
-                            return insets;
-                        }
-                    });
+            View root = findViewById(android.R.id.content);
+            root.setOnApplyWindowInsetsListener(new MyInsetsListener(this));
         }
 
         String title;
