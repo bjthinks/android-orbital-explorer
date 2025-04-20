@@ -1,11 +1,12 @@
 package com.gputreats.orbitalexplorer;
 
+import static java.lang.Math.max;
 import android.content.Context;
 import android.graphics.Insets;
 import android.os.Build;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowInsets;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.core.content.ContextCompat;
@@ -23,11 +24,16 @@ public class MyInsetsListener implements View.OnApplyWindowInsetsListener {
     @Override
     public WindowInsets onApplyWindowInsets(@NonNull View v, @NonNull WindowInsets insets) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            Insets bars = insets.getInsets(
-                    WindowInsets.Type.systemBars() |
-                            WindowInsets.Type.displayCutout());
+            Insets bars = insets.getInsets(WindowInsets.Type.systemBars());
+            Insets cutouts = insets.getInsets(WindowInsets.Type.displayCutout());
             v.setBackgroundColor(ContextCompat.getColor(context, R.color.dark));
             v.setPadding(bars.left, bars.top, bars.right, 0);
+            ViewGroup.MarginLayoutParams mlp = (ViewGroup.MarginLayoutParams) v.getLayoutParams();
+            mlp.topMargin = max(cutouts.top - bars.top, 0);
+            mlp.leftMargin = max(cutouts.left - bars.left, 0);
+            mlp.rightMargin = max(cutouts.right - bars.right, 0);
+            mlp.bottomMargin = 0;
+            v.setLayoutParams(mlp);
             return WindowInsets.CONSUMED;
         }
         return insets;

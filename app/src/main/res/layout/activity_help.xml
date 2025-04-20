@@ -1,20 +1,30 @@
-<LinearLayout
+<merge
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="?attr/colorPrimary">
+    android:layout_height="match_parent">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/help_toolbar"
+    <View
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:minHeight="?attr/actionBarSize"
-        android:background="?attr/colorPrimary" />
+        android:layout_height="match_parent"
+        android:background="@color/black" />
 
-    <WebView
-        android:id="@+id/help_webview"
+    <LinearLayout
+        android:id="@+id/help_content"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="?attr/colorPrimary">
 
-</LinearLayout>
+        <androidx.appcompat.widget.Toolbar
+          android:id="@+id/help_toolbar"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:minHeight="?attr/actionBarSize"
+          android:background="?attr/colorPrimary" />
+        <WebView
+            android:id="@+id/help_webview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+</merge>
