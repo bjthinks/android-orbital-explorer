@@ -3,5 +3,6 @@
     <color name="clear">#0000</color>
     <color name="black">#000</color>
     <color name="dark">#111</color>
+    <color name="darkTransparent">#8111</color>
     <color name="white">#fff</color>
 </resources>

@@ -19,6 +19,7 @@
 
         <!-- unused space if the html is brief -->
         <View
+            android:id="@+id/help_background"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="?attr/colorPrimary" />
@@ -41,5 +42,13 @@
                 android:layout_height="wrap_content" />
 
         </LinearLayout>
+
+        <!-- This goes under the bottom bars but not cutouts -->
+        <View
+            android:id="@+id/help_bottom_transparency"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="0dp"
+            android:background="@color/darkTransparent" />
     </FrameLayout>
 </merge>
