@@ -3,28 +3,42 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <!-- black background behind cutouts -->
     <View
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/black" />
+        android:background="?attr/colorPrimary" />
 
-    <LinearLayout
+    <!-- margin for cutouts, padding for system bars -->
+    <FrameLayout
         android:id="@+id/help_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:background="?attr/colorPrimary">
+        android:background="?attr/colorPrimaryDark">
 
-        <androidx.appcompat.widget.Toolbar
-          android:id="@+id/help_toolbar"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:minHeight="?attr/actionBarSize"
-          android:background="?attr/colorPrimary" />
-        <WebView
-            android:id="@+id/help_webview"
+        <!-- unused space if the html is brief -->
+        <View
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="match_parent"
+            android:background="?attr/colorPrimary" />
 
-    </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/help_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="?attr/actionBarSize"
+                android:background="?attr/colorPrimary" />
+
+            <WebView
+                android:id="@+id/help_webview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+    </FrameLayout>
 </merge>

@@ -26,7 +26,6 @@ public class MyInsetsListener implements View.OnApplyWindowInsetsListener {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             Insets bars = insets.getInsets(WindowInsets.Type.systemBars());
             Insets cutouts = insets.getInsets(WindowInsets.Type.displayCutout());
-            v.setBackgroundColor(ContextCompat.getColor(context, R.color.dark));
             v.setPadding(bars.left, bars.top, bars.right, 0);
             ViewGroup.MarginLayoutParams mlp = (ViewGroup.MarginLayoutParams) v.getLayoutParams();
             mlp.topMargin = max(cutouts.top - bars.top, 0);
