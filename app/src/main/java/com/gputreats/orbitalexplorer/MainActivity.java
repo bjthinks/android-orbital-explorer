@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ConfigurationInfo;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -61,8 +62,8 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
         decorView = getWindow().getDecorView();
-        toolbar = findViewById(R.id.toolbar);
-        orbitalSelector = findViewById(R.id.orbitalselector);
+        toolbar = findViewById(R.id.orbital_toolbar);
+        orbitalSelector = findViewById(R.id.orbital_selector);
         orbitalView = findViewById(R.id.orbitalview);
 
         orbitalView.setOnSingleTapUp(() -> setFullscreen(false));
@@ -132,11 +133,17 @@ public class MainActivity extends AppCompatActivity {
             toolbar.setVisibility(View.INVISIBLE);
             orbitalSelector.setVisibility(View.INVISIBLE);
         } else {
-            decorView.setSystemUiVisibility(
-                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE |
-                    View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION |
-                    View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-            );
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
+                // Handle insets on Android 15+
+                View view = findViewById(R.id.orbital_tools);
+                view.setOnApplyWindowInsetsListener(new MyInsetsListener());
+                decorView.setSystemUiVisibility(0);
+            } else
+                // These are the flags needed on android 14-
+                decorView.setSystemUiVisibility(
+                        View.SYSTEM_UI_FLAG_LAYOUT_STABLE |
+                        View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION |
+                        View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
             toolbar.setVisibility(View.VISIBLE);
             orbitalSelector.setVisibility(View.VISIBLE);
         }

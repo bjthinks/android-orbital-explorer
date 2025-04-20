@@ -9,24 +9,23 @@
         android:layout_height="match_parent" />
 
     <LinearLayout
+        android:id="@+id/orbital_tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:fitsSystemWindows="true">
+        android:orientation="vertical">
 
         <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
+            android:id="@+id/orbital_toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:minHeight="?attr/actionBarSize"
             android:background="?attr/colorPrimary" />
 
         <com.gputreats.orbitalexplorer.OrbitalSelector
-            android:id="@+id/orbitalselector"
+            android:id="@+id/orbital_selector"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical" />
 
     </LinearLayout>
-
 </merge>
