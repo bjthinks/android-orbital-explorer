@@ -14,10 +14,10 @@ import androidx.core.content.ContextCompat;
 @RequiresApi(api = Build.VERSION_CODES.KITKAT_WATCH)
 public class MyInsetsListener implements View.OnApplyWindowInsetsListener {
 
-    Context context;
+    private final boolean doBottomInsets;
 
-    MyInsetsListener(Context c) {
-        context = c;
+    MyInsetsListener(boolean doBottomInsets_) {
+        doBottomInsets = doBottomInsets_;
     }
 
     @NonNull
@@ -26,12 +26,12 @@ public class MyInsetsListener implements View.OnApplyWindowInsetsListener {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             Insets bars = insets.getInsets(WindowInsets.Type.systemBars());
             Insets cutouts = insets.getInsets(WindowInsets.Type.displayCutout());
-            v.setPadding(bars.left, bars.top, bars.right, 0);
+            v.setPadding(bars.left, bars.top, bars.right, doBottomInsets ? bars.bottom : 0);
             ViewGroup.MarginLayoutParams mlp = (ViewGroup.MarginLayoutParams) v.getLayoutParams();
             mlp.topMargin = max(cutouts.top - bars.top, 0);
             mlp.leftMargin = max(cutouts.left - bars.left, 0);
             mlp.rightMargin = max(cutouts.right - bars.right, 0);
-            mlp.bottomMargin = 0;
+            mlp.bottomMargin = doBottomInsets ? max(cutouts.bottom - bars.bottom, 0) : 0;
             v.setLayoutParams(mlp);
             return WindowInsets.CONSUMED;
         }
