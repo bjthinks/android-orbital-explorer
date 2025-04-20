@@ -2,11 +2,11 @@ apply plugin: 'com.android.application'
 
 android {
     namespace "com.gputreats.orbitalexplorer"
-    compileSdkVersion 36
+    compileSdkVersion 35
     defaultConfig {
         applicationId "com.gputreats.orbitalexplorer"
         minSdkVersion 19
-        targetSdkVersion 36
+        targetSdkVersion 35
         versionCode 150
         // ALSO CHANGE IN assets/docs/about.html
         versionName "1.5"
