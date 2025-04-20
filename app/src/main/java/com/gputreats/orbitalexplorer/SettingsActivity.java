@@ -1,7 +1,10 @@
 package com.gputreats.orbitalexplorer;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -15,6 +18,12 @@ public class SettingsActivity extends AppCompatActivity {
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.settings_container, new SettingsFragment())
                 .commit();
+
+        // Handle insets and set the system bars colors on Android 15+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
+            View root = findViewById(R.id.settings_content);
+            root.setOnApplyWindowInsetsListener(new MyInsetsListener(this));
+        }
 
         Toolbar toolbar = findViewById(R.id.settings_toolbar);
         if (toolbar != null) {
