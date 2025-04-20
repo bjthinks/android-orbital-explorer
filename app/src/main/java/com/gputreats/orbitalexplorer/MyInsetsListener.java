@@ -27,7 +27,7 @@ public class MyInsetsListener implements View.OnApplyWindowInsetsListener {
                     WindowInsets.Type.systemBars() |
                             WindowInsets.Type.displayCutout());
             v.setBackgroundColor(ContextCompat.getColor(context, R.color.dark));
-            v.setPadding(bars.left, bars.top, bars.right, bars.bottom);
+            v.setPadding(bars.left, bars.top, bars.right, 0);
             return WindowInsets.CONSUMED;
         }
         return insets;
