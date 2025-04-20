@@ -23,11 +23,12 @@ public class MyInsetsListener implements View.OnApplyWindowInsetsListener {
     @Override
     public WindowInsets onApplyWindowInsets(@NonNull View v, @NonNull WindowInsets insets) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            Insets statusBarInsets = insets.getInsets(WindowInsets.Type.statusBars());
-            Insets navBarInsets = insets.getInsets(WindowInsets.Type.navigationBars());
+            Insets bars = insets.getInsets(
+                    WindowInsets.Type.systemBars() |
+                            WindowInsets.Type.displayCutout());
             v.setBackgroundColor(ContextCompat.getColor(context, R.color.dark));
-            v.setPadding(navBarInsets.left, statusBarInsets.top, navBarInsets.right, 0);
-            return insets;
+            v.setPadding(bars.left, bars.top, bars.right, bars.bottom);
+            return WindowInsets.CONSUMED;
         }
         return insets;
     }
