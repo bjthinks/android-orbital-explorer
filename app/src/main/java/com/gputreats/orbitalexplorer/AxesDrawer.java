@@ -57,7 +57,7 @@ public class AxesDrawer {
         GLES30.glDisable(GLES30.GL_SCISSOR_TEST);
         GLES30.glEnable(GLES30.GL_BLEND);
         GLES30.glBlendEquation(GLES30.GL_MAX);
-        GLES30.glBlendFunc(GLES30.GL_SRC_ALPHA, GLES30.GL_ONE);
+        GLES30.glBlendFunc(GLES30.GL_ONE, GLES30.GL_ONE);
         GLES30.glViewport(0, 0, width, height);
 
         MyGL.checkGLES();

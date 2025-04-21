@@ -4,6 +4,5 @@ in vec3 color;
 out vec3 outColor;
 
 void main() {
-    // Does this need an alpha channel?
     outColor = color;
 }
