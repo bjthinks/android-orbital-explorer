@@ -49,7 +49,12 @@ public class AxesDrawer {
             return;
 
         program.use();
+        boolean savedDepthTest = GLES30.glIsEnabled(GLES30.GL_DEPTH_TEST);
+        GLES30.glDisable(GLES30.GL_DEPTH_TEST);
         GLES30.glViewport(0, 0, width, height);
+
+        int projectionMatrixHandle = program.getUniformLocation("projectionMatrix");
+        GLES30.glUniformMatrix4fv(projectionMatrixHandle, 1, false, transform, 0);
 
         int inPositionHandle = program.getAttribLocation("inPosition");
         GLES30.glEnableVertexAttribArray(inPositionHandle);
@@ -65,6 +70,8 @@ public class AxesDrawer {
         GLES30.glDrawArrays(GLES30.GL_LINES, 0, 6);
         GLES30.glDisableVertexAttribArray(inPositionHandle);
         GLES30.glDisableVertexAttribArray(inColorHandle);
+        if (savedDepthTest)
+            GLES30.glEnable(GLES30.GL_DEPTH_TEST);
 
         MyGL.checkGLES();
     }
