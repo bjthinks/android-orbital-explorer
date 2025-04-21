@@ -2,6 +2,7 @@ package com.gputreats.orbitalexplorer;
 
 import android.content.Context;
 import android.content.res.AssetManager;
+import android.opengl.GLES20;
 import android.opengl.GLES30;
 
 import java.nio.FloatBuffer;
@@ -51,8 +52,12 @@ public class AxesDrawer {
         program.use();
         boolean savedDepthTest = GLES30.glIsEnabled(GLES30.GL_DEPTH_TEST);
         boolean savedScissorTest = GLES30.glIsEnabled(GLES30.GL_SCISSOR_TEST);
+        boolean savedBlend = GLES30.glIsEnabled(GLES30.GL_BLEND);
         GLES30.glDisable(GLES30.GL_DEPTH_TEST);
         GLES30.glDisable(GLES30.GL_SCISSOR_TEST);
+        GLES30.glEnable(GLES30.GL_BLEND);
+        GLES30.glBlendEquation(GLES30.GL_MAX);
+        GLES30.glBlendFunc(GLES30.GL_SRC_ALPHA, GLES30.GL_ONE);
         GLES30.glViewport(0, 0, width, height);
 
         MyGL.checkGLES();
@@ -93,6 +98,8 @@ public class AxesDrawer {
             GLES30.glEnable(GLES30.GL_DEPTH_TEST);
         if (savedScissorTest)
             GLES30.glEnable(GLES30.GL_SCISSOR_TEST);
+        if (!savedBlend)
+            GLES30.glDisable(GLES30.GL_BLEND);
 
         MyGL.checkGLES();
     }
