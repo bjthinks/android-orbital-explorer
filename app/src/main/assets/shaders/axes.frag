@@ -1,8 +1,9 @@
 #version 300 es
 precision mediump float;
-out vec3 color;
+in vec3 color;
+out vec3 outColor;
 
 void main() {
     // Does this need an alpha channel?
-    color = vec3(1.0, 1.0, 1.0);
+    outColor = color;
 }

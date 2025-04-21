@@ -57,6 +57,7 @@ class OrbitalRenderer implements GLSurfaceView.Renderer {
         int integrationHeight = height / scaleDownFactor;
         integrator.resize(integrationWidth, integrationHeight);
         screenDrawer.resize(integrationWidth, integrationHeight, width, height);
+        axesDrawer.resize(width, height);
     }
 
     // Rendering thread
