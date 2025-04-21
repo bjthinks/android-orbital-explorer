@@ -200,7 +200,7 @@ class Camera implements Parcelable {
             totalRotation = ALIGNED_ROTATIONS[best];
     }
 
-    synchronized float[] computeInverseShaderTransform(double aspectRatio) {
+    synchronized float[] computeShaderTransform(double aspectRatio) {
         float ratio = (float) Math.sqrt(aspectRatio);
         float near = (float) cameraDistance;
         float far = (float) (cameraDistance + 1.0);
@@ -224,11 +224,6 @@ class Camera implements Parcelable {
         float[] shaderTransform = new float[16];
         Matrix.multiplyMM(shaderTransform, 0, viewProjMatrix, 0, cameraRotation, 0);
 
-        // Samsung Galaxy S5 can't invert 4x4 matrices correctly in the OpenGL driver,
-        // so we make the CPU do the inverse instead.
-        float[] inverseTransform = new float[16];
-        Matrix.invertM(inverseTransform, 0, shaderTransform, 0);
-
-        return inverseTransform;
+        return shaderTransform;
     }
 }

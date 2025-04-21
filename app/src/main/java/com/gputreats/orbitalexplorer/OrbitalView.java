@@ -240,13 +240,13 @@ public class OrbitalView extends GLSurfaceView {
 
     // Render thread calls this function
 
-    float[] getInverseTransform(double aspectRatio) {
+    float[] getTransform(double aspectRatio) {
         // Camera is a thread-safe class
         boolean stillFlinging = camera.continueFling();
         if (stillFlinging)
             requestRender();
         // In between these two camera function calls, we hold no lock, so another
         // thread can change the camera. This is ok.
-        return camera.computeInverseShaderTransform(aspectRatio);
+        return camera.computeShaderTransform(aspectRatio);
     }
 }

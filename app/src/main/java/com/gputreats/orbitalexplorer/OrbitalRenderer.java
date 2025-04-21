@@ -2,6 +2,7 @@ package com.gputreats.orbitalexplorer;
 
 import android.content.Context;
 import android.opengl.GLSurfaceView;
+import android.opengl.Matrix;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -13,6 +14,7 @@ class OrbitalRenderer implements GLSurfaceView.Renderer {
     private final OrbitalData orbitalData;
     private final Integrator integrator;
     private final ScreenDrawer screenDrawer;
+    private final AxesDrawer axesDrawer;
     private final OrbitalView orbitalView;
     private final FPS fps;
 
@@ -23,6 +25,7 @@ class OrbitalRenderer implements GLSurfaceView.Renderer {
         orbitalData = new OrbitalData(context);
         integrator = new Integrator(context);
         screenDrawer = new ScreenDrawer(context);
+        axesDrawer = new AxesDrawer(context);
         orbitalView = ov;
         fps = new FPS();
     }
@@ -40,6 +43,7 @@ class OrbitalRenderer implements GLSurfaceView.Renderer {
         orbitalData.onSurfaceCreated();
         integrator.onSurfaceCreated();
         screenDrawer.onSurfaceCreated();
+        axesDrawer.onSurfaceCreated();
     }
 
     // Rendering thread
@@ -67,9 +71,14 @@ class OrbitalRenderer implements GLSurfaceView.Renderer {
             if (BuildConfig.DEBUG)
                 fps.frame();
             orbitalData.loadOrbital(orbitalTemp);
-            float[] inverseTransform = orbitalView.getInverseTransform(aspectRatio);
+            float[] transform = orbitalView.getTransform(aspectRatio);
+            // Samsung Galaxy S5 can't invert 4x4 matrices correctly in the OpenGL driver,
+            // so we make the CPU do the inverse instead.
+            float[] inverseTransform = new float[16];
+            Matrix.invertM(inverseTransform, 0, transform, 0);
             Texture integratorOutput = integrator.render(orbitalData, inverseTransform);
             screenDrawer.render(orbitalData, integratorOutput);
+            axesDrawer.render(orbitalData, transform);
         }
     }
 }
