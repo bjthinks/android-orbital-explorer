@@ -50,7 +50,9 @@ public class AxesDrawer {
 
         program.use();
         boolean savedDepthTest = GLES30.glIsEnabled(GLES30.GL_DEPTH_TEST);
+        boolean savedScissorTest = GLES30.glIsEnabled(GLES30.GL_SCISSOR_TEST);
         GLES30.glDisable(GLES30.GL_DEPTH_TEST);
+        GLES30.glDisable(GLES30.GL_SCISSOR_TEST);
         GLES30.glViewport(0, 0, width, height);
 
         int projectionMatrixHandle = program.getUniformLocation("projectionMatrix");
@@ -72,6 +74,8 @@ public class AxesDrawer {
         GLES30.glDisableVertexAttribArray(inColorHandle);
         if (savedDepthTest)
             GLES30.glEnable(GLES30.GL_DEPTH_TEST);
+        if (savedScissorTest)
+            GLES30.glEnable(GLES30.GL_SCISSOR_TEST);
 
         MyGL.checkGLES();
     }
