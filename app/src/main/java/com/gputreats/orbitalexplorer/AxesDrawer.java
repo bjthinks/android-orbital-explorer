@@ -1,10 +1,11 @@
 package com.gputreats.orbitalexplorer;
 
+import static java.lang.Math.max;
+import static java.lang.Math.round;
 import android.content.Context;
 import android.content.res.AssetManager;
-import android.opengl.GLES20;
 import android.opengl.GLES30;
-
+import android.util.DisplayMetrics;
 import java.nio.FloatBuffer;
 
 public class AxesDrawer {
@@ -13,6 +14,7 @@ public class AxesDrawer {
     private final AssetManager assets;
     private final AppPreferences appPreferences;
     private Program program;
+    private final float lineWidth;
 
     AxesDrawer(Context context) {
         float[] axesCoordinates = {
@@ -29,6 +31,8 @@ public class AxesDrawer {
         colors = FloatBufferFactory.make(axesColors);
         assets = context.getAssets();
         appPreferences = new AppPreferences(context);
+        DisplayMetrics metrics = context.getResources().getDisplayMetrics();
+        lineWidth = max(round(((float) metrics.densityDpi) / 64.0f), 1.0f);
     }
 
     public void onSurfaceCreated() {
@@ -90,7 +94,7 @@ public class AxesDrawer {
 
         MyGL.checkGLES();
 
-        GLES30.glLineWidth(3.0f); // TODO compute pixels per inch and calculate this
+        GLES30.glLineWidth(lineWidth);
         GLES30.glDrawArrays(GLES30.GL_LINES, 0, 6);
         GLES30.glDisableVertexAttribArray(inPositionHandle);
         GLES30.glDisableVertexAttribArray(inColorHandle);
