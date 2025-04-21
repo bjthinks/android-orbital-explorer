@@ -2,6 +2,7 @@ package com.gputreats.orbitalexplorer;
 
 import android.content.Context;
 import android.content.res.AssetManager;
+import android.opengl.GLES30;
 
 import java.nio.FloatBuffer;
 
@@ -26,6 +27,17 @@ public class AxesDrawer {
         program = new Program(assets, "axes.vert", "axes.frag");
     }
 
+    private int width, height;
+
+    public void resize(int newWidth, int newHeight) {
+        width = newWidth;
+        height = newHeight;
+    }
+
     public void render(OrbitalData orbitalData /* Does this have maxRadius?*/, float[] transform) {
+        MyGL.checkGLES();
+
+        program.use();
+        GLES30.glViewport(0, 0, width, height);
     }
 }
