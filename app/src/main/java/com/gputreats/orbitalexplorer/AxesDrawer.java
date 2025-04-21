@@ -55,8 +55,23 @@ public class AxesDrawer {
         GLES30.glDisable(GLES30.GL_SCISSOR_TEST);
         GLES30.glViewport(0, 0, width, height);
 
+        MyGL.checkGLES();
+
         int projectionMatrixHandle = program.getUniformLocation("projectionMatrix");
         GLES30.glUniformMatrix4fv(projectionMatrixHandle, 1, false, transform, 0);
+
+        float mr = (float) orbitalData.getOrbital().getRadialFunction().getMaximumRadius();
+        mr *= 0.75f;
+        float[] scalingMatrix = {
+                mr, 0f, 0f, 0f,
+                0f, mr, 0f, 0f,
+                0f, 0f, mr, 0f,
+                0f, 0f, 0f, 1f
+        };
+        int scalingMatrixHandle = program.getUniformLocation("scalingMatrix");
+        GLES30.glUniformMatrix4fv(scalingMatrixHandle, 1, false, scalingMatrix, 0);
+
+        MyGL.checkGLES();
 
         int inPositionHandle = program.getAttribLocation("inPosition");
         GLES30.glEnableVertexAttribArray(inPositionHandle);
@@ -67,6 +82,8 @@ public class AxesDrawer {
         GLES30.glEnableVertexAttribArray(inColorHandle);
         GLES30.glVertexAttribPointer(inColorHandle, 3, GLES30.GL_FLOAT, false,
                 12, colors);
+
+        MyGL.checkGLES();
 
         GLES30.glLineWidth(3.0f); // TODO compute pixels per inch and calculate this
         GLES30.glDrawArrays(GLES30.GL_LINES, 0, 6);
