@@ -45,6 +45,9 @@ public class AxesDrawer {
     public void render(OrbitalData orbitalData /* Does this have maxRadius?*/, float[] transform) {
         MyGL.checkGLES();
 
+        if (!appPreferences.getShowAxes())
+            return;
+
         program.use();
         GLES30.glViewport(0, 0, width, height);
 
