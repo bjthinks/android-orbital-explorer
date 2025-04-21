@@ -10,6 +10,7 @@ public class AxesDrawer {
     final FloatBuffer axes;
     private final AssetManager assets;
     private final AppPreferences appPreferences;
+    private Program program;
 
     AxesDrawer(Context context) {
         float[] axesCoordinates = {
@@ -21,6 +22,8 @@ public class AxesDrawer {
     }
 
     public void onSurfaceCreated() {
+        MyGL.checkGLES();
+        program = new Program(assets, "axes.vert", "axes.frag");
     }
 
     public void render(OrbitalData orbitalData /* Does this have maxRadius?*/, float[] transform) {
