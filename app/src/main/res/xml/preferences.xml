@@ -7,6 +7,12 @@
         android:summary="@string/prefUltraQuality_Summary"
         android:defaultValue="false" />
 
+    <SwitchPreferenceCompat
+        android:key="prefShowAxes"
+        android:title="@string/prefAxes_Title"
+        android:summary="@string/prefAxes_Summary"
+        android:defaultValue="true" />
+
     <ListPreference
         android:key="prefColorBlind"
         android:title="@string/prefColorBlind_Title"

@@ -9,6 +9,7 @@ public class AxesDrawer {
 
     final FloatBuffer axes;
     private final AssetManager assets;
+    private final AppPreferences appPreferences;
 
     AxesDrawer(Context context) {
         float[] axesCoordinates = {
@@ -16,6 +17,7 @@ public class AxesDrawer {
         };
         axes = FloatBufferFactory.make(axesCoordinates);
         assets = context.getAssets();
+        appPreferences = new AppPreferences(context);
     }
 
     public void onSurfaceCreated() {

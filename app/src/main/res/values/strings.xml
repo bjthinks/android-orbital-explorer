@@ -25,5 +25,7 @@
 
     <string name="prefUltraQuality_Title">Ultra quality rendering</string>
     <string name="prefUltraQuality_Summary">Slow on older devices</string>
+    <string name="prefAxes_Title">Show axes</string>
+    <string name="prefAxes_Summary">Red x-axis, green y-axis, blue z-axis</string>
     <string name="prefColorBlind_Title">Color blind mode</string>
 </resources>
