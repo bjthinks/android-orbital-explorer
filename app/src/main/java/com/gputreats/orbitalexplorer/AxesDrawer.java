@@ -79,8 +79,8 @@ public class AxesDrawer {
 
         axesProgram.use();
 
-        int projectionMatrixHandle = axesProgram.getUniformLocation("projectionMatrix");
-        GLES30.glUniformMatrix4fv(projectionMatrixHandle, 1, false, transform, 0);
+        int axisProjectionMatrixHandle = axesProgram.getUniformLocation("projectionMatrix");
+        GLES30.glUniformMatrix4fv(axisProjectionMatrixHandle, 1, false, transform, 0);
 
         float mr = (float) orbitalData.getOrbital().getRadialFunction().getMaximumRadius();
         mr *= 0.75f;
@@ -90,8 +90,8 @@ public class AxesDrawer {
                 0f, 0f, mr, 0f,
                 0f, 0f, 0f, 1f
         };
-        int scalingMatrixHandle = axesProgram.getUniformLocation("scalingMatrix");
-        GLES30.glUniformMatrix4fv(scalingMatrixHandle, 1, false, scalingMatrix, 0);
+        int axisScalingMatrixHandle = axesProgram.getUniformLocation("scalingMatrix");
+        GLES30.glUniformMatrix4fv(axisScalingMatrixHandle, 1, false, scalingMatrix, 0);
 
         MyGL.checkGLES();
 
@@ -118,10 +118,16 @@ public class AxesDrawer {
 
         arrowProgram.use();
 
-        int arrowPositionHandle = axesProgram.getAttribLocation("inPosition");
+        int arrowPositionHandle = arrowProgram.getAttribLocation("inPosition");
         GLES30.glEnableVertexAttribArray(arrowPositionHandle);
         GLES30.glVertexAttribPointer(arrowPositionHandle, 3, GLES30.GL_FLOAT, false,
                 12, arrows);
+
+        int arrowProjectionMatrixHandle = arrowProgram.getUniformLocation("projectionMatrix");
+        GLES30.glUniformMatrix4fv(arrowProjectionMatrixHandle, 1, false, transform, 0);
+
+        int arrowScalingMatrixHandle = arrowProgram.getUniformLocation("scalingMatrix");
+        GLES30.glUniformMatrix4fv(arrowScalingMatrixHandle, 1, false, scalingMatrix, 0);
 
         arrowProgram.setUniform1f("arrowSize", 8.0f * lineWidth);
         GLES30.glDrawArrays(GLES30.GL_POINTS, 0, 3);
