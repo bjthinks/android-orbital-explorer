@@ -12,7 +12,6 @@ import java.nio.FloatBuffer;
 public class AxesDrawer {
 
     final FloatBuffer axes, colors, arrows;
-    final byte[] arrowData;
     final ByteBuffer arrowBuffer;
     private final int arrowSize = 64;
     private int arrowTexture;
@@ -43,7 +42,7 @@ public class AxesDrawer {
         arrows = FloatBufferFactory.make(arrowCoordinates);
 
         assets = context.getAssets();
-        arrowData = (new ReadBytes(assets, "textures/arrow.raw",
+        byte[] arrowData = (new ReadBytes(assets, "textures/arrow.raw",
                 arrowSize * arrowSize)).get();
         arrowBuffer = ByteBuffer.allocateDirect(arrowSize * arrowSize);
         arrowBuffer.put(arrowData);
@@ -68,6 +67,14 @@ public class AxesDrawer {
         GLES30.glBindTexture(GLES30.GL_TEXTURE_2D, arrowTexture);
         GLES30.glTexImage2D(GLES30.GL_TEXTURE_2D, 0, GLES30.GL_R8, arrowSize, arrowSize,
                 0, GLES30.GL_RED, GLES30.GL_UNSIGNED_BYTE, arrowBuffer);
+        GLES30.glTexParameteri(GLES30.GL_TEXTURE_2D,
+                GLES30.GL_TEXTURE_MIN_FILTER, GLES30.GL_NEAREST);
+        GLES30.glTexParameteri(GLES30.GL_TEXTURE_2D,
+                GLES30.GL_TEXTURE_MAG_FILTER, GLES30.GL_NEAREST);
+        GLES30.glTexParameteri(GLES30.GL_TEXTURE_2D,
+                GLES30.GL_TEXTURE_WRAP_S, GLES30.GL_CLAMP_TO_EDGE);
+        GLES30.glTexParameteri(GLES30.GL_TEXTURE_2D,
+                GLES30.GL_TEXTURE_WRAP_T, GLES30.GL_CLAMP_TO_EDGE);
         MyGL.checkGLES();
     }
 
@@ -148,7 +155,12 @@ public class AxesDrawer {
         int arrowScalingMatrixHandle = arrowProgram.getUniformLocation("scalingMatrix");
         GLES30.glUniformMatrix4fv(arrowScalingMatrixHandle, 1, false, scalingMatrix, 0);
 
-        arrowProgram.setUniform1f("arrowSize", 5.0f * lineWidth);
+        arrowProgram.setUniform1f("arrowSize", 8.0f * lineWidth);
+
+        GLES30.glActiveTexture(GLES30.GL_TEXTURE0);
+        GLES30.glBindTexture(GLES30.GL_TEXTURE_2D, arrowTexture);
+        arrowProgram.setUniform1i("arrow", 0);
+
         GLES30.glDrawArrays(GLES30.GL_POINTS, 0, 3);
         GLES30.glDisableVertexAttribArray(arrowPositionHandle);
 

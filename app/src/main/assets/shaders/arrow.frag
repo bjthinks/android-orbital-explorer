@@ -2,8 +2,9 @@
 precision mediump float;
 in vec3 color;
 out vec3 outColor;
+uniform sampler2D arrow;
 
 void main() {
-    vec2 position = 2.0 * gl_PointCoord - vec2(1, 1);
-    outColor = color;
+    float t = texture(arrow, gl_PointCoord).r;
+    outColor = vec3(color * t);
 }
