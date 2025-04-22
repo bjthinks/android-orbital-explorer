@@ -48,6 +48,8 @@ public class AxesDrawer {
         MyGL.checkGLES();
         axesProgram = new Program(assets, "axes.vert", "axes.frag");
         originProgram = new Program(assets, "origin.vert", "origin.frag");
+        arrowProgram = new Program(assets, "arrow.vert", "arrow.frag");
+        MyGL.checkGLES();
     }
 
     private int width, height;
