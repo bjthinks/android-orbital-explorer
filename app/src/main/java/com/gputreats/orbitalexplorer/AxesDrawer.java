@@ -10,10 +10,10 @@ import java.nio.FloatBuffer;
 
 public class AxesDrawer {
 
-    final FloatBuffer axes, colors;
+    final FloatBuffer axes, colors, arrows;
     private final AssetManager assets;
     private final AppPreferences appPreferences;
-    private Program axesProgram, originProgram;
+    private Program axesProgram, originProgram, arrowProgram;
     private final float lineWidth;
 
     AxesDrawer(Context context) {
@@ -29,6 +29,15 @@ public class AxesDrawer {
                 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f
         };
         colors = FloatBufferFactory.make(axesColors);
+
+        float[] arrowCoordinates = {
+                1.0f, 0.0f, 0.0f,
+                0.0f, 1.0f, 0.0f,
+                0.0f, 0.0f, 1.0f
+        };
+        // Note this is both coordinates and colors :)
+        arrows = FloatBufferFactory.make(arrowCoordinates);
+
         assets = context.getAssets();
         appPreferences = new AppPreferences(context);
         DisplayMetrics metrics = context.getResources().getDisplayMetrics();
