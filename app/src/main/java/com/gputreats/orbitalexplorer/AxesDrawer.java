@@ -95,22 +95,22 @@ public class AxesDrawer {
 
         MyGL.checkGLES();
 
-        int inPositionHandle = axesProgram.getAttribLocation("inPosition");
-        GLES30.glEnableVertexAttribArray(inPositionHandle);
-        GLES30.glVertexAttribPointer(inPositionHandle, 3, GLES30.GL_FLOAT, false,
+        int axisPositionHandle = axesProgram.getAttribLocation("inPosition");
+        GLES30.glEnableVertexAttribArray(axisPositionHandle);
+        GLES30.glVertexAttribPointer(axisPositionHandle, 3, GLES30.GL_FLOAT, false,
                 12, axes);
 
-        int inColorHandle = axesProgram.getAttribLocation("inColor");
-        GLES30.glEnableVertexAttribArray(inColorHandle);
-        GLES30.glVertexAttribPointer(inColorHandle, 3, GLES30.GL_FLOAT, false,
+        int axisColorHandle = axesProgram.getAttribLocation("inColor");
+        GLES30.glEnableVertexAttribArray(axisColorHandle);
+        GLES30.glVertexAttribPointer(axisColorHandle, 3, GLES30.GL_FLOAT, false,
                 12, colors);
 
         MyGL.checkGLES();
 
         GLES30.glLineWidth(lineWidth);
         GLES30.glDrawArrays(GLES30.GL_LINES, 0, 6);
-        GLES30.glDisableVertexAttribArray(inPositionHandle);
-        GLES30.glDisableVertexAttribArray(inColorHandle);
+        GLES30.glDisableVertexAttribArray(axisPositionHandle);
+        GLES30.glDisableVertexAttribArray(axisColorHandle);
 
         originProgram.use();
         originProgram.setUniform1f("originSize", 2.0f * lineWidth);
@@ -125,6 +125,7 @@ public class AxesDrawer {
 
         arrowProgram.setUniform1f("arrowSize", 8.0f * lineWidth);
         GLES30.glDrawArrays(GLES30.GL_POINTS, 0, 3);
+        GLES30.glDisableVertexAttribArray(arrowPositionHandle);
 
         if (savedDepthTest)
             GLES30.glEnable(GLES30.GL_DEPTH_TEST);
