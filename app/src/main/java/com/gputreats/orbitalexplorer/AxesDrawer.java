@@ -129,7 +129,7 @@ public class AxesDrawer {
         int arrowScalingMatrixHandle = arrowProgram.getUniformLocation("scalingMatrix");
         GLES30.glUniformMatrix4fv(arrowScalingMatrixHandle, 1, false, scalingMatrix, 0);
 
-        arrowProgram.setUniform1f("arrowSize", 8.0f * lineWidth);
+        arrowProgram.setUniform1f("arrowSize", 5.0f * lineWidth);
         GLES30.glDrawArrays(GLES30.GL_POINTS, 0, 3);
         GLES30.glDisableVertexAttribArray(arrowPositionHandle);
 
