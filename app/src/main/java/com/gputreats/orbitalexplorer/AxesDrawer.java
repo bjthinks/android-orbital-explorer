@@ -143,6 +143,8 @@ public class AxesDrawer {
         originProgram.setUniform1f("originSize", 2.0f * lineWidth);
         GLES30.glDrawArrays(GLES30.GL_POINTS, 0, 1);
 
+        MyGL.checkGLES();
+
         arrowProgram.use();
 
         int arrowPositionHandle = arrowProgram.getAttribLocation("inPosition");
@@ -157,6 +159,9 @@ public class AxesDrawer {
         GLES30.glUniformMatrix4fv(arrowScalingMatrixHandle, 1, false, scalingMatrix, 0);
 
         arrowProgram.setUniform1f("arrowSize", 8.0f * lineWidth);
+
+        int screenDimensionsHandle = arrowProgram.getUniformLocation("screenDimensions");
+        GLES30.glUniform2f(screenDimensionsHandle, width, height);
 
         GLES30.glActiveTexture(GLES30.GL_TEXTURE0);
         GLES30.glBindTexture(GLES30.GL_TEXTURE_2D, arrowTexture);
