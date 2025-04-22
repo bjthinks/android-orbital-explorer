@@ -6,12 +6,16 @@ import android.content.Context;
 import android.content.res.AssetManager;
 import android.opengl.GLES30;
 import android.util.DisplayMetrics;
+import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 
 public class AxesDrawer {
 
     final FloatBuffer axes, colors, arrows;
     final byte[] arrowData;
+    final ByteBuffer arrowBuffer;
+    private final int arrowSize = 64;
+    private int arrowTexture;
     private final AssetManager assets;
     private final AppPreferences appPreferences;
     private Program axesProgram, originProgram, arrowProgram;
@@ -31,16 +35,19 @@ public class AxesDrawer {
         };
         colors = FloatBufferFactory.make(axesColors);
 
-        float[] arrowCoordinates = {
+        float[] arrowCoordinates = { // Note this is both coordinates and colors :)
                 1.0f, 0.0f, 0.0f,
                 0.0f, 1.0f, 0.0f,
                 0.0f, 0.0f, 1.0f
         };
-        // Note this is both coordinates and colors :)
         arrows = FloatBufferFactory.make(arrowCoordinates);
 
         assets = context.getAssets();
-        arrowData = (new ReadBytes(assets, "textures/arrow.raw", 64 * 64)).get();
+        arrowData = (new ReadBytes(assets, "textures/arrow.raw",
+                arrowSize * arrowSize)).get();
+        arrowBuffer = ByteBuffer.allocateDirect(arrowSize * arrowSize);
+        arrowBuffer.put(arrowData);
+        arrowBuffer.position(0);
 
         appPreferences = new AppPreferences(context);
         DisplayMetrics metrics = context.getResources().getDisplayMetrics();
@@ -49,9 +56,18 @@ public class AxesDrawer {
 
     public void onSurfaceCreated() {
         MyGL.checkGLES();
+
         axesProgram = new Program(assets, "axes.vert", "axes.frag");
         originProgram = new Program(assets, "origin.vert", "origin.frag");
         arrowProgram = new Program(assets, "arrow.vert", "arrow.frag");
+        MyGL.checkGLES();
+
+        int[] temp = new int[1];
+        GLES30.glGenTextures(1, temp, 0);
+        arrowTexture = temp[0];
+        GLES30.glBindTexture(GLES30.GL_TEXTURE_2D, arrowTexture);
+        GLES30.glTexImage2D(GLES30.GL_TEXTURE_2D, 0, GLES30.GL_R8, arrowSize, arrowSize,
+                0, GLES30.GL_RED, GLES30.GL_UNSIGNED_BYTE, arrowBuffer);
         MyGL.checkGLES();
     }
 
@@ -62,7 +78,7 @@ public class AxesDrawer {
         height = newHeight;
     }
 
-    public void render(OrbitalData orbitalData /* Does this have maxRadius?*/, float[] transform) {
+    public void render(OrbitalData orbitalData, float[] transform) {
         MyGL.checkGLES();
 
         if (!appPreferences.getShowAxes())
