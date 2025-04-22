@@ -116,6 +116,16 @@ public class AxesDrawer {
         originProgram.setUniform1f("originSize", 2.0f * lineWidth);
         GLES30.glDrawArrays(GLES30.GL_POINTS, 0, 1);
 
+        arrowProgram.use();
+
+        int arrowPositionHandle = axesProgram.getAttribLocation("inPosition");
+        GLES30.glEnableVertexAttribArray(arrowPositionHandle);
+        GLES30.glVertexAttribPointer(arrowPositionHandle, 3, GLES30.GL_FLOAT, false,
+                12, arrows);
+
+        arrowProgram.setUniform1f("arrowSize", 8.0f * lineWidth);
+        GLES30.glDrawArrays(GLES30.GL_POINTS, 0, 3);
+
         if (savedDepthTest)
             GLES30.glEnable(GLES30.GL_DEPTH_TEST);
         if (savedScissorTest)
