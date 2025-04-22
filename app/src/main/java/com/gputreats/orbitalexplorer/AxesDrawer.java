@@ -11,6 +11,7 @@ import java.nio.FloatBuffer;
 public class AxesDrawer {
 
     final FloatBuffer axes, colors, arrows;
+    final byte[] arrowData;
     private final AssetManager assets;
     private final AppPreferences appPreferences;
     private Program axesProgram, originProgram, arrowProgram;
@@ -39,6 +40,8 @@ public class AxesDrawer {
         arrows = FloatBufferFactory.make(arrowCoordinates);
 
         assets = context.getAssets();
+        arrowData = (new ReadBytes(assets, "textures/arrow.raw", 64 * 64)).get();
+
         appPreferences = new AppPreferences(context);
         DisplayMetrics metrics = context.getResources().getDisplayMetrics();
         lineWidth = max(round(((float) metrics.densityDpi) / 64.0f), 1.0f);
