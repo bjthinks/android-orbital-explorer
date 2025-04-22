@@ -67,10 +67,11 @@ public class AxesDrawer {
         GLES30.glBindTexture(GLES30.GL_TEXTURE_2D, arrowTexture);
         GLES30.glTexImage2D(GLES30.GL_TEXTURE_2D, 0, GLES30.GL_R8, arrowSize, arrowSize,
                 0, GLES30.GL_RED, GLES30.GL_UNSIGNED_BYTE, arrowBuffer);
+        // R8 textures are linearly filterable
         GLES30.glTexParameteri(GLES30.GL_TEXTURE_2D,
-                GLES30.GL_TEXTURE_MIN_FILTER, GLES30.GL_NEAREST);
+                GLES30.GL_TEXTURE_MIN_FILTER, GLES30.GL_LINEAR);
         GLES30.glTexParameteri(GLES30.GL_TEXTURE_2D,
-                GLES30.GL_TEXTURE_MAG_FILTER, GLES30.GL_NEAREST);
+                GLES30.GL_TEXTURE_MAG_FILTER, GLES30.GL_LINEAR);
         GLES30.glTexParameteri(GLES30.GL_TEXTURE_2D,
                 GLES30.GL_TEXTURE_WRAP_S, GLES30.GL_CLAMP_TO_EDGE);
         GLES30.glTexParameteri(GLES30.GL_TEXTURE_2D,
