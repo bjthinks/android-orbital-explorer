@@ -13,7 +13,7 @@ public class AxesDrawer {
     final FloatBuffer axes, colors;
     private final AssetManager assets;
     private final AppPreferences appPreferences;
-    private Program program;
+    private Program axesProgram, originProgram;
     private final float lineWidth;
 
     AxesDrawer(Context context) {
@@ -37,7 +37,8 @@ public class AxesDrawer {
 
     public void onSurfaceCreated() {
         MyGL.checkGLES();
-        program = new Program(assets, "axes.vert", "axes.frag");
+        axesProgram = new Program(assets, "axes.vert", "axes.frag");
+        originProgram = new Program(assets, "origin.vert", "origin.frag");
     }
 
     private int width, height;
@@ -53,7 +54,6 @@ public class AxesDrawer {
         if (!appPreferences.getShowAxes())
             return;
 
-        program.use();
         boolean savedDepthTest = GLES30.glIsEnabled(GLES30.GL_DEPTH_TEST);
         boolean savedScissorTest = GLES30.glIsEnabled(GLES30.GL_SCISSOR_TEST);
         boolean savedBlend = GLES30.glIsEnabled(GLES30.GL_BLEND);
@@ -66,7 +66,9 @@ public class AxesDrawer {
 
         MyGL.checkGLES();
 
-        int projectionMatrixHandle = program.getUniformLocation("projectionMatrix");
+        axesProgram.use();
+
+        int projectionMatrixHandle = axesProgram.getUniformLocation("projectionMatrix");
         GLES30.glUniformMatrix4fv(projectionMatrixHandle, 1, false, transform, 0);
 
         float mr = (float) orbitalData.getOrbital().getRadialFunction().getMaximumRadius();
@@ -77,17 +79,17 @@ public class AxesDrawer {
                 0f, 0f, mr, 0f,
                 0f, 0f, 0f, 1f
         };
-        int scalingMatrixHandle = program.getUniformLocation("scalingMatrix");
+        int scalingMatrixHandle = axesProgram.getUniformLocation("scalingMatrix");
         GLES30.glUniformMatrix4fv(scalingMatrixHandle, 1, false, scalingMatrix, 0);
 
         MyGL.checkGLES();
 
-        int inPositionHandle = program.getAttribLocation("inPosition");
+        int inPositionHandle = axesProgram.getAttribLocation("inPosition");
         GLES30.glEnableVertexAttribArray(inPositionHandle);
         GLES30.glVertexAttribPointer(inPositionHandle, 3, GLES30.GL_FLOAT, false,
                 12, axes);
 
-        int inColorHandle = program.getAttribLocation("inColor");
+        int inColorHandle = axesProgram.getAttribLocation("inColor");
         GLES30.glEnableVertexAttribArray(inColorHandle);
         GLES30.glVertexAttribPointer(inColorHandle, 3, GLES30.GL_FLOAT, false,
                 12, colors);
@@ -98,6 +100,11 @@ public class AxesDrawer {
         GLES30.glDrawArrays(GLES30.GL_LINES, 0, 6);
         GLES30.glDisableVertexAttribArray(inPositionHandle);
         GLES30.glDisableVertexAttribArray(inColorHandle);
+
+        originProgram.use();
+        originProgram.setUniform1f("originSize", 2.0f * lineWidth);
+        GLES30.glDrawArrays(GLES30.GL_POINTS, 0, 1);
+
         if (savedDepthTest)
             GLES30.glEnable(GLES30.GL_DEPTH_TEST);
         if (savedScissorTest)
