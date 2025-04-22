@@ -112,7 +112,11 @@ class Camera implements Parcelable {
     }
 
     private static final Quaternion INITIAL_ROTATION =
-            rotation(Math.PI / 2.0, X_HAT).multiply(rotation(Math.PI, Y_HAT));
+            rotation(Math.PI / 2.0, X_HAT)
+                    .multiply(rotation(Math.PI, Y_HAT))
+                    .multiply(rotation(-0.75 * Math.PI, Z_HAT))
+                    .multiply(rotation(Math.PI / 6.0,
+                            new Vector3(-1.0, 1.0, 0.0)));
 
     private Quaternion totalRotation = INITIAL_ROTATION;
 
