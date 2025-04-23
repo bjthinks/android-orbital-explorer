@@ -10,7 +10,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#000" />
+        android:background="@color/black" />
 
     <!-- Make bar background darkTransparent -->
     <View
@@ -19,31 +19,32 @@
         android:layout_height="match_parent"
         android:background="@color/darkTransparent" />
 
+    <!-- Make content background black again -->
     <View
         android:id="@+id/content_background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#000" />
+        android:background="@color/black" />
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#0000">
+        android:background="@color/clear">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_scrollFlags="scroll|enterAlways"
             app:titleEnabled="false"
-            android:background="#0000">
+            android:background="@color/clear">
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#0000"
-                app:layout_collapseMode="pin" /> <!-- bkgd used to be ?attr/colorPrimary -->
+                android:background="@color/clear"
+                app:layout_collapseMode="pin" />
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
@@ -76,7 +77,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:background="#0000" />
+            android:background="@color/clear" />
         <View
             android:id="@+id/bottom_transparency"
             android:layout_width="match_parent"
