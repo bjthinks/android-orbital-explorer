@@ -14,7 +14,7 @@ public class AppPreferences
     public AppPreferences(Context context) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         ultraQuality = preferences.getBoolean("prefUltraQuality", false);
-        showAxes = preferences.getBoolean("prefShowAxes", false);
+        showAxes = preferences.getBoolean("prefShowAxes", true);
         colorBlind = Integer.parseInt(preferences.getString("prefColorBlind", "0"));
         preferences.registerOnSharedPreferenceChangeListener(this);
     }
