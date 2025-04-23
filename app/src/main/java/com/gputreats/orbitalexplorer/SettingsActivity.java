@@ -21,18 +21,18 @@ public class SettingsActivity extends AppCompatActivity {
 
         // Handle insets and set the system bars colors on Android 15+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
-            View settingsContent = findViewById(R.id.settings_content);
-            settingsContent.setOnApplyWindowInsetsListener(
-                    new MyInsetsListener(true, null));
+            View root = findViewById(R.id.coordinator_layout);
+            root.setOnApplyWindowInsetsListener(new ApplyInsets(this));
         }
 
-        Toolbar toolbar = findViewById(R.id.settings_toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         if (toolbar != null) {
             toolbar.setContentInsetStartWithNavigation(0);
             setSupportActionBar(toolbar);
             ActionBar actionBar = getSupportActionBar();
-            if (actionBar != null)
+            if (actionBar != null) {
                 actionBar.setDisplayHomeAsUpEnabled(true);
+            }
         }
     }
 
