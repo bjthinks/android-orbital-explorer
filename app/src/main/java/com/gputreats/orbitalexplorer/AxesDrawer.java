@@ -159,7 +159,7 @@ public class AxesDrawer {
         int arrowScalingMatrixHandle = arrowProgram.getUniformLocation("scalingMatrix");
         GLES30.glUniformMatrix4fv(arrowScalingMatrixHandle, 1, false, scalingMatrix, 0);
 
-        arrowProgram.setUniform1f("arrowSize", 8.0f * lineWidth);
+        arrowProgram.setUniform1f("arrowSize", 6.0f * lineWidth);
 
         int screenDimensionsHandle = arrowProgram.getUniformLocation("screenDimensions");
         GLES30.glUniform2f(screenDimensionsHandle, width, height);
