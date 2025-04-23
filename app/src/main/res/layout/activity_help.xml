@@ -19,23 +19,31 @@
         android:layout_height="match_parent"
         android:background="@color/darkTransparent" />
 
+    <View
+        android:id="@+id/content_background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#000" />
+
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="#0000">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_scrollFlags="scroll|enterAlways"
-            app:titleEnabled="false">
+            app:titleEnabled="false"
+            android:background="#0000">
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="?attr/colorPrimary"
-                app:layout_collapseMode="pin" />
+                android:background="#0000"
+                app:layout_collapseMode="pin" /> <!-- bkgd used to be ?attr/colorPrimary -->
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>

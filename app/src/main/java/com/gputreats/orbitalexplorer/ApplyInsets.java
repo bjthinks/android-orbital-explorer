@@ -30,13 +30,15 @@ public class ApplyInsets implements View.OnApplyWindowInsetsListener {
             View sidebar_background = activity.findViewById(R.id.sidebar_background);
             setSideMargins(sidebar_background, cutouts.left, cutouts.right);
 
-            // Left & right inset the app bar, content, and top & bottom insets
+            // Left & right inset the app bar, background, content, and top & bottom insets
             int leftInset = max(bars.left, cutouts.left);
             int rightInset = max(bars.right, cutouts.right);
             View appbar = activity.findViewById(R.id.appbar);
+            View content_background = activity.findViewById(R.id.content_background);
             View content = activity.findViewById(R.id.content);
             View topbottom_insets = activity.findViewById(R.id.topbottom_insets);
             setSideMargins(appbar, leftInset, rightInset);
+            setSideMargins(content_background, leftInset, rightInset);
             setSideMargins(content, leftInset, rightInset);
             setSideMargins(topbottom_insets, leftInset, rightInset);
 
