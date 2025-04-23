@@ -11,11 +11,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 
 @RequiresApi(api = Build.VERSION_CODES.KITKAT_WATCH)
-public class ApplyInsets implements View.OnApplyWindowInsetsListener {
+public class InsetsAux implements View.OnApplyWindowInsetsListener {
 
     private final Activity activity;
 
-    ApplyInsets(Activity activity_) {
+    InsetsAux(Activity activity_) {
         activity = activity_;
     }
 
