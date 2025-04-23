@@ -13,6 +13,8 @@ void main() {
     c = 2.0 * c - vec2(1, 1);
     c = rotation * c;
     c = 0.5 * (c + vec2(1, 1));
+    if (any(greaterThan(c, vec2(1))) || any(lessThan(c, vec2(0))))
+        discard;
     float t = texture(arrow, c).r;
     outColor = vec3(color * t);
 }
