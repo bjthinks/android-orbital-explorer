@@ -52,8 +52,6 @@ public class HelpActivity extends AppCompatActivity {
             actionBar.setTitle(title);
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
-        // Collapsing Toolbar title is buggy when no zooming effect is present
-        ((CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar)).setTitleEnabled(false);
 
         webview = findViewById(R.id.help_webview);
         if (webview != null) {
