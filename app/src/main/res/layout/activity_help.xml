@@ -1,48 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merge
+<androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- black background behind cutouts -->
-    <View
+    <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/black" />
+        android:layout_height="wrap_content">
 
-    <!-- margin for cutouts, padding for system bars -->
-    <FrameLayout
-        android:id="@+id/help_content"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="?attr/colorPrimaryDark">
-
-        <!-- unused space if the html is brief -->
-        <View
+        <com.google.android.material.appbar.CollapsingToolbarLayout
+            android:id="@+id/collapsing_toolbar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="?attr/colorPrimary" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="wrap_content"
+            app:layout_scrollFlags="scroll|enterAlways">
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/help_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:minHeight="?attr/actionBarSize"
-                android:background="?attr/colorPrimary" />
+                android:paddingTop="100dp"
+                android:background="?attr/colorPrimary"
+                app:layout_collapseMode="pin" />
 
-            <WebView
-                android:id="@+id/help_webview"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
+    </com.google.android.material.appbar.AppBarLayout>
 
-        </LinearLayout>
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <LinearLayout
+        <WebView
+            android:id="@+id/help_webview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </androidx.core.widget.NestedScrollView>
+
+        <!--<LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
@@ -52,13 +48,12 @@
                 android:layout_height="0dp"
                 android:layout_weight="1" />
 
-            <!-- This goes under the bottom bars but not cutouts -->
+            <!- This goes under the bottom bars but not cutouts ->
             <View
                 android:id="@+id/help_bottom_transparency"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:background="@color/darkTransparent" />
 
-        </LinearLayout>
-    </FrameLayout>
-</merge>
+        </LinearLayout>-->
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
