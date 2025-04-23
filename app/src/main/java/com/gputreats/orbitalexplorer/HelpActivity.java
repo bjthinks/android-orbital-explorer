@@ -1,22 +1,16 @@
 package com.gputreats.orbitalexplorer;
 
-import android.content.Context;
 import android.graphics.Color;
-import android.graphics.Insets;
 import android.os.Build;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
 import androidx.core.app.NavUtils;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.content.ContextCompat;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowInsets;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
-import com.google.android.material.appbar.CollapsingToolbarLayout;
 
 public class HelpActivity extends AppCompatActivity {
 
@@ -28,12 +22,10 @@ public class HelpActivity extends AppCompatActivity {
         setContentView(R.layout.activity_help);
 
         // Handle insets and set the system bars colors on Android 15+
-        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
-            View bottomTransparency = findViewById(R.id.help_bottom_transparency);
-            View helpContent = findViewById(R.id.help_content);
-            helpContent.setOnApplyWindowInsetsListener(
-                    new MyInsetsListener(false, bottomTransparency));
-        }*/
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
+            View root = findViewById(R.id.coordinator_layout);
+            root.setOnApplyWindowInsetsListener(new ApplyInsets(this));
+        }
 
         String title;
         Bundle extras = getIntent().getExtras();
@@ -42,7 +34,7 @@ public class HelpActivity extends AppCompatActivity {
         else
             title = "Help";
 
-        Toolbar toolbar = findViewById(R.id.help_toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         if (toolbar != null) {
             toolbar.setContentInsetStartWithNavigation(0);
         }

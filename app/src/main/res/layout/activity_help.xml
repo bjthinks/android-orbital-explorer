@@ -2,25 +2,38 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/coordinator_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <!-- Make margins black -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#000" />
+
+    <!-- Make bar background darkTransparent -->
+    <View
+        android:id="@+id/sidebar_background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/darkTransparent" />
+
     <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
-            android:id="@+id/collapsing_toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_scrollFlags="scroll|enterAlways"
             app:titleEnabled="false">
 
             <androidx.appcompat.widget.Toolbar
-                android:id="@+id/help_toolbar"
+                android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="100dp"
                 android:background="?attr/colorPrimary"
                 app:layout_collapseMode="pin" />
 
@@ -28,6 +41,7 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
@@ -39,22 +53,27 @@
 
     </androidx.core.widget.NestedScrollView>
 
-        <!--<LinearLayout
+    <LinearLayout
+        android:id="@+id/topbottom_insets"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <View
+            android:id="@+id/top_transparency"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="0dp"
+            android:background="@color/darkTransparent" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="#0000" />
+        <View
+            android:id="@+id/bottom_transparency"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:background="@color/darkTransparent" />
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1" />
-
-            <!- This goes under the bottom bars but not cutouts ->
-            <View
-                android:id="@+id/help_bottom_transparency"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:background="@color/darkTransparent" />
-
-        </LinearLayout>-->
+    </LinearLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
