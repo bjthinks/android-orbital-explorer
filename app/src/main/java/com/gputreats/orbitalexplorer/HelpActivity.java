@@ -27,12 +27,12 @@ public class HelpActivity extends AppCompatActivity {
         setContentView(R.layout.activity_help);
 
         // Handle insets and set the system bars colors on Android 15+
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
+        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
             View bottomTransparency = findViewById(R.id.help_bottom_transparency);
             View helpContent = findViewById(R.id.help_content);
             helpContent.setOnApplyWindowInsetsListener(
                     new MyInsetsListener(false, bottomTransparency));
-        }
+        }*/
 
         String title;
         Bundle extras = getIntent().getExtras();
