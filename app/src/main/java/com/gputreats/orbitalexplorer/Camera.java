@@ -87,7 +87,8 @@ class Camera implements Parcelable {
     };
 
     private static final double MIN_CAMERA_DISTANCE = 1.5;
-    private static final double MAX_CAMERA_DISTANCE = 420.0;
+    private static final double MAX_CAMERA_DISTANCE =
+            1.575 * MaximumRadiusTable.getMaximumRadius(BaseOrbital.MAX_N, 0);
     private static final double INITIAL_CAMERA_DISTANCE = 70.0;
 
     private double cameraDistance = INITIAL_CAMERA_DISTANCE;

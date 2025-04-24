@@ -2,7 +2,7 @@ package com.gputreats.orbitalexplorer;
 
 class BaseOrbital {
 
-    static final int MAX_N = 10;
+    static final int MAX_N = 12;
 
     final int qZ, qN, qL, qM;
     final boolean real, color;
