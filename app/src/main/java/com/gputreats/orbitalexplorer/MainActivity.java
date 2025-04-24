@@ -198,6 +198,7 @@ public class MainActivity extends AppCompatActivity {
             intent.putExtra("url", "file:///android_asset/docs/help.html");
             intent.putExtra("url-v19", "file:///android_asset/docs/help-v19.html");
             intent.putExtra("title", getString(R.string.menuHelp));
+            intent.putExtra("scroll", true);
             startActivity(intent);
         } else
             return super.onOptionsItemSelected(item);

@@ -11,6 +11,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.appbar.CollapsingToolbarLayout;
 
 public class HelpActivity extends AppCompatActivity {
 
@@ -60,6 +62,19 @@ public class HelpActivity extends AppCompatActivity {
                 else
                     url = "file:///android_asset/docs/help.html";
                 webview.loadUrl(url);
+            }
+        }
+
+        // Check if we want to scroll the toolbar
+        if (extras != null) {
+            boolean scroll = extras.getBoolean("scroll");
+            if (!scroll) {
+                CollapsingToolbarLayout collapsingToolbarLayout =
+                        findViewById(R.id.collapsing_toolbar_layout);
+                AppBarLayout.LayoutParams params = (AppBarLayout.LayoutParams)
+                        collapsingToolbarLayout.getLayoutParams();
+                params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_NO_SCROLL);
+                collapsingToolbarLayout.setLayoutParams(params);
             }
         }
     }
