@@ -35,14 +35,6 @@ public class SettingsActivity extends AppCompatActivity {
                 actionBar.setDisplayHomeAsUpEnabled(true);
             }
         }
-
-        // Don't scroll Settings toolbar
-        CollapsingToolbarLayout collapsingToolbarLayout =
-                findViewById(R.id.collapsing_toolbar_layout);
-        AppBarLayout.LayoutParams params = (AppBarLayout.LayoutParams)
-                collapsingToolbarLayout.getLayoutParams();
-        params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_NO_SCROLL);
-        collapsingToolbarLayout.setLayoutParams(params);
     }
 
     @Override

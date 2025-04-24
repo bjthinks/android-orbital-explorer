@@ -67,13 +67,14 @@ public class HelpActivity extends AppCompatActivity {
 
         // Check if we want to scroll the toolbar
         if (extras != null) {
-            boolean scroll = extras.getBoolean("scroll");
-            if (!scroll) {
+            boolean scroll = extras.getBoolean("scrollToolbar");
+            if (scroll) {
                 CollapsingToolbarLayout collapsingToolbarLayout =
                         findViewById(R.id.collapsing_toolbar_layout);
                 AppBarLayout.LayoutParams params = (AppBarLayout.LayoutParams)
                         collapsingToolbarLayout.getLayoutParams();
-                params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_NO_SCROLL);
+                params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL |
+                        AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS);
                 collapsingToolbarLayout.setLayoutParams(params);
             }
         }
