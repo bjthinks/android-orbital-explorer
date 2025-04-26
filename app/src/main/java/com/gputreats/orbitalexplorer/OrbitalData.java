@@ -21,7 +21,6 @@ class OrbitalData {
     private float fInverseQuadratureStepSize;
     private float fInverseRadialStepSize;
     private float fM;
-    private float fConstantFactors;
     private float fRadialScaleFactor;
     private float fRadialExponent;
     private float fFactorPower;
@@ -86,7 +85,6 @@ class OrbitalData {
             fInverseQuadratureStepSize = (float) quadratureSteps / quadratureRadius;
             fInverseRadialStepSize = (float) radialTextureSize / maximumRadius;
             fM = (float) orbital.qM;
-            fConstantFactors = (float) radialFunction.getConstantFactors();
             fRadialScaleFactor = (float) radialFunction.getRadialScaleFactor();
             fFactorPower = (float) radialFunction.getPowerOfR();
             if (fFactorPower == 0.0)
@@ -145,7 +143,6 @@ class OrbitalData {
         program.setUniform1f("fInverseQuadratureStepSize", fInverseQuadratureStepSize);
         program.setUniform1f("fInverseRadialStepSize", fInverseRadialStepSize);
         program.setUniform1f("fM", fM);
-        program.setUniform1f("fConstantFactors", fConstantFactors);
         program.setUniform1f("fRadialScaleFactor", fRadialScaleFactor);
         program.setUniform1f("fRadialExponent", fRadialExponent);
         program.setUniform1f("fFactorPower", fFactorPower);

@@ -18,7 +18,6 @@ uniform float fInverseAzimuthalStepSize;
 uniform float fInverseQuadratureStepSize;
 uniform float fInverseRadialStepSize; // unused
 uniform float fM;
-uniform float fConstantFactors; // unused
 uniform float fRadialScaleFactor; // unused
 uniform float fRadialExponent; // unused
 uniform float fFactorPower; // unused
