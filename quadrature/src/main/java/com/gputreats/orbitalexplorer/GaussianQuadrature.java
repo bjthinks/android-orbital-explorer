@@ -151,5 +151,13 @@ class GaussianQuadrature {
                 weight[j - 1] = tempWeight;
             }
         }
+
+        // Sanity check: the way the integration is done now, with two separate integrals
+        // from -infinity to zero, and from zero to +infinity, implies that the smallest
+        // node must be >= 0.
+        if (node[0] < 0.0) {
+            System.out.println("Error: Negative node detected");
+            System.exit(1);
+        }
     }
 }
