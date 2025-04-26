@@ -47,12 +47,16 @@ enum QuadratureGenerator {
                             Polynomial.variableToThe(powerOfR).rescaleX(radialScaleFactor),
                             distanceFromOrigin);
                     GaussianQuadrature gq = new GaussianQuadrature(weightFunction, order, minLength);
+                    WeightFunction weightFunctionWithoutConstants =
+                            new WeightFunction(1.0,
+                                    exponentialConstant,
+                                    Polynomial.variableToThe(powerOfR).rescaleX(radialScaleFactor),
+                                    distanceFromOrigin);
 
                     for (int j = 0; j < order; ++j) {
-                        quadratureWeights[2 * order * i + 2 * j]
-                                = (float) gq.getNode(j);
-                        quadratureWeights[2 * order * i + 2 * j + 1]
-                                = (float) (gq.getWeight(j) / weightFunction.eval(gq.getNode(j)));
+                        quadratureWeights[2 * order * i + 2 * j] = (float) gq.getNode(j);
+                        quadratureWeights[2 * order * i + 2 * j + 1] = (float) (gq.getWeight(j) /
+                                weightFunctionWithoutConstants.eval(gq.getNode(j)));
                     }
                     if (i == 0 || i == steps) {
                         System.out.println("Color N=" + qN + " L=" + qL + " step=" + i);
