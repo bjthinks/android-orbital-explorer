@@ -21,7 +21,7 @@ class GaussianQuadrature {
         /*
          * STEP 0: Compute an offset for calculating the moments of the weight function.
          * I hoped this heuristic would increase the numerical stability of the Cholesky
-         * decomposition, but it only helps a tiny bit.
+         * decomposition, and it appears to, at least somewhat.
          * Goal: horizontally translate the power of x so that half of the weight function's
          * integral is on each side of its zero.
          */
@@ -75,8 +75,11 @@ class GaussianQuadrature {
         for (int i = 0; i < points + 1; ++i)
             for (int j = 0; j < points + 1; ++j)
                 H[i][j] = moments[i + j];
+        // Just print how close the matrix is to being non-positive definite.
+        // Return value is deliberately ignored for now.
         CholeskyDecomposition.decompose(H, points + 1);
 
+        // Here's the algorithm due to Phillips.
         double[] a = new double[points];
         double[] b = new double[points];
         double[][] c = new double[points + 1][2 * points + 1];
