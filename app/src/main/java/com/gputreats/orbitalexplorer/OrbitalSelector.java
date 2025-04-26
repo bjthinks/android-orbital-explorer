@@ -414,6 +414,12 @@ public class OrbitalSelector extends LinearLayout {
             case 9:
                 name += "m";
                 break;
+            case 10:
+                name += "n";
+                break;
+            case 11:
+                name += "o";
+                break;
             default:
                 name += Integer.toString(qL);
         }

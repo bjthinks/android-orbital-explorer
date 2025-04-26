@@ -4,18 +4,18 @@ enum Romberg {
     ;
 
     // Integrate a function from 0 to +infinity
-    static double integrate(Function f) {
+    static double integrate(Function f, double minLength) {
         int n = 1;
         double[] moreAccurateEstimate = new double[n];
         double stepSize = 1.0;
-        moreAccurateEstimate[0] = trapezoidalEstimate(f, stepSize);
+        moreAccurateEstimate[0] = trapezoidalEstimate(f, stepSize, minLength);
 
         do {
             ++n;
             double[] lessAccurateEstimate = moreAccurateEstimate;
             moreAccurateEstimate = new double[n];
             stepSize *= 0.5;
-            moreAccurateEstimate[0] = trapezoidalEstimate(f, stepSize);
+            moreAccurateEstimate[0] = trapezoidalEstimate(f, stepSize, minLength);
             double c = 1.0;
             for (int i = 1; i < n; ++i) {
                 c *= 4.0;
@@ -23,7 +23,7 @@ enum Romberg {
                         =  c  / (c - 1.0) * moreAccurateEstimate[i - 1]
                         - 1.0 / (c - 1.0) * lessAccurateEstimate[i - 1];
             }
-        } while (moreAccurateEstimate[n - 1] != moreAccurateEstimate[n-2]);
+        } while (n < 5);
 
         return moreAccurateEstimate[n - 1];
     }
@@ -32,7 +32,7 @@ enum Romberg {
     // Assumes f goes to zero at infinity, otherwise will not terminate.
     // Heuristically guesses when to stop by noticing when the accumulated total
     // doesn't change for multiple trapezoids in a row.
-    private static double trapezoidalEstimate(Function f, double stepSize) {
+    public static double trapezoidalEstimate(Function f, double stepSize, double minLength) {
         double nextResult = 0.5 * f.eval(0.0);
         int i = 0;
         int numberOfConsecutiveIdenticalResults = 0;
@@ -44,7 +44,7 @@ enum Romberg {
                 ++numberOfConsecutiveIdenticalResults;
             else
                 numberOfConsecutiveIdenticalResults = 0;
-        } while (numberOfConsecutiveIdenticalResults < 5);
+        } while (stepSize * (double) i < minLength || numberOfConsecutiveIdenticalResults < 5);
 
         return nextResult * stepSize;
     }

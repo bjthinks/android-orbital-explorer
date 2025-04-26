@@ -16,7 +16,37 @@ class GaussianQuadrature {
         return weight[i];
     }
 
-    GaussianQuadrature(Function weightFunction, int points) {
+    GaussianQuadrature(Function weightFunction, int points, double minLength) {
+
+        /*
+         * STEP 0: Compute an offset for calculating the moments of the weight function.
+         * I hoped this heuristic would increase the numerical stability of the Cholesky
+         * decomposition, but it only helps a tiny bit.
+         * Goal: horizontally translate the power of x so that half of the weight function's
+         * integral is on each side of its zero.
+         */
+        int approximateSteps = 256;
+        double approximateStepSize = minLength / (double) approximateSteps;
+        double approximateIntegral = 0.5 * weightFunction.eval(0) * approximateStepSize;
+        int step;
+        for (step = 1; step < approximateSteps; ++step)
+            approximateIntegral += weightFunction.eval(approximateStepSize * (double) step)
+                    * approximateStepSize;
+        approximateIntegral += 0.5 * weightFunction.eval(minLength) * approximateStepSize;
+
+        double halfIntegral = 0.5 * weightFunction.eval(0) * approximateStepSize;
+        for (step = 1; step < approximateSteps; ++step) {
+            halfIntegral += weightFunction.eval(approximateStepSize * (double) step)
+                    * approximateStepSize;
+            if (halfIntegral * 2.0 > approximateIntegral)
+                break;
+        }
+        if (step == approximateSteps) {
+            System.out.println("Couldn't figure out the offset");
+            System.exit(1);
+        }
+        double offset = approximateStepSize * (double) step;
+        System.out.println("length = " + minLength + " offset = " + offset);
 
         /*
          * STEP I: Compute the first 2N + 1 moments of the weight function.
@@ -24,8 +54,9 @@ class GaussianQuadrature {
 
         double[] moments = new double[2 * points + 1];
         for (int i = 0; i < 2 * points + 1; ++i) {
-            Function integrand = new Product(new Power(i), weightFunction);
-            moments[i] = Romberg.integrate(integrand);
+            Function integrand = new Product(new Power(Polynomial.variableToThe(1)
+                    .subtract(offset), i), weightFunction);
+            moments[i] = Romberg.integrate(integrand, minLength);
         }
 
         /*
@@ -36,6 +67,15 @@ class GaussianQuadrature {
          * TODO PROBLEM: The Cholesky decomposition of H has entries tending to 0,
          * TODO PROBLEM: which makes the following logic numerically unstable.
          */
+
+        /* Try computing the Cholesky decomposition of H using a tried-and-true
+         * method from Wikipedia. Doesn't help. :(
+         */
+        double[][] H = new double[points + 1][points + 1];
+        for (int i = 0; i < points + 1; ++i)
+            for (int j = 0; j < points + 1; ++j)
+                H[i][j] = moments[i + j];
+        CholeskyDecomposition.decompose(H, points + 1);
 
         double[] a = new double[points];
         double[] b = new double[points];
@@ -91,7 +131,7 @@ class GaussianQuadrature {
         node = new double[points];
         weight = new double[points];
         for (int i = 0; i < points; ++i) {
-            node[i] = J.getDiagonal(i);
+            node[i] = J.getDiagonal(i) + offset;
             weight[i] = MyMath.fastpow(J.getComponent(i), 2) * moments[0];
         }
 

@@ -34,12 +34,17 @@ enum QuadratureGenerator {
 
                 float[] quadratureWeights = new float[2 * order * (steps + 1)];
                 for (int i = 0; i <= steps; ++i) {
-                    double distanceFromOrigin = radialFunction.getMaximumRadius()
-                            * (double) i / (double) steps;
+                    System.out.println("color " + qN + " " + qL + " " + i);
+                    double maxRadius = radialFunction.getMaximumRadius();
+                    double distanceFromOrigin = maxRadius * (double) i / (double) steps;
+                    double minLength = Math.sqrt(maxRadius * maxRadius -
+                            distanceFromOrigin * distanceFromOrigin);
+                    if (minLength < 2.0)
+                        minLength = 2.0;
                     WeightFunction weightFunction = new WeightFunction(exponentialConstant,
                             Polynomial.variableToThe(powerOfR).rescaleX(radialScaleFactor),
                             distanceFromOrigin);
-                    GaussianQuadrature gq = new GaussianQuadrature(weightFunction, order);
+                    GaussianQuadrature gq = new GaussianQuadrature(weightFunction, order, minLength);
 
                     for (int j = 0; j < order; ++j) {
                         quadratureWeights[2 * order * i + 2 * j]
@@ -68,8 +73,13 @@ enum QuadratureGenerator {
 
                 quadratureWeights = new float[2 * order * (steps + 1)];
                 for (int i = 0; i <= steps; ++i) {
-                    double distanceFromOrigin = radialFunction.getMaximumRadius()
-                            * (double) i / (double) steps;
+                    System.out.println("mono " + qN + " " + qL + " " + i);
+                    double maxRadius = radialFunction.getMaximumRadius();
+                    double distanceFromOrigin = maxRadius * (double) i / (double) steps;
+                    double minLength = Math.sqrt(maxRadius * maxRadius -
+                            distanceFromOrigin * distanceFromOrigin);
+                    if (minLength < 2.0)
+                        minLength = 2.0;
                     WeightFunction weightFunction
                             = new WeightFunction(exponentialConstant,
                             new Product(Polynomial.variableToThe(powerOfR)
@@ -78,7 +88,7 @@ enum QuadratureGenerator {
                     Function simpleWeightFunction = new WeightFunction(exponentialConstant,
                             Polynomial.variableToThe(powerOfR).rescaleX(radialScaleFactor),
                             distanceFromOrigin);
-                    GaussianQuadrature gq = new GaussianQuadrature(weightFunction, order);
+                    GaussianQuadrature gq = new GaussianQuadrature(weightFunction, order, minLength);
 
                     for (int j = 0; j < order; ++j) {
                         quadratureWeights[2 * order * i + 2 * j]
