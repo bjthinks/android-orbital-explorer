@@ -24,6 +24,7 @@ enum QuadratureGenerator {
             for (int qL = 0; qL < qN; ++qL) {
 
                 RadialFunction radialFunction = new RadialFunction(1, qN, qL);
+                double constantFactors = radialFunction.getConstantFactors();
                 double radialScaleFactor = radialFunction.getRadialScaleFactor();
                 double exponentialConstant = radialFunction.getExponentialConstant();
                 int powerOfR = radialFunction.getPowerOfR();
@@ -41,7 +42,8 @@ enum QuadratureGenerator {
                             distanceFromOrigin * distanceFromOrigin);
                     if (minLength < 2.0)
                         minLength = 2.0;
-                    WeightFunction weightFunction = new WeightFunction(exponentialConstant,
+                    WeightFunction weightFunction = new WeightFunction(constantFactors,
+                            exponentialConstant,
                             Polynomial.variableToThe(powerOfR).rescaleX(radialScaleFactor),
                             distanceFromOrigin);
                     GaussianQuadrature gq = new GaussianQuadrature(weightFunction, order, minLength);
@@ -81,7 +83,7 @@ enum QuadratureGenerator {
                     if (minLength < 2.0)
                         minLength = 2.0;
                     WeightFunction weightFunction
-                            = new WeightFunction(exponentialConstant,
+                            = new WeightFunction(constantFactors, exponentialConstant,
                             new Product(Polynomial.variableToThe(powerOfR)
                                     .rescaleX(radialScaleFactor),
                                     oscillatingPart), distanceFromOrigin);
