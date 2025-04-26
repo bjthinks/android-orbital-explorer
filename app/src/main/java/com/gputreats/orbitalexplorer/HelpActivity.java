@@ -73,8 +73,8 @@ public class HelpActivity extends AppCompatActivity {
                         findViewById(R.id.collapsing_toolbar_layout);
                 AppBarLayout.LayoutParams params = (AppBarLayout.LayoutParams)
                         collapsingToolbarLayout.getLayoutParams();
-                params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL |
-                        AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS);
+                params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL /*|
+                        AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS*/);
                 collapsingToolbarLayout.setLayoutParams(params);
             }
         }
