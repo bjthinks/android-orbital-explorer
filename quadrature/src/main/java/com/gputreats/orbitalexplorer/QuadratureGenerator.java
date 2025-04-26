@@ -85,17 +85,11 @@ enum QuadratureGenerator {
                             new Product(Polynomial.variableToThe(powerOfR)
                                     .rescaleX(radialScaleFactor),
                                     oscillatingPart), distanceFromOrigin);
-                    Function simpleWeightFunction = new WeightFunction(exponentialConstant,
-                            Polynomial.variableToThe(powerOfR).rescaleX(radialScaleFactor),
-                            distanceFromOrigin);
                     GaussianQuadrature gq = new GaussianQuadrature(weightFunction, order, minLength);
 
                     for (int j = 0; j < order; ++j) {
-                        quadratureWeights[2 * order * i + 2 * j]
-                                = (float) gq.getNode(j);
-                        quadratureWeights[2 * order * i + 2 * j + 1]
-                                = (float) (gq.getWeight(j)
-                                / simpleWeightFunction.eval(gq.getNode(j)));
+                        quadratureWeights[2 * order * i + 2 * j] = (float) gq.getNode(j);
+                        quadratureWeights[2 * order * i + 2 * j + 1] = (float) gq.getWeight(j);
                     }
                     if (i == 0 || i == steps) {
                         System.out.println("Mono N=" + qN + " L=" + qL + " step=" + i);
