@@ -231,7 +231,8 @@ public class OrbitalSelector extends LinearLayout {
         setOrbitalName();
 
         if (orbitalView != null)
-            orbitalView.onOrbitalChanged(new Orbital(1, qN, qL, qM, real, color), pauseTime);
+            orbitalView.onOrbitalChanged(
+                    new Orbital(1, qN, qL, qM, real, color), pauseTime);
     }
 
     private void setMChanger() {
