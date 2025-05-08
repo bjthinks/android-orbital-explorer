@@ -18,7 +18,7 @@ public class AxesDrawer {
     private final AssetManager assets;
     private final AppPreferences appPreferences;
     private Program axesProgram, originProgram, arrowProgram;
-    private final float lineWidth;
+    private float lineWidth;
 
     AxesDrawer(Context context) {
         float[] axesCoordinates = {
@@ -77,6 +77,15 @@ public class AxesDrawer {
         GLES30.glTexParameteri(GLES30.GL_TEXTURE_2D,
                 GLES30.GL_TEXTURE_WRAP_T, GLES30.GL_CLAMP_TO_EDGE);
         GLES30.glGenerateMipmap(GLES30.GL_TEXTURE_2D);
+        MyGL.checkGLES();
+
+        float[] lineWidthRange = new float[2];
+        GLES30.glGetFloatv(GLES30.GL_ALIASED_LINE_WIDTH_RANGE, lineWidthRange, 0);
+        if (lineWidthRange[1] < lineWidth) {
+            lineWidth = (float) Math.floor(lineWidthRange[1]);
+            if (lineWidth < 1.0f)
+                lineWidth = 1.0f;
+        }
         MyGL.checkGLES();
     }
 
