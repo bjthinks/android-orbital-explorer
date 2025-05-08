@@ -12,13 +12,14 @@ import java.nio.FloatBuffer;
 public class AxesDrawer {
 
     final FloatBuffer axes, axisRect, colors, arrows;
-    final ByteBuffer arrowBuffer, originBuffer;
+    final ByteBuffer axisBuffer, originBuffer, arrowBuffer;
     private final int arrowSize = 64, originSize = 32;
-    private int arrowTexture, originTexture;
+    private int axisTexture, originTexture, arrowTexture;
     private final AssetManager assets;
     private final AppPreferences appPreferences;
     private Program axesProgram, axisRectProgram, originProgram, arrowProgram;
     private float lineWidth;
+    private final int axisWidth;
 
     AxesDrawer(Context context) {
         float[] axesCoordinates = {
@@ -49,12 +50,18 @@ public class AxesDrawer {
         };
         arrows = FloatBufferFactory.make(arrowCoordinates);
 
+        appPreferences = new AppPreferences(context);
+        DisplayMetrics metrics = context.getResources().getDisplayMetrics();
+        lineWidth = max(round(((float) metrics.densityDpi) / 64.0f), 1.0f);
         assets = context.getAssets();
-        byte[] arrowData = (new ReadBytes(assets, "textures/arrow.raw",
-                arrowSize * arrowSize)).get();
-        arrowBuffer = ByteBuffer.allocateDirect(arrowSize * arrowSize);
-        arrowBuffer.put(arrowData);
-        arrowBuffer.position(0);
+
+        axisWidth = 2 + (int) lineWidth;
+        byte[] axisData = new byte[axisWidth];
+        for (int i = 1; i < axisWidth - 1; ++i)
+            axisData[i] = -1;
+        axisBuffer = ByteBuffer.allocateDirect(axisWidth);
+        axisBuffer.put(axisData);
+        axisBuffer.position(0);
 
         byte[] originData = (new ReadBytes(assets, "textures/origin.raw",
                 originSize * originSize)).get();
@@ -62,9 +69,11 @@ public class AxesDrawer {
         originBuffer.put(originData);
         originBuffer.position(0);
 
-        appPreferences = new AppPreferences(context);
-        DisplayMetrics metrics = context.getResources().getDisplayMetrics();
-        lineWidth = max(round(((float) metrics.densityDpi) / 64.0f), 1.0f);
+        byte[] arrowData = (new ReadBytes(assets, "textures/arrow.raw",
+                arrowSize * arrowSize)).get();
+        arrowBuffer = ByteBuffer.allocateDirect(arrowSize * arrowSize);
+        arrowBuffer.put(arrowData);
+        arrowBuffer.position(0);
     }
 
     public void onSurfaceCreated() {
@@ -80,14 +89,31 @@ public class AxesDrawer {
                 "arrow.vert", "arrow.frag");
         MyGL.checkGLES();
 
-        int[] temp = new int[2];
-        GLES30.glGenTextures(2, temp, 0);
-        arrowTexture = temp[0];
+        int[] temp = new int[3];
+        GLES30.glGenTextures(3, temp, 0);
+        axisTexture = temp[0];
         originTexture = temp[1];
+        arrowTexture = temp[2];
 
-        GLES30.glBindTexture(GLES30.GL_TEXTURE_2D, arrowTexture);
-        GLES30.glTexImage2D(GLES30.GL_TEXTURE_2D, 0, GLES30.GL_R8, arrowSize, arrowSize,
-                0, GLES30.GL_RED, GLES30.GL_UNSIGNED_BYTE, arrowBuffer);
+        GLES30.glBindTexture(GLES30.GL_TEXTURE_2D, axisTexture);
+        // This needs to be axisWidth by 1, not vice versa, because of unpack alignment crud
+        GLES30.glTexImage2D(GLES30.GL_TEXTURE_2D, 0, GLES30.GL_R8, axisWidth, 1,
+                0, GLES30.GL_RED, GLES30.GL_UNSIGNED_BYTE, axisBuffer);
+        // R8 textures are linearly filterable
+        GLES30.glTexParameteri(GLES30.GL_TEXTURE_2D,
+                GLES30.GL_TEXTURE_MIN_FILTER, GLES30.GL_LINEAR);
+        GLES30.glTexParameteri(GLES30.GL_TEXTURE_2D,
+                GLES30.GL_TEXTURE_MAG_FILTER, GLES30.GL_LINEAR);
+        GLES30.glTexParameteri(GLES30.GL_TEXTURE_2D,
+                GLES30.GL_TEXTURE_WRAP_S, GLES30.GL_CLAMP_TO_EDGE);
+        GLES30.glTexParameteri(GLES30.GL_TEXTURE_2D,
+                GLES30.GL_TEXTURE_WRAP_T, GLES30.GL_CLAMP_TO_EDGE);
+        // No mipmaps for this texture
+        MyGL.checkGLES();
+
+        GLES30.glBindTexture(GLES30.GL_TEXTURE_2D, originTexture);
+        GLES30.glTexImage2D(GLES30.GL_TEXTURE_2D, 0, GLES30.GL_R8, originSize, originSize,
+                0, GLES30.GL_RED, GLES30.GL_UNSIGNED_BYTE, originBuffer);
         // R8 textures are linearly filterable
         GLES30.glTexParameteri(GLES30.GL_TEXTURE_2D,
                 GLES30.GL_TEXTURE_MIN_FILTER, GLES30.GL_LINEAR_MIPMAP_LINEAR);
@@ -100,9 +126,9 @@ public class AxesDrawer {
         GLES30.glGenerateMipmap(GLES30.GL_TEXTURE_2D);
         MyGL.checkGLES();
 
-        GLES30.glBindTexture(GLES30.GL_TEXTURE_2D, originTexture);
-        GLES30.glTexImage2D(GLES30.GL_TEXTURE_2D, 0, GLES30.GL_R8, originSize, originSize,
-                0, GLES30.GL_RED, GLES30.GL_UNSIGNED_BYTE, originBuffer);
+        GLES30.glBindTexture(GLES30.GL_TEXTURE_2D, arrowTexture);
+        GLES30.glTexImage2D(GLES30.GL_TEXTURE_2D, 0, GLES30.GL_R8, arrowSize, arrowSize,
+                0, GLES30.GL_RED, GLES30.GL_UNSIGNED_BYTE, arrowBuffer);
         // R8 textures are linearly filterable
         GLES30.glTexParameteri(GLES30.GL_TEXTURE_2D,
                 GLES30.GL_TEXTURE_MIN_FILTER, GLES30.GL_LINEAR_MIPMAP_LINEAR);
@@ -192,7 +218,7 @@ public class AxesDrawer {
         GLES30.glVertexAttribPointer(axisRectPositionHandle, 3, GLES30.GL_FLOAT, false,
                 12, axisRect);
 
-        float ah = lineWidth / (float) height;
+        float ah = (float) axisWidth / (float) height;
         float[] axisRectMatrix = {
                 1f, .005f, 0f, 0f,
                 0f, ah, 0f, 0f,
@@ -204,6 +230,10 @@ public class AxesDrawer {
 
         int axisRectColorHandle = axisRectProgram.getUniformLocation("color");
         GLES30.glUniform3f(axisRectColorHandle, 1.0f, 0.0f, 0.0f);
+
+        GLES30.glActiveTexture(GLES30.GL_TEXTURE0);
+        GLES30.glBindTexture(GLES30.GL_TEXTURE_2D, axisTexture);
+        axisRectProgram.setUniform1i("axis", 0);
 
         GLES30.glDrawArrays(GLES30.GL_TRIANGLE_FAN, 0, 4);
         GLES30.glDisableVertexAttribArray(axisRectPositionHandle);
