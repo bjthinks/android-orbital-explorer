@@ -218,7 +218,7 @@ public class AxesDrawer {
         GLES30.glVertexAttribPointer(axisRectPositionHandle, 3, GLES30.GL_FLOAT, false,
                 12, axisRect);
 
-        float ah = (float) axisWidth / (float) height;
+        float ah = 20.0f * (float) axisWidth / (float) height;
         float[] axisRectMatrix = {
                 1f, 0f, 0f, 0f,
                 0f, ah, 0f, 0f,
