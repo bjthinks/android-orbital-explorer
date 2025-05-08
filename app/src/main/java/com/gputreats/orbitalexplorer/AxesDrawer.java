@@ -11,13 +11,13 @@ import java.nio.FloatBuffer;
 
 public class AxesDrawer {
 
-    final FloatBuffer axes, colors, arrows;
+    final FloatBuffer axes, axisRect, colors, arrows;
     final ByteBuffer arrowBuffer, originBuffer;
     private final int arrowSize = 64, originSize = 32;
     private int arrowTexture, originTexture;
     private final AssetManager assets;
     private final AppPreferences appPreferences;
-    private Program axesProgram, originProgram, arrowProgram;
+    private Program axesProgram, axisRectProgram, originProgram, arrowProgram;
     private float lineWidth;
 
     AxesDrawer(Context context) {
@@ -33,6 +33,14 @@ public class AxesDrawer {
                 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f
         };
         colors = FloatBufferFactory.make(axesColors);
+
+        float[] axisRectangle = {
+                0.0f, -0.5f, 0.0f,
+                1.0f, -0.5f, 0.0f,
+                1.0f,  0.5f, 0.0f,
+                0.0f,  0.5f, 0.0f
+        };
+        axisRect = FloatBufferFactory.make(axisRectangle);
 
         float[] arrowCoordinates = { // Note this is both coordinates and colors :)
                 1.0f, 0.0f, 0.0f,
@@ -62,9 +70,14 @@ public class AxesDrawer {
     public void onSurfaceCreated() {
         MyGL.checkGLES();
 
-        axesProgram = new Program(assets, "axes.vert", "axes.frag");
-        originProgram = new Program(assets, "origin.vert", "origin.frag");
-        arrowProgram = new Program(assets, "arrow.vert", "arrow.frag");
+        axesProgram = new Program(assets,
+                "axes.vert", "axes.frag");
+        axisRectProgram = new Program(assets,
+                "axisRect.vert", "axisRect.frag");
+        originProgram = new Program(assets,
+                "origin.vert", "origin.frag");
+        arrowProgram = new Program(assets,
+                "arrow.vert", "arrow.frag");
         MyGL.checkGLES();
 
         int[] temp = new int[2];
