@@ -207,7 +207,7 @@ public class AxesDrawer {
         MyGL.checkGLES();
 
         GLES30.glLineWidth(lineWidth);
-        GLES30.glDrawArrays(GLES30.GL_LINES, 0, 6);
+        GLES30.glDrawArrays(GLES30.GL_LINES, 2, 4);
         GLES30.glDisableVertexAttribArray(axisPositionHandle);
         GLES30.glDisableVertexAttribArray(axisColorHandle);
 
@@ -220,13 +220,19 @@ public class AxesDrawer {
 
         float ah = (float) axisWidth / (float) height;
         float[] axisRectMatrix = {
-                1f, .005f, 0f, 0f,
+                1f, 0f, 0f, 0f,
                 0f, ah, 0f, 0f,
                 0f, 0f, 1f, 0f,
                 0f, 0f, 0f, 1f
         };
         int axisRectMatrixHandle = axisRectProgram.getUniformLocation("axisMatrix");
         GLES30.glUniformMatrix4fv(axisRectMatrixHandle, 1, false, axisRectMatrix, 0);
+
+        int axisRectProjectionMatrixHandle = axisRectProgram.getUniformLocation("projectionMatrix");
+        GLES30.glUniformMatrix4fv(axisRectProjectionMatrixHandle, 1, false, transform, 0);
+
+        int axisRectScalingMatrixHandle = axisRectProgram.getUniformLocation("scalingMatrix");
+        GLES30.glUniformMatrix4fv(axisRectScalingMatrixHandle, 1, false, scalingMatrix, 0);
 
         int axisRectColorHandle = axisRectProgram.getUniformLocation("color");
         GLES30.glUniform3f(axisRectColorHandle, 1.0f, 0.0f, 0.0f);
