@@ -35,10 +35,10 @@ public class AxesDrawer {
         colors = FloatBufferFactory.make(axesColors);
 
         float[] axisRectangle = {
-                0.0f, -0.5f, 0.0f,
-                1.0f, -0.5f, 0.0f,
-                1.0f,  0.5f, 0.0f,
-                0.0f,  0.5f, 0.0f
+                0.0f, -1.0f, 0.0f,
+                1.0f, -1.0f, 0.0f,
+                1.0f,  1.0f, 0.0f,
+                0.0f,  1.0f, 0.0f
         };
         axisRect = FloatBufferFactory.make(axisRectangle);
 
@@ -184,6 +184,31 @@ public class AxesDrawer {
         GLES30.glDrawArrays(GLES30.GL_LINES, 0, 6);
         GLES30.glDisableVertexAttribArray(axisPositionHandle);
         GLES30.glDisableVertexAttribArray(axisColorHandle);
+
+        axisRectProgram.use();
+
+        int axisRectPositionHandle = axisRectProgram.getAttribLocation("inPosition");
+        GLES30.glEnableVertexAttribArray(axisRectPositionHandle);
+        GLES30.glVertexAttribPointer(axisRectPositionHandle, 3, GLES30.GL_FLOAT, false,
+                12, axisRect);
+
+        float ah = lineWidth / (float) height;
+        float[] axisRectMatrix = {
+                1f, .005f, 0f, 0f,
+                0f, ah, 0f, 0f,
+                0f, 0f, 1f, 0f,
+                0f, 0f, 0f, 1f
+        };
+        int axisRectMatrixHandle = axisRectProgram.getUniformLocation("axisMatrix");
+        GLES30.glUniformMatrix4fv(axisRectMatrixHandle, 1, false, axisRectMatrix, 0);
+
+        int axisRectColorHandle = axisRectProgram.getUniformLocation("color");
+        GLES30.glUniform3f(axisRectColorHandle, 1.0f, 0.0f, 0.0f);
+
+        GLES30.glDrawArrays(GLES30.GL_TRIANGLE_FAN, 0, 4);
+        GLES30.glDisableVertexAttribArray(axisRectPositionHandle);
+
+        MyGL.checkGLES();
 
         originProgram.use();
         originProgram.setUniform1f("originSize", 2.0f * lineWidth);
