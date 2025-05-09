@@ -11,7 +11,7 @@ import java.nio.FloatBuffer;
 
 public class AxesDrawer {
 
-    final FloatBuffer axes, axisRects, axisSides, colors, arrows;
+    final FloatBuffer axes, colors, axisRects, axisSides, axisColors, arrows;
     final ByteBuffer axisBuffer, originBuffer, arrowBuffer;
     private final int arrowSize = 64, originSize = 32;
     private int axisTexture, originTexture, arrowTexture;
@@ -59,6 +59,21 @@ public class AxesDrawer {
                 -1f, -1f, 1f, 1f
         };
         axisSides = FloatBufferFactory.make(axisSidesArray);
+        float[] axisColorsArray = {
+                1f, 0f, 0f,
+                1f, 0f, 0f,
+                1f, 0f, 0f,
+                1f, 0f, 0f,
+                0f, 1f, 0f,
+                0f, 1f, 0f,
+                0f, 1f, 0f,
+                0f, 1f, 0f,
+                0f, 0f, 1f,
+                0f, 0f, 1f,
+                0f, 0f, 1f,
+                0f, 0f, 1f
+        };
+        axisColors = FloatBufferFactory.make(axisColorsArray);
 
         float[] arrowCoordinates = { // Note this is both coordinates and colors :)
                 1.0f, 0.0f, 0.0f,
@@ -224,7 +239,7 @@ public class AxesDrawer {
         MyGL.checkGLES();
 
         GLES30.glLineWidth(lineWidth);
-        GLES30.glDrawArrays(GLES30.GL_LINES, 0, 6);
+        //GLES30.glDrawArrays(GLES30.GL_LINES, 0, 6);
         GLES30.glDisableVertexAttribArray(axisPositionHandle);
         GLES30.glDisableVertexAttribArray(axisColorHandle);
 
@@ -239,6 +254,11 @@ public class AxesDrawer {
         GLES30.glEnableVertexAttribArray(axisSidesPositionHandle);
         GLES30.glVertexAttribPointer(axisSidesPositionHandle, 1, GLES30.GL_FLOAT, false,
                 4, axisSides);
+
+        int axisColorPositionHandle = axisRectProgram.getAttribLocation("inColor");
+        GLES30.glEnableVertexAttribArray(axisColorPositionHandle);
+        GLES30.glVertexAttribPointer(axisColorPositionHandle, 3, GLES30.GL_FLOAT, false,
+                12, axisColors);
 
         float ah = 20.0f * (float) axisWidth / (float) height;
         float[] axisRectMatrix = {
@@ -256,9 +276,6 @@ public class AxesDrawer {
         int axisRectScalingMatrixHandle = axisRectProgram.getUniformLocation("scalingMatrix");
         GLES30.glUniformMatrix4fv(axisRectScalingMatrixHandle, 1, false, scalingMatrix, 0);
 
-        int axisRectColorHandle = axisRectProgram.getUniformLocation("color");
-        GLES30.glUniform3f(axisRectColorHandle, 0.5f, 0.5f, 0.5f);
-
         GLES30.glActiveTexture(GLES30.GL_TEXTURE0);
         GLES30.glBindTexture(GLES30.GL_TEXTURE_2D, axisTexture);
         axisRectProgram.setUniform1i("axis", 0);
@@ -268,6 +285,7 @@ public class AxesDrawer {
         GLES30.glDrawArrays(GLES30.GL_TRIANGLE_FAN, 8, 4);
         GLES30.glDisableVertexAttribArray(axisRectPositionHandle);
         GLES30.glDisableVertexAttribArray(axisSidesPositionHandle);
+        GLES30.glDisableVertexAttribArray(axisColorPositionHandle);
 
         MyGL.checkGLES();
 
