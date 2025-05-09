@@ -10,8 +10,9 @@ uniform mat4 scalingMatrix;
 
 void main() {
     vec4 linePosition = projectionMatrix * scalingMatrix * vec4(inPosition, 1);
+    linePosition /= linePosition.w;
     vec4 widthPosition = axisMatrix * vec4(0, inSide, 0, 0);
-    gl_Position = vec4(linePosition + widthPosition * linePosition.w);
+    gl_Position = vec4(linePosition + widthPosition);
     texCoord = vec2((inSide + 1.0) / 2.0, 0.5);
     color = inColor;
 }
