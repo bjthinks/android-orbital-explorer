@@ -11,7 +11,7 @@ import java.nio.FloatBuffer;
 
 public class AxesDrawer {
 
-    final FloatBuffer axes, colors, arrows;
+    final FloatBuffer axesCoordinates, axesColors, arrows;
     final ByteBuffer arrowBuffer, originBuffer;
     private final int arrowSize = 64, originSize = 32;
     private int arrowTexture, originTexture;
@@ -21,25 +21,25 @@ public class AxesDrawer {
     private float lineWidth;
 
     AxesDrawer(Context context) {
-        float[] axesCoordinates = {
+        float[] axesCoordinateArray = {
                 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,
                 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f,
                 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f
         };
-        axes = FloatBufferFactory.make(axesCoordinates);
-        float[] axesColors = {
+        axesCoordinates = FloatBufferFactory.make(axesCoordinateArray);
+        float[] axesColorArray = {
                 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,
                 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
                 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f
         };
-        colors = FloatBufferFactory.make(axesColors);
+        axesColors = FloatBufferFactory.make(axesColorArray);
 
-        float[] arrowCoordinates = { // Note this is both coordinates and colors :)
+        float[] arrowArray = { // Note this is both coordinates and colors :)
                 1.0f, 0.0f, 0.0f,
                 0.0f, 1.0f, 0.0f,
                 0.0f, 0.0f, 1.0f
         };
-        arrows = FloatBufferFactory.make(arrowCoordinates);
+        arrows = FloatBufferFactory.make(arrowArray);
 
         assets = context.getAssets();
         byte[] arrowData = (new ReadBytes(assets, "textures/arrow.raw",
@@ -158,12 +158,12 @@ public class AxesDrawer {
         int axisPositionHandle = axesProgram.getAttribLocation("inPosition");
         GLES30.glEnableVertexAttribArray(axisPositionHandle);
         GLES30.glVertexAttribPointer(axisPositionHandle, 3, GLES30.GL_FLOAT, false,
-                12, axes);
+                12, axesCoordinates);
 
         int axisColorHandle = axesProgram.getAttribLocation("inColor");
         GLES30.glEnableVertexAttribArray(axisColorHandle);
         GLES30.glVertexAttribPointer(axisColorHandle, 3, GLES30.GL_FLOAT, false,
-                12, colors);
+                12, axesColors);
 
         MyGL.checkGLES();
 
