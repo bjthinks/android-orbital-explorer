@@ -251,30 +251,38 @@ public class OrbitalView extends GLSurfaceView {
     private static class MyEGLChooser implements EGLConfigChooser {
         @Override
         public EGLConfig chooseConfig(EGL10 egl10, EGLDisplay eglDisplay) {
+            EGLConfig msaa8 = chooseConfigWithMSAA(egl10, eglDisplay, 8);
+            if (msaa8 != null)
+                return msaa8;
+
+            EGLConfig msaa4 = chooseConfigWithMSAA(egl10, eglDisplay, 4);
+            if (msaa4 != null)
+                return msaa4;
+
+            EGLConfig msaa2 = chooseConfigWithMSAA(egl10, eglDisplay, 2);
+            if (msaa2 != null)
+                return msaa2;
+
+            return chooseConfigWithMSAA(egl10, eglDisplay, 1);
+        }
+
+        public EGLConfig chooseConfigWithMSAA(EGL10 egl10, EGLDisplay eglDisplay, int msaa) {
             int[] attribs = {
-                    EGL10.EGL_RED_SIZE, 8,
-                    EGL10.EGL_GREEN_SIZE, 8,
-                    EGL10.EGL_BLUE_SIZE, 8,
-                    EGL10.EGL_ALPHA_SIZE, 0,
-                    EGL10.EGL_DEPTH_SIZE, 0,
-                    EGL10.EGL_STENCIL_SIZE, 0,
-                    EGL10.EGL_SAMPLE_BUFFERS, 1,
-                    EGL10.EGL_SAMPLES, 8,
+                    EGL10.EGL_RED_SIZE, 1,
+                    EGL10.EGL_GREEN_SIZE, 1,
+                    EGL10.EGL_BLUE_SIZE, 1,
+                    EGL10.EGL_SAMPLE_BUFFERS, msaa > 0 ? 1 : 0,
+                    EGL10.EGL_SAMPLES, msaa > 1 ? msaa : 0,
                     EGL10.EGL_RENDERABLE_TYPE, EGL_OPENGL_ES2_BIT,
                     EGL10.EGL_NONE
             };
 
             EGLConfig[] configs = new EGLConfig[1];
             int[] numConfigs = new int[1];
-            if (!egl10.eglChooseConfig(eglDisplay, attribs, configs, 1, numConfigs)) {
-                // TODO BAD
+            if (!egl10.eglChooseConfig(eglDisplay, attribs, configs, 1, numConfigs))
                 return null;
-            }
-            if (numConfigs[0] > 0) {
+            if (numConfigs[0] > 0)
                 return configs[0];
-            }
-
-            // TODO BAD
             return null;
         }
     }
