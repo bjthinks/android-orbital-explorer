@@ -7,6 +7,11 @@ import android.os.Parcelable;
 import android.util.AttributeSet;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
+import androidx.annotation.NonNull;
+import static android.opengl.EGL14.EGL_OPENGL_ES2_BIT;
+import javax.microedition.khronos.egl.EGL10;
+import javax.microedition.khronos.egl.EGLConfig;
+import javax.microedition.khronos.egl.EGLDisplay;
 
 public class OrbitalView extends GLSurfaceView {
 
@@ -25,6 +30,10 @@ public class OrbitalView extends GLSurfaceView {
     }
 
     private void constructorSetup(Context context) {
+        // Ask for a multisampled framebuffer
+        // TODO: Try glDisable(GL_DITHER)
+        setEGLConfigChooser(new MyEGLChooser());
+
         // Specify OpenGL ES version 3.0
         setEGLContextClientVersion(3);
 
@@ -208,19 +217,19 @@ public class OrbitalView extends GLSurfaceView {
     private class TapFlingListener extends GestureDetector.SimpleOnGestureListener {
 
         @Override
-        public boolean onDown(MotionEvent event) {
+        public boolean onDown(@NonNull MotionEvent event) {
             return true;
         }
 
         @Override
-        public boolean onSingleTapUp(MotionEvent event) {
+        public boolean onSingleTapUp(@NonNull MotionEvent event) {
             if (!stoppedFling && onSingleTapUp != null)
                 onSingleTapUp.run();
             return true;
         }
 
         @Override
-        public boolean onDoubleTap(MotionEvent event) {
+        public boolean onDoubleTap(@NonNull MotionEvent event) {
             camera.stopFling();
             camera.snapToAxis();
             requestRender();
@@ -228,13 +237,44 @@ public class OrbitalView extends GLSurfaceView {
         }
 
         @Override
-        public boolean onFling(MotionEvent event1, MotionEvent event2,
+        public boolean onFling(MotionEvent event1, @NonNull MotionEvent event2,
                                float velocityX, float velocityY) {
             double meanSize = Math.sqrt((double) (getWidth() * getHeight()));
             camera.fling((double) velocityX / meanSize, (double) velocityY / meanSize);
             requestRender();
 
             return true;
+        }
+    }
+
+    private static class MyEGLChooser implements EGLConfigChooser {
+        @Override
+        public EGLConfig chooseConfig(EGL10 egl10, EGLDisplay eglDisplay) {
+            int[] attribs = {
+                    EGL10.EGL_RED_SIZE, 8,
+                    EGL10.EGL_GREEN_SIZE, 8,
+                    EGL10.EGL_BLUE_SIZE, 8,
+                    EGL10.EGL_ALPHA_SIZE, 0,
+                    EGL10.EGL_DEPTH_SIZE, 0,
+                    EGL10.EGL_STENCIL_SIZE, 0,
+                    EGL10.EGL_SAMPLE_BUFFERS, 1,
+                    EGL10.EGL_SAMPLES, 8,
+                    EGL10.EGL_RENDERABLE_TYPE, EGL_OPENGL_ES2_BIT,
+                    EGL10.EGL_NONE
+            };
+
+            EGLConfig[] configs = new EGLConfig[1];
+            int[] numConfigs = new int[1];
+            if (!egl10.eglChooseConfig(eglDisplay, attribs, configs, 1, numConfigs)) {
+                // TODO BAD
+                return null;
+            }
+            if (numConfigs[0] > 0) {
+                return configs[0];
+            }
+
+            // TODO BAD
+            return null;
         }
     }
 
