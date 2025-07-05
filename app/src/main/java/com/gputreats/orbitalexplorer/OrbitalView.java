@@ -31,7 +31,8 @@ public class OrbitalView extends GLSurfaceView {
 
     private void constructorSetup(Context context) {
         // Ask for a multisampled framebuffer
-        // TODO: Try glDisable(GL_DITHER)
+        // Note: Gemini suggests glDisable(GL_DITHER), but I don't see how it would have
+        // any positive effect since the only thing being multisampled is the axes.
         setEGLConfigChooser(new MyEGLChooser());
 
         // Specify OpenGL ES version 3.0
