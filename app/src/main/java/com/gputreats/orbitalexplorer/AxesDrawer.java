@@ -11,7 +11,7 @@ import java.nio.FloatBuffer;
 
 public class AxesDrawer {
 
-    final FloatBuffer axesCoordinates, axesColors, arrows;
+    final FloatBuffer axesCoordinates, axesColors, origin, arrows;
     final ByteBuffer arrowBuffer, originBuffer;
     private final int arrowSize = 64, originSize = 32;
     private int arrowTexture, originTexture;
@@ -33,6 +33,11 @@ public class AxesDrawer {
                 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f
         };
         axesColors = FloatBufferFactory.make(axesColorArray);
+
+        float[] originArray = {
+                0.0f, 0.0f, 0.0f
+        };
+        origin = FloatBufferFactory.make(originArray);
 
         float[] arrowArray = { // Note this is both coordinates and colors :)
                 1.0f, 0.0f, 0.0f,
@@ -173,6 +178,12 @@ public class AxesDrawer {
         GLES30.glDisableVertexAttribArray(axisColorHandle);
 
         originProgram.use();
+
+        int originPositionHandle = originProgram.getAttribLocation("inPosition");
+        GLES30.glEnableVertexAttribArray(originPositionHandle);
+        GLES30.glVertexAttribPointer(originPositionHandle, 3, GLES30.GL_FLOAT, false,
+                12, origin);
+
         originProgram.setUniform1f("originSize", 2.0f * lineWidth);
 
         GLES30.glActiveTexture(GLES30.GL_TEXTURE0);
