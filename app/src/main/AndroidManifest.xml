@@ -33,6 +33,14 @@
             android:exported="false">
         </activity>
 
+        <activity
+            android:name=".SettingsActivity"
+            android:label="Settings"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AuxTheme"
+            android:exported="false">
+        </activity>
+
     </application>
 
 </manifest>

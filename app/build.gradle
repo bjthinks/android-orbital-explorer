@@ -2,15 +2,14 @@ apply plugin: 'com.android.application'
 
 android {
     namespace "com.gputreats.orbitalexplorer"
-    compileSdkVersion 34
+    compileSdkVersion 36
     defaultConfig {
         applicationId "com.gputreats.orbitalexplorer"
         minSdkVersion 19
-        targetSdkVersion 34
-        // ALSO CHANGE IN ShaderObfuscator.java
-        versionCode 132
+        targetSdkVersion 36
+        versionCode 172
         // ALSO CHANGE IN assets/docs/about.html
-        versionName "1.3b"
+        versionName "1.7b"
     }
     android.compileOptions.sourceCompatibility 1.8
     android.compileOptions.targetCompatibility 1.8
@@ -26,6 +25,9 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'androidx.appcompat:appcompat:1.6.1' // 1.7.0+ requires minSdkVersion 21+
+    implementation 'androidx.preference:preference:1.2.1'
+    'androidx.coordinatorlayout:coordinatorlayout:1.3.0'
+    implementation 'com.google.android.material:material:1.12.0'
     implementation project(':math')
 }

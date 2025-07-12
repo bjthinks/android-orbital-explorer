@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <SwitchPreferenceCompat
+        android:key="prefUltraQuality"
+        android:title="@string/prefUltraQuality_Title"
+        android:summary="@string/prefUltraQuality_Summary"
+        android:defaultValue="false" />
+
+    <SwitchPreferenceCompat
+        android:key="prefShowAxes"
+        android:title="@string/prefAxes_Title"
+        android:summary="@string/prefAxes_Summary"
+        android:defaultValue="true" />
+
+    <ListPreference
+        android:key="prefColorBlind"
+        android:title="@string/prefColorBlind_Title"
+        android:summary="%s"
+        android:entries="@array/colorBlindOptions"
+        android:entryValues="@array/colorBlindValues"
+        android:defaultValue="0" />
+
+</PreferenceScreen>

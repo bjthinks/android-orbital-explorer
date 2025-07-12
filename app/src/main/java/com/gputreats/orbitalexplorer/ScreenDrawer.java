@@ -8,17 +8,21 @@ import android.util.Log;
 class ScreenDrawer extends RenderStage {
 
     private final AssetManager assets;
+    private final AppPreferences appPreferences;
 
     private Program programColor, programMono;
 
     ScreenDrawer(Context context) {
         assets = context.getAssets();
+        appPreferences = new AppPreferences(context);
     }
 
     void onSurfaceCreated() {
         MyGL.checkGLES();
-        programColor = new Program(assets, "6", "5");
-        programMono = new Program(assets, "8", "7");
+        programColor = new Program(assets,
+                "screendrawer_color.vert", "screendrawer_color.frag");
+        programMono = new Program(assets,
+                "screendrawer_mono.vert", "screendrawer_mono.frag");
     }
 
     private int inputWidth, inputHeight;
@@ -34,7 +38,7 @@ class ScreenDrawer extends RenderStage {
         height = newHeight;
     }
 
-    void render(OrbitalData orbitalData, Texture texture) {
+    void render(OrbitalData orbitalData, Texture texture, long millis) {
 
         MyGL.checkGLES();
 
@@ -56,10 +60,14 @@ class ScreenDrawer extends RenderStage {
         float[] rot = new float[4];
         int qN = orbitalData.getN();
         long period = (long) (qN * qN * 1000); // ms
-        double t = 2.0 * Math.PI * (double) (System.currentTimeMillis() % period) / (double) period;
+        double t = 2.0 * Math.PI * (double) (millis % period) / (double) period;
         rot[0] = (float) Math.cos(t);  rot[2] = (float) -Math.sin(t);
         rot[1] = (float) Math.sin(t);  rot[3] = (float) Math.cos(t);
         GLES30.glUniformMatrix2fv(program.getUniformLocation("colorRotation"), 1, false, rot, 0);
+
+        // Handle color blindness
+        GLES30.glUniform1i(program.getUniformLocation("colorBlindMode"),
+                appPreferences.getColorBlind());
 
         int inPositionHandle = program.getAttribLocation("inPosition");
         GLES30.glEnableVertexAttribArray(inPositionHandle);

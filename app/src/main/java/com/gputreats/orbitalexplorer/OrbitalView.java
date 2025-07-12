@@ -7,6 +7,11 @@ import android.os.Parcelable;
 import android.util.AttributeSet;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
+import androidx.annotation.NonNull;
+import static android.opengl.EGL14.EGL_OPENGL_ES2_BIT;
+import javax.microedition.khronos.egl.EGL10;
+import javax.microedition.khronos.egl.EGLConfig;
+import javax.microedition.khronos.egl.EGLDisplay;
 
 public class OrbitalView extends GLSurfaceView {
 
@@ -25,6 +30,11 @@ public class OrbitalView extends GLSurfaceView {
     }
 
     private void constructorSetup(Context context) {
+        // Ask for a multisampled framebuffer
+        // Note: Gemini suggests glDisable(GL_DITHER), but I don't see how it would have
+        // any positive effect since the only thing being multisampled is the axes.
+        setEGLConfigChooser(new MyEGLChooser());
+
         // Specify OpenGL ES version 3.0
         setEGLContextClientVersion(3);
 
@@ -57,9 +67,9 @@ public class OrbitalView extends GLSurfaceView {
         super.onRestoreInstanceState(bundle.getParcelable("superState"));
     }
 
-    void onOrbitalChanged(Orbital newOrbital) {
-        orbitalRenderer.onOrbitalChanged(newOrbital);
-        if (newOrbital.color)
+    void onOrbitalChanged(Orbital newOrbital, long freezeTime) {
+        orbitalRenderer.onOrbitalChanged(newOrbital, freezeTime);
+        if (newOrbital.color && freezeTime == 0)
             setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
         else {
             setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
@@ -208,19 +218,19 @@ public class OrbitalView extends GLSurfaceView {
     private class TapFlingListener extends GestureDetector.SimpleOnGestureListener {
 
         @Override
-        public boolean onDown(MotionEvent event) {
+        public boolean onDown(@NonNull MotionEvent event) {
             return true;
         }
 
         @Override
-        public boolean onSingleTapUp(MotionEvent event) {
+        public boolean onSingleTapUp(@NonNull MotionEvent event) {
             if (!stoppedFling && onSingleTapUp != null)
                 onSingleTapUp.run();
             return true;
         }
 
         @Override
-        public boolean onDoubleTap(MotionEvent event) {
+        public boolean onDoubleTap(@NonNull MotionEvent event) {
             camera.stopFling();
             camera.snapToAxis();
             requestRender();
@@ -228,7 +238,7 @@ public class OrbitalView extends GLSurfaceView {
         }
 
         @Override
-        public boolean onFling(MotionEvent event1, MotionEvent event2,
+        public boolean onFling(MotionEvent event1, @NonNull MotionEvent event2,
                                float velocityX, float velocityY) {
             double meanSize = Math.sqrt((double) (getWidth() * getHeight()));
             camera.fling((double) velocityX / meanSize, (double) velocityY / meanSize);
@@ -238,15 +248,54 @@ public class OrbitalView extends GLSurfaceView {
         }
     }
 
+    private static class MyEGLChooser implements EGLConfigChooser {
+        @Override
+        public EGLConfig chooseConfig(EGL10 egl10, EGLDisplay eglDisplay) {
+            EGLConfig msaa8 = chooseConfigWithMSAA(egl10, eglDisplay, 8);
+            if (msaa8 != null)
+                return msaa8;
+
+            EGLConfig msaa4 = chooseConfigWithMSAA(egl10, eglDisplay, 4);
+            if (msaa4 != null)
+                return msaa4;
+
+            EGLConfig msaa2 = chooseConfigWithMSAA(egl10, eglDisplay, 2);
+            if (msaa2 != null)
+                return msaa2;
+
+            return chooseConfigWithMSAA(egl10, eglDisplay, 1);
+        }
+
+        public EGLConfig chooseConfigWithMSAA(EGL10 egl10, EGLDisplay eglDisplay, int msaa) {
+            int[] attribs = {
+                    EGL10.EGL_RED_SIZE, 1,
+                    EGL10.EGL_GREEN_SIZE, 1,
+                    EGL10.EGL_BLUE_SIZE, 1,
+                    EGL10.EGL_SAMPLE_BUFFERS, msaa > 0 ? 1 : 0,
+                    EGL10.EGL_SAMPLES, msaa > 1 ? msaa : 0,
+                    EGL10.EGL_RENDERABLE_TYPE, EGL_OPENGL_ES2_BIT,
+                    EGL10.EGL_NONE
+            };
+
+            EGLConfig[] configs = new EGLConfig[1];
+            int[] numConfigs = new int[1];
+            if (!egl10.eglChooseConfig(eglDisplay, attribs, configs, 1, numConfigs))
+                return null;
+            if (numConfigs[0] > 0)
+                return configs[0];
+            return null;
+        }
+    }
+
     // Render thread calls this function
 
-    float[] getInverseTransform(double aspectRatio) {
+    float[] getTransform(double aspectRatio) {
         // Camera is a thread-safe class
         boolean stillFlinging = camera.continueFling();
         if (stillFlinging)
             requestRender();
         // In between these two camera function calls, we hold no lock, so another
         // thread can change the camera. This is ok.
-        return camera.computeInverseShaderTransform(aspectRatio);
+        return camera.computeShaderTransform(aspectRatio);
     }
 }

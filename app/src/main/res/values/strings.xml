@@ -4,8 +4,9 @@
     <string name="apologySubtext">OpenGL ES 3.0 is required.</string>
 
     <string name="menuFullscreen">Fullscreen</string>
-    <string name="menuStore">Rate this</string>
     <string name="menuAbout">About</string>
+    <string name="menuSettings">Settings</string>
+    <string name="menuStore">Feedback</string>
     <string name="menuHelp">Help</string>
 
     <string name="askStore">View this app on the Google Play Store?"</string>
@@ -20,5 +21,12 @@
     <string name="up">Up</string>
     <string name="down">Down</string>
     <string name="colormono">Color / Mono</string>
+    <string name="pause">Pause</string>
     <string name="error">Big exclamation point</string>
+
+    <string name="prefUltraQuality_Title">Ultra quality rendering</string>
+    <string name="prefUltraQuality_Summary">Slow on older devices</string>
+    <string name="prefAxes_Title">Show axes</string>
+    <string name="prefAxes_Summary">Red x-axis, green y-axis, blue z-axis</string>
+    <string name="prefColorBlind_Title">Color blind mode</string>
 </resources>

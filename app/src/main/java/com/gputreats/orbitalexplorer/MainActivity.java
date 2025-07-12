@@ -6,9 +6,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ConfigurationInfo;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsCompat;
+import androidx.core.view.WindowInsetsControllerCompat;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
     private OrbitalSelector orbitalSelector;
     private OrbitalView orbitalView;
     private boolean fullScreenMode;
+    private WindowInsetsControllerCompat windowInsetsController;
 
     //
     // STARTUP -- CHECK OPENGL ES 3.0
@@ -61,9 +66,15 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
         decorView = getWindow().getDecorView();
-        toolbar = findViewById(R.id.toolbar);
-        orbitalSelector = findViewById(R.id.orbitalselector);
+        toolbar = findViewById(R.id.orbital_toolbar);
+        orbitalSelector = findViewById(R.id.orbital_selector);
         orbitalView = findViewById(R.id.orbitalview);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
+            // Handle insets on Android 15+
+            View view = findViewById(R.id.orbital_tools);
+            view.setOnApplyWindowInsetsListener(new InsetsMain());
+        }
+        windowInsetsController = WindowCompat.getInsetsController(getWindow(), decorView);
 
         orbitalView.setOnSingleTapUp(() -> setFullscreen(false));
 
@@ -122,7 +133,12 @@ public class MainActivity extends AppCompatActivity {
 
     private void setFullscreen(boolean f) {
         if (f) {
-            decorView.setSystemUiVisibility(
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
+                // Hide the system bars
+                windowInsetsController.hide(WindowInsetsCompat.Type.systemBars());
+            } else
+                // These are the flags needed on android 14-
+                decorView.setSystemUiVisibility(
                     View.SYSTEM_UI_FLAG_LAYOUT_STABLE |
                     View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION |
                     View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN |
@@ -132,11 +148,15 @@ public class MainActivity extends AppCompatActivity {
             toolbar.setVisibility(View.INVISIBLE);
             orbitalSelector.setVisibility(View.INVISIBLE);
         } else {
-            decorView.setSystemUiVisibility(
-                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE |
-                    View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION |
-                    View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-            );
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
+                // Show the system bars
+                windowInsetsController.show(WindowInsetsCompat.Type.systemBars());
+            } else
+                // These are the flags needed on android 14-
+                decorView.setSystemUiVisibility(
+                        View.SYSTEM_UI_FLAG_LAYOUT_STABLE |
+                        View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION |
+                        View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
             toolbar.setVisibility(View.VISIBLE);
             orbitalSelector.setVisibility(View.VISIBLE);
         }
@@ -161,20 +181,24 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
         if (id == R.id.menuFullscreen)
             setFullscreen(true);
-        else if (id == R.id.menuStore) {
-            DialogFragment confirm = new StoreConfirm();
-            confirm.show(getFragmentManager(), "StoreConfirm");
-        } else if (id == R.id.menuAbout) {
+        else if (id == R.id.menuAbout) {
             intent = new Intent(this, HelpActivity.class);
             intent.putExtra("url", "file:///android_asset/docs/about.html");
             intent.putExtra("url-v19", "file:///android_asset/docs/about.html");
             intent.putExtra("title", getString(R.string.menuAbout));
             startActivity(intent);
+        } else if (id == R.id.menuSettings) {
+            intent = new Intent(this, SettingsActivity.class);
+            startActivity(intent);
+        } else if (id == R.id.menuStore) {
+            DialogFragment confirm = new StoreConfirm();
+            confirm.show(getFragmentManager(), "StoreConfirm");
         } else if (id == R.id.menuHelp) {
             intent = new Intent(this, HelpActivity.class);
             intent.putExtra("url", "file:///android_asset/docs/help.html");
             intent.putExtra("url-v19", "file:///android_asset/docs/help-v19.html");
             intent.putExtra("title", getString(R.string.menuHelp));
+            intent.putExtra("scrollToolbar", true);
             startActivity(intent);
         } else
             return super.onOptionsItemSelected(item);

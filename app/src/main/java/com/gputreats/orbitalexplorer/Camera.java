@@ -87,8 +87,9 @@ class Camera implements Parcelable {
     };
 
     private static final double MIN_CAMERA_DISTANCE = 1.5;
-    private static final double MAX_CAMERA_DISTANCE = 280.0;
-    private static final double INITIAL_CAMERA_DISTANCE = 60.0;
+    private static final double MAX_CAMERA_DISTANCE =
+            1.575 * MaximumRadiusTable.getMaximumRadius(BaseOrbital.MAX_N, 0);
+    private static final double INITIAL_CAMERA_DISTANCE = 70.0;
 
     private double cameraDistance = INITIAL_CAMERA_DISTANCE;
 
@@ -111,7 +112,12 @@ class Camera implements Parcelable {
         return new Quaternion(c, v.normalize().multiply(s));
     }
 
-    private static final Quaternion INITIAL_ROTATION = rotation(Math.PI / 2.0, X_HAT);
+    private static final Quaternion INITIAL_ROTATION =
+            rotation(Math.PI / 2.0, X_HAT)
+                    .multiply(rotation(Math.PI, Y_HAT))
+                    .multiply(rotation(-0.75 * Math.PI, Z_HAT))
+                    .multiply(rotation(Math.PI / 6.0,
+                            new Vector3(-1.0, 1.0, 0.0)));
 
     private Quaternion totalRotation = INITIAL_ROTATION;
 
@@ -200,10 +206,10 @@ class Camera implements Parcelable {
             totalRotation = ALIGNED_ROTATIONS[best];
     }
 
-    synchronized float[] computeInverseShaderTransform(double aspectRatio) {
+    synchronized float[] computeShaderTransform(double aspectRatio) {
         float ratio = (float) Math.sqrt(aspectRatio);
-        float near = (float) cameraDistance;
-        float far = (float) (cameraDistance + 1.0);
+        float near = (float) (cameraDistance * 0.1);
+        float far = (float) (cameraDistance * 2.0);
         float leftRight = near * ratio;
         float bottomTop = near / ratio;
         float[] projectionMatrix = new float[16];
@@ -224,11 +230,6 @@ class Camera implements Parcelable {
         float[] shaderTransform = new float[16];
         Matrix.multiplyMM(shaderTransform, 0, viewProjMatrix, 0, cameraRotation, 0);
 
-        // Samsung Galaxy S5 can't invert 4x4 matrices correctly in the OpenGL driver,
-        // so we make the CPU do the inverse instead.
-        float[] inverseTransform = new float[16];
-        Matrix.invertM(inverseTransform, 0, shaderTransform, 0);
-
-        return inverseTransform;
+        return shaderTransform;
     }
 }

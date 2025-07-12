@@ -3,6 +3,7 @@ package com.gputreats.orbitalexplorer;
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.opengl.GLES30;
+import android.util.Log;
 
 class OrbitalData {
 
@@ -20,8 +21,9 @@ class OrbitalData {
     private float fInverseQuadratureStepSize;
     private float fInverseRadialStepSize;
     private float fM;
+    private float fRadialScaleFactor;
     private float fRadialExponent;
-    private float fRadialPower;
+    private float fFactorPower;
     private int iAzimuthalSteps;
     private int iOrder;
     private int iQuadratureSteps;
@@ -83,13 +85,42 @@ class OrbitalData {
             fInverseQuadratureStepSize = (float) quadratureSteps / quadratureRadius;
             fInverseRadialStepSize = (float) radialTextureSize / maximumRadius;
             fM = (float) orbital.qM;
-            // Multiply by 2 because the wave function is squared
-            fRadialExponent = (float) (2.0 * radialFunction.getExponentialConstant());
-            fRadialPower = (float) (2 * radialFunction.getPowerOfR());
+            fRadialScaleFactor = (float) radialFunction.getRadialScaleFactor();
+            fFactorPower = (float) radialFunction.getPowerOfR();
+            if (fFactorPower == 0.0)
+                fRadialExponent = (float) radialFunction.getExponentialConstant();
+            else
+                fRadialExponent = (float) radialFunction.getExponentialConstant() /
+                        (float) radialFunction.getPowerOfR();
             iAzimuthalSteps = azimuthalTextureSize;
             iOrder = order;
             iQuadratureSteps = quadratureSteps;
             iRadialSteps = radialTextureSize;
+
+            if (BuildConfig.DEBUG) {
+                Log.d("Rad", "---");
+                Log.d("Rad", "Constant factors = " +
+                        radialFunction.getConstantFactors());
+                Log.d("Rad", "Radial scale factor = " +
+                        radialFunction.getRadialScaleFactor());
+                Log.d("Rad", "Exponential constant = " +
+                        radialFunction.getExponentialConstant());
+                Log.d("Rad", "Power of r = " +
+                        radialFunction.getPowerOfR());
+                int m = 0;
+                int rts = radialTextureSize * 2;
+                for (int i = 0; i < rts; ++i)
+                    if (Math.abs(radialData[i]) > Math.abs(radialData[m]))
+                        m = i;
+                Log.d("Rad", "Radial texture maximum value = " + m + " " + radialData[m]);
+                Log.d("Rad", "Radial texture: " + radialData[rts / 8] + " "
+                        + radialData[3 * rts / 8] + " " + radialData[5 * rts / 8] + " "
+                        + radialData[7 * rts / 8]);
+                Log.d("Rad", "Radial texture function: "
+                        + radialFunction.getOscillatingPart().toString());
+                Log.d("Rad", "Maximum radius = " +
+                        radialFunction.getMaximumRadius());
+            }
         }
     }
 
@@ -112,8 +143,9 @@ class OrbitalData {
         program.setUniform1f("fInverseQuadratureStepSize", fInverseQuadratureStepSize);
         program.setUniform1f("fInverseRadialStepSize", fInverseRadialStepSize);
         program.setUniform1f("fM", fM);
+        program.setUniform1f("fRadialScaleFactor", fRadialScaleFactor);
         program.setUniform1f("fRadialExponent", fRadialExponent);
-        program.setUniform1f("fRadialPower", fRadialPower);
+        program.setUniform1f("fFactorPower", fFactorPower);
         program.setUniform1i("iAzimuthalSteps", iAzimuthalSteps);
         program.setUniform1i("iOrder", iOrder);
         program.setUniform1i("iQuadratureSteps", iQuadratureSteps);

@@ -139,7 +139,7 @@ class Polynomial implements Function {
         return result;
     }
 
-    /* @Override
+    @Override
     public String toString() {
         String result = "";
         for (int d = c.length - 1; d >= 0; --d)
@@ -155,7 +155,7 @@ class Polynomial implements Function {
         return result;
     }
 
-    public static void test() {
+    /* public static void test() {
         String TAG = "Polynomial";
         Log.d(TAG, "Testing");
         TAG += " FAIL";
