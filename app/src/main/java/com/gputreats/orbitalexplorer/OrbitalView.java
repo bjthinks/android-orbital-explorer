@@ -251,10 +251,6 @@ public class OrbitalView extends GLSurfaceView {
     private static class MyEGLChooser implements EGLConfigChooser {
         @Override
         public EGLConfig chooseConfig(EGL10 egl10, EGLDisplay eglDisplay) {
-            EGLConfig msaa8 = chooseConfigWithMSAA(egl10, eglDisplay, 8);
-            if (msaa8 != null)
-                return msaa8;
-
             EGLConfig msaa4 = chooseConfigWithMSAA(egl10, eglDisplay, 4);
             if (msaa4 != null)
                 return msaa4;
