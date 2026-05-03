@@ -7,6 +7,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
 import androidx.core.content.ContextCompat;
+import androidx.core.os.BundleCompat;
 import android.text.Html;
 import android.text.Spanned;
 import android.util.AttributeSet;
@@ -157,7 +158,8 @@ public class OrbitalSelector extends LinearLayout {
     @Override
     public void onRestoreInstanceState(Parcelable state) {
         Bundle bundle = (Bundle) state;
-        super.onRestoreInstanceState(bundle.getParcelable("superState"));
+        super.onRestoreInstanceState(BundleCompat.getParcelable(bundle, "superState",
+                Parcelable.class));
         qN = bundle.getInt("qN");
         qL = bundle.getInt("qL");
         qM = bundle.getInt("qM");

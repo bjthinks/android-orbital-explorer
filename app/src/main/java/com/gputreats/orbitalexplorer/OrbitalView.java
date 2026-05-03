@@ -8,6 +8,7 @@ import android.util.AttributeSet;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import androidx.annotation.NonNull;
+import androidx.core.os.BundleCompat;
 import static android.opengl.EGL14.EGL_OPENGL_ES2_BIT;
 import javax.microedition.khronos.egl.EGL10;
 import javax.microedition.khronos.egl.EGLConfig;
@@ -63,8 +64,9 @@ public class OrbitalView extends GLSurfaceView {
     @Override
     public void onRestoreInstanceState(Parcelable state) {
         Bundle bundle = (Bundle) state;
-        camera = bundle.getParcelable("camera");
-        super.onRestoreInstanceState(bundle.getParcelable("superState"));
+        camera = BundleCompat.getParcelable(bundle, "camera", Camera.class);
+        super.onRestoreInstanceState(BundleCompat.getParcelable(bundle, "superState",
+                Parcelable.class));
     }
 
     void onOrbitalChanged(Orbital newOrbital, long freezeTime) {
