@@ -267,7 +267,7 @@ public class OrbitalView extends GLSurfaceView {
                     EGL10.EGL_RED_SIZE, 1,
                     EGL10.EGL_GREEN_SIZE, 1,
                     EGL10.EGL_BLUE_SIZE, 1,
-                    EGL10.EGL_SAMPLE_BUFFERS, msaa > 0 ? 1 : 0,
+                    EGL10.EGL_SAMPLE_BUFFERS, msaa > 1 ? 1 : 0,
                     EGL10.EGL_SAMPLES, msaa > 1 ? msaa : 0,
                     EGL10.EGL_RENDERABLE_TYPE, EGL_OPENGL_ES2_BIT,
                     EGL10.EGL_NONE
