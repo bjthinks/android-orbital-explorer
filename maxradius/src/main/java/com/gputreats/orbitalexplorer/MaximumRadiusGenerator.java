@@ -28,8 +28,10 @@ enum MaximumRadiusGenerator {
         CodePrinter codePrinter = new CodePrinter(filename);
         codePrinter.printPreface();
         for (int qN = 0; qN <= BaseOrbital.MAX_N; ++qN) {
-            for (int qL = 0; qL < qN; ++qL)
+            for (int qL = 0; qL < qN; ++qL) {
+                System.out.println("N = " + qN + " L = " + qL);
                 codePrinter.printNumber(computeRadius(qN, qL));
+            }
             if (qN < BaseOrbital.MAX_N)
                 codePrinter.printSeparator();
         }
