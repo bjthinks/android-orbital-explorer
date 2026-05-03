@@ -3,6 +3,7 @@ package com.gputreats.orbitalexplorer;
 import android.content.Context;
 import android.content.SharedPreferences;
 import androidx.preference.PreferenceManager;
+import java.util.Objects;
 
 public class AppPreferences
         implements SharedPreferences.OnSharedPreferenceChangeListener {
@@ -33,11 +34,13 @@ public class AppPreferences
 
     @Override
     public synchronized void onSharedPreferenceChanged(SharedPreferences preferences, String key) {
-        if (key.equals("prefUltraQuality"))
-            ultraQuality = preferences.getBoolean("prefUltraQuality", false);
-        else if (key.equals("prefShowAxes"))
-            showAxes = preferences.getBoolean("prefShowAxes", true);
-        else if (key.equals("prefColorBlind"))
-            colorBlind = Integer.parseInt(preferences.getString("prefColorBlind", "0"));
+        switch (Objects.requireNonNull(key)) {
+            case "prefUltraQuality" ->
+                    ultraQuality = preferences.getBoolean("prefUltraQuality", false);
+            case "prefShowAxes" ->
+                    showAxes = preferences.getBoolean("prefShowAxes", true);
+            case "prefColorBlind" ->
+                    colorBlind = Integer.parseInt(preferences.getString("prefColorBlind", "0"));
+        }
     }
 }

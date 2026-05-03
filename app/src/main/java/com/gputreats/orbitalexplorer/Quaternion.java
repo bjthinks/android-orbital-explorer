@@ -19,7 +19,7 @@ class Quaternion implements Parcelable {
     }
 
     public static final Parcelable.Creator<Quaternion> CREATOR
-            = new Parcelable.Creator<Quaternion>() {
+            = new Parcelable.Creator<>() {
         @Override
         public Quaternion createFromParcel(Parcel source) {
             return new Quaternion(

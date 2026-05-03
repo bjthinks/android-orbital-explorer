@@ -24,7 +24,7 @@ class Orbital extends BaseOrbital implements Parcelable {
     }
 
     public static final Parcelable.Creator<Orbital> CREATOR
-            = new Parcelable.Creator<Orbital>() {
+            = new Parcelable.Creator<>() {
         @Override
         public Orbital createFromParcel(Parcel source) {
             return new Orbital(

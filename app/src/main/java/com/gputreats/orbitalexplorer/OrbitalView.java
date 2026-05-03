@@ -166,11 +166,11 @@ public class OrbitalView extends GLSurfaceView {
 
         int pointerIndex = event.findPointerIndex(firstPointerID);
 
-        double x = (double) event.getX(pointerIndex);
-        double y = (double) event.getY(pointerIndex);
+        double x = event.getX(pointerIndex);
+        double y = event.getY(pointerIndex);
 
         if (actionable) {
-            double meanSize = Math.sqrt((double) (getWidth() * getHeight()));
+            double meanSize = Math.sqrt(getWidth() * getHeight());
             double dx = (x - previousX) / meanSize;
             double dy = (y - previousY) / meanSize;
             camera.drag(dx, dy);
@@ -189,10 +189,10 @@ public class OrbitalView extends GLSurfaceView {
         int firstPointerIndex  = event.findPointerIndex(firstPointerID);
         int secondPointerIndex = event.findPointerIndex(secondPointerID);
 
-        double x1 = (double) event.getX(firstPointerIndex);
-        double y1 = (double) event.getY(firstPointerIndex);
-        double x2 = (double) event.getX(secondPointerIndex);
-        double y2 = (double) event.getY(secondPointerIndex);
+        double x1 = event.getX(firstPointerIndex);
+        double y1 = event.getY(firstPointerIndex);
+        double x2 = event.getX(secondPointerIndex);
+        double y2 = event.getY(secondPointerIndex);
 
         double angle = Math.atan2(y2 - y1, x2 - x1);
         double distance = Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
@@ -242,7 +242,7 @@ public class OrbitalView extends GLSurfaceView {
         @Override
         public boolean onFling(MotionEvent event1, @NonNull MotionEvent event2,
                                float velocityX, float velocityY) {
-            double meanSize = Math.sqrt((double) (getWidth() * getHeight()));
+            double meanSize = Math.sqrt(getWidth() * getHeight());
             camera.fling((double) velocityX / meanSize, (double) velocityY / meanSize);
             requestRender();
 

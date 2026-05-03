@@ -62,13 +62,13 @@ class OrbitalData {
             // Calculate radius info
             float quadratureRadius = (float) radialFunction.getMaximumRadius();
             float maxLateral = quadratureData[quadratureData.length - 2];
-            float maximumRadius = (float) Math.sqrt((double) (quadratureRadius * quadratureRadius
-                    + maxLateral * maxLateral));
+            float maximumRadius = (float) Math.sqrt(quadratureRadius * quadratureRadius
+                    + maxLateral * maxLateral);
 
             // Load new radial texture
             final int radialTextureSize = 1024;
             float[] radialData = functionToBuffer2(radialFunction.getOscillatingPart(),
-                    0.0, (double) maximumRadius, radialTextureSize);
+                    0.0, maximumRadius, radialTextureSize);
             radialTexture.bindToTexture2DAndSetImage(radialTextureSize, 1, radialData);
 
             // Load new azimuthal texture

@@ -59,7 +59,7 @@ class ScreenDrawer extends RenderStage {
 
         float[] rot = new float[4];
         int qN = orbitalData.getN();
-        long period = (long) (qN * qN * 1000); // ms
+        long period = (long) qN * qN * 1000; // ms
         double t = 2.0 * Math.PI * (double) (millis % period) / (double) period;
         rot[0] = (float) Math.cos(t);  rot[2] = (float) -Math.sin(t);
         rot[1] = (float) Math.sin(t);  rot[3] = (float) Math.cos(t);
