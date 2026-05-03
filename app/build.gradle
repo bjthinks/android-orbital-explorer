@@ -11,8 +11,8 @@ android {
         // ALSO CHANGE IN assets/docs/about.html
         versionName "1.7b"
     }
-    android.compileOptions.sourceCompatibility 1.8
-    android.compileOptions.targetCompatibility 1.8
+    android.compileOptions.sourceCompatibility JavaVersion.VERSION_1_9
+    android.compileOptions.targetCompatibility JavaVersion.VERSION_1_9
     buildTypes {
         release {
             minifyEnabled true
