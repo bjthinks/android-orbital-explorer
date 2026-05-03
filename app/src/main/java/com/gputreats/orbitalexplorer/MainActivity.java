@@ -1,7 +1,7 @@
 package com.gputreats.orbitalexplorer;
 
 import android.app.ActivityManager;
-import android.app.DialogFragment;
+import androidx.fragment.app.DialogFragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ConfigurationInfo;
@@ -192,7 +192,7 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         } else if (id == R.id.menuStore) {
             DialogFragment confirm = new StoreConfirm();
-            confirm.show(getFragmentManager(), "StoreConfirm");
+            confirm.show(getSupportFragmentManager(), "StoreConfirm");
         } else if (id == R.id.menuHelp) {
             intent = new Intent(this, HelpActivity.class);
             intent.putExtra("url", "file:///android_asset/docs/help.html");
