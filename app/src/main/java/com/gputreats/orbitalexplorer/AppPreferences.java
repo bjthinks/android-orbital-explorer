@@ -2,7 +2,7 @@ package com.gputreats.orbitalexplorer;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
+import androidx.preference.PreferenceManager;
 
 public class AppPreferences
         implements SharedPreferences.OnSharedPreferenceChangeListener {
