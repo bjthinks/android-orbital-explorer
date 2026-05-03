@@ -72,18 +72,22 @@ class Camera implements Parcelable {
         dest.writeParcelable(totalRotation, flags);
     }
 
+    @SuppressWarnings("deprecation")
+    private static Quaternion readQuaternion(Parcel source) {
+        return source.readParcelable(Quaternion.class.getClassLoader());
+    }
+
     public static final Parcelable.Creator<Camera> CREATOR
             = new Parcelable.Creator<Camera>() {
         @Override
         public Camera createFromParcel(Parcel source) {
             Camera c = new Camera();
             c.cameraDistance = source.readDouble();
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
                 c.totalRotation = source.readParcelable(Quaternion.class.getClassLoader(),
                         Quaternion.class);
-            } else {
-                c.totalRotation = source.readParcelable(Quaternion.class.getClassLoader());
-            }
+            else
+                c.totalRotation = readQuaternion(source);
             return c;
         }
         @Override
