@@ -1,6 +1,7 @@
 package com.gputreats.orbitalexplorer;
 
 import android.opengl.Matrix;
+import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -77,7 +78,12 @@ class Camera implements Parcelable {
         public Camera createFromParcel(Parcel source) {
             Camera c = new Camera();
             c.cameraDistance = source.readDouble();
-            c.totalRotation = source.readParcelable(Quaternion.class.getClassLoader());
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                c.totalRotation = source.readParcelable(Quaternion.class.getClassLoader(),
+                        Quaternion.class);
+            } else {
+                c.totalRotation = source.readParcelable(Quaternion.class.getClassLoader());
+            }
             return c;
         }
         @Override
