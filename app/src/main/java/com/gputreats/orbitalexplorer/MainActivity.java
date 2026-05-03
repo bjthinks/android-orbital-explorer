@@ -1,6 +1,9 @@
 package com.gputreats.orbitalexplorer;
 
 import android.app.ActivityManager;
+import androidx.activity.EdgeToEdge;
+import androidx.activity.SystemBarStyle;
+import androidx.core.view.ViewCompat;
 import androidx.fragment.app.DialogFragment;
 import android.content.Context;
 import android.content.Intent;
@@ -64,6 +67,12 @@ public class MainActivity extends AppCompatActivity {
         // inflate an OrbitalView, which will ask its context (i.e. this object) for
         // the renderState.
 
+        // Enable edge-to-edge with a dark style (white foreground color)
+        EdgeToEdge.enable(this,
+                SystemBarStyle.dark(android.graphics.Color.TRANSPARENT), // Status bar
+                SystemBarStyle.dark(android.graphics.Color.TRANSPARENT)  // Nav bar
+        );
+
         setContentView(R.layout.activity_main);
         decorView = getWindow().getDecorView();
         toolbar = findViewById(R.id.orbital_toolbar);
@@ -78,7 +87,8 @@ public class MainActivity extends AppCompatActivity {
 
         orbitalView.setOnSingleTapUp(() -> setFullscreen(false));
 
-        decorView.setOnSystemUiVisibilityChangeListener((int flags) -> {
+        ViewCompat.setOnApplyWindowInsetsListener(decorView, (v, insets) -> {
+            boolean isVisible = insets.isVisible(WindowInsetsCompat.Type.systemBars());
             // If we're in fullscreen mode and the decor has been shown, get the user out
             // of fullscreen mode. This tends to happen in two different ways:
             // (1) Swipe down from top, the built-in way to exit immersive fullscreen.
@@ -90,8 +100,9 @@ public class MainActivity extends AppCompatActivity {
             //     framework bug, it also causes the fullscreen state of the UI to get
             //     into an inconsistent state. The best we can do is to follow along and
             //     also show the app controls.
-            if (fullScreenMode && (flags & View.SYSTEM_UI_FLAG_FULLSCREEN) == 0)
+            if (fullScreenMode && isVisible)
                 setFullscreen(false);
+            return ViewCompat.onApplyWindowInsets(v, insets);
         });
 
         setSupportActionBar(toolbar);
@@ -133,30 +144,15 @@ public class MainActivity extends AppCompatActivity {
 
     private void setFullscreen(boolean f) {
         if (f) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
-                // Hide the system bars
-                windowInsetsController.hide(WindowInsetsCompat.Type.systemBars());
-            } else
-                // These are the flags needed on android 14-
-                decorView.setSystemUiVisibility(
-                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE |
-                    View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION |
-                    View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN |
-                    View.SYSTEM_UI_FLAG_FULLSCREEN |
-                    View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
-                    View.SYSTEM_UI_FLAG_IMMERSIVE);
+            // Gemini says use the controller for all API versions
+            windowInsetsController.hide(WindowInsetsCompat.Type.systemBars());
+            windowInsetsController.setSystemBarsBehavior(
+                    WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE);
+
             toolbar.setVisibility(View.INVISIBLE);
             orbitalSelector.setVisibility(View.INVISIBLE);
         } else {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
-                // Show the system bars
-                windowInsetsController.show(WindowInsetsCompat.Type.systemBars());
-            } else
-                // These are the flags needed on android 14-
-                decorView.setSystemUiVisibility(
-                        View.SYSTEM_UI_FLAG_LAYOUT_STABLE |
-                        View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION |
-                        View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+            windowInsetsController.show(WindowInsetsCompat.Type.systemBars());
             toolbar.setVisibility(View.VISIBLE);
             orbitalSelector.setVisibility(View.VISIBLE);
         }
