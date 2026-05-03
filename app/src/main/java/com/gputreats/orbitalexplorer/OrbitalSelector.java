@@ -8,7 +8,7 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import androidx.core.content.ContextCompat;
 import androidx.core.os.BundleCompat;
-import android.text.Html;
+import androidx.core.text.HtmlCompat;
 import android.text.Spanned;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -453,13 +453,7 @@ public class OrbitalSelector extends LinearLayout {
                 name += Integer.toString(qL);
         }
         name += "<sub>" + subscript + "</sub>";
-        Spanned formattedName;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            formattedName = Html.fromHtml(name, Html.FROM_HTML_MODE_LEGACY);
-        } else {
-            //noinspection deprecation
-            formattedName = Html.fromHtml(name);
-        }
+        Spanned formattedName = HtmlCompat.fromHtml(name, HtmlCompat.FROM_HTML_MODE_LEGACY);
         orbitalName.setText(formattedName);
     }
 
