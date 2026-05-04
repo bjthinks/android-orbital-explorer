@@ -3,6 +3,7 @@ package com.gputreats.orbitalexplorer;
 import android.opengl.Matrix;
 import android.os.Parcel;
 import android.os.Parcelable;
+import androidx.core.os.ParcelCompat;
 
 class Camera implements Parcelable {
 
@@ -72,12 +73,13 @@ class Camera implements Parcelable {
     }
 
     public static final Parcelable.Creator<Camera> CREATOR
-            = new Parcelable.Creator<Camera>() {
+            = new Parcelable.Creator<>() {
         @Override
         public Camera createFromParcel(Parcel source) {
             Camera c = new Camera();
             c.cameraDistance = source.readDouble();
-            c.totalRotation = source.readParcelable(Quaternion.class.getClassLoader());
+            c.totalRotation = ParcelCompat.readParcelable(source, Quaternion.class.getClassLoader(),
+                    Quaternion.class);
             return c;
         }
         @Override
@@ -124,9 +126,9 @@ class Camera implements Parcelable {
     // One finger drag by an increment of (x,y) pixels
     // x and y are multiples of the (mean) screen size
     synchronized void drag(double x, double y) {
-        // Finger moves right --> positive rotation about y axis
+        // Finger moves right --> positive rotation about y-axis
         Quaternion yRotation = rotation(Math.PI * x, Y_HAT);
-        // Finger moves up --> negative rotation about x axis
+        // Finger moves up --> negative rotation about x-axis
         Quaternion xRotation = rotation(-Math.PI * y, X_HAT);
         // total = normalize(x_rot * y_rot * total)
         totalRotation = xRotation.multiply(yRotation).multiply(totalRotation);

@@ -3,6 +3,7 @@ package com.gputreats.orbitalexplorer;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import androidx.annotation.NonNull;
 import androidx.core.app.NavUtils;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -61,6 +62,7 @@ public class HelpActivity extends AppCompatActivity {
                             ? "url" : "url-v19");
                 else
                     url = "file:///android_asset/docs/help.html";
+                assert url != null;
                 webview.loadUrl(url);
             }
         }
@@ -81,7 +83,7 @@ public class HelpActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         webview.saveState(outState);
     }

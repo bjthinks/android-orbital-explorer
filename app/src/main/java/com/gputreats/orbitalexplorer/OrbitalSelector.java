@@ -7,7 +7,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
 import androidx.core.content.ContextCompat;
-import android.text.Html;
+import androidx.core.os.BundleCompat;
+import androidx.core.text.HtmlCompat;
 import android.text.Spanned;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -49,13 +50,13 @@ public class OrbitalSelector extends LinearLayout {
         constructorSetup(context);
     }
 
-    public OrbitalSelector(Context context, AttributeSet attribs) {
-        super(context, attribs);
+    public OrbitalSelector(Context context, AttributeSet attrs) {
+        super(context, attrs);
         constructorSetup(context);
     }
 
-    public OrbitalSelector(Context context, AttributeSet attribs, int defStyle) {
-        super(context, attribs, defStyle);
+    public OrbitalSelector(Context context, AttributeSet attrs, int defStyle) {
+        super(context, attrs, defStyle);
         constructorSetup(context);
     }
 
@@ -67,7 +68,7 @@ public class OrbitalSelector extends LinearLayout {
             realNumbers = context.getString(R.string.realNumbers);
             complexNumbers = context.getString(R.string.complexNumbers);
         } else {
-            // The unicode glyphs appear to be missing pre-Lollipop
+            // The Unicode glyphs appear to be missing pre-Lollipop
             realNumbers = "R";
             complexNumbers = "C";
         }
@@ -157,7 +158,8 @@ public class OrbitalSelector extends LinearLayout {
     @Override
     public void onRestoreInstanceState(Parcelable state) {
         Bundle bundle = (Bundle) state;
-        super.onRestoreInstanceState(bundle.getParcelable("superState"));
+        super.onRestoreInstanceState(BundleCompat.getParcelable(bundle, "superState",
+                Parcelable.class));
         qN = bundle.getInt("qN");
         qL = bundle.getInt("qL");
         qM = bundle.getInt("qM");
@@ -329,101 +331,57 @@ public class OrbitalSelector extends LinearLayout {
             case 1:
                 name += "p";
                 if (real) {
-                    switch (qM) {
-                        case -1:
-                            subscript = "y";
-                            break;
-                        case 0:
-                            subscript = "z";
-                            break;
-                        case 1:
-                            subscript = "x";
-                            break;
-                    }
+                    subscript = switch (qM) {
+                        case -1 -> "y";
+                        case 0 -> "z";
+                        case 1 -> "x";
+                        default -> subscript;
+                    };
                 }
                 break;
             case 2:
                 name += "d";
                 if (real) {
-                    switch (qM) {
-                        case -2:
-                            subscript = "xy";
-                            break;
-                        case -1:
-                            subscript = "yz";
-                            break;
-                        case 0:
-                            subscript = 'z' + ss(2);
-                            break;
-                        case 1:
-                            subscript = "xz";
-                            break;
-                        case 2:
-                            subscript = 'x' + ss(2) + "-y" + ss(2);
-                            break;
-                    }
+                    subscript = switch (qM) {
+                        case -2 -> "xy";
+                        case -1 -> "yz";
+                        case 0 -> 'z' + ss(2);
+                        case 1 -> "xz";
+                        case 2 -> 'x' + ss(2) + "-y" + ss(2);
+                        default -> subscript;
+                    };
                 }
                 break;
             case 3:
                 name += "f";
                 if (real) {
-                    switch (qM) {
-                        case -3:
-                            subscript = "y(3x" + ss(2) + "-y" + ss(2) + ')';
-                            break;
-                        case -2:
-                            subscript = "xyz";
-                            break;
-                        case -1:
-                            subscript = "yz" + ss(2);
-                            break;
-                        case 0:
-                            subscript = 'z' + ss(3);
-                            break;
-                        case 1:
-                            subscript = "xz" + ss(2);
-                            break;
-                        case 2:
-                            subscript = "z(x" + ss(2) + "-y" + ss(2) + ')';
-                            break;
-                        case 3:
-                            subscript = "x(x" + ss(2) + "-3y" + ss(2) + ')';
-                            break;
-                    }
+                    subscript = switch (qM) {
+                        case -3 -> "y(3x" + ss(2) + "-y" + ss(2) + ')';
+                        case -2 -> "xyz";
+                        case -1 -> "yz" + ss(2);
+                        case 0 -> 'z' + ss(3);
+                        case 1 -> "xz" + ss(2);
+                        case 2 -> "z(x" + ss(2) + "-y" + ss(2) + ')';
+                        case 3 -> "x(x" + ss(2) + "-3y" + ss(2) + ')';
+                        default -> subscript;
+                    };
                 }
                 break;
             case 4:
                 name += "g";
                 if (real) {
-                    switch (qM) {
-                        case -4:
-                            subscript = "xy(x" + ss(2) + "-y" + ss(2) + ')';
-                            break;
-                        case -3:
-                            subscript = "zy" + ss(3);
-                            break;
-                        case -2:
-                            subscript = 'z' + ss(2) + "xy";
-                            break;
-                        case -1:
-                            subscript = 'z' + ss(3) + 'y';
-                            break;
-                        case 0:
-                            subscript = 'z' + ss(4);
-                            break;
-                        case 1:
-                            subscript = 'z' + ss(3) + 'x';
-                            break;
-                        case 2:
-                            subscript = 'z' + ss(2) + "(x" + ss(2) + "-y" + ss(2) + ')';
-                            break;
-                        case 3:
-                            subscript = "zx" + ss(3);
-                            break;
-                        case 4:
-                            subscript = 'x' + ss(4) + "+y" + ss(4);
-                            break;
-                    }
+                    subscript = switch (qM) {
+                        case -4 -> "xy(x" + ss(2) + "-y" + ss(2) + ')';
+                        case -3 -> "zy" + ss(3);
+                        case -2 -> 'z' + ss(2) + "xy";
+                        case -1 -> 'z' + ss(3) + 'y';
+                        case 0 -> 'z' + ss(4);
+                        case 1 -> 'z' + ss(3) + 'x';
+                        case 2 -> 'z' + ss(2) + "(x" + ss(2) + "-y" + ss(2) + ')';
+                        case 3 -> "zx" + ss(3);
+                        case 4 -> 'x' + ss(4) + "+y" + ss(4);
+                        default -> subscript;
+                    };
                 }
                 break;
             case 5:
@@ -451,17 +409,11 @@ public class OrbitalSelector extends LinearLayout {
                 name += Integer.toString(qL);
         }
         name += "<sub>" + subscript + "</sub>";
-        Spanned formattedName;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            formattedName = Html.fromHtml(name, Html.FROM_HTML_MODE_LEGACY);
-        } else {
-            //noinspection deprecation
-            formattedName = Html.fromHtml(name);
-        }
+        Spanned formattedName = HtmlCompat.fromHtml(name, HtmlCompat.FROM_HTML_MODE_LEGACY);
         orbitalName.setText(formattedName);
     }
 
     private static String ss(int x) {
-        return "<sup><small>" + Integer.toString(x) + "</small></sup>";
+        return "<sup><small>" + x + "</small></sup>";
     }
 }

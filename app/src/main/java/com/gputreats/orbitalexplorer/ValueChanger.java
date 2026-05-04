@@ -20,13 +20,13 @@ public class ValueChanger extends LinearLayout {
         constructorSetup(context);
     }
 
-    public ValueChanger(Context context, AttributeSet attribs) {
-        super(context, attribs);
+    public ValueChanger(Context context, AttributeSet attrs) {
+        super(context, attrs);
         constructorSetup(context);
     }
 
-    public ValueChanger(Context context, AttributeSet attribs, int defStyle) {
-        super(context, attribs, defStyle);
+    public ValueChanger(Context context, AttributeSet attrs, int defStyle) {
+        super(context, attrs, defStyle);
         constructorSetup(context);
     }
 
